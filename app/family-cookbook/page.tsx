@@ -69,7 +69,7 @@ export default function FamilyCookbook() {
 
       <section className="bg-[#FFF3DF] px-6 py-24 text-center">
         <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
-          Your page awaits
+          Wet Our Appetite
         </p>
         <h2 className="mx-auto mt-5 max-w-3xl text-4xl font-bold md:text-5xl">
           Could your family&apos;s recipe be next?
