@@ -5,6 +5,11 @@ import { useEffect, useState } from "react";
 
 const slides = [
   {
+    image: "/images/hero-kitchen.png",
+    alt: "The Other People's Recipes kitchen table",
+    label: "Other People's Recipes · Every recipe has a story",
+  },
+  {
     image: "/images/recipes/nana-serbs-rice-pudding.png",
     alt: "Nana Serb's Sunday Rice Pudding",
     label: "Nana Serb's Sunday Rice Pudding · Birmingham",
