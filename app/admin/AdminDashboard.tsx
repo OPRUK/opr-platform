@@ -21,6 +21,7 @@ type Submission = {
   permission_to_feature: boolean;
   status: SubmissionStatus;
   photo_path: string | null;
+  is_published: boolean;
 };
 
 const allowedEmail = "chaten@otherpeoplesrecipes.co.uk";
@@ -67,7 +68,7 @@ export default function AdminDashboard() {
       const { data, error } = await supabase
         .from("recipe_submissions")
         .select(
-          "id, created_at, name, email, location, title, category, servings, story, ingredients, method, permission_to_feature, status, photo_path",
+          "id, created_at, name, email, location, title, category, servings, story, ingredients, method, permission_to_feature, status, photo_path, is_published",
         )
         .order("created_at", { ascending: false });
 
@@ -123,6 +124,34 @@ export default function AdminDashboard() {
     );
     setSelectedSubmission((current) =>
       current?.id === id ? { ...current, status } : current,
+    );
+  }
+
+  async function togglePublished(submission: Submission) {
+    const willPublish = !submission.is_published;
+    const { error } = await supabase
+      .from("recipe_submissions")
+      .update({
+        is_published: willPublish,
+        published_at: willPublish ? new Date().toISOString() : null,
+        status: willPublish ? "selected" : submission.status,
+      })
+      .eq("id", submission.id);
+
+    if (error) {
+      setMessage("We could not change this recipe's publishing status. Please try again.");
+      return;
+    }
+
+    const changes = {
+      is_published: willPublish,
+      status: willPublish ? "selected" as SubmissionStatus : submission.status,
+    };
+    setSubmissions((current) =>
+      current.map((item) => (item.id === submission.id ? { ...item, ...changes } : item)),
+    );
+    setSelectedSubmission((current) =>
+      current?.id === submission.id ? { ...current, ...changes } : current,
     );
   }
 
@@ -236,7 +265,7 @@ export default function AdminDashboard() {
                     </p>
                   </div>
                   <span className={`rounded-full px-3 py-1 text-xs font-medium capitalize ${statusStyle[submission.status]}`}>
-                    {submission.status}
+                    {submission.is_published ? "Published" : submission.status}
                   </span>
                 </div>
               </button>
@@ -269,6 +298,24 @@ export default function AdminDashboard() {
                   <option value="reviewed">Reviewed</option>
                   <option value="selected">Selected</option>
                 </select>
+              </div>
+
+              <div className="mt-7 rounded-2xl border border-[#D1AD75]/70 bg-[#F4DDAE]/45 p-5 md:flex md:items-center md:justify-between md:gap-6">
+                <div>
+                  <h3 className="font-bold">{selectedSubmission.is_published ? "Live in the Family Cookbook" : "Ready to share?"}</h3>
+                  <p className="mt-1 text-sm leading-6 text-stone-700">
+                    {selectedSubmission.is_published
+                      ? "This recipe is visible to everyone in the public cookbook."
+                      : "Publishing makes this recipe, its story and its photo visible in the public Family Cookbook."}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => void togglePublished(selectedSubmission)}
+                  className="mt-4 rounded-full bg-[#4A4232] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#33291F] md:mt-0"
+                >
+                  {selectedSubmission.is_published ? "Remove from cookbook" : "Publish to cookbook"}
+                </button>
               </div>
 
               <div className="mt-10 space-y-8 text-stone-700">

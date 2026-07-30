@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
+import PublishedRecipes from "./PublishedRecipes";
 
 const recipes = [
   {
@@ -50,7 +51,7 @@ export default function FamilyCookbook() {
       <section className="mx-auto max-w-6xl px-6 py-20 md:px-8">
         <div className="mb-14 max-w-2xl">
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
-            Choose a page
+            Choose a recipe
           </p>
           <h2 className="mt-4 text-4xl font-bold md:text-5xl">
             Stories from family kitchens
@@ -95,6 +96,8 @@ export default function FamilyCookbook() {
             </Link>
           ))}
         </div>
+
+        <PublishedRecipes />
       </section>
 
       <section className="bg-[#FFF3DF] px-6 py-24 text-center">
