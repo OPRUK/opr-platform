@@ -36,7 +36,7 @@ export default function Footer() {
       </div>
 
       <div className="mx-auto mt-14 max-w-6xl border-t border-[#6E4B2C] pt-6 text-sm text-[#DABF8D]">
-        © {new Date().getFullYear()} Other People&apos;s Recipes. Every recipe has a story.
+        © {new Date().getFullYear()}{" "}Other People&apos;s Recipes. Every recipe has a story.
       </div>
     </footer>
   );
