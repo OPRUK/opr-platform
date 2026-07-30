@@ -25,12 +25,12 @@ const recipes = [
     category: "Main",
   },
   {
-    title: "Grandad's Steak & Ale Pie",
+    title: "Barbara's Beef Casserole",
     place: "Yorkshire, England",
     story:
-      "He always made the filling a day early, saying that good things were worth waiting for. We still use his battered recipe book.",
+      "Barbara learnt it from her mother Pat, then made it her own with a tablespoon of Bovril. She always prepared it a day early, saying that good things were worth waiting for.",
     number: "03",
-    slug: "grandads-steak-and-ale-pie",
+    slug: "barbaras-beef-casserole",
     image: "/images/recipes/grandads-steak-ale-pie.png",
     category: "Main",
   },

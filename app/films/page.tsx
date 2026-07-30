@@ -5,7 +5,7 @@ const films = [
   {
     title: "Three Recipes, Three Stories",
     description:
-      "A short OPR film celebrating Nana Serb’s rice pudding, Dave’s butter chicken and Grandad’s steak & ale pie.",
+      "A short OPR film celebrating Nana Serb’s rice pudding, Dave’s butter chicken and Barbara’s beef casserole.",
     source: "/videos/opr-recipe-stories-film.mp4",
     poster: "/images/recipes/nana-serbs-rice-pudding.png",
   },

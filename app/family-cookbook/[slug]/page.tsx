@@ -52,11 +52,11 @@ const recipes = {
     ],
     image: "/images/recipes/daves-butter-chicken.png",
   },
-  "grandads-steak-and-ale-pie": {
-    title: "Grandad's Steak & Ale Pie",
+  "barbaras-beef-casserole": {
+    title: "Barbara's Beef Casserole",
     place: "Yorkshire, England",
     story:
-      "Grandad made this every Christmas Eve. He always prepared the filling the day before because, as he put it, good things are worth waiting for. We still make it from his flour-dusted recipe book, and nobody is allowed to skip the extra gravy.",
+      "Barbara learnt this recipe from her mother, Pat, and made it her own by adding a tablespoon of Bovril. She always prepared it the day before because, as she put it, good things are worth waiting for. We still make it from her flour-dusted recipe book, and nobody is allowed to skip the extra gravy.",
     ingredients: [
       "750g braising steak, diced",
       "2 onions, sliced",
@@ -64,15 +64,14 @@ const recipes = {
       "500ml dark ale",
       "300ml beef stock",
       "2 tablespoons plain flour",
-      "1 sheet ready-rolled puff pastry",
-      "1 egg, beaten",
+      "1 tablespoon Bovril",
     ],
     method: [
       "Brown the beef in batches, then soften the onions and carrots in the same pan.",
-      "Stir in the flour, then add the ale and stock. Return the beef to the pan.",
-      "Simmer gently for two hours until tender. Cool the filling completely — overnight is even better.",
-      "Fill a pie dish, cover with pastry and brush with beaten egg.",
-      "Bake at 200°C fan for 30–35 minutes, until deeply golden. Serve with plenty of gravy.",
+      "Stir in the flour, then add the ale, stock and Bovril. Return the beef to the pan.",
+      "Simmer gently for two hours until tender. Barbara always prepared it the day before — overnight is even better.",
+      "Reheat slowly until the sauce is rich and glossy, then season to taste.",
+      "Serve in warmed bowls with creamy mash or crusty bread, and plenty of extra gravy.",
     ],
     image: "/images/recipes/grandads-steak-ale-pie.png",
   },
