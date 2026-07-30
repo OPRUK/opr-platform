@@ -11,48 +11,143 @@ type PublishedRecipe = {
   location: string | null;
   story: string;
   photo_path: string | null;
+  category: string;
 };
 
-export default function PublishedRecipes() {
-  const [recipes, setRecipes] = useState<PublishedRecipe[]>([]);
+type FeaturedRecipe = {
+  title: string;
+  place: string;
+  story: string;
+  number: string;
+  slug: string;
+  image: string;
+  category: string;
+};
+
+type RecipeCard = {
+  id: string;
+  title: string;
+  contributor: string;
+  location: string | null;
+  story: string;
+  category: string;
+  imageUrl: string | null;
+  href: string;
+  number?: string;
+};
+
+export default function PublishedRecipes({
+  featuredRecipes,
+}: {
+  featuredRecipes: FeaturedRecipe[];
+}) {
+  const [communityRecipes, setCommunityRecipes] = useState<PublishedRecipe[]>([]);
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("All recipes");
 
   useEffect(() => {
     async function loadPublishedRecipes() {
       const { data } = await supabase
         .from("recipe_submissions")
-        .select("id, title, name, location, story, photo_path")
+        .select("id, title, name, location, story, photo_path, category")
         .eq("is_published", true)
         .order("published_at", { ascending: false });
 
-      setRecipes((data ?? []) as PublishedRecipe[]);
+      setCommunityRecipes((data ?? []) as PublishedRecipe[]);
     }
 
     void loadPublishedRecipes();
   }, []);
 
-  if (recipes.length === 0) {
-    return null;
-  }
+  const cards: RecipeCard[] = [
+    ...featuredRecipes.map((recipe) => ({
+      id: `featured-${recipe.slug}`,
+      title: recipe.title,
+      contributor: "From the OPR collection",
+      location: recipe.place,
+      story: recipe.story,
+      category: recipe.category,
+      imageUrl: recipe.image,
+      href: `/family-cookbook/${recipe.slug}`,
+      number: recipe.number,
+    })),
+    ...communityRecipes.map((recipe) => ({
+      id: `community-${recipe.id}`,
+      title: recipe.title,
+      contributor: recipe.name,
+      location: recipe.location,
+      story: recipe.story,
+      category: recipe.category,
+      imageUrl: recipe.photo_path
+        ? supabase.storage.from("recipe-photos").getPublicUrl(recipe.photo_path).data.publicUrl
+        : null,
+      href: `/family-cookbook/community/${recipe.id}`,
+    })),
+  ];
+
+  const categories = [
+    "All recipes",
+    ...Array.from(new Set(cards.map((recipe) => recipe.category))),
+  ];
+  const query = search.trim().toLowerCase();
+  const visibleRecipes = cards.filter((recipe) => {
+    const matchesCategory = category === "All recipes" || recipe.category === category;
+    const matchesSearch =
+      !query ||
+      [recipe.title, recipe.contributor, recipe.location ?? "", recipe.story, recipe.category]
+        .join(" ")
+        .toLowerCase()
+        .includes(query);
+
+    return matchesCategory && matchesSearch;
+  });
 
   return (
-    <section className="mt-20 border-t border-[#D1AD75]/70 pt-16">
-      <p className="text-sm uppercase tracking-[0.35em] text-amber-700">Newly shared</p>
-      <h2 className="mt-4 text-4xl font-bold md:text-5xl">Fresh pages from the community</h2>
-      <div className="mt-10 grid gap-8 md:grid-cols-3">
-        {recipes.map((recipe) => {
-          const imageUrl = recipe.photo_path
-            ? supabase.storage.from("recipe-photos").getPublicUrl(recipe.photo_path).data.publicUrl
-            : null;
+    <section>
+      <div className="rounded-3xl border border-[#D1AD75]/70 bg-[#FFF3DF] p-5 shadow-sm shadow-[#6E4B2C]/10 md:flex md:items-center md:justify-between md:gap-6 md:p-6">
+        <label className="block flex-1">
+          <span className="sr-only">Search recipes</span>
+          <input
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            type="search"
+            placeholder="Search by recipe, story, cook or place"
+            className="w-full rounded-xl border border-[#D1AD75] bg-white px-5 py-3.5 text-[#4A4232] outline-none transition placeholder:text-stone-500 focus:border-[#9A622A] focus:ring-2 focus:ring-[#D1AD75]/50"
+          />
+        </label>
+        <div className="mt-4 flex flex-wrap gap-2 md:mt-0">
+          {categories.map((item) => (
+            <button
+              key={item}
+              type="button"
+              onClick={() => setCategory(item)}
+              className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+                category === item
+                  ? "bg-[#4A4232] text-white"
+                  : "border border-[#D1AD75] text-[#4A4232] hover:bg-[#F4DDAE]"
+              }`}
+            >
+              {item}
+            </button>
+          ))}
+        </div>
+      </div>
 
-          return (
+      <p className="mt-8 text-sm text-stone-600">
+        {visibleRecipes.length} {visibleRecipes.length === 1 ? "recipe" : "recipes"} to discover
+      </p>
+
+      {visibleRecipes.length ? (
+        <div className="mt-5 grid gap-8 md:grid-cols-3">
+          {visibleRecipes.map((recipe) => (
             <Link
               key={recipe.id}
-              href={`/family-cookbook/community/${recipe.id}`}
+              href={recipe.href}
               className="group overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-lg shadow-[#6E4B2C]/15 transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
             >
-              {imageUrl ? (
+              {recipe.imageUrl ? (
                 <img
-                  src={imageUrl}
+                  src={recipe.imageUrl}
                   alt={recipe.title}
                   className="aspect-[4/3] w-full object-cover transition duration-500 group-hover:scale-105"
                 />
@@ -61,18 +156,39 @@ export default function PublishedRecipes() {
                   A treasured family recipe
                 </div>
               )}
-              <div className="flex min-h-72 flex-col p-8">
+              <div className="flex min-h-80 flex-col p-8">
                 <p className="text-sm uppercase tracking-[0.16em] text-stone-500">
-                  Shared by {recipe.name}{recipe.location ? ` · ${recipe.location}` : ""}
+                  {recipe.number ? `${recipe.number} · ` : ""}
+                  {recipe.category}
                 </p>
                 <h3 className="mt-5 text-3xl font-bold leading-tight">{recipe.title}</h3>
-                <p className="mt-5 grow leading-7 text-stone-700">“{recipe.story}”</p>
-                <span className="mt-8 font-medium transition group-hover:text-amber-700">Open recipe →</span>
+                <p className="mt-3 text-sm uppercase tracking-[0.16em] text-stone-500">
+                  {recipe.contributor}
+                  {recipe.location ? ` · ${recipe.location}` : ""}
+                </p>
+                <p className="mt-6 grow leading-7 text-stone-700">“{recipe.story}”</p>
+                <span className="mt-8 font-medium transition group-hover:text-amber-700">
+                  Open recipe →
+                </span>
               </div>
             </Link>
-          );
-        })}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div className="mt-8 rounded-3xl border border-dashed border-[#D1AD75] bg-[#FFF3DF]/60 px-8 py-14 text-center">
+          <h3 className="text-2xl font-bold">No recipes match that search.</h3>
+          <button
+            type="button"
+            onClick={() => {
+              setSearch("");
+              setCategory("All recipes");
+            }}
+            className="mt-5 font-medium text-[#9A622A] underline underline-offset-4"
+          >
+            Show every recipe
+          </button>
+        </div>
+      )}
     </section>
   );
 }

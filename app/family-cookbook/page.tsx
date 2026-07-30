@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 import PublishedRecipes from "./PublishedRecipes";
@@ -13,6 +12,7 @@ const recipes = [
     number: "01",
     slug: "nans-sunday-rice-pudding",
     image: "/images/recipes/nana-serbs-rice-pudding.png",
+    category: "Dessert",
   },
   {
     title: "Dave's Butter Chicken",
@@ -22,6 +22,7 @@ const recipes = [
     number: "02",
     slug: "dads-friday-night-butter-chicken",
     image: "/images/recipes/daves-butter-chicken.png",
+    category: "Main course",
   },
   {
     title: "Grandad's Steak & Ale Pie",
@@ -31,6 +32,7 @@ const recipes = [
     number: "03",
     slug: "grandads-steak-and-ale-pie",
     image: "/images/recipes/grandads-steak-ale-pie.png",
+    category: "Main course",
   },
 ];
 
@@ -62,42 +64,7 @@ export default function FamilyCookbook() {
           </p>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-3">
-          {recipes.map((recipe) => (
-            <Link
-              key={recipe.number}
-              href={`/family-cookbook/${recipe.slug}`}
-              className="group overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-lg shadow-[#6E4B2C]/15 transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
-            >
-              <Image
-                src={recipe.image}
-                alt={recipe.title}
-                width={1200}
-                height={900}
-                className="aspect-[4/3] w-full object-cover transition duration-500 group-hover:scale-105"
-              />
-              <div className="flex min-h-80 flex-col p-9">
-                <p className="text-sm tracking-[0.3em] text-amber-700">
-                  {recipe.number}
-                </p>
-                <h3 className="mt-5 text-3xl font-bold leading-tight">
-                  {recipe.title}
-                </h3>
-                <p className="mt-3 text-sm uppercase tracking-[0.16em] text-stone-500">
-                  {recipe.place}
-                </p>
-                <p className="mt-7 grow leading-7 text-stone-700">
-                  “{recipe.story}”
-                </p>
-                <span className="mt-8 font-medium text-[#4A4232] transition group-hover:text-amber-700">
-                  Open recipe →
-                </span>
-              </div>
-            </Link>
-          ))}
-        </div>
-
-        <PublishedRecipes />
+        <PublishedRecipes featuredRecipes={recipes} />
       </section>
 
       <section className="bg-[#FFF3DF] px-6 py-24 text-center">
