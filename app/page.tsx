@@ -2,6 +2,7 @@ import Navigation from "./components/Navigation";
 import Image from "next/image";
 import Link from "next/link";
 import Footer from "./components/Footer";
+import HeroCarousel from "./components/HeroCarousel";
 
 export default function Home() {
   return (
@@ -9,13 +10,8 @@ export default function Home() {
       <Navigation />
 
       {/* Hero */}
-      <section
-        className="relative flex min-h-screen items-center justify-center bg-cover bg-center"
-        style={{
-          backgroundImage: "url('/images/hero-kitchen.png')",
-        }}
-      >
-        <div className="absolute inset-0 bg-black/45"></div>
+      <section className="relative flex min-h-screen items-center justify-center overflow-hidden">
+        <HeroCarousel />
 
         <div className="relative z-10 mx-auto max-w-4xl px-8 text-center text-white animate-rise-in">
           <p className="mb-6 text-sm font-semibold uppercase tracking-[0.4em] text-[#FFD58C] drop-shadow-md">
