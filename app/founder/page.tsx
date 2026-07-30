@@ -41,7 +41,7 @@ export default function FounderPage() {
             A founder&apos;s letter
           </p>
           <h2 className="mt-5 text-4xl font-bold leading-tight md:text-5xl">
-            This idea has been with me since 2000.
+            OPR is as much about you and your family as it is about the recipes we hold dear to our hearts.
           </h2>
 
           <div className="mt-8 space-y-6 text-lg leading-8 text-stone-700">
