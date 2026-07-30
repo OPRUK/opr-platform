@@ -128,6 +128,21 @@ export default function RecipeForm() {
       return;
     }
 
+    try {
+      await fetch("/api/recipe-submission", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: values.name,
+          email: values.email,
+          title: values.title,
+          location: values.location || null,
+        }),
+      });
+    } catch {
+      // The recipe itself was saved successfully, so email can be retried later.
+    }
+
     window.sessionStorage.removeItem(recipeDraftKey);
     setPhoto(null);
     setPhotoPreview("");

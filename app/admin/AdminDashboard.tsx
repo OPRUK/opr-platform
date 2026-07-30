@@ -153,6 +153,27 @@ export default function AdminDashboard() {
     setSelectedSubmission((current) =>
       current?.id === submission.id ? { ...current, ...changes } : current,
     );
+
+    if (willPublish) {
+      try {
+        const { data: sessionData } = await supabase.auth.getSession();
+        await fetch("/api/recipe-published", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${sessionData.session?.access_token ?? ""}`,
+          },
+          body: JSON.stringify({
+            id: submission.id,
+            name: submission.name,
+            email: submission.email,
+            title: submission.title,
+          }),
+        });
+      } catch {
+        // Publishing remains successful even if the email service is temporarily unavailable.
+      }
+    }
   }
 
   const selectedPhotoUrl = selectedSubmission?.photo_path
