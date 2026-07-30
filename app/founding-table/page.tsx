@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Footer from "../components/Footer";
+import HeroCarousel from "../components/HeroCarousel";
 import Navigation from "../components/Navigation";
 import FoundingTableForm from "./FoundingTableForm";
 
@@ -15,17 +16,20 @@ export default function FoundingTablePage() {
     <main className="min-h-screen bg-[#EED8B2] text-[#4A4232]">
       <Navigation />
 
-      <section className="bg-[#4A4232] px-6 pb-24 pt-40 text-center text-[#FFF3DF]">
-        <p className="mb-5 text-sm uppercase tracking-[0.4em] text-[#FFD58C]">
-          The Founding Table
-        </p>
-        <h1 className="mx-auto max-w-4xl text-5xl font-bold leading-tight md:text-7xl">
-          Be there at the beginning.
-        </h1>
-        <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-[#FFF1D8]">
-          A small group of people helping to shape the living cookbook,
-          the conversations and the table we are building together.
-        </p>
+      <section className="relative isolate overflow-hidden bg-[#2D2117] px-6 pb-24 pt-40 text-center text-[#FFF3DF]">
+        <HeroCarousel />
+        <div className="relative z-10">
+          <p className="mb-5 text-sm uppercase tracking-[0.4em] text-[#FFD58C]">
+            The Founding Table
+          </p>
+          <h1 className="mx-auto max-w-4xl text-5xl font-bold leading-tight drop-shadow-2xl md:text-7xl">
+            Be there at the beginning.
+          </h1>
+          <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-[#FFF1D8]">
+            A small group of people helping to shape the living cookbook,
+            the conversations and the table we are building together.
+          </p>
+        </div>
       </section>
 
       <section className="mx-auto grid max-w-6xl gap-12 px-6 py-20 md:grid-cols-[1.05fr_0.95fr] md:px-8">
