@@ -38,7 +38,7 @@ export default function HeroCarousel() {
   }, []);
 
   return (
-    <div className="absolute inset-0 -z-10 overflow-hidden bg-[#2D2117]">
+    <div className="absolute inset-0 z-0 overflow-hidden bg-[#2D2117]">
       {slides.map((slide, index) => (
         <Image
           key={slide.image}

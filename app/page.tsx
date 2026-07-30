@@ -10,7 +10,7 @@ export default function Home() {
       <Navigation />
 
       {/* Hero */}
-      <section className="relative flex min-h-screen items-center justify-center overflow-hidden">
+      <section className="relative isolate flex min-h-screen items-center justify-center overflow-hidden bg-[#2D2117]">
         <HeroCarousel />
 
         <div className="relative z-10 mx-auto max-w-4xl px-8 text-center text-white animate-rise-in">
