@@ -41,13 +41,29 @@ export default function FamilyCookbook() {
     <main className="min-h-screen bg-[#EED8B2] text-[#4A4232]">
       <Navigation />
 
-      <section className="bg-[#4A4232] px-6 pb-24 pt-40 text-center text-white">
-        <p className="mb-5 text-sm uppercase tracking-[0.4em] text-amber-300">
-          The Family Cookbook
-        </p>
-        <h1 className="mx-auto max-w-4xl text-5xl font-bold leading-tight md:text-7xl">
-          Every recipe has travelled through time before finding its way here.
-        </h1>
+      <section className="relative isolate overflow-hidden bg-[#4A4232] px-6 pb-24 pt-40 text-center text-white">
+        <video
+          className="absolute inset-0 -z-20 h-full w-full object-cover"
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+        >
+          <source src="/videos/opr-teaser-3.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 -z-10 bg-[#2D2117]/75" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#20160F]/65 via-[#4A4232]/45 to-[#20160F]/80" />
+
+        <div className="mx-auto max-w-4xl">
+          <p className="mb-5 text-sm uppercase tracking-[0.4em] text-amber-200">
+            The Family Cookbook
+          </p>
+          <h1 className="text-5xl font-bold leading-tight drop-shadow-lg md:text-7xl">
+            Every recipe has travelled through time before finding its way here.
+          </h1>
+        </div>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-20 md:px-8">
