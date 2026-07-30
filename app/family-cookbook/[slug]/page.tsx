@@ -3,6 +3,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import Navigation from "../../components/Navigation";
 import Footer from "../../components/Footer";
+import RecipeActions from "../../components/RecipeActions";
 
 const recipes = {
   "nans-sunday-rice-pudding": {
@@ -156,6 +157,8 @@ export default async function RecipePage({
           </ol>
         </div>
       </section>
+
+      <RecipeActions title={recipe.title} />
 
       <section className="px-6 py-20 text-center">
         <Link

@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Navigation from "../../../components/Navigation";
 import Footer from "../../../components/Footer";
+import RecipeActions from "../../../components/RecipeActions";
 import { supabase } from "../../../../lib/supabase/client";
 
 type CommunityRecipe = {
@@ -88,6 +89,7 @@ export default function CommunityRecipePage() {
               </ol>
             </div>
           </section>
+          <RecipeActions title={recipe.title} />
         </>
       ) : null}
       <Footer />
