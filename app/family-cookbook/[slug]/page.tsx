@@ -54,7 +54,7 @@ const recipes = {
   },
   "barbaras-beef-casserole": {
     title: "Barbara's Beef Casserole",
-    place: "Yorkshire, England",
+    place: "Swansea, Wales",
     story:
       "Barbara learnt this recipe from her mother, Pat, and made it her own by adding a tablespoon of Bovril. She always prepared it the day before because, as she put it, good things are worth waiting for. We still make it from her flour-dusted recipe book, and nobody is allowed to skip the extra gravy.",
     ingredients: [
