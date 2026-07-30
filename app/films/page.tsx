@@ -6,7 +6,7 @@ const films = [
     title: "Three Recipes, Three Stories",
     description:
       "A short OPR film celebrating Nana Serb’s rice pudding, Dave’s butter chicken and Barbara’s beef casserole.",
-    source: "/videos/opr-recipe-stories-film.mp4",
+    source: "/videos/opr-recipe-stories-film-v2.mp4",
     poster: "/images/recipes/nana-serbs-rice-pudding.png",
   },
   {
@@ -44,7 +44,7 @@ export default function FilmsPage() {
           preload="metadata"
           aria-hidden="true"
         >
-          <source src="/videos/opr-recipe-stories-film.mp4" type="video/mp4" />
+          <source src="/videos/opr-recipe-stories-film-v2.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 -z-10 bg-[#2D2117]/75" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#20160F]/65 via-[#4A4232]/45 to-[#20160F]/80" />
