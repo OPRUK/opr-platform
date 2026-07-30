@@ -1,23 +1,27 @@
 import Link from "next/link";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
+import HeroCarousel from "../components/HeroCarousel";
 
 export default function OurStory() {
   return (
     <main className="min-h-screen bg-[#EED8B2] text-[#4A4232]">
       <Navigation />
 
-      <section className="bg-[#4A4232] px-6 pb-24 pt-40 text-center text-white">
-        <p className="mb-5 text-sm uppercase tracking-[0.4em] text-amber-300">
-          Your Story
-        </p>
-        <h1 className="mx-auto max-w-4xl text-5xl font-bold leading-tight md:text-7xl">
-          Every family has a recipe worth remembering.
-        </h1>
-        <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-stone-200">
-          Other People&apos;s Recipes exists to preserve the meals, memories and
-          traditions that make a house feel like home.
-        </p>
+      <section className="relative isolate overflow-hidden bg-[#2D2117] px-6 pb-24 pt-40 text-center text-white">
+        <HeroCarousel />
+        <div className="relative z-10">
+          <p className="mb-5 text-sm uppercase tracking-[0.4em] text-amber-300">
+            Your Story
+          </p>
+          <h1 className="mx-auto max-w-4xl text-5xl font-bold leading-tight drop-shadow-2xl md:text-7xl">
+            Every family has a recipe worth remembering.
+          </h1>
+          <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-stone-100">
+            Other People&apos;s Recipes exists to preserve the meals, memories and
+            traditions that make a house feel like home.
+          </p>
+        </div>
       </section>
 
       <section className="mx-auto grid max-w-6xl gap-12 px-8 py-24 md:grid-cols-2 md:items-center">
