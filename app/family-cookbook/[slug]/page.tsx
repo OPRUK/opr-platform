@@ -158,7 +158,7 @@ export default async function RecipePage({
         </div>
       </section>
 
-      <RecipeActions title={recipe.title} />
+      <RecipeActions title={recipe.title} imageUrl={recipe.image} />
 
       <section className="px-6 py-20 text-center">
         <Link

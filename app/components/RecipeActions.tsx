@@ -2,8 +2,15 @@
 
 import { useState } from "react";
 
-export default function RecipeActions({ title }: { title: string }) {
+export default function RecipeActions({
+  title,
+  imageUrl,
+}: {
+  title: string;
+  imageUrl?: string | null;
+}) {
   const [copied, setCopied] = useState(false);
+  const [instagramMessage, setInstagramMessage] = useState("");
 
   const shareText = `I thought you might enjoy ${title} from Other People's Recipes.`;
 
@@ -35,6 +42,104 @@ export default function RecipeActions({ title }: { title: string }) {
     } catch {
       setCopied(false);
     }
+  }
+
+  function drawWrappedText(
+    context: CanvasRenderingContext2D,
+    text: string,
+    x: number,
+    y: number,
+    maxWidth: number,
+    lineHeight: number,
+  ) {
+    const words = text.split(" ");
+    let line = "";
+    let currentY = y;
+
+    words.forEach((word) => {
+      const candidate = line ? `${line} ${word}` : word;
+      if (context.measureText(candidate).width > maxWidth && line) {
+        context.fillText(line, x, currentY);
+        line = word;
+        currentY += lineHeight;
+      } else {
+        line = candidate;
+      }
+    });
+
+    if (line) {
+      context.fillText(line, x, currentY);
+    }
+  }
+
+  async function downloadInstagramCard() {
+    setInstagramMessage("");
+    const canvas = document.createElement("canvas");
+    canvas.width = 1080;
+    canvas.height = 1080;
+    const context = canvas.getContext("2d");
+
+    if (!context) {
+      setInstagramMessage("We could not create the image just now.");
+      return;
+    }
+
+    context.fillStyle = "#FFF3DF";
+    context.fillRect(0, 0, 1080, 1080);
+    context.fillStyle = "#4A4232";
+    context.fillRect(0, 0, 1080, 640);
+
+    if (imageUrl) {
+      try {
+        const image = new window.Image();
+        image.crossOrigin = "anonymous";
+        image.src = imageUrl;
+        await new Promise<void>((resolve, reject) => {
+          image.onload = () => resolve();
+          image.onerror = () => reject(new Error("Image failed to load"));
+        });
+
+        const sourceSize = Math.min(image.width, image.height);
+        const sourceX = (image.width - sourceSize) / 2;
+        const sourceY = (image.height - sourceSize) / 2;
+        context.drawImage(image, sourceX, sourceY, sourceSize, sourceSize, 0, 0, 1080, 640);
+        const gradient = context.createLinearGradient(0, 430, 0, 640);
+        gradient.addColorStop(0, "rgba(45, 33, 23, 0)");
+        gradient.addColorStop(1, "rgba(45, 33, 23, 0.55)");
+        context.fillStyle = gradient;
+        context.fillRect(0, 0, 1080, 640);
+      } catch {
+        // The finished card remains useful even if a contributor image is unavailable.
+      }
+    }
+
+    context.fillStyle = "#9A622A";
+    context.font = "600 28px Arial, sans-serif";
+    context.letterSpacing = "4px";
+    context.fillText("OTHER PEOPLE'S RECIPES", 76, 740);
+    context.letterSpacing = "0px";
+    context.fillStyle = "#4A4232";
+    context.font = "bold 62px Georgia, serif";
+    drawWrappedText(context, title, 76, 820, 928, 76);
+    context.fillStyle = "#766B5C";
+    context.font = "italic 28px Georgia, serif";
+    context.fillText("Every recipe has a story.", 76, 1010);
+
+    canvas.toBlob((blob) => {
+      if (!blob) {
+        setInstagramMessage("We could not create the image just now.");
+        return;
+      }
+
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `${title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}-opr.png`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(link.href);
+      setInstagramMessage("Instagram card downloaded — ready to share.");
+    }, "image/png");
   }
 
   return (
@@ -75,7 +180,15 @@ export default function RecipeActions({ title }: { title: string }) {
           >
             Print recipe
           </button>
+          <button
+            type="button"
+            onClick={() => void downloadInstagramCard()}
+            className="rounded-full bg-[#9A622A] px-5 py-3 text-sm font-medium text-white transition hover:scale-105 hover:bg-[#7A481B]"
+          >
+            Instagram card
+          </button>
         </div>
+        {instagramMessage ? <p className="mt-5 text-sm text-stone-600">{instagramMessage}</p> : null}
       </div>
     </section>
   );

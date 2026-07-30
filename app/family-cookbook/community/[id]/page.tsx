@@ -44,7 +44,9 @@ export default function CommunityRecipePage() {
 
   const imageUrl = recipe?.photo_path
     ? supabase.storage.from("recipe-photos").getPublicUrl(recipe.photo_path).data.publicUrl
-    : null;
+    : recipe?.title.toLowerCase().includes("sudesh") && recipe.title.toLowerCase().includes("bhindi")
+      ? "/images/recipes/sudeshs-bhindi.png"
+      : null;
 
   return (
     <main className="min-h-screen bg-[#EED8B2] text-[#4A4232]">
@@ -89,7 +91,7 @@ export default function CommunityRecipePage() {
               </ol>
             </div>
           </section>
-          <RecipeActions title={recipe.title} />
+          <RecipeActions title={recipe.title} imageUrl={imageUrl} />
         </>
       ) : null}
       <Footer />
