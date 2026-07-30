@@ -19,6 +19,7 @@ export default function Footer() {
           <ul className="mt-5 space-y-3 text-[#FFF3DF]">
             <li><Link href="/" className="transition hover:text-[#DDB765]">Home</Link></li>
             <li><Link href="/our-story" className="transition hover:text-[#DDB765]">Your Story</Link></li>
+            <li><Link href="/founder" className="transition hover:text-[#DDB765]">Founder</Link></li>
             <li><Link href="/family-cookbook" className="transition hover:text-[#DDB765]">Family Cookbook</Link></li>
             <li><Link href="/films" className="transition hover:text-[#DDB765]">Films</Link></li>
           </ul>
