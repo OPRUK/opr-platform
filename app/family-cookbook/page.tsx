@@ -18,7 +18,7 @@ const recipes = [
     title: "Dave's Butter Chicken",
     place: "New Malden, England",
     story:
-      "Dave learnt this from his Indian mother-in-law. He replaced chopped tomatoes with passata to enhance the flavour, and now cooks it for his Indian family whenever he is in India.",
+      "Dave learned this from his Indian mother-in-law, then replaced tinned tomatoes with passata for a smoother, richer taste. He has cooked it in India for family — and even his mother-in-law now says his is better than hers.",
     number: "02",
     slug: "dads-friday-night-butter-chicken",
     image: "/images/recipes/daves-butter-chicken.png",

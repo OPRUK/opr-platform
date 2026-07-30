@@ -138,9 +138,9 @@ export default function Home() {
               New Malden, England
             </p>
             <p className="mt-7 text-lg leading-8 text-[#FFF1D8]">
-              Dave learnt this from his Indian mother-in-law, then made it his
-              own by replacing chopped tomatoes with passata. He now cooks it
-              for his Indian family whenever he is in India.
+              Dave learned this from his Indian mother-in-law, then made it his
+              own with passata for a smoother, richer sauce. He has cooked it
+              in India for family — and even she now says his is better.
             </p>
             <Link
               href="/family-cookbook/dads-friday-night-butter-chicken"
