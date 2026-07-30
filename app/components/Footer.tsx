@@ -31,6 +31,26 @@ export default function Footer() {
           <ul className="mt-5 space-y-3 text-[#FFF3DF]">
             <li><Link href="/share" className="transition hover:text-[#DDB765]">Share your recipe</Link></li>
             <li><a href="mailto:info@otherpeoplesrecipes.co.uk" className="transition hover:text-[#DDB765]">Contact OPR</a></li>
+            <li>
+              <a
+                href="https://www.instagram.com/opr_uk/"
+                target="_blank"
+                rel="noreferrer"
+                className="transition hover:text-[#DDB765]"
+              >
+                Instagram · @opr_uk
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://www.facebook.com/61592736388045"
+                target="_blank"
+                rel="noreferrer"
+                className="transition hover:text-[#DDB765]"
+              >
+                Facebook · Other People&apos;s Recipes
+              </a>
+            </li>
           </ul>
         </div>
       </div>
