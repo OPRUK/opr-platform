@@ -96,3 +96,34 @@ export function publishedRecipeEmail({ name, title, recipeUrl }: { name: string;
     `,
   };
 }
+
+export function foundingTableWelcomeEmail({ name }: { name: string }) {
+  return {
+    subject: "Welcome to the OPR Founding Table",
+    html: `
+      <div style="font-family: Georgia, serif; max-width: 620px; margin: 0 auto; color: #4A4232; line-height: 1.65;">
+        <p style="color: #9A622A; letter-spacing: 2px; font-size: 12px; text-transform: uppercase;">Other People's Recipes</p>
+        <h1 style="font-size: 34px; line-height: 1.2;">You have a place at the Founding Table.</h1>
+        <p>Dear ${escapeHtml(name)},</p>
+        <p>Thank you for joining the very first people shaping Other People's Recipes.</p>
+        <p>You will be first to hear about new family recipes, future tasting events, Recipe of the Month voting and the next chapter of OPR.</p>
+        <p style="margin-top: 32px;">Warmly,<br /><strong>Chaten &amp; the OPR team</strong></p>
+        <p style="border-top: 1px solid #D1AD75; padding-top: 18px; margin-top: 36px; font-size: 13px; color: #6B6254;">Every recipe has a story.</p>
+      </div>
+    `,
+  };
+}
+
+export function newFoundingTableEmail({ name, email }: { name: string; email: string }) {
+  return {
+    subject: `New Founding Table member: ${name}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 620px; margin: 0 auto; color: #4A4232; line-height: 1.65;">
+        <p style="color: #9A622A; font-size: 12px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase;">Private OPR alert</p>
+        <h1 style="font-family: Georgia, serif; font-size: 30px;">A new person has joined the Founding Table.</h1>
+        <p><strong>${escapeHtml(name)}</strong> has joined the waitlist.</p>
+        <p>Contact: <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></p>
+      </div>
+    `,
+  };
+}
