@@ -22,7 +22,7 @@ const recipes = [
     number: "02",
     slug: "dads-friday-night-butter-chicken",
     image: "/images/recipes/daves-butter-chicken.png",
-    category: "Main course",
+    category: "Main",
   },
   {
     title: "Grandad's Steak & Ale Pie",
@@ -32,7 +32,7 @@ const recipes = [
     number: "03",
     slug: "grandads-steak-and-ale-pie",
     image: "/images/recipes/grandads-steak-ale-pie.png",
-    category: "Main course",
+    category: "Main",
   },
 ];
 

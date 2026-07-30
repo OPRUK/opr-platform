@@ -43,7 +43,7 @@ export default function PublishedRecipes({
 }) {
   const [communityRecipes, setCommunityRecipes] = useState<PublishedRecipe[]>([]);
   const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("All recipes");
+  const [category, setCategory] = useState("all");
 
   useEffect(() => {
     async function loadPublishedRecipes() {
@@ -86,12 +86,15 @@ export default function PublishedRecipes({
   ];
 
   const categories = [
-    "All recipes",
-    ...Array.from(new Set(cards.map((recipe) => recipe.category))),
+    { value: "all", label: "All Recipes", matches: [] },
+    { value: "starter", label: "Starter", matches: ["Starter", "Starter or side"] },
+    { value: "main", label: "Main", matches: ["Main", "Main course"] },
+    { value: "dessert", label: "Dessert", matches: ["Dessert", "Dessert or baking"] },
   ];
   const query = search.trim().toLowerCase();
   const visibleRecipes = cards.filter((recipe) => {
-    const matchesCategory = category === "All recipes" || recipe.category === category;
+    const selectedCategory = categories.find((item) => item.value === category);
+    const matchesCategory = category === "all" || selectedCategory?.matches.includes(recipe.category);
     const matchesSearch =
       !query ||
       [recipe.title, recipe.contributor, recipe.location ?? "", recipe.story, recipe.category]
@@ -118,16 +121,16 @@ export default function PublishedRecipes({
         <div className="mt-4 flex flex-wrap gap-2 md:mt-0">
           {categories.map((item) => (
             <button
-              key={item}
+              key={item.value}
               type="button"
-              onClick={() => setCategory(item)}
+              onClick={() => setCategory(item.value)}
               className={`rounded-full px-4 py-2 text-sm font-medium transition ${
-                category === item
+                category === item.value
                   ? "bg-[#4A4232] text-white"
                   : "border border-[#D1AD75] text-[#4A4232] hover:bg-[#F4DDAE]"
               }`}
             >
-              {item}
+              {item.label}
             </button>
           ))}
         </div>
@@ -181,7 +184,7 @@ export default function PublishedRecipes({
             type="button"
             onClick={() => {
               setSearch("");
-              setCategory("All recipes");
+              setCategory("all");
             }}
             className="mt-5 font-medium text-[#9A622A] underline underline-offset-4"
           >
