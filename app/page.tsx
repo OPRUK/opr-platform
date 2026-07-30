@@ -115,6 +115,43 @@ export default function Home() {
           </div>
       </section>
 
+      <section className="bg-[#FFF3DF] px-6 py-24">
+        <div className="mx-auto grid max-w-6xl overflow-hidden rounded-[2rem] bg-[#6E4B2C] shadow-2xl md:grid-cols-2">
+          <div className="relative min-h-[340px]">
+            <Image
+              src="/images/recipes/daves-butter-chicken.png"
+              alt="Dave's Butter Chicken"
+              fill
+              sizes="(min-width: 768px) 50vw, 100vw"
+              className="object-cover"
+            />
+          </div>
+
+          <div className="flex flex-col justify-center p-9 text-[#FFF3DF] md:p-14">
+            <p className="text-sm uppercase tracking-[0.35em] text-[#FFD58C]">
+              This week&apos;s story from the OPR cookbook
+            </p>
+            <h2 className="mt-5 text-4xl font-bold leading-tight md:text-5xl">
+              Dave&apos;s Butter Chicken
+            </h2>
+            <p className="mt-3 text-sm uppercase tracking-[0.25em] text-[#F0D4A0]">
+              New Malden, England
+            </p>
+            <p className="mt-7 text-lg leading-8 text-[#FFF1D8]">
+              Dave learnt this from his Indian mother-in-law, then made it his
+              own by replacing chopped tomatoes with passata. He now cooks it
+              for his Indian family whenever he is in India.
+            </p>
+            <Link
+              href="/family-cookbook/dads-friday-night-butter-chicken"
+              className="mt-9 inline-flex w-fit items-center rounded-full bg-[#DDB765] px-7 py-4 font-medium text-[#33291F] transition hover:scale-105 hover:bg-[#FFD58C]"
+            >
+              Read Dave&apos;s story →
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <section
         id="cookbook"
         className="bg-[#4A4232] px-6 py-24 animate-rise-in-delayed"
