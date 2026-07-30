@@ -64,7 +64,10 @@ export default function Home() {
             </p>
 
             <div className="mt-16 grid gap-8 md:grid-cols-3">
-              <div className="rounded-3xl bg-[#FFF3DF] p-10 shadow-lg shadow-[#6E4B2C]/15 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+              <Link
+                href="/our-story"
+                className="group rounded-3xl bg-[#FFF3DF] p-10 text-left shadow-lg shadow-[#6E4B2C]/15 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
+              >
                 <h3 className="mb-4 text-2xl font-bold text-[#4A4232]">
                   Family Stories
                 </h3>
@@ -72,9 +75,15 @@ export default function Home() {
                 <p className="text-stone-600">
                   Discover the memories behind treasured family recipes.
                 </p>
-              </div>
+                <span className="mt-7 inline-block text-sm font-semibold text-[#9A622A] transition group-hover:translate-x-1">
+                  Read Your Story →
+                </span>
+              </Link>
 
-              <div className="rounded-3xl bg-[#FFF3DF] p-10 shadow-lg shadow-[#6E4B2C]/15 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+              <Link
+                href="/family-cookbook"
+                className="group rounded-3xl bg-[#FFF3DF] p-10 text-left shadow-lg shadow-[#6E4B2C]/15 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
+              >
                 <h3 className="mb-4 text-2xl font-bold text-[#4A4232]">
                   Treasured Recipes
                 </h3>
@@ -82,9 +91,15 @@ export default function Home() {
                 <p className="text-stone-600">
                   Preserve recipes that deserve to live on for generations.
                 </p>
-              </div>
+                <span className="mt-7 inline-block text-sm font-semibold text-[#9A622A] transition group-hover:translate-x-1">
+                  Explore the cookbook →
+                </span>
+              </Link>
 
-              <div className="rounded-3xl bg-[#FFF3DF] p-10 shadow-lg shadow-[#6E4B2C]/15 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+              <Link
+                href="/share"
+                className="group rounded-3xl bg-[#FFF3DF] p-10 text-left shadow-lg shadow-[#6E4B2C]/15 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
+              >
                 <h3 className="mb-4 text-2xl font-bold text-[#4A4232]">
                   Shared Around the Table
                 </h3>
@@ -92,7 +107,10 @@ export default function Home() {
                 <p className="text-stone-600">
                   Celebrate the moments that bring families together.
                 </p>
-              </div>
+                <span className="mt-7 inline-block text-sm font-semibold text-[#9A622A] transition group-hover:translate-x-1">
+                  Share your recipe →
+                </span>
+              </Link>
             </div>
           </div>
       </section>
