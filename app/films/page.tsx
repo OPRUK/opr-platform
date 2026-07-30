@@ -41,7 +41,8 @@ export default function FilmsPage() {
           loop
           muted
           playsInline
-          preload="metadata"
+          preload="auto"
+          poster="/images/recipes/barbaras-beef-casserole.png"
           aria-hidden="true"
         >
           <source src="/videos/opr-recipe-stories-film-v2.mp4" type="video/mp4" />
