@@ -15,7 +15,7 @@ export default function Home() {
 
         <div className="relative z-10 mx-auto max-w-4xl px-8 text-center text-white animate-rise-in">
           <p className="mb-6 text-sm font-semibold uppercase tracking-[0.4em] text-[#FFD58C] drop-shadow-md">
-            Welcome to
+            A Living Cookbook
           </p>
 
           <h1 className="text-6xl md:text-8xl font-bold leading-tight tracking-tight drop-shadow-2xl">
