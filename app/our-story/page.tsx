@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Navigation from "../components/Navigation";
+import Footer from "../components/Footer";
 
 export default function OurStory() {
   return (
@@ -57,6 +58,7 @@ export default function OurStory() {
           </Link>
         </div>
       </section>
+      <Footer />
     </main>
   );
 }

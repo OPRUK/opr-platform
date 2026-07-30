@@ -1,5 +1,6 @@
 import Navigation from "../components/Navigation";
 import RecipeForm from "./RecipeForm";
+import Footer from "../components/Footer";
 
 export default function ShareYourStory() {
   return (
@@ -22,6 +23,28 @@ export default function ShareYourStory() {
       <section className="mx-auto max-w-3xl px-6 py-20 md:px-8">
         <RecipeForm />
       </section>
+
+      <section className="border-t border-[#D1AD75]/70 bg-[#FFF3DF] px-6 py-20">
+        <div className="mx-auto max-w-6xl">
+          <p className="text-center text-sm uppercase tracking-[0.35em] text-amber-700">
+            What happens next
+          </p>
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            {[
+              ["01", "Send your recipe", "Your email arrives directly with the OPR team."],
+              ["02", "We read the story", "We look for the people and memories behind every dish."],
+              ["03", "A recipe lives on", "Selected stories can appear in the living cookbook and beyond."],
+            ].map(([number, title, copy]) => (
+              <article key={number} className="rounded-3xl border border-[#D1AD75]/70 bg-[#F4DDAE]/60 p-7">
+                <p className="text-sm font-bold tracking-[0.25em] text-amber-800">{number}</p>
+                <h2 className="mt-5 text-2xl font-bold">{title}</h2>
+                <p className="mt-3 leading-7 text-stone-700">{copy}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+      <Footer />
     </main>
   );
 }

@@ -1,6 +1,14 @@
 import Navigation from "../components/Navigation";
+import Footer from "../components/Footer";
 
 const films = [
+  {
+    title: "Three Recipes, Three Stories",
+    description:
+      "A short OPR film celebrating Nana Serb’s rice pudding, Dave’s butter chicken and Grandad’s steak & ale pie.",
+    source: "/videos/opr-recipe-stories-film.mp4",
+    poster: "/images/recipes/nana-serbs-rice-pudding.png",
+  },
   {
     title: "The OPR Story",
     description:
@@ -46,7 +54,12 @@ export default function FilmsPage() {
             className={`grid items-center gap-10 md:grid-cols-2 ${index % 2 === 1 ? "md:[&>*:first-child]:order-2" : ""}`}
           >
             <div className="overflow-hidden rounded-3xl bg-black shadow-2xl">
-              <video className="aspect-video w-full" controls preload="metadata">
+              <video
+                className="aspect-video w-full"
+                controls
+                preload="metadata"
+                poster={film.poster}
+              >
                 <source src={film.source} type="video/mp4" />
                 Your browser does not support video playback.
               </video>
@@ -75,6 +88,7 @@ export default function FilmsPage() {
           Every recipe has a story. Perhaps yours is the one we tell next.
         </h2>
       </section>
+      <Footer />
     </main>
   );
 }

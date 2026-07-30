@@ -1,131 +1,312 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
+import { supabase } from "../../lib/supabase/client";
 
 type RecipeFormValues = {
   name: string;
   email: string;
+  location: string;
   title: string;
+  category: string;
+  servings: string;
   story: string;
   ingredients: string;
   method: string;
+  permission: boolean;
 };
 
 const initialValues: RecipeFormValues = {
   name: "",
   email: "",
+  location: "",
   title: "",
+  category: "",
+  servings: "",
   story: "",
   ingredients: "",
   method: "",
+  permission: false,
 };
 
-export default function RecipeForm() {
-  const [values, setValues] = useState(initialValues);
+const recipeDraftKey = "opr-recipe-submission-draft";
 
-  function updateValue(field: keyof RecipeFormValues, value: string) {
+function getInitialValues(): RecipeFormValues {
+  if (typeof window === "undefined") {
+    return initialValues;
+  }
+
+  try {
+    const savedDraft = window.sessionStorage.getItem(recipeDraftKey);
+    return savedDraft ? { ...initialValues, ...JSON.parse(savedDraft) } : initialValues;
+  } catch {
+    window.sessionStorage.removeItem(recipeDraftKey);
+    return initialValues;
+  }
+}
+
+export default function RecipeForm() {
+  const [values, setValues] = useState(getInitialValues);
+  const [submissionComplete, setSubmissionComplete] = useState(false);
+  const [submissionError, setSubmissionError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    window.sessionStorage.setItem(recipeDraftKey, JSON.stringify(values));
+  }, [values]);
+
+  function updateValue(field: keyof RecipeFormValues, value: string | boolean) {
     setValues((current) => ({ ...current, [field]: value }));
   }
 
-  function sendRecipe(event: FormEvent<HTMLFormElement>) {
+  async function submitRecipe(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setIsSubmitting(true);
+    setSubmissionError("");
 
-    const subject = `OPR recipe submission: ${values.title}`;
-    const body = `Name: ${values.name}\nEmail: ${values.email}\n\nRecipe: ${values.title}\n\nTHE STORY\n${values.story}\n\nINGREDIENTS\n${values.ingredients}\n\nMETHOD\n${values.method}`;
+    const { error } = await supabase.from("recipe_submissions").insert({
+      name: values.name,
+      email: values.email,
+      location: values.location || null,
+      title: values.title,
+      category: values.category,
+      servings: values.servings || null,
+      story: values.story,
+      ingredients: values.ingredients,
+      method: values.method,
+      permission_to_feature: values.permission,
+    });
 
-    window.location.href = `mailto:info@otherpeoplesrecipes.co.uk?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    if (error) {
+      setSubmissionError(
+        "We could not save your recipe just now. Please try again in a moment.",
+      );
+      setIsSubmitting(false);
+      return;
+    }
+
+    window.sessionStorage.removeItem(recipeDraftKey);
+    setSubmissionComplete(true);
+    setIsSubmitting(false);
   }
 
+  if (submissionComplete) {
+    return (
+      <section className="rounded-3xl bg-[#FFF3DF] p-8 text-center shadow-xl shadow-[#6E4B2C]/15 md:p-12">
+        <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
+          Your recipe has been received
+        </p>
+        <h2 className="mt-5 text-4xl font-bold md:text-5xl">
+          Thank you for sharing it with us.
+        </h2>
+        <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-stone-700">
+          Thank you for trusting OPR with your family&apos;s story. Our team will
+          read it and may be in touch if it could become part of the living
+          cookbook.
+        </p>
+        <button
+          type="button"
+          onClick={() => {
+            setValues(initialValues);
+            window.sessionStorage.removeItem(recipeDraftKey);
+            setSubmissionComplete(false);
+          }}
+          className="mt-9 rounded-full border border-[#4A4232] px-7 py-3 font-medium transition hover:bg-[#4A4232] hover:text-white"
+        >
+          Share another recipe
+        </button>
+      </section>
+    );
+  }
+
+  const inputClassName =
+    "mt-3 w-full rounded-xl border border-[#D1AD75] bg-[#F4DDAE] px-4 py-3 outline-none transition placeholder:text-stone-500 focus:border-[#4A4232] focus:ring-2 focus:ring-[#D1AD75]/60";
+
   return (
-    <form onSubmit={sendRecipe} className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#6E4B2C]/15 md:p-12">
-      <div className="grid gap-7 md:grid-cols-2">
-        <label className="block text-sm font-medium">
-          Your name
-          <input
-            required
-            value={values.name}
-            onChange={(event) => updateValue("name", event.target.value)}
-            type="text"
-            name="name"
-            placeholder="Your first name"
-            className="mt-3 w-full rounded-xl border border-[#D1AD75] bg-[#F4DDAE] px-4 py-3 outline-none transition focus:border-[#4A4232]"
-          />
-        </label>
-        <label className="block text-sm font-medium">
-          Email address
-          <input
-            required
-            value={values.email}
-            onChange={(event) => updateValue("email", event.target.value)}
-            type="email"
-            name="email"
-            placeholder="you@example.com"
-            className="mt-3 w-full rounded-xl border border-[#D1AD75] bg-[#F4DDAE] px-4 py-3 outline-none transition focus:border-[#4A4232]"
-          />
-        </label>
+    <form
+      onSubmit={submitRecipe}
+      className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#6E4B2C]/15 md:p-12"
+    >
+      <div className="border-b border-[#D1AD75]/70 pb-8">
+        <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
+          Your recipe
+        </p>
+        <h2 className="mt-4 text-3xl font-bold md:text-4xl">
+          Give it a place in the book.
+        </h2>
+        <p className="mt-4 max-w-2xl leading-7 text-stone-700">
+          There is no need for it to be perfect. The recipes we remember best
+          are often the ones written in a hurry, with a story beside them.
+        </p>
       </div>
 
-      <label className="mt-7 block text-sm font-medium">
-        What&apos;s the recipe called?
+      <fieldset className="mt-10">
+        <legend className="text-xl font-bold">About you</legend>
+        <div className="mt-6 grid gap-7 md:grid-cols-2">
+          <label className="block text-sm font-medium">
+            Your name
+            <input
+              required
+              value={values.name}
+              onChange={(event) => updateValue("name", event.target.value)}
+              type="text"
+              name="name"
+              autoComplete="name"
+              placeholder="Your first name"
+              className={inputClassName}
+            />
+          </label>
+
+          <label className="block text-sm font-medium">
+            Email address
+            <input
+              required
+              value={values.email}
+              onChange={(event) => updateValue("email", event.target.value)}
+              type="email"
+              name="email"
+              autoComplete="email"
+              placeholder="you@example.com"
+              className={inputClassName}
+            />
+          </label>
+        </div>
+
+        <label className="mt-7 block text-sm font-medium">
+          Town or city <span className="font-normal text-stone-500">(optional)</span>
+          <input
+            value={values.location}
+            onChange={(event) => updateValue("location", event.target.value)}
+            type="text"
+            name="location"
+            placeholder="For example: Birmingham"
+            className={inputClassName}
+          />
+        </label>
+      </fieldset>
+
+      <fieldset className="mt-12 border-t border-[#D1AD75]/70 pt-10">
+        <legend className="text-xl font-bold">The recipe</legend>
+
+        <label className="mt-6 block text-sm font-medium">
+          What&apos;s it called?
+          <input
+            required
+            value={values.title}
+            onChange={(event) => updateValue("title", event.target.value)}
+            type="text"
+            name="title"
+            placeholder="For example: Nana's Sunday Rice Pudding"
+            className={inputClassName}
+          />
+        </label>
+
+        <div className="mt-7 grid gap-7 md:grid-cols-2">
+          <label className="block text-sm font-medium">
+            Type of recipe
+            <select
+              required
+              value={values.category}
+              onChange={(event) => updateValue("category", event.target.value)}
+              name="category"
+              className={inputClassName}
+            >
+              <option value="" disabled>
+                Choose one
+              </option>
+              <option>Breakfast or brunch</option>
+              <option>Starter or side</option>
+              <option>Main course</option>
+              <option>Dessert or baking</option>
+              <option>Drink</option>
+              <option>Something else</option>
+            </select>
+          </label>
+
+          <label className="block text-sm font-medium">
+            How many does it serve? <span className="font-normal text-stone-500">(optional)</span>
+            <input
+              value={values.servings}
+              onChange={(event) => updateValue("servings", event.target.value)}
+              type="text"
+              name="servings"
+              placeholder="For example: 4 people"
+              className={inputClassName}
+            />
+          </label>
+        </div>
+
+        <label className="mt-7 block text-sm font-medium">
+          Tell us why it&apos;s special
+          <textarea
+            required
+            value={values.story}
+            onChange={(event) => updateValue("story", event.target.value)}
+            name="story"
+            rows={6}
+            placeholder="Who taught you this recipe? When do you make it? What does it remind you of?"
+            className={inputClassName}
+          />
+        </label>
+
+        <label className="mt-7 block text-sm font-medium">
+          Ingredients
+          <textarea
+            required
+            value={values.ingredients}
+            onChange={(event) => updateValue("ingredients", event.target.value)}
+            name="ingredients"
+            rows={6}
+            placeholder="One ingredient per line is perfect."
+            className={inputClassName}
+          />
+        </label>
+
+        <label className="mt-7 block text-sm font-medium">
+          Method
+          <textarea
+            required
+            value={values.method}
+            onChange={(event) => updateValue("method", event.target.value)}
+            name="method"
+            rows={8}
+            placeholder="Tell us how your family makes it, one step at a time."
+            className={inputClassName}
+          />
+        </label>
+      </fieldset>
+
+      <label className="mt-10 flex gap-4 rounded-2xl border border-[#D1AD75]/80 bg-[#F4DDAE]/70 p-5 text-sm leading-6">
         <input
-          required
-          value={values.title}
-          onChange={(event) => updateValue("title", event.target.value)}
-          type="text"
-          name="title"
-          placeholder="For example: Nan's Sunday Rice Pudding"
-          className="mt-3 w-full rounded-xl border border-[#D1AD75] bg-[#F4DDAE] px-4 py-3 outline-none transition focus:border-[#4A4232]"
+          checked={values.permission}
+          onChange={(event) => updateValue("permission", event.target.checked)}
+          type="checkbox"
+          name="permission"
+          className="mt-1 h-4 w-4 accent-[#4A4232]"
         />
-      </label>
-
-      <label className="mt-7 block text-sm font-medium">
-        Tell us why it&apos;s special
-        <textarea
-          required
-          value={values.story}
-          onChange={(event) => updateValue("story", event.target.value)}
-          name="story"
-          rows={6}
-          placeholder="Who taught you this recipe? When do you make it? What does it remind you of?"
-          className="mt-3 w-full resize-y rounded-xl border border-[#D1AD75] bg-[#F4DDAE] px-4 py-3 outline-none transition focus:border-[#4A4232]"
-        />
-      </label>
-
-      <label className="mt-7 block text-sm font-medium">
-        Ingredients
-        <textarea
-          required
-          value={values.ingredients}
-          onChange={(event) => updateValue("ingredients", event.target.value)}
-          name="ingredients"
-          rows={5}
-          placeholder="One ingredient per line is perfect."
-          className="mt-3 w-full resize-y rounded-xl border border-[#D1AD75] bg-[#F4DDAE] px-4 py-3 outline-none transition focus:border-[#4A4232]"
-        />
-      </label>
-
-      <label className="mt-7 block text-sm font-medium">
-        Method
-        <textarea
-          required
-          value={values.method}
-          onChange={(event) => updateValue("method", event.target.value)}
-          name="method"
-          rows={7}
-          placeholder="Tell us how your family makes it."
-          className="mt-3 w-full resize-y rounded-xl border border-[#D1AD75] bg-[#F4DDAE] px-4 py-3 outline-none transition focus:border-[#4A4232]"
-        />
+        <span>
+          I&apos;m happy for OPR to contact me if this recipe could be featured on
+          the website, in the restaurant or in a future film.
+        </span>
       </label>
 
       <button
         type="submit"
-        className="mt-10 rounded-full bg-[#4A4232] px-8 py-4 text-lg font-medium text-white transition hover:scale-105"
+        disabled={isSubmitting}
+        className="mt-10 rounded-full bg-[#4A4232] px-8 py-4 text-lg font-medium text-white transition hover:scale-105 hover:bg-[#33291F]"
       >
-        Prepare My Recipe Email
+        {isSubmitting ? "Saving your recipe..." : "Share my recipe"}
       </button>
 
-      <p className="mt-5 text-sm leading-6 text-stone-500">
-        Your email app will open with your recipe ready to send to the OPR team.
+      {submissionError ? (
+        <p className="mt-5 rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-sm leading-6 text-red-800">
+          {submissionError}
+        </p>
+      ) : null}
+
+      <p className="mt-5 text-sm leading-6 text-stone-600">
+        Your recipe is sent securely to the OPR team. We&apos;ll only use your
+        details to respond about your submission.
       </p>
     </form>
   );
