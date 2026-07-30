@@ -9,7 +9,7 @@ export default function OurStory() {
 
       <section className="bg-[#4A4232] px-6 pb-24 pt-40 text-center text-white">
         <p className="mb-5 text-sm uppercase tracking-[0.4em] text-amber-300">
-          Our Story
+          Your Story
         </p>
         <h1 className="mx-auto max-w-4xl text-5xl font-bold leading-tight md:text-7xl">
           Every family has a recipe worth remembering.

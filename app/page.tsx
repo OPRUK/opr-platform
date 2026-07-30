@@ -40,7 +40,7 @@ export default function Home() {
               href="/our-story"
               className="rounded-full border border-white px-10 py-4 text-lg transition hover:bg-white hover:text-black"
             >
-              Our Story
+              Your Story
             </Link>
           </div>
         </div>

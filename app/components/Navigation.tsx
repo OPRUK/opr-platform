@@ -8,7 +8,7 @@ export default function Navigation() {
 
   const links = [
     { href: "/", label: "Home" },
-    { href: "/our-story", label: "Our Story" },
+    { href: "/our-story", label: "Your Story" },
     { href: "/family-cookbook", label: "Cookbook" },
     { href: "/films", label: "Films" },
     { href: "/share", label: "Share" },
