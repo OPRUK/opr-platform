@@ -34,17 +34,33 @@ export default function FilmsPage() {
     <main className="min-h-screen bg-[#EED8B2] text-[#4A4232]">
       <Navigation />
 
-      <section className="bg-[#4A4232] px-6 pb-24 pt-40 text-center text-white">
-        <p className="mb-5 text-sm uppercase tracking-[0.4em] text-amber-300">
-          The OPR Film Collection
-        </p>
-        <h1 className="mx-auto max-w-4xl text-5xl font-bold leading-tight md:text-7xl">
-          Some stories are best told around a table. Others deserve a screen.
-        </h1>
-        <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-stone-200">
-          Watch the films behind Other People&apos;s Recipes — a growing collection
-          about food, family and the memories we choose to pass on.
-        </p>
+      <section className="relative isolate overflow-hidden bg-[#4A4232] px-6 pb-24 pt-40 text-center text-white">
+        <video
+          className="absolute inset-0 -z-20 h-full w-full object-cover"
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+        >
+          <source src="/videos/opr-recipe-stories-film.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 -z-10 bg-[#2D2117]/75" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#20160F]/65 via-[#4A4232]/45 to-[#20160F]/80" />
+
+        <div className="mx-auto max-w-4xl">
+          <p className="mb-5 text-sm uppercase tracking-[0.4em] text-amber-200">
+            The OPR Film Collection
+          </p>
+          <h1 className="text-5xl font-bold leading-tight drop-shadow-lg md:text-7xl">
+            Some stories are best told around a table. Others deserve a screen.
+          </h1>
+          <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-[#FFF1D8]">
+            Watch the films behind Other People&apos;s Recipes — a growing collection
+            about food, family and the memories we choose to pass on.
+          </p>
+        </div>
       </section>
 
       <section className="mx-auto max-w-6xl space-y-20 px-6 py-20 md:px-8">
