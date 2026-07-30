@@ -20,6 +20,7 @@ type Submission = {
   method: string;
   permission_to_feature: boolean;
   status: SubmissionStatus;
+  photo_path: string | null;
 };
 
 const allowedEmail = "chaten@otherpeoplesrecipes.co.uk";
@@ -66,7 +67,7 @@ export default function AdminDashboard() {
       const { data, error } = await supabase
         .from("recipe_submissions")
         .select(
-          "id, created_at, name, email, location, title, category, servings, story, ingredients, method, permission_to_feature, status",
+          "id, created_at, name, email, location, title, category, servings, story, ingredients, method, permission_to_feature, status, photo_path",
         )
         .order("created_at", { ascending: false });
 
@@ -124,6 +125,10 @@ export default function AdminDashboard() {
       current?.id === id ? { ...current, status } : current,
     );
   }
+
+  const selectedPhotoUrl = selectedSubmission?.photo_path
+    ? supabase.storage.from("recipe-photos").getPublicUrl(selectedSubmission.photo_path).data.publicUrl
+    : null;
 
   if (loading && !session) {
     return <main className="min-h-screen bg-[#EED8B2]" />;
@@ -267,6 +272,16 @@ export default function AdminDashboard() {
               </div>
 
               <div className="mt-10 space-y-8 text-stone-700">
+                {selectedPhotoUrl ? (
+                  <article>
+                    <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#4A4232]">Recipe photo</h3>
+                    <img
+                      src={selectedPhotoUrl}
+                      alt={selectedSubmission.title}
+                      className="mt-4 max-h-[28rem] w-full rounded-2xl object-cover shadow-lg"
+                    />
+                  </article>
+                ) : null}
                 <article>
                   <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#4A4232]">The story</h3>
                   <p className="mt-3 whitespace-pre-wrap leading-8">{selectedSubmission.story}</p>

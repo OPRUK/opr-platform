@@ -47,6 +47,8 @@ function getInitialValues(): RecipeFormValues {
 
 export default function RecipeForm() {
   const [values, setValues] = useState(getInitialValues);
+  const [photo, setPhoto] = useState<File | null>(null);
+  const [photoPreview, setPhotoPreview] = useState("");
   const [submissionComplete, setSubmissionComplete] = useState(false);
   const [submissionError, setSubmissionError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -59,10 +61,50 @@ export default function RecipeForm() {
     setValues((current) => ({ ...current, [field]: value }));
   }
 
+  function choosePhoto(file: File | null) {
+    if (!file) {
+      setPhoto(null);
+      setPhotoPreview("");
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      setSubmissionError("Please choose an image file.");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setSubmissionError("Please choose a photo smaller than 5 MB.");
+      return;
+    }
+
+    setSubmissionError("");
+    setPhoto(file);
+    setPhotoPreview(URL.createObjectURL(file));
+  }
+
   async function submitRecipe(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsSubmitting(true);
     setSubmissionError("");
+
+    let photoPath: string | null = null;
+
+    if (photo) {
+      const fileExtension = photo.name.split(".").pop()?.toLowerCase() || "jpg";
+      photoPath = `${crypto.randomUUID()}.${fileExtension}`;
+      const { error: photoError } = await supabase.storage
+        .from("recipe-photos")
+        .upload(photoPath, photo, { contentType: photo.type, upsert: false });
+
+      if (photoError) {
+        setSubmissionError(
+          "We could not upload that photo just now. Please try again in a moment.",
+        );
+        setIsSubmitting(false);
+        return;
+      }
+    }
 
     const { error } = await supabase.from("recipe_submissions").insert({
       name: values.name,
@@ -75,6 +117,7 @@ export default function RecipeForm() {
       ingredients: values.ingredients,
       method: values.method,
       permission_to_feature: values.permission,
+      photo_path: photoPath,
     });
 
     if (error) {
@@ -86,6 +129,8 @@ export default function RecipeForm() {
     }
 
     window.sessionStorage.removeItem(recipeDraftKey);
+    setPhoto(null);
+    setPhotoPreview("");
     setSubmissionComplete(true);
     setIsSubmitting(false);
   }
@@ -108,6 +153,8 @@ export default function RecipeForm() {
           type="button"
           onClick={() => {
             setValues(initialValues);
+            setPhoto(null);
+            setPhotoPreview("");
             window.sessionStorage.removeItem(recipeDraftKey);
             setSubmissionComplete(false);
           }}
@@ -274,6 +321,38 @@ export default function RecipeForm() {
             className={inputClassName}
           />
         </label>
+
+        <div className="mt-7 rounded-2xl border border-dashed border-[#B77938]/70 bg-[#F4DDAE]/45 p-5">
+          <label className="block text-sm font-medium">
+            Add a photo <span className="font-normal text-stone-500">(optional)</span>
+            <input
+              onChange={(event) => choosePhoto(event.target.files?.[0] ?? null)}
+              type="file"
+              name="photo"
+              accept="image/jpeg,image/png,image/webp"
+              className="mt-3 block w-full text-sm text-stone-700 file:mr-4 file:rounded-full file:border-0 file:bg-[#4A4232] file:px-4 file:py-2 file:font-medium file:text-white hover:file:bg-[#33291F]"
+            />
+          </label>
+          <p className="mt-3 text-sm leading-6 text-stone-600">
+            A clear photo of the finished dish is perfect. JPG, PNG or WebP, up to 5 MB.
+          </p>
+          {photoPreview ? (
+            <div className="mt-5 flex items-start gap-4">
+              <img
+                src={photoPreview}
+                alt="Recipe photo preview"
+                className="h-28 w-28 rounded-xl object-cover shadow-md"
+              />
+              <button
+                type="button"
+                onClick={() => choosePhoto(null)}
+                className="rounded-full border border-[#4A4232] px-4 py-2 text-sm font-medium transition hover:bg-[#4A4232] hover:text-white"
+              >
+                Remove photo
+              </button>
+            </div>
+          ) : null}
+        </div>
       </fieldset>
 
       <label className="mt-10 flex gap-4 rounded-2xl border border-[#D1AD75]/80 bg-[#F4DDAE]/70 p-5 text-sm leading-6">
