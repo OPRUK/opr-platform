@@ -49,7 +49,7 @@ export default function FounderPage() {
               Other People&apos;s Recipes began as an idea back in 2000. It has
               always been a passion of mine, but life moved quickly and I never
               quite got round to bringing it to life. Now, with so much
-              encouragement from friends and family, I finally have.
+              encouragement from family and friends, I finally have.
             </p>
             <p>
               I&apos;ve been lucky enough to travel the world and taste some
