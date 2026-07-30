@@ -36,15 +36,26 @@ export default function FounderPage() {
           </div>
         </div>
 
-        <article className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#6E4B2C]/10 md:p-12">
-          <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
-            A founder&apos;s letter
-          </p>
-          <h2 className="mt-5 text-4xl font-bold leading-tight md:text-5xl">
-            OPR is as much about you and your family as it is about the recipes we hold dear to our hearts.
-          </h2>
+        <article
+          className="relative rotate-[0.35deg] overflow-hidden rounded-sm border border-[#C29A60]/60 bg-[#F7E7C4] p-8 shadow-2xl shadow-[#6E4B2C]/20 md:p-12"
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(to bottom, transparent 0, transparent 33px, rgba(125, 83, 41, 0.12) 34px)",
+          }}
+        >
+          <div className="absolute -top-3 left-1/2 h-7 w-28 -translate-x-1/2 rotate-[-2deg] bg-[#D9B66D]/70 shadow-sm" />
+          <div className="relative">
+            <div className="flex items-start justify-between gap-4 border-b border-[#9A622A]/35 pb-5">
+              <p className="text-xs uppercase tracking-[0.3em] text-[#8B5A2B]">
+                A founder&apos;s letter
+              </p>
+              <p className="font-serif text-2xl italic text-[#8B5A2B]">2000</p>
+            </div>
+            <h2 className="mt-8 font-serif text-4xl font-bold leading-tight text-[#4A4232] md:text-5xl">
+              OPR is as much about you and your family as it is about the recipes we hold dear to our hearts.
+            </h2>
 
-          <div className="mt-8 space-y-6 text-lg leading-8 text-stone-700">
+          <div className="mt-9 space-y-6 font-serif text-lg leading-8 text-[#5B4834]">
             <p>
               Other People&apos;s Recipes began as an idea back in 2000. It has
               always been a passion of mine, but life moved quickly and I never
@@ -70,12 +81,16 @@ export default function FounderPage() {
             </p>
           </div>
 
-          <p className="mt-10 font-serif text-3xl italic text-[#6E4B2C]">
+          <p
+            className="mt-10 text-4xl text-[#6E4B2C]"
+            style={{ fontFamily: '"Segoe Print", "Bradley Hand", cursive' }}
+          >
             Chaten
           </p>
-          <p className="mt-1 text-sm uppercase tracking-[0.25em] text-[#9A622A]">
+          <p className="mt-1 text-xs uppercase tracking-[0.25em] text-[#9A622A]">
             Founder, Other People&apos;s Recipes
           </p>
+          </div>
         </article>
       </section>
 
