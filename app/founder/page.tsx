@@ -8,41 +8,39 @@ export default function FounderPage() {
     <main className="min-h-screen bg-[#EED8B2] text-[#4A4232]">
       <Navigation />
 
-      <section className="bg-[#4A4232] px-6 pb-24 pt-40 text-center text-white">
-        <p className="mb-5 text-sm uppercase tracking-[0.4em] text-amber-300">
-          From the founder
-        </p>
-        <h1 className="mx-auto max-w-4xl text-5xl font-bold leading-tight md:text-7xl">
-          Every recipe deserves to be remembered.
-        </h1>
-        <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-stone-200">
-          A note from Chaten, founder of Other People&apos;s Recipes.
-        </p>
-      </section>
+      <section className="relative isolate overflow-hidden px-6 pb-24 pt-36 md:px-8 md:pt-44">
+        <Image
+          src="/images/founders-letter-desk.png"
+          alt="A handwritten note kept in a treasured wooden desk drawer"
+          fill
+          priority
+          className="-z-20 object-cover"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(35,24,15,0.9)_0%,rgba(35,24,15,0.68)_42%,rgba(35,24,15,0.38)_100%)]" />
 
-      <section className="mx-auto grid max-w-6xl gap-12 px-6 py-20 md:grid-cols-[0.9fr_1.1fr] md:items-start md:px-8">
-        <div className="relative overflow-hidden rounded-3xl bg-[#6E4B2C] shadow-2xl">
-          <Image
-            src="/images/hero-kitchen.png"
-            alt="A treasured recipe book on a kitchen table"
-            width={1000}
-            height={750}
-            className="h-full min-h-[360px] w-full object-cover"
-          />
-          <div className="absolute inset-0 bg-[#21170F]/45" />
-          <div className="absolute inset-x-0 bottom-0 p-8 text-[#FFF3DF]">
-            <p className="text-sm uppercase tracking-[0.3em] text-[#FFD58C]">Chaten</p>
-            <p className="mt-2 text-3xl font-bold">Founder</p>
+        <div className="mx-auto max-w-6xl">
+          <div className="max-w-2xl text-[#FFF3DF]">
+            <p className="mb-5 text-sm uppercase tracking-[0.4em] text-[#FFD58C]">
+              A note to my future self
+            </p>
+            <h1 className="text-5xl font-bold leading-tight drop-shadow-lg md:text-7xl">
+              A founder&apos;s letter,
+              <span className="block text-[#FFD58C]">written in 2000.</span>
+            </h1>
+            <p className="mt-7 max-w-xl text-lg leading-8 text-[#FFF3DF]/90">
+              A small reminder left in a desk drawer: when life gives you the
+              time, build the place where family recipes can live on.
+            </p>
           </div>
-        </div>
 
-        <article
-          className="relative rotate-[0.35deg] overflow-hidden rounded-sm border border-[#C29A60]/60 bg-[#F7E7C4] p-8 shadow-2xl shadow-[#6E4B2C]/20 md:p-12"
-          style={{
-            backgroundImage:
-              "repeating-linear-gradient(to bottom, transparent 0, transparent 33px, rgba(125, 83, 41, 0.12) 34px)",
-          }}
-        >
+          <article
+            className="relative ml-auto mt-14 max-w-2xl rotate-[0.35deg] overflow-hidden rounded-sm border border-[#C29A60]/60 bg-[#F7E7C4]/95 p-8 shadow-2xl shadow-black/45 backdrop-blur-[1px] md:mt-18 md:p-12"
+            style={{
+              backgroundImage:
+                "repeating-linear-gradient(to bottom, transparent 0, transparent 33px, rgba(125, 83, 41, 0.13) 34px)",
+            }}
+          >
           <div className="absolute -top-3 left-1/2 h-7 w-28 -translate-x-1/2 rotate-[-2deg] bg-[#D9B66D]/70 shadow-sm" />
           <div className="relative">
             <div className="flex items-start justify-between gap-4 border-b border-[#9A622A]/35 pb-5">
@@ -51,11 +49,17 @@ export default function FounderPage() {
               </p>
               <p className="font-serif text-2xl italic text-[#8B5A2B]">2000</p>
             </div>
-            <h2 className="mt-8 font-serif text-4xl font-bold leading-tight text-[#4A4232] md:text-5xl">
+            <h2
+              className="mt-8 text-4xl font-bold leading-tight text-[#4A4232] md:text-5xl"
+              style={{ fontFamily: '"Segoe Print", "Bradley Hand", cursive' }}
+            >
               OPR is as much about you and your family as it is about the recipes we hold dear to our hearts.
             </h2>
 
-          <div className="mt-9 space-y-6 font-serif text-lg leading-8 text-[#5B4834]">
+          <div
+            className="mt-9 space-y-6 text-[1.08rem] leading-8 text-[#5B4834]"
+            style={{ fontFamily: '"Segoe Print", "Bradley Hand", cursive' }}
+          >
             <p>
               Other People&apos;s Recipes began as an idea back in 2000. It has
               always been a passion of mine, but life moved quickly and I never
@@ -91,7 +95,8 @@ export default function FounderPage() {
             Founder, Other People&apos;s Recipes
           </p>
           </div>
-        </article>
+          </article>
+        </div>
       </section>
 
       <section className="bg-[#33291F] px-6 py-20 text-center text-[#FFF3DF]">
