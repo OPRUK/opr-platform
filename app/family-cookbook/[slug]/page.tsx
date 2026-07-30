@@ -73,7 +73,7 @@ const recipes = {
       "Reheat slowly until the sauce is rich and glossy, then season to taste.",
       "Serve in warmed bowls with creamy mash or crusty bread, and plenty of extra gravy.",
     ],
-    image: "/images/recipes/grandads-steak-ale-pie.png",
+    image: "/images/recipes/barbaras-beef-casserole.png",
   },
 };
 

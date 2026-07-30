@@ -31,7 +31,7 @@ const recipes = [
       "Barbara learnt it from her mother Pat, then made it her own with a tablespoon of Bovril. She always prepared it a day early, saying that good things were worth waiting for.",
     number: "03",
     slug: "barbaras-beef-casserole",
-    image: "/images/recipes/grandads-steak-ale-pie.png",
+    image: "/images/recipes/barbaras-beef-casserole.png",
     category: "Main",
   },
 ];
