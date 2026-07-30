@@ -43,7 +43,7 @@ export default function HeroCarousel() {
   }, []);
 
   return (
-    <div className="absolute inset-0 z-0 overflow-hidden bg-[#2D2117]">
+    <div className="absolute inset-0 z-0 overflow-hidden bg-[#0D342F]">
       {slides.map((slide, index) => (
         <Image
           key={slide.image}
@@ -58,8 +58,8 @@ export default function HeroCarousel() {
         />
       ))}
 
-      <div className="absolute inset-0 bg-[#1D1611]/55" />
-      <div className="absolute inset-0 bg-gradient-to-b from-[#20160F]/35 via-transparent to-[#20160F]/60" />
+      <div className="absolute inset-0 bg-[#0A2A27]/55" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#08231F]/35 via-transparent to-[#08231F]/60" />
 
       <div className="absolute bottom-9 left-1/2 z-10 flex -translate-x-1/2 items-center gap-3 text-xs font-medium tracking-wide text-[#FFF3DF] sm:bottom-11">
         <span className="hidden sm:inline">{slides[activeSlide].label}</span>

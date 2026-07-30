@@ -109,7 +109,7 @@ export default function PublishedRecipes({
 
   return (
     <section>
-      <div className="rounded-3xl border border-[#D1AD75]/70 bg-[#FFF3DF] p-5 shadow-sm shadow-[#6E4B2C]/10 md:flex md:items-center md:justify-between md:gap-6 md:p-6">
+      <div className="rounded-3xl border border-[#D1AD75]/70 bg-[#FFF3DF] p-5 shadow-sm shadow-[#1C5A50]/10 md:flex md:items-center md:justify-between md:gap-6 md:p-6">
         <label className="block flex-1">
           <span className="sr-only">Search recipes</span>
           <input
@@ -117,7 +117,7 @@ export default function PublishedRecipes({
             onChange={(event) => setSearch(event.target.value)}
             type="search"
             placeholder="Search by recipe, story, cook or place"
-            className="w-full rounded-xl border border-[#D1AD75] bg-white px-5 py-3.5 text-[#4A4232] outline-none transition placeholder:text-stone-500 focus:border-[#9A622A] focus:ring-2 focus:ring-[#D1AD75]/50"
+            className="w-full rounded-xl border border-[#D1AD75] bg-white px-5 py-3.5 text-[#123C39] outline-none transition placeholder:text-stone-500 focus:border-[#9A622A] focus:ring-2 focus:ring-[#D1AD75]/50"
           />
         </label>
         <div className="mt-4 flex flex-wrap gap-2 md:mt-0">
@@ -128,8 +128,8 @@ export default function PublishedRecipes({
               onClick={() => setCategory(item.value)}
               className={`rounded-full px-4 py-2 text-sm font-medium transition ${
                 category === item.value
-                  ? "bg-[#4A4232] text-white"
-                  : "border border-[#D1AD75] text-[#4A4232] hover:bg-[#F4DDAE]"
+                  ? "bg-[#123C39] text-white"
+                  : "border border-[#D1AD75] text-[#123C39] hover:bg-[#F4DDAE]"
               }`}
             >
               {item.label}
@@ -148,7 +148,7 @@ export default function PublishedRecipes({
             <Link
               key={recipe.id}
               href={recipe.href}
-              className="group overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-lg shadow-[#6E4B2C]/15 transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
+              className="group overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/15 transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
             >
               {recipe.imageUrl ? (
                 <img
@@ -157,7 +157,7 @@ export default function PublishedRecipes({
                   className="aspect-[4/3] w-full object-cover transition duration-500 group-hover:scale-105"
                 />
               ) : (
-                <div className="flex aspect-[4/3] items-center justify-center bg-[#DDBB82] px-8 text-center text-xl font-bold text-[#4A4232]">
+                <div className="flex aspect-[4/3] items-center justify-center bg-[#DDBB82] px-8 text-center text-xl font-bold text-[#123C39]">
                   A treasured family recipe
                 </div>
               )}

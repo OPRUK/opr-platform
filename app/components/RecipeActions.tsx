@@ -86,7 +86,7 @@ export default function RecipeActions({
 
     context.fillStyle = "#FFF3DF";
     context.fillRect(0, 0, 1080, 1080);
-    context.fillStyle = "#4A4232";
+    context.fillStyle = "#123C39";
     context.fillRect(0, 0, 1080, 640);
 
     if (imageUrl) {
@@ -118,7 +118,7 @@ export default function RecipeActions({
     context.letterSpacing = "4px";
     context.fillText("OTHER PEOPLE'S RECIPES", 76, 740);
     context.letterSpacing = "0px";
-    context.fillStyle = "#4A4232";
+    context.fillStyle = "#123C39";
     context.font = "bold 62px Georgia, serif";
     drawWrappedText(context, title, 76, 820, 928, 76);
     context.fillStyle = "#766B5C";
@@ -144,7 +144,7 @@ export default function RecipeActions({
 
   return (
     <section className="bg-[#EED8B2] px-6 py-16 text-center print:hidden">
-      <div className="mx-auto max-w-3xl rounded-3xl border border-[#D1AD75]/80 bg-[#FFF3DF] px-6 py-10 shadow-lg shadow-[#6E4B2C]/10 md:px-10">
+      <div className="mx-auto max-w-3xl rounded-3xl border border-[#D1AD75]/80 bg-[#FFF3DF] px-6 py-10 shadow-lg shadow-[#1C5A50]/10 md:px-10">
         <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
           Pass it on
         </p>
@@ -169,14 +169,14 @@ export default function RecipeActions({
           <button
             type="button"
             onClick={() => void copyLink()}
-            className="rounded-full border border-[#4A4232] px-5 py-3 text-sm font-medium transition hover:bg-[#4A4232] hover:text-white"
+            className="rounded-full border border-[#123C39] px-5 py-3 text-sm font-medium transition hover:bg-[#123C39] hover:text-white"
           >
             {copied ? "Link copied" : "Copy link"}
           </button>
           <button
             type="button"
             onClick={() => window.print()}
-            className="rounded-full border border-[#4A4232] px-5 py-3 text-sm font-medium transition hover:bg-[#4A4232] hover:text-white"
+            className="rounded-full border border-[#123C39] px-5 py-3 text-sm font-medium transition hover:bg-[#123C39] hover:text-white"
           >
             Print recipe
           </button>

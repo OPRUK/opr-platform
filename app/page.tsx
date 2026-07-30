@@ -6,11 +6,11 @@ import HeroCarousel from "./components/HeroCarousel";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#EED8B2] text-[#4A4232]">
+    <main className="min-h-screen bg-[#EED8B2] text-[#123C39]">
       <Navigation />
 
       {/* Hero */}
-      <section className="relative isolate flex min-h-screen items-center justify-center overflow-hidden bg-[#2D2117]">
+      <section className="relative isolate flex min-h-screen items-center justify-center overflow-hidden bg-[#0D342F]">
         <HeroCarousel />
 
         <div className="relative z-10 mx-auto max-w-4xl px-8 text-center text-white animate-rise-in">
@@ -31,7 +31,7 @@ export default function Home() {
           <div className="mt-12 flex flex-col justify-center gap-5 sm:flex-row">
             <Link
               href="/family-cookbook"
-              className="rounded-full bg-[#4A4232] px-10 py-4 text-lg font-medium transition hover:scale-105"
+              className="rounded-full bg-[#123C39] px-10 py-4 text-lg font-medium transition hover:scale-105"
             >
               Open the Cookbook
             </Link>
@@ -52,7 +52,7 @@ export default function Home() {
               EVERY RECIPE HAS A STORY
             </p>
 
-            <h2 className="text-5xl font-bold text-[#4A4232]">
+            <h2 className="text-5xl font-bold text-[#123C39]">
               More Than Just Recipes
             </h2>
 
@@ -66,9 +66,9 @@ export default function Home() {
             <div className="mt-16 grid gap-8 md:grid-cols-3">
               <Link
                 href="/our-story"
-                className="group rounded-3xl bg-[#FFF3DF] p-10 text-left shadow-lg shadow-[#6E4B2C]/15 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
+                className="group rounded-3xl bg-[#FFF3DF] p-10 text-left shadow-lg shadow-[#1C5A50]/15 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
               >
-                <h3 className="mb-4 text-2xl font-bold text-[#4A4232]">
+                <h3 className="mb-4 text-2xl font-bold text-[#123C39]">
                   Family Stories
                 </h3>
 
@@ -82,9 +82,9 @@ export default function Home() {
 
               <Link
                 href="/family-cookbook"
-                className="group rounded-3xl bg-[#FFF3DF] p-10 text-left shadow-lg shadow-[#6E4B2C]/15 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
+                className="group rounded-3xl bg-[#FFF3DF] p-10 text-left shadow-lg shadow-[#1C5A50]/15 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
               >
-                <h3 className="mb-4 text-2xl font-bold text-[#4A4232]">
+                <h3 className="mb-4 text-2xl font-bold text-[#123C39]">
                   Treasured Recipes
                 </h3>
 
@@ -98,9 +98,9 @@ export default function Home() {
 
               <Link
                 href="/share"
-                className="group rounded-3xl bg-[#FFF3DF] p-10 text-left shadow-lg shadow-[#6E4B2C]/15 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
+                className="group rounded-3xl bg-[#FFF3DF] p-10 text-left shadow-lg shadow-[#1C5A50]/15 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
               >
-                <h3 className="mb-4 text-2xl font-bold text-[#4A4232]">
+                <h3 className="mb-4 text-2xl font-bold text-[#123C39]">
                   Shared Around the Table
                 </h3>
 
@@ -116,7 +116,7 @@ export default function Home() {
       </section>
 
       <section className="bg-[#FFF3DF] px-6 py-24">
-        <div className="mx-auto grid max-w-6xl overflow-hidden rounded-[2rem] bg-[#6E4B2C] shadow-2xl md:grid-cols-2">
+        <div className="mx-auto grid max-w-6xl overflow-hidden rounded-[2rem] bg-[#1C5A50] shadow-2xl md:grid-cols-2">
           <div className="relative min-h-[340px]">
             <Image
               src="/images/recipes/daves-butter-chicken.png"
@@ -144,7 +144,7 @@ export default function Home() {
             </p>
             <Link
               href="/family-cookbook/dads-friday-night-butter-chicken"
-              className="mt-9 inline-flex w-fit items-center rounded-full bg-[#DDB765] px-7 py-4 font-medium text-[#33291F] transition hover:scale-105 hover:bg-[#FFD58C]"
+              className="mt-9 inline-flex w-fit items-center rounded-full bg-[#DDB765] px-7 py-4 font-medium text-[#08231F] transition hover:scale-105 hover:bg-[#FFD58C]"
             >
               Read Dave&apos;s story →
             </Link>
@@ -154,7 +154,7 @@ export default function Home() {
 
       <section
         id="cookbook"
-        className="bg-[#4A4232] px-6 py-24 animate-rise-in-delayed"
+        className="bg-[#123C39] px-6 py-24 animate-rise-in-delayed"
       >
           <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2">
             <Image

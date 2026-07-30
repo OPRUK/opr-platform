@@ -4,10 +4,10 @@ import Footer from "../components/Footer";
 
 export default function ShareYourStory() {
   return (
-    <main className="min-h-screen bg-[#EED8B2] text-[#4A4232]">
+    <main className="min-h-screen bg-[#EED8B2] text-[#123C39]">
       <Navigation />
 
-      <section className="bg-[#4A4232] px-6 pb-24 pt-40 text-center text-white">
+      <section className="bg-[#123C39] px-6 pb-24 pt-40 text-center text-white">
         <p className="mb-5 text-sm uppercase tracking-[0.4em] text-amber-300">
           Add a page to the book
         </p>

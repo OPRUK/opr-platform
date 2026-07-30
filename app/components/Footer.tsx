@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#33291F] px-6 py-16 text-[#FFF3DF]">
+    <footer className="bg-[#08231F] px-6 py-16 text-[#FFF3DF]">
       <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
           <p className="text-2xl font-bold tracking-wide">Other People&apos;s Recipes</p>
@@ -39,7 +39,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Follow Other People's Recipes on Instagram"
-                className="rounded-full border border-[#8B6B42] p-2.5 text-[#FFF3DF] transition hover:-translate-y-0.5 hover:border-[#DDB765] hover:bg-[#DDB765] hover:text-[#33291F]"
+                className="rounded-full border border-[#8B6B42] p-2.5 text-[#FFF3DF] transition hover:-translate-y-0.5 hover:border-[#DDB765] hover:bg-[#DDB765] hover:text-[#08231F]"
               >
                 <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current stroke-[1.8]">
                   <rect x="3" y="3" width="18" height="18" rx="5" />
@@ -52,7 +52,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Follow Other People's Recipes on Facebook"
-                className="rounded-full border border-[#8B6B42] p-2.5 text-[#FFF3DF] transition hover:-translate-y-0.5 hover:border-[#DDB765] hover:bg-[#DDB765] hover:text-[#33291F]"
+                className="rounded-full border border-[#8B6B42] p-2.5 text-[#FFF3DF] transition hover:-translate-y-0.5 hover:border-[#DDB765] hover:bg-[#DDB765] hover:text-[#08231F]"
               >
                 <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 fill-current">
                   <path d="M13.7 21v-8h2.7l.4-3.1h-3.1V8c0-.9.3-1.6 1.7-1.6H17V3.6c-.3 0-1.3-.1-2.4-.1-2.4 0-4.1 1.5-4.1 4.2v2.3H7.8V13h2.7v8h3.2Z" />
@@ -63,7 +63,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="mx-auto mt-14 max-w-6xl border-t border-[#6E4B2C] pt-6 text-sm text-[#DABF8D]">
+      <div className="mx-auto mt-14 max-w-6xl border-t border-[#1C5A50] pt-6 text-sm text-[#DABF8D]">
         © {new Date().getFullYear()}{" "}Other People&apos;s Recipes. Every recipe has a story.
       </div>
     </footer>

@@ -28,7 +28,7 @@ const allowedEmail = "chaten@otherpeoplesrecipes.co.uk";
 
 const statusStyle: Record<SubmissionStatus, string> = {
   new: "bg-[#F4DDAE] text-[#6B431E]",
-  reviewed: "bg-[#E8E2CF] text-[#4A4232]",
+  reviewed: "bg-[#E8E2CF] text-[#123C39]",
   selected: "bg-[#CDE4CD] text-[#2E5A35]",
 };
 
@@ -186,10 +186,10 @@ export default function AdminDashboard() {
 
   if (!session) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#EED8B2] px-6 text-[#4A4232]">
+      <main className="flex min-h-screen items-center justify-center bg-[#EED8B2] px-6 text-[#123C39]">
         <form
           onSubmit={sendMagicLink}
-          className="w-full max-w-md rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#6E4B2C]/15 md:p-10"
+          className="w-full max-w-md rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-10"
         >
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
             Private OPR area
@@ -205,12 +205,12 @@ export default function AdminDashboard() {
               onChange={(event) => setEmail(event.target.value)}
               type="email"
               autoComplete="email"
-              className="mt-3 w-full rounded-xl border border-[#D1AD75] bg-[#F4DDAE] px-4 py-3 outline-none transition focus:border-[#4A4232] focus:ring-2 focus:ring-[#D1AD75]/60"
+              className="mt-3 w-full rounded-xl border border-[#D1AD75] bg-[#F4DDAE] px-4 py-3 outline-none transition focus:border-[#123C39] focus:ring-2 focus:ring-[#D1AD75]/60"
             />
           </label>
           <button
             type="submit"
-            className="mt-8 rounded-full bg-[#4A4232] px-7 py-3 font-medium text-white transition hover:bg-[#33291F]"
+            className="mt-8 rounded-full bg-[#123C39] px-7 py-3 font-medium text-white transition hover:bg-[#08231F]"
           >
             Send secure sign-in link
           </button>
@@ -222,8 +222,8 @@ export default function AdminDashboard() {
 
   if (session.user.email !== allowedEmail) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#EED8B2] px-6 text-center text-[#4A4232]">
-        <div className="max-w-lg rounded-3xl bg-[#FFF3DF] p-10 shadow-xl shadow-[#6E4B2C]/15">
+      <main className="flex min-h-screen items-center justify-center bg-[#EED8B2] px-6 text-center text-[#123C39]">
+        <div className="max-w-lg rounded-3xl bg-[#FFF3DF] p-10 shadow-xl shadow-[#1C5A50]/15">
           <h1 className="text-3xl font-bold">This inbox is private.</h1>
           <p className="mt-5 leading-7 text-stone-700">
             Please sign in using the OPR team email address.
@@ -231,7 +231,7 @@ export default function AdminDashboard() {
           <button
             type="button"
             onClick={() => void supabase.auth.signOut()}
-            className="mt-8 rounded-full border border-[#4A4232] px-6 py-3 font-medium"
+            className="mt-8 rounded-full border border-[#123C39] px-6 py-3 font-medium"
           >
             Sign out
           </button>
@@ -241,7 +241,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <main className="min-h-screen bg-[#EED8B2] px-6 py-10 text-[#4A4232] md:px-10">
+    <main className="min-h-screen bg-[#EED8B2] px-6 py-10 text-[#123C39] md:px-10">
       <header className="mx-auto flex max-w-7xl flex-col justify-between gap-6 md:flex-row md:items-end">
         <div>
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">Private OPR area</p>
@@ -253,7 +253,7 @@ export default function AdminDashboard() {
         <button
           type="button"
           onClick={() => void supabase.auth.signOut()}
-          className="self-start rounded-full border border-[#4A4232] px-5 py-2.5 text-sm font-medium transition hover:bg-[#4A4232] hover:text-white md:self-auto"
+          className="self-start rounded-full border border-[#123C39] px-5 py-2.5 text-sm font-medium transition hover:bg-[#123C39] hover:text-white md:self-auto"
         >
           Sign out
         </button>
@@ -262,7 +262,7 @@ export default function AdminDashboard() {
       {message ? <p className="mx-auto mt-8 max-w-7xl text-sm text-red-800">{message}</p> : null}
 
       <section className="mx-auto mt-10 grid max-w-7xl gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-        <div className="overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-xl shadow-[#6E4B2C]/10">
+        <div className="overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-xl shadow-[#1C5A50]/10">
           <div className="border-b border-[#D1AD75]/70 px-6 py-5">
             <h2 className="text-xl font-bold">All submissions</h2>
           </div>
@@ -294,7 +294,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <section className="rounded-3xl bg-[#FFF3DF] p-7 shadow-xl shadow-[#6E4B2C]/10 md:p-10">
+        <section className="rounded-3xl bg-[#FFF3DF] p-7 shadow-xl shadow-[#1C5A50]/10 md:p-10">
           {selectedSubmission ? (
             <>
               <div className="flex flex-col justify-between gap-5 md:flex-row md:items-start">
@@ -333,7 +333,7 @@ export default function AdminDashboard() {
                 <button
                   type="button"
                   onClick={() => void togglePublished(selectedSubmission)}
-                  className="mt-4 rounded-full bg-[#4A4232] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#33291F] md:mt-0"
+                  className="mt-4 rounded-full bg-[#123C39] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#08231F] md:mt-0"
                 >
                   {selectedSubmission.is_published ? "Remove from cookbook" : "Publish to cookbook"}
                 </button>
@@ -342,7 +342,7 @@ export default function AdminDashboard() {
               <div className="mt-10 space-y-8 text-stone-700">
                 {selectedPhotoUrl ? (
                   <article>
-                    <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#4A4232]">Recipe photo</h3>
+                    <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#123C39]">Recipe photo</h3>
                     <img
                       src={selectedPhotoUrl}
                       alt={selectedSubmission.title}
@@ -351,15 +351,15 @@ export default function AdminDashboard() {
                   </article>
                 ) : null}
                 <article>
-                  <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#4A4232]">The story</h3>
+                  <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#123C39]">The story</h3>
                   <p className="mt-3 whitespace-pre-wrap leading-8">{selectedSubmission.story}</p>
                 </article>
                 <article>
-                  <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#4A4232]">Ingredients</h3>
+                  <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#123C39]">Ingredients</h3>
                   <p className="mt-3 whitespace-pre-wrap leading-8">{selectedSubmission.ingredients}</p>
                 </article>
                 <article>
-                  <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#4A4232]">Method</h3>
+                  <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#123C39]">Method</h3>
                   <p className="mt-3 whitespace-pre-wrap leading-8">{selectedSubmission.method}</p>
                 </article>
                 <p className="border-t border-[#D1AD75]/70 pt-6 text-sm">

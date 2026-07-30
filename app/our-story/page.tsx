@@ -5,10 +5,10 @@ import HeroCarousel from "../components/HeroCarousel";
 
 export default function OurStory() {
   return (
-    <main className="min-h-screen bg-[#EED8B2] text-[#4A4232]">
+    <main className="min-h-screen bg-[#EED8B2] text-[#123C39]">
       <Navigation />
 
-      <section className="relative isolate overflow-hidden bg-[#2D2117] px-6 pb-24 pt-40 text-center text-white">
+      <section className="relative isolate overflow-hidden bg-[#0D342F] px-6 pb-24 pt-40 text-center text-white">
         <HeroCarousel />
         <div className="relative z-10">
           <p className="mb-5 text-sm uppercase tracking-[0.4em] text-amber-300">
@@ -56,7 +56,7 @@ export default function OurStory() {
           </h2>
           <Link
             href="/share"
-            className="mt-10 inline-block rounded-full bg-[#4A4232] px-8 py-4 text-lg font-medium text-white transition hover:scale-105"
+            className="mt-10 inline-block rounded-full bg-[#123C39] px-8 py-4 text-lg font-medium text-white transition hover:scale-105"
           >
             Share Your Story
           </Link>

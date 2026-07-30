@@ -13,10 +13,10 @@ const benefits = [
 
 export default function FoundingTablePage() {
   return (
-    <main className="min-h-screen bg-[#EED8B2] text-[#4A4232]">
+    <main className="min-h-screen bg-[#EED8B2] text-[#123C39]">
       <Navigation />
 
-      <section className="relative isolate overflow-hidden bg-[#2D2117] px-6 pb-24 pt-40 text-center text-[#FFF3DF]">
+      <section className="relative isolate overflow-hidden bg-[#0D342F] px-6 pb-24 pt-40 text-center text-[#FFF3DF]">
         <HeroCarousel />
         <div className="relative z-10">
           <p className="mb-5 text-sm uppercase tracking-[0.4em] text-[#FFD58C]">
@@ -48,7 +48,7 @@ export default function FoundingTablePage() {
           <ul className="mt-10 space-y-5">
             {benefits.map((benefit) => (
               <li key={benefit} className="flex gap-4 text-lg leading-7 text-stone-700">
-                <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#6E4B2C] text-sm text-[#FFD58C]">✓</span>
+                <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#1C5A50] text-sm text-[#FFD58C]">✓</span>
                 {benefit}
               </li>
             ))}
@@ -58,7 +58,7 @@ export default function FoundingTablePage() {
           </p>
         </div>
 
-        <div className="rounded-3xl bg-[#6E4B2C] p-8 shadow-2xl md:p-10">
+        <div className="rounded-3xl bg-[#1C5A50] p-8 shadow-2xl md:p-10">
           <p className="text-sm uppercase tracking-[0.35em] text-[#FFD58C]">
             Save your seat
           </p>

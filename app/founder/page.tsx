@@ -5,7 +5,7 @@ import Navigation from "../components/Navigation";
 
 export default function FounderPage() {
   return (
-    <main className="min-h-screen bg-[#EED8B2] text-[#4A4232]">
+    <main className="min-h-screen bg-[#EED8B2] text-[#123C39]">
       <Navigation />
 
       <section className="relative isolate overflow-hidden px-6 pb-24 pt-36 md:px-8 md:pt-44">
@@ -50,7 +50,7 @@ export default function FounderPage() {
               <p className="font-serif text-2xl italic text-[#8B5A2B]">2000</p>
             </div>
             <h2
-              className="mt-8 text-4xl font-bold leading-tight text-[#4A4232] md:text-5xl"
+              className="mt-8 text-4xl font-bold leading-tight text-[#123C39] md:text-5xl"
               style={{ fontFamily: '"Segoe Print", "Bradley Hand", cursive' }}
             >
               OPR is as much about you and your family as it is about the recipes we hold dear to our hearts.
@@ -86,7 +86,7 @@ export default function FounderPage() {
           </div>
 
           <p
-            className="mt-10 text-4xl text-[#6E4B2C]"
+            className="mt-10 text-4xl text-[#1C5A50]"
             style={{ fontFamily: '"Segoe Print", "Bradley Hand", cursive' }}
           >
             Chaten
@@ -99,7 +99,7 @@ export default function FounderPage() {
         </div>
       </section>
 
-      <section className="bg-[#33291F] px-6 py-20 text-center text-[#FFF3DF]">
+      <section className="bg-[#08231F] px-6 py-20 text-center text-[#FFF3DF]">
         <p className="text-sm uppercase tracking-[0.35em] text-[#FFD58C]">
           Join the story
         </p>
@@ -109,19 +109,19 @@ export default function FounderPage() {
         <div className="mx-auto mt-10 flex max-w-3xl flex-col justify-center gap-4 sm:flex-row sm:flex-wrap">
           <Link
             href="/share"
-            className="rounded-full bg-[#DDB765] px-7 py-4 font-medium text-[#33291F] transition hover:scale-105 hover:bg-[#FFD58C]"
+            className="rounded-full bg-[#DDB765] px-7 py-4 font-medium text-[#08231F] transition hover:scale-105 hover:bg-[#FFD58C]"
           >
             Share your recipe
           </Link>
           <a
             href="mailto:info@otherpeoplesrecipes.co.uk?subject=OPR%20Partnership"
-            className="rounded-full border border-[#DDB765] px-7 py-4 font-medium text-[#FFF3DF] transition hover:bg-[#DDB765] hover:text-[#33291F]"
+            className="rounded-full border border-[#DDB765] px-7 py-4 font-medium text-[#FFF3DF] transition hover:bg-[#DDB765] hover:text-[#08231F]"
           >
             Partner with us
           </a>
           <a
             href="mailto:info@otherpeoplesrecipes.co.uk?subject=OPR%20Enquiry"
-            className="rounded-full border border-[#FFF3DF]/70 px-7 py-4 font-medium text-[#FFF3DF] transition hover:bg-[#FFF3DF] hover:text-[#33291F]"
+            className="rounded-full border border-[#FFF3DF]/70 px-7 py-4 font-medium text-[#FFF3DF] transition hover:bg-[#FFF3DF] hover:text-[#08231F]"
           >
             Get in touch
           </a>

@@ -97,10 +97,10 @@ export default async function RecipePage({
   }
 
   return (
-    <main className="min-h-screen bg-[#EED8B2] text-[#4A4232]">
+    <main className="min-h-screen bg-[#EED8B2] text-[#123C39]">
       <Navigation />
 
-      <section className="bg-[#4A4232] px-6 pb-20 pt-40 text-center text-white">
+      <section className="bg-[#123C39] px-6 pb-20 pt-40 text-center text-white">
         <p className="mb-5 text-sm uppercase tracking-[0.4em] text-amber-300">
           A page from the family cookbook
         </p>
@@ -113,11 +113,11 @@ export default async function RecipePage({
       </section>
 
       <section className="mx-auto grid max-w-6xl gap-14 px-6 py-20 md:grid-cols-[1.1fr_0.9fr] md:px-8">
-        <article className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#6E4B2C]/15 md:p-12">
+        <article className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-12">
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
             The story
           </p>
-          <p className="mt-7 text-2xl leading-relaxed text-[#4A4232]">
+          <p className="mt-7 text-2xl leading-relaxed text-[#123C39]">
             “{recipe.story}”
           </p>
           <p className="mt-10 border-t border-[#D1AD75] pt-6 text-sm italic text-stone-600">
@@ -125,7 +125,7 @@ export default async function RecipePage({
           </p>
         </article>
 
-        <aside className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#6E4B2C]/15 md:p-12">
+        <aside className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-12">
           <Image
             src={recipe.image}
             alt={recipe.title}
@@ -152,7 +152,7 @@ export default async function RecipePage({
           <ol className="mt-9 space-y-7">
             {recipe.method.map((step, index) => (
               <li key={step} className="flex gap-6 text-lg leading-8 text-stone-700">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#4A4232] text-sm font-bold text-white">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#123C39] text-sm font-bold text-white">
                   {index + 1}
                 </span>
                 {step}
@@ -167,7 +167,7 @@ export default async function RecipePage({
       <section className="px-6 py-20 text-center">
         <Link
           href="/family-cookbook"
-          className="inline-block rounded-full bg-[#4A4232] px-8 py-4 text-lg font-medium text-white transition hover:scale-105"
+          className="inline-block rounded-full bg-[#123C39] px-8 py-4 text-lg font-medium text-white transition hover:scale-105"
         >
           Return to the Cookbook
         </Link>

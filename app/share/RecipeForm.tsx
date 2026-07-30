@@ -152,7 +152,7 @@ export default function RecipeForm() {
 
   if (submissionComplete) {
     return (
-      <section className="rounded-3xl bg-[#FFF3DF] p-8 text-center shadow-xl shadow-[#6E4B2C]/15 md:p-12">
+      <section className="rounded-3xl bg-[#FFF3DF] p-8 text-center shadow-xl shadow-[#1C5A50]/15 md:p-12">
         <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
           Your recipe has been received
         </p>
@@ -173,7 +173,7 @@ export default function RecipeForm() {
             window.sessionStorage.removeItem(recipeDraftKey);
             setSubmissionComplete(false);
           }}
-          className="mt-9 rounded-full border border-[#4A4232] px-7 py-3 font-medium transition hover:bg-[#4A4232] hover:text-white"
+          className="mt-9 rounded-full border border-[#123C39] px-7 py-3 font-medium transition hover:bg-[#123C39] hover:text-white"
         >
           Share another recipe
         </button>
@@ -182,12 +182,12 @@ export default function RecipeForm() {
   }
 
   const inputClassName =
-    "mt-3 w-full rounded-xl border border-[#D1AD75] bg-[#F4DDAE] px-4 py-3 outline-none transition placeholder:text-stone-500 focus:border-[#4A4232] focus:ring-2 focus:ring-[#D1AD75]/60";
+    "mt-3 w-full rounded-xl border border-[#D1AD75] bg-[#F4DDAE] px-4 py-3 outline-none transition placeholder:text-stone-500 focus:border-[#123C39] focus:ring-2 focus:ring-[#D1AD75]/60";
 
   return (
     <form
       onSubmit={submitRecipe}
-      className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#6E4B2C]/15 md:p-12"
+      className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-12"
     >
       <div className="border-b border-[#D1AD75]/70 pb-8">
         <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
@@ -345,7 +345,7 @@ export default function RecipeForm() {
               type="file"
               name="photo"
               accept="image/jpeg,image/png,image/webp"
-              className="mt-3 block w-full text-sm text-stone-700 file:mr-4 file:rounded-full file:border-0 file:bg-[#4A4232] file:px-4 file:py-2 file:font-medium file:text-white hover:file:bg-[#33291F]"
+              className="mt-3 block w-full text-sm text-stone-700 file:mr-4 file:rounded-full file:border-0 file:bg-[#123C39] file:px-4 file:py-2 file:font-medium file:text-white hover:file:bg-[#08231F]"
             />
           </label>
           <p className="mt-3 text-sm leading-6 text-stone-600">
@@ -361,7 +361,7 @@ export default function RecipeForm() {
               <button
                 type="button"
                 onClick={() => choosePhoto(null)}
-                className="rounded-full border border-[#4A4232] px-4 py-2 text-sm font-medium transition hover:bg-[#4A4232] hover:text-white"
+                className="rounded-full border border-[#123C39] px-4 py-2 text-sm font-medium transition hover:bg-[#123C39] hover:text-white"
               >
                 Remove photo
               </button>
@@ -376,7 +376,7 @@ export default function RecipeForm() {
           onChange={(event) => updateValue("permission", event.target.checked)}
           type="checkbox"
           name="permission"
-          className="mt-1 h-4 w-4 accent-[#4A4232]"
+          className="mt-1 h-4 w-4 accent-[#123C39]"
         />
         <span>
           I&apos;m happy for OPR to contact me if this recipe could be featured on
@@ -387,7 +387,7 @@ export default function RecipeForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="mt-10 rounded-full bg-[#4A4232] px-8 py-4 text-lg font-medium text-white transition hover:scale-105 hover:bg-[#33291F]"
+        className="mt-10 rounded-full bg-[#123C39] px-8 py-4 text-lg font-medium text-white transition hover:scale-105 hover:bg-[#08231F]"
       >
         {isSubmitting ? "Saving your recipe..." : "Share my recipe"}
       </button>

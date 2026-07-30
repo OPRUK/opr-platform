@@ -17,11 +17,11 @@ export default function Navigation() {
   ];
 
   return (
-    <header className="absolute top-0 left-0 z-50 w-full border-b border-[#D1AD75]/70 bg-[#FFF3DF]/95 shadow-sm shadow-[#6E4B2C]/10 backdrop-blur-sm">
+    <header className="absolute top-0 left-0 z-50 w-full border-b border-[#D1AD75]/70 bg-[#FFF3DF]/95 shadow-sm shadow-[#1C5A50]/10 backdrop-blur-sm">
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-8 py-5">
         <Link
           href="/"
-          className="text-xl font-bold tracking-wide text-[#4A4232] transition hover:text-[#9A622A]"
+          className="text-xl font-bold tracking-wide text-[#123C39] transition hover:text-[#9A622A]"
         >
           Other People&apos;s Recipes
         </Link>
@@ -31,7 +31,7 @@ export default function Navigation() {
             <li key={link.href}>
               <Link
                 href={link.href}
-                className="text-[#4A4232] transition hover:text-[#9A622A]"
+                className="text-[#123C39] transition hover:text-[#9A622A]"
               >
                 {link.label}
               </Link>
@@ -42,7 +42,7 @@ export default function Navigation() {
         <button
           type="button"
           onClick={() => setMenuOpen((open) => !open)}
-          className="rounded-lg px-3 py-2 text-2xl leading-none text-[#4A4232] transition hover:bg-[#F4DDAE] md:hidden"
+          className="rounded-lg px-3 py-2 text-2xl leading-none text-[#123C39] transition hover:bg-[#F4DDAE] md:hidden"
           aria-label="Toggle navigation menu"
           aria-expanded={menuOpen}
         >
@@ -58,7 +58,7 @@ export default function Navigation() {
                 <Link
                   href={link.href}
                   onClick={() => setMenuOpen(false)}
-                  className="block text-[#4A4232] transition hover:text-[#9A622A]"
+                  className="block text-[#123C39] transition hover:text-[#9A622A]"
                 >
                   {link.label}
                 </Link>

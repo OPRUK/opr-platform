@@ -31,10 +31,10 @@ const films = [
 
 export default function FilmsPage() {
   return (
-    <main className="min-h-screen bg-[#EED8B2] text-[#4A4232]">
+    <main className="min-h-screen bg-[#EED8B2] text-[#123C39]">
       <Navigation />
 
-      <section className="relative isolate overflow-hidden bg-[#4A4232] px-6 pb-24 pt-40 text-center text-white">
+      <section className="relative isolate overflow-hidden bg-[#123C39] px-6 pb-24 pt-40 text-center text-white">
         <video
           className="absolute inset-0 -z-20 h-full w-full object-cover"
           autoPlay
@@ -47,8 +47,8 @@ export default function FilmsPage() {
         >
           <source src="/videos/opr-recipe-stories-film-v2.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 -z-10 bg-[#2D2117]/75" />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#20160F]/65 via-[#4A4232]/45 to-[#20160F]/80" />
+        <div className="absolute inset-0 -z-10 bg-[#0D342F]/75" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#08231F]/65 via-[#123C39]/45 to-[#08231F]/80" />
 
         <div className="mx-auto max-w-4xl">
           <p className="mb-5 text-sm uppercase tracking-[0.4em] text-amber-200">
