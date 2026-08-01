@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useState } from "react";
+import { ReactNode, useRef, useState } from "react";
 import HeroCarousel from "./HeroCarousel";
 
 type HomeHeroProps = {
@@ -9,6 +9,15 @@ type HomeHeroProps = {
 
 export default function HomeHero({ children }: HomeHeroProps) {
   const [introductionComplete, setIntroductionComplete] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  function toggleSound() {
+    if (!videoRef.current) return;
+
+    videoRef.current.muted = !isMuted;
+    setIsMuted((current) => !current);
+  }
 
   return (
     <section className="relative isolate flex min-h-screen items-center justify-center overflow-hidden bg-[#0D342F]">
@@ -22,20 +31,31 @@ export default function HomeHero({ children }: HomeHeroProps) {
 
       {!introductionComplete ? (
         <video
+          ref={videoRef}
           autoPlay
-          muted
+          muted={isMuted}
           playsInline
           preload="auto"
           onEnded={() => setIntroductionComplete(true)}
           onError={() => setIntroductionComplete(true)}
           className="absolute inset-0 h-full w-full object-cover"
-          aria-hidden="true"
+          aria-label="Other People's Recipes introduction film"
         >
           <source src="/videos/opr-home-introduction.mp4" type="video/mp4" />
         </video>
       ) : null}
 
       <div className="absolute inset-0 z-[1] bg-[#08231F]/35" />
+      {!introductionComplete ? (
+        <button
+          type="button"
+          onClick={toggleSound}
+          className="absolute bottom-7 right-7 z-20 rounded-full border border-white/70 bg-[#08231F]/75 px-4 py-2 text-sm font-medium text-white backdrop-blur transition hover:bg-[#123C39]"
+          aria-label={isMuted ? "Turn sound on" : "Mute introduction film"}
+        >
+          {isMuted ? "Turn sound on" : "Mute sound"}
+        </button>
+      ) : null}
       {children}
     </section>
   );
