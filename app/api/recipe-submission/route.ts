@@ -65,6 +65,10 @@ export async function POST(request: Request) {
       ingredients,
       method,
       photo_path: photoPath,
+      // Retain the original database field while the newer licence wording is
+      // in use. The required licence confirmation explicitly covers featuring
+      // the recipe, so this is compatible with existing submissions.
+      permission_to_feature: true,
       licence_accepted: readText(formData, "licenceAccepted") === "true",
       marketing_opt_in: readText(formData, "marketingOptIn") === "true",
       consent_version: readText(formData, "consentVersion") || "opr-submission-terms-2026-08-01",
