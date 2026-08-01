@@ -88,7 +88,10 @@ export async function POST(request: Request) {
     ]);
 
     return Response.json({ ok: true });
-  } catch {
+  } catch (error) {
+    // Keep the public response deliberately general, but retain the full error
+    // in Vercel's private server logs so a failed submission can be diagnosed.
+    console.error("OPR recipe submission failed", error);
     return Response.json({ error: "Recipe could not be saved" }, { status: 400 });
   }
 }
