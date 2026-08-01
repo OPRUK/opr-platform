@@ -62,7 +62,7 @@ export default function TermsPage() {
                 Other People&apos;s Recipes a perpetual, worldwide,
                 royalty-free licence to publish, edit, adapt and reproduce
                 them — including in print, film, at OPR events and, if we
-                ever open one, an OPR restaurant — with credit as agreed.
+                ever open one, an OPR restaurant.
               </blockquote>
 
               <p className="mt-5">This means:</p>

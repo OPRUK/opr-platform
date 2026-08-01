@@ -561,8 +561,7 @@ export default function RecipeForm() {
           I confirm this recipe and story are mine to share, and I grant Other
           People&apos;s Recipes a perpetual, worldwide, royalty-free licence to
           publish, edit, adapt and reproduce them — including in print, film,
-          at OPR events and, if we ever open one, an OPR restaurant — with
-          credit as agreed.{" "}
+          at OPR events and, if we ever open one, an OPR restaurant.{" "}
           <Link href="/terms" className="underline underline-offset-4">
             Read our full terms.
           </Link>
