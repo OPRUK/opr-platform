@@ -1,6 +1,14 @@
+import type { Metadata } from "next";
 import Navigation from "../components/Navigation";
 import RecipeForm from "./RecipeForm";
 import Footer from "../components/Footer";
+
+export const metadata: Metadata = {
+  title: "Share Your Family's Recipe",
+  description:
+    "Send us the recipe and the story behind it. It doesn't need to be perfect.",
+  alternates: { canonical: "/share" },
+};
 
 export default function ShareYourStory() {
   return (

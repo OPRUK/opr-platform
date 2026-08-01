@@ -1,7 +1,15 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import Footer from "../components/Footer";
 import Navigation from "../components/Navigation";
+
+export const metadata: Metadata = {
+  title: "The Founder's Letter",
+  description:
+    "An idea written down in 2000, finally built: why OPR exists, in Chaten's own words.",
+  alternates: { canonical: "/founder" },
+};
 
 export default function FounderPage() {
   return (

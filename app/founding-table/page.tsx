@@ -1,8 +1,16 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Footer from "../components/Footer";
 import HeroCarousel from "../components/HeroCarousel";
 import Navigation from "../components/Navigation";
 import FoundingTableForm from "./FoundingTableForm";
+
+export const metadata: Metadata = {
+  title: "Join the Founding Table",
+  description:
+    "Be there at the beginning. Free to join, first look at every new recipe and story.",
+  alternates: { canonical: "/founding-table" },
+};
 
 const benefits = [
   "First look at new family recipes and stories",

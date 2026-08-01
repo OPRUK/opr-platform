@@ -1,15 +1,19 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { SITE_NAME, SITE_URL, absoluteUrl } from "../lib/site";
 
 export const metadata: Metadata = {
-  title: "Other People's Recipes",
+  title: {
+    default: SITE_NAME,
+    template: `%s | ${SITE_NAME}`,
+  },
   description: "Every recipe has a story.",
-  metadataBase: new URL("https://otherpeoplesrecipes.co.uk"),
+  metadataBase: new URL(SITE_URL),
   openGraph: {
-    title: "Other People's Recipes",
+    title: SITE_NAME,
     description: "Every recipe has a story.",
     url: "/",
-    siteName: "Other People's Recipes",
+    siteName: SITE_NAME,
     locale: "en_GB",
     type: "website",
     images: [
@@ -23,6 +27,25 @@ export const metadata: Metadata = {
   },
 };
 
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: SITE_NAME,
+  url: SITE_URL,
+  logo: absoluteUrl("/icon.svg"),
+  sameAs: [
+    "https://www.instagram.com/opr_uk/",
+    "https://www.facebook.com/61592736388045",
+  ],
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: SITE_NAME,
+  url: SITE_URL,
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -30,7 +53,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full antialiased">
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
+      </body>
     </html>
   );
 }

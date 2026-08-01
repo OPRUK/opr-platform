@@ -1,7 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 import { supabase } from "../../lib/supabase/client";
+
+// Bump this whenever the submission licence wording on /terms changes, so we
+// always know exactly which version of the terms a contributor agreed to.
+const CONSENT_VERSION = "opr-submission-terms-2026-08-01";
 
 type RecipeFormValues = {
   name: string;
@@ -13,7 +18,8 @@ type RecipeFormValues = {
   story: string;
   ingredients: string;
   method: string;
-  permission: boolean;
+  licenceAccepted: boolean;
+  marketingOptIn: boolean;
 };
 
 const initialValues: RecipeFormValues = {
@@ -26,7 +32,8 @@ const initialValues: RecipeFormValues = {
   story: "",
   ingredients: "",
   method: "",
-  permission: false,
+  licenceAccepted: false,
+  marketingOptIn: false,
 };
 
 const recipeDraftKey = "opr-recipe-submission-draft";
@@ -116,8 +123,11 @@ export default function RecipeForm() {
       story: values.story,
       ingredients: values.ingredients,
       method: values.method,
-      permission_to_feature: values.permission,
       photo_path: photoPath,
+      licence_accepted: values.licenceAccepted,
+      marketing_opt_in: values.marketingOptIn,
+      consent_version: CONSENT_VERSION,
+      consent_given_at: new Date().toISOString(),
     });
 
     if (error) {
@@ -372,16 +382,34 @@ export default function RecipeForm() {
 
       <label className="mt-10 flex gap-4 rounded-2xl border border-[#D1AD75]/80 bg-[#F4DDAE]/70 p-5 text-sm leading-6">
         <input
-          checked={values.permission}
-          onChange={(event) => updateValue("permission", event.target.checked)}
+          required
+          checked={values.licenceAccepted}
+          onChange={(event) => updateValue("licenceAccepted", event.target.checked)}
           type="checkbox"
-          name="permission"
+          name="licenceAccepted"
           className="mt-1 h-4 w-4 accent-[#123C39]"
         />
         <span>
-          I&apos;m happy for OPR to contact me if this recipe could be featured on
-          the website, in the restaurant or in a future film.
+          I confirm this recipe and story are mine to share, and I grant Other
+          People&apos;s Recipes a perpetual, worldwide, royalty-free licence to
+          publish, edit, adapt and reproduce them — including in print, film,
+          at OPR events and, if we ever open one, an OPR restaurant — with
+          credit as agreed.{" "}
+          <Link href="/terms" className="underline underline-offset-4">
+            Read our full terms.
+          </Link>
         </span>
+      </label>
+
+      <label className="mt-4 flex gap-4 rounded-2xl border border-[#D1AD75]/80 bg-[#F4DDAE]/70 p-5 text-sm leading-6">
+        <input
+          checked={values.marketingOptIn}
+          onChange={(event) => updateValue("marketingOptIn", event.target.checked)}
+          type="checkbox"
+          name="marketingOptIn"
+          className="mt-1 h-4 w-4 accent-[#123C39]"
+        />
+        <span>Keep me posted about OPR news and events.</span>
       </label>
 
       <button

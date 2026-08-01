@@ -1,40 +1,18 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 import PublishedRecipes from "./PublishedRecipes";
+import { featuredRecipes } from "../../lib/recipes";
 
-const recipes = [
-  {
-    title: "Nana Serb's Sunday Rice Pudding",
-    place: "Birmingham, England",
-    story:
-      "Every Sunday after church, Nana Serb would put this in the oven before lunch. By dessert, the whole house smelled of vanilla and nutmeg.",
-    number: "01",
-    slug: "nans-sunday-rice-pudding",
-    image: "/images/recipes/nana-serbs-rice-pudding.png",
-    category: "Dessert",
-  },
-  {
-    title: "Dave's Butter Chicken",
-    place: "New Malden, England",
-    story:
-      "Dave learned this from his Indian mother-in-law, then replaced tinned tomatoes with passata for a smoother, richer taste. He has cooked it in India for family — and even his mother-in-law now says his is better than hers.",
-    number: "02",
-    slug: "dads-friday-night-butter-chicken",
-    image: "/images/recipes/daves-butter-chicken.png",
-    category: "Main",
-  },
-  {
-    title: "Barbara's Beef Casserole",
-    place: "Swansea, Wales",
-    story:
-      "Barbara learnt it from her mother Pat, then made it her own with a tablespoon of Bovril. She always prepared it a day early, saying that good things were worth waiting for.",
-    number: "03",
-    slug: "barbaras-beef-casserole",
-    image: "/images/recipes/barbaras-beef-casserole.png",
-    category: "Main",
-  },
-];
+export const metadata: Metadata = {
+  title: "The Family Cookbook",
+  description:
+    "Real recipes from real family kitchens, each one saved with the memory that made it matter.",
+  alternates: { canonical: "/family-cookbook" },
+};
+
+const recipes = featuredRecipes;
 
 export default function FamilyCookbook() {
   return (
