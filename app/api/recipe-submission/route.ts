@@ -19,6 +19,10 @@ export async function POST(request: Request) {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 
     if (!secretKey || !supabaseUrl) {
+      console.error("OPR recipe submission service is not configured", {
+        hasSupabaseSecretKey: Boolean(secretKey),
+        hasSupabaseUrl: Boolean(supabaseUrl),
+      });
       return Response.json({ error: "Submission service is not configured" }, { status: 503 });
     }
 
