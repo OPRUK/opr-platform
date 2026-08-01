@@ -3,7 +3,27 @@ import { newSubmissionEmail, recipeReceivedEmail, sendEmail } from "../../../lib
 
 const adminEmail = "chaten@otherpeoplesrecipes.co.uk";
 const maximumPhotoSize = 5 * 1024 * 1024;
+const maximumOriginalRecipeSize = 10 * 1024 * 1024;
 const acceptedPhotoTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
+const acceptedOriginalRecipeTypes = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/heic",
+  "image/heif",
+]);
+
+function extensionForImage(type: string) {
+  const extensions: Record<string, string> = {
+    "image/jpeg": "jpg",
+    "image/png": "png",
+    "image/webp": "webp",
+    "image/heic": "heic",
+    "image/heif": "heif",
+  };
+
+  return extensions[type] ?? "jpg";
+}
 
 function readText(formData: FormData, field: string, required = false) {
   const value = formData.get(field);
@@ -36,11 +56,18 @@ export async function POST(request: Request) {
     const method = readText(formData, "method", true);
 
     const photo = formData.get("photo");
+    const originalRecipe = formData.get("originalRecipe");
     if (photo instanceof File && photo.size > maximumPhotoSize) {
       return Response.json({ error: "Photo is too large" }, { status: 400 });
     }
     if (photo instanceof File && !acceptedPhotoTypes.has(photo.type)) {
       return Response.json({ error: "Unsupported photo type" }, { status: 400 });
+    }
+    if (originalRecipe instanceof File && originalRecipe.size > maximumOriginalRecipeSize) {
+      return Response.json({ error: "Original recipe image is too large" }, { status: 400 });
+    }
+    if (originalRecipe instanceof File && originalRecipe.size > 0 && !acceptedOriginalRecipeTypes.has(originalRecipe.type)) {
+      return Response.json({ error: "Unsupported original recipe image type" }, { status: 400 });
     }
 
     const supabase = createClient(supabaseUrl, secretKey, {
@@ -49,11 +76,24 @@ export async function POST(request: Request) {
 
     let photoPath: string | null = null;
     if (photo instanceof File && photo.size > 0) {
-      const extension = photo.type === "image/png" ? "png" : photo.type === "image/webp" ? "webp" : "jpg";
+      const extension = extensionForImage(photo.type);
       photoPath = `${crypto.randomUUID()}.${extension}`;
       const { error: uploadError } = await supabase.storage
         .from("recipe-photos")
         .upload(photoPath, photo, { contentType: photo.type, upsert: false });
+
+      if (uploadError) throw uploadError;
+    }
+
+    let originalRecipePath: string | null = null;
+    if (originalRecipe instanceof File && originalRecipe.size > 0) {
+      originalRecipePath = `originals/${crypto.randomUUID()}.${extensionForImage(originalRecipe.type)}`;
+      const { error: uploadError } = await supabase.storage
+        .from("recipe-photos")
+        .upload(originalRecipePath, originalRecipe, {
+          contentType: originalRecipe.type,
+          upsert: false,
+        });
 
       if (uploadError) throw uploadError;
     }
@@ -69,6 +109,7 @@ export async function POST(request: Request) {
       ingredients,
       method,
       photo_path: photoPath,
+      original_recipe_path: originalRecipePath,
       // Retain the original database field while the newer licence wording is
       // in use. The required licence confirmation explicitly covers featuring
       // the recipe, so this is compatible with existing submissions.

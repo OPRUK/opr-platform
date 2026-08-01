@@ -55,6 +55,8 @@ export default function RecipeForm() {
   const [values, setValues] = useState(getInitialValues);
   const [photo, setPhoto] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState("");
+  const [originalRecipe, setOriginalRecipe] = useState<File | null>(null);
+  const [originalRecipePreview, setOriginalRecipePreview] = useState("");
   const [submissionComplete, setSubmissionComplete] = useState(false);
   const [submissionError, setSubmissionError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -89,6 +91,28 @@ export default function RecipeForm() {
     setPhotoPreview(URL.createObjectURL(file));
   }
 
+  function chooseOriginalRecipe(file: File | null) {
+    if (!file) {
+      setOriginalRecipe(null);
+      setOriginalRecipePreview("");
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      setSubmissionError("Please choose an image of the original recipe.");
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      setSubmissionError("Please choose an original recipe image smaller than 10 MB.");
+      return;
+    }
+
+    setSubmissionError("");
+    setOriginalRecipe(file);
+    setOriginalRecipePreview(URL.createObjectURL(file));
+  }
+
   async function submitRecipe(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsSubmitting(true);
@@ -108,6 +132,7 @@ export default function RecipeForm() {
     formData.set("marketingOptIn", String(values.marketingOptIn));
     formData.set("consentVersion", CONSENT_VERSION);
     if (photo) formData.set("photo", photo);
+    if (originalRecipe) formData.set("originalRecipe", originalRecipe);
 
     try {
       const response = await fetch("/api/recipe-submission", {
@@ -127,6 +152,8 @@ export default function RecipeForm() {
     window.sessionStorage.removeItem(recipeDraftKey);
     setPhoto(null);
     setPhotoPreview("");
+    setOriginalRecipe(null);
+    setOriginalRecipePreview("");
     setSubmissionComplete(true);
     setIsSubmitting(false);
   }
@@ -151,6 +178,8 @@ export default function RecipeForm() {
             setValues(initialValues);
             setPhoto(null);
             setPhotoPreview("");
+            setOriginalRecipe(null);
+            setOriginalRecipePreview("");
             window.sessionStorage.removeItem(recipeDraftKey);
             setSubmissionComplete(false);
           }}
@@ -346,6 +375,43 @@ export default function RecipeForm() {
               >
                 Remove photo
               </button>
+            </div>
+          ) : null}
+        </div>
+
+        <div className="mt-5 rounded-2xl border border-dashed border-[#B77938]/70 bg-[#F4DDAE]/45 p-5">
+          <label className="block text-sm font-medium">
+            The original recipe <span className="font-normal text-stone-500">(optional)</span>
+            <input
+              onChange={(event) => chooseOriginalRecipe(event.target.files?.[0] ?? null)}
+              type="file"
+              name="originalRecipe"
+              accept="image/jpeg,image/png,image/webp,image/heic,image/heif"
+              className="mt-3 block w-full text-sm text-stone-700 file:mr-4 file:rounded-full file:border-0 file:bg-[#123C39] file:px-4 file:py-2 file:font-medium file:text-white hover:file:bg-[#08231F]"
+            />
+          </label>
+          <p className="mt-3 text-sm leading-6 text-stone-600">
+            A photo of the recipe card, a handwritten notebook page or even the back of an envelope can be the most precious part of the story. JPG, PNG, WebP or HEIC, up to 10 MB.
+          </p>
+          {originalRecipe ? (
+            <div className="mt-5 flex items-start gap-4">
+              {originalRecipePreview ? (
+                <img
+                  src={originalRecipePreview}
+                  alt="Original recipe preview"
+                  className="h-28 w-28 rounded-xl object-cover shadow-md"
+                />
+              ) : null}
+              <div>
+                <p className="text-sm font-medium text-[#123C39]">{originalRecipe.name}</p>
+                <button
+                  type="button"
+                  onClick={() => chooseOriginalRecipe(null)}
+                  className="mt-3 rounded-full border border-[#123C39] px-4 py-2 text-sm font-medium transition hover:bg-[#123C39] hover:text-white"
+                >
+                  Remove original
+                </button>
+              </div>
             </div>
           ) : null}
         </div>

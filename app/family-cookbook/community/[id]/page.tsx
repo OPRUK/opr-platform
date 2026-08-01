@@ -17,6 +17,7 @@ type CommunityRecipe = {
   ingredients: string;
   method: string;
   photo_path: string | null;
+  original_recipe_path: string | null;
 };
 
 function truncate(text: string, maxLength: number): string {
@@ -29,7 +30,7 @@ function truncate(text: string, maxLength: number): string {
 async function getCommunityRecipe(id: string): Promise<CommunityRecipe | null> {
   const { data } = await supabase
     .from("recipe_submissions")
-    .select("id, title, name, location, category, servings, story, ingredients, method, photo_path")
+    .select("id, title, name, location, category, servings, story, ingredients, method, photo_path, original_recipe_path")
     .eq("id", id)
     .eq("is_published", true)
     .maybeSingle();
@@ -45,6 +46,12 @@ function imageUrlFor(recipe: CommunityRecipe): string | null {
     return "/images/recipes/sudeshs-bhindi.png";
   }
   return null;
+}
+
+function originalRecipeImageUrlFor(recipe: CommunityRecipe): string | null {
+  return recipe.original_recipe_path
+    ? supabase.storage.from("recipe-photos").getPublicUrl(recipe.original_recipe_path).data.publicUrl
+    : null;
 }
 
 export async function generateMetadata({
@@ -105,6 +112,7 @@ export default async function CommunityRecipePage({
   }
 
   const imageUrl = imageUrlFor(recipe);
+  const originalRecipeImageUrl = originalRecipeImageUrlFor(recipe);
   const ingredients = recipe.ingredients.split("\n").filter(Boolean);
   const method = recipe.method.split("\n").filter(Boolean);
 
@@ -166,6 +174,24 @@ export default async function CommunityRecipePage({
           </ul>
         </aside>
       </section>
+      {originalRecipeImageUrl ? (
+        <section className="bg-[#F4DDAE]/60 px-6 py-20">
+          <div className="mx-auto grid max-w-5xl items-center gap-10 rounded-3xl bg-[#FFF3DF] p-7 shadow-xl shadow-[#1C5A50]/10 md:grid-cols-[0.85fr_1.15fr] md:p-10">
+            <img
+              src={originalRecipeImageUrl}
+              alt={`The original handwritten recipe for ${recipe.title}`}
+              className="max-h-[36rem] w-full rounded-2xl object-contain shadow-lg"
+            />
+            <div>
+              <p className="text-sm uppercase tracking-[0.35em] text-amber-700">The original</p>
+              <h2 className="mt-5 text-4xl font-bold">The recipe as it was first written.</h2>
+              <p className="mt-6 text-lg leading-8 text-stone-700">
+                The handwritten notes, stains and shortcuts are part of the story too.
+              </p>
+            </div>
+          </div>
+        </section>
+      ) : null}
       <section className="bg-[#FFF3DF] px-6 py-20">
         <div className="mx-auto max-w-4xl">
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">The method</p>

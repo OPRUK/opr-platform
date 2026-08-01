@@ -21,6 +21,7 @@ type Submission = {
   permission_to_feature: boolean;
   status: SubmissionStatus;
   photo_path: string | null;
+  original_recipe_path: string | null;
   is_published: boolean;
 };
 
@@ -68,7 +69,7 @@ export default function AdminDashboard() {
       const { data, error } = await supabase
         .from("recipe_submissions")
         .select(
-          "id, created_at, name, email, location, title, category, servings, story, ingredients, method, permission_to_feature, status, photo_path, is_published",
+          "id, created_at, name, email, location, title, category, servings, story, ingredients, method, permission_to_feature, status, photo_path, original_recipe_path, is_published",
         )
         .order("created_at", { ascending: false });
 
@@ -178,6 +179,9 @@ export default function AdminDashboard() {
 
   const selectedPhotoUrl = selectedSubmission?.photo_path
     ? supabase.storage.from("recipe-photos").getPublicUrl(selectedSubmission.photo_path).data.publicUrl
+    : null;
+  const selectedOriginalRecipeUrl = selectedSubmission?.original_recipe_path
+    ? supabase.storage.from("recipe-photos").getPublicUrl(selectedSubmission.original_recipe_path).data.publicUrl
     : null;
 
   if (loading && !session) {
@@ -347,6 +351,16 @@ export default function AdminDashboard() {
                       src={selectedPhotoUrl}
                       alt={selectedSubmission.title}
                       className="mt-4 max-h-[28rem] w-full rounded-2xl object-cover shadow-lg"
+                    />
+                  </article>
+                ) : null}
+                {selectedOriginalRecipeUrl ? (
+                  <article>
+                    <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#123C39]">The original recipe</h3>
+                    <img
+                      src={selectedOriginalRecipeUrl}
+                      alt={`The original recipe for ${selectedSubmission.title}`}
+                      className="mt-4 max-h-[36rem] w-full rounded-2xl object-contain shadow-lg"
                     />
                   </article>
                 ) : null}
