@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Footer from "./components/Footer";
 import HomeHero from "./components/HomeHero";
+import { supabase } from "../lib/supabase/client";
 
 export const metadata: Metadata = {
   title: {
@@ -20,7 +21,32 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Home() {
+type RecipeOfWeek = {
+  id: number;
+  title: string;
+  name: string;
+  location: string | null;
+  story: string;
+  photo_path: string | null;
+  recipe_of_week_note: string | null;
+};
+
+async function getRecipeOfWeek(): Promise<RecipeOfWeek | null> {
+  const { data } = await supabase
+    .from("recipe_submissions")
+    .select("id, title, name, location, story, photo_path, recipe_of_week_note")
+    .eq("is_published", true)
+    .eq("is_recipe_of_week", true)
+    .maybeSingle();
+
+  return (data as RecipeOfWeek | null) ?? null;
+}
+
+export default async function Home() {
+  const recipeOfWeek = await getRecipeOfWeek();
+  const recipeOfWeekImage = recipeOfWeek?.photo_path
+    ? supabase.storage.from("recipe-photos").getPublicUrl(recipeOfWeek.photo_path).data.publicUrl
+    : null;
   return (
     <main className="min-h-screen bg-[#EED8B2] text-[#123C39]">
       <Navigation />
@@ -132,13 +158,17 @@ export default function Home() {
       <section className="bg-[#FFF3DF] px-6 py-24">
         <div className="mx-auto grid max-w-6xl overflow-hidden rounded-[2rem] bg-[#1C5A50] shadow-2xl md:grid-cols-2">
           <div className="relative min-h-[340px]">
-            <Image
-              src="/images/recipes/daves-butter-chicken.png"
-              alt="Dave's Butter Chicken"
-              fill
-              sizes="(min-width: 768px) 50vw, 100vw"
-              className="object-cover"
-            />
+            {recipeOfWeek ? (
+              recipeOfWeekImage ? <img src={recipeOfWeekImage} alt={recipeOfWeek.title} className="h-full w-full object-cover" /> : <div className="flex h-full items-center justify-center bg-[#DDBB82] p-8 text-center text-2xl font-bold text-[#123C39]">A treasured family recipe</div>
+            ) : (
+              <Image
+                src="/images/recipes/daves-butter-chicken.png"
+                alt="Dave's Butter Chicken"
+                fill
+                sizes="(min-width: 768px) 50vw, 100vw"
+                className="object-cover"
+              />
+            )}
           </div>
 
           <div className="flex flex-col justify-center p-9 text-[#FFF3DF] md:p-14">
@@ -146,21 +176,19 @@ export default function Home() {
               This week&apos;s story from the OPR cookbook
             </p>
             <h2 className="mt-5 text-4xl font-bold leading-tight md:text-5xl">
-              Dave&apos;s Butter Chicken
+              {recipeOfWeek?.title ?? "Dave's Butter Chicken"}
             </h2>
             <p className="mt-3 text-sm uppercase tracking-[0.25em] text-[#F0D4A0]">
-              New Malden, England
+              {recipeOfWeek?.location ?? "New Malden, England"}
             </p>
             <p className="mt-7 text-lg leading-8 text-[#FFF1D8]">
-              Dave learned this from his Indian mother-in-law, then made it his
-              own with passata for a smoother, richer sauce. He has cooked it
-              in India for family — and even she now says his is better.
+              {recipeOfWeek?.recipe_of_week_note ?? recipeOfWeek?.story ?? "Dave learned this from his Indian mother-in-law, then made it his own with passata for a smoother, richer sauce. He has cooked it in India for family — and even she now says his is better."}
             </p>
             <Link
-              href="/family-cookbook/dads-friday-night-butter-chicken"
+              href={recipeOfWeek ? `/family-cookbook/community/${recipeOfWeek.id}` : "/family-cookbook/dads-friday-night-butter-chicken"}
               className="mt-9 inline-flex w-fit items-center rounded-full bg-[#DDB765] px-7 py-4 font-medium text-[#08231F] transition hover:scale-105 hover:bg-[#FFD58C]"
             >
-              Read Dave&apos;s story →
+              Read {recipeOfWeek ? `${recipeOfWeek.name}'s` : "Dave's"} story →
             </Link>
           </div>
         </div>

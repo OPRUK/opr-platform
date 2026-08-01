@@ -24,6 +24,8 @@ type Submission = {
   original_recipe_path: string | null;
   audio_story_path: string | null;
   is_published: boolean;
+  is_recipe_of_week: boolean;
+  recipe_of_week_note: string | null;
 };
 
 const allowedEmail = "chaten@otherpeoplesrecipes.co.uk";
@@ -70,7 +72,7 @@ export default function AdminDashboard() {
       const { data, error } = await supabase
         .from("recipe_submissions")
         .select(
-          "id, created_at, name, email, location, title, category, servings, story, ingredients, method, permission_to_feature, status, photo_path, original_recipe_path, audio_story_path, is_published",
+          "id, created_at, name, email, location, title, category, servings, story, ingredients, method, permission_to_feature, status, photo_path, original_recipe_path, audio_story_path, is_published, is_recipe_of_week, recipe_of_week_note",
         )
         .order("created_at", { ascending: false });
 
@@ -137,6 +139,7 @@ export default function AdminDashboard() {
         is_published: willPublish,
         published_at: willPublish ? new Date().toISOString() : null,
         status: willPublish ? "selected" : submission.status,
+        is_recipe_of_week: willPublish ? submission.is_recipe_of_week : false,
       })
       .eq("id", submission.id);
 
@@ -148,6 +151,7 @@ export default function AdminDashboard() {
     const changes = {
       is_published: willPublish,
       status: willPublish ? "selected" as SubmissionStatus : submission.status,
+      is_recipe_of_week: willPublish ? submission.is_recipe_of_week : false,
     };
     setSubmissions((current) =>
       current.map((item) => (item.id === submission.id ? { ...item, ...changes } : item)),
@@ -176,6 +180,76 @@ export default function AdminDashboard() {
         // Publishing remains successful even if the email service is temporarily unavailable.
       }
     }
+  }
+
+  function updateRecipeOfWeekNote(value: string) {
+    if (!selectedSubmission) return;
+
+    setSelectedSubmission((current) =>
+      current ? { ...current, recipe_of_week_note: value } : current,
+    );
+    setSubmissions((current) =>
+      current.map((item) =>
+        item.id === selectedSubmission.id ? { ...item, recipe_of_week_note: value } : item,
+      ),
+    );
+  }
+
+  async function toggleRecipeOfWeek(submission: Submission) {
+    setMessage("");
+
+    if (!submission.is_published) {
+      setMessage("Publish this recipe to the cookbook before making it Recipe of the Week.");
+      return;
+    }
+
+    const willFeature = !submission.is_recipe_of_week;
+
+    if (willFeature) {
+      const { error: clearError } = await supabase
+        .from("recipe_submissions")
+        .update({ is_recipe_of_week: false })
+        .eq("is_recipe_of_week", true);
+
+      if (clearError) {
+        setMessage("We could not update Recipe of the Week just now. Please try again.");
+        return;
+      }
+    }
+
+    const { error } = await supabase
+      .from("recipe_submissions")
+      .update({
+        is_recipe_of_week: willFeature,
+        recipe_of_week_note: willFeature ? submission.recipe_of_week_note?.trim() || null : null,
+      })
+      .eq("id", submission.id);
+
+    if (error) {
+      setMessage("We could not update Recipe of the Week just now. Please try again.");
+      return;
+    }
+
+    setSubmissions((current) =>
+      current.map((item) => ({
+        ...item,
+        is_recipe_of_week: willFeature ? item.id === submission.id : item.id === submission.id ? false : item.is_recipe_of_week,
+        recipe_of_week_note: item.id === submission.id
+          ? willFeature
+            ? submission.recipe_of_week_note?.trim() || null
+            : null
+          : item.recipe_of_week_note,
+      })),
+    );
+    setSelectedSubmission((current) =>
+      current
+        ? {
+            ...current,
+            is_recipe_of_week: willFeature,
+            recipe_of_week_note: willFeature ? current.recipe_of_week_note?.trim() || null : null,
+          }
+        : current,
+    );
   }
 
   const selectedPhotoUrl = selectedSubmission?.photo_path
@@ -345,6 +419,36 @@ export default function AdminDashboard() {
                 >
                   {selectedSubmission.is_published ? "Remove from cookbook" : "Publish to cookbook"}
                 </button>
+              </div>
+
+              <div className="mt-5 rounded-2xl border border-[#D1AD75]/70 bg-[#FFF3DF] p-5">
+                <div className="md:flex md:items-start md:justify-between md:gap-6">
+                  <div>
+                    <h3 className="font-bold">
+                      {selectedSubmission.is_recipe_of_week ? "This is Recipe of the Week" : "Feature this recipe on the homepage"}
+                    </h3>
+                    <p className="mt-1 text-sm leading-6 text-stone-700">
+                      Choose one published recipe at a time. It will become the homepage&apos;s weekly story.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => void toggleRecipeOfWeek(selectedSubmission)}
+                    className="mt-4 rounded-full bg-[#9A622A] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#6B431E] md:mt-0"
+                  >
+                    {selectedSubmission.is_recipe_of_week ? "Remove as Recipe of the Week" : "Make Recipe of the Week"}
+                  </button>
+                </div>
+                <label className="mt-5 block text-sm font-medium">
+                  Why this recipe this week? <span className="font-normal text-stone-500">(optional)</span>
+                  <textarea
+                    value={selectedSubmission.recipe_of_week_note ?? ""}
+                    onChange={(event) => updateRecipeOfWeekNote(event.target.value)}
+                    rows={3}
+                    placeholder="For example: A family favourite that deserves a place at the centre of the table."
+                    className="mt-3 w-full resize-y rounded-xl border border-[#D1AD75] bg-white px-4 py-3 leading-6 outline-none transition focus:border-[#123C39] focus:ring-2 focus:ring-[#D1AD75]/60"
+                  />
+                </label>
               </div>
 
               <div className="mt-10 space-y-8 text-stone-700">
