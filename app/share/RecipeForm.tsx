@@ -1,7 +1,6 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
-import { supabase } from "../../lib/supabase/client";
 
 type RecipeFormValues = {
   name: string;
@@ -88,59 +87,32 @@ export default function RecipeForm() {
     setIsSubmitting(true);
     setSubmissionError("");
 
-    let photoPath: string | null = null;
+    const formData = new FormData();
+    formData.set("name", values.name);
+    formData.set("email", values.email);
+    formData.set("location", values.location);
+    formData.set("title", values.title);
+    formData.set("category", values.category);
+    formData.set("servings", values.servings);
+    formData.set("story", values.story);
+    formData.set("ingredients", values.ingredients);
+    formData.set("method", values.method);
+    formData.set("permission", String(values.permission));
+    if (photo) formData.set("photo", photo);
 
-    if (photo) {
-      const fileExtension = photo.name.split(".").pop()?.toLowerCase() || "jpg";
-      photoPath = `${crypto.randomUUID()}.${fileExtension}`;
-      const { error: photoError } = await supabase.storage
-        .from("recipe-photos")
-        .upload(photoPath, photo, { contentType: photo.type, upsert: false });
+    try {
+      const response = await fetch("/api/recipe-submission", {
+        method: "POST",
+        body: formData,
+      });
 
-      if (photoError) {
-        setSubmissionError(
-          "We could not upload that photo just now. Please try again in a moment.",
-        );
-        setIsSubmitting(false);
-        return;
-      }
-    }
-
-    const { error } = await supabase.from("recipe_submissions").insert({
-      name: values.name,
-      email: values.email,
-      location: values.location || null,
-      title: values.title,
-      category: values.category,
-      servings: values.servings || null,
-      story: values.story,
-      ingredients: values.ingredients,
-      method: values.method,
-      permission_to_feature: values.permission,
-      photo_path: photoPath,
-    });
-
-    if (error) {
+      if (!response.ok) throw new Error("Recipe submission failed");
+    } catch {
       setSubmissionError(
         "We could not save your recipe just now. Please try again in a moment.",
       );
       setIsSubmitting(false);
       return;
-    }
-
-    try {
-      await fetch("/api/recipe-submission", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: values.name,
-          email: values.email,
-          title: values.title,
-          location: values.location || null,
-        }),
-      });
-    } catch {
-      // The recipe itself was saved successfully, so email can be retried later.
     }
 
     window.sessionStorage.removeItem(recipeDraftKey);
