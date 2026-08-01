@@ -1,5 +1,13 @@
+import type { Metadata } from "next";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
+
+export const metadata: Metadata = {
+  title: "The OPR Film Collection",
+  description:
+    "Short films about food, family and the recipes we choose to pass on.",
+  alternates: { canonical: "/films" },
+};
 
 const films = [
   {
