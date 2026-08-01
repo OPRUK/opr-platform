@@ -56,7 +56,15 @@ export default function HomeHero({ children }: HomeHeroProps) {
           {isMuted ? "Turn sound on" : "Mute sound"}
         </button>
       ) : null}
-      {children}
+      <div
+        className={`relative z-10 transition-all duration-1000 ${
+          introductionComplete
+            ? "translate-y-0 opacity-100"
+            : "pointer-events-none translate-y-4 opacity-0"
+        }`}
+      >
+        {children}
+      </div>
     </section>
   );
 }
