@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { SITE_NAME, SITE_URL, absoluteUrl } from "../lib/site";
 
@@ -63,6 +64,7 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
+        <Analytics />
       </body>
     </html>
   );
