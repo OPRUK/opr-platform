@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 
 // Bump this whenever the submission licence wording on /terms changes, so we
 // always know exactly which version of the terms a contributor agreed to.
@@ -57,6 +57,11 @@ export default function RecipeForm() {
   const [photoPreview, setPhotoPreview] = useState("");
   const [originalRecipe, setOriginalRecipe] = useState<File | null>(null);
   const [originalRecipePreview, setOriginalRecipePreview] = useState("");
+  const [audioStory, setAudioStory] = useState<File | null>(null);
+  const [audioStoryPreview, setAudioStoryPreview] = useState("");
+  const [isRecording, setIsRecording] = useState(false);
+  const recorderRef = useRef<MediaRecorder | null>(null);
+  const recordingTimerRef = useRef<number | null>(null);
   const [submissionComplete, setSubmissionComplete] = useState(false);
   const [submissionError, setSubmissionError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -113,6 +118,75 @@ export default function RecipeForm() {
     setOriginalRecipePreview(URL.createObjectURL(file));
   }
 
+  function chooseAudioStory(file: File | null) {
+    if (!file) {
+      setAudioStory(null);
+      setAudioStoryPreview("");
+      return;
+    }
+
+    if (!file.type.startsWith("audio/")) {
+      setSubmissionError("Please choose an audio file for the voice story.");
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      setSubmissionError("Please choose a voice story smaller than 10 MB.");
+      return;
+    }
+
+    setSubmissionError("");
+    setAudioStory(file);
+    setAudioStoryPreview(URL.createObjectURL(file));
+  }
+
+  async function startVoiceRecording() {
+    if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === "undefined") {
+      setSubmissionError("Voice recording is not available in this browser. You can still upload an audio file below.");
+      return;
+    }
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream);
+      const chunks: BlobPart[] = [];
+
+      recorderRef.current = recorder;
+      recorder.addEventListener("dataavailable", (event) => {
+        if (event.data.size > 0) chunks.push(event.data);
+      });
+      recorder.addEventListener("stop", () => {
+        if (recordingTimerRef.current) {
+          window.clearTimeout(recordingTimerRef.current);
+          recordingTimerRef.current = null;
+        }
+        const audioType = recorder.mimeType || "audio/webm";
+        const extension = audioType.includes("mp4") ? "m4a" : audioType.includes("ogg") ? "ogg" : "webm";
+        chooseAudioStory(new File([new Blob(chunks, { type: audioType })], `opr-voice-story.${extension}`, { type: audioType }));
+        stream.getTracks().forEach((track) => track.stop());
+        recorderRef.current = null;
+        setIsRecording(false);
+      });
+
+      setSubmissionError("");
+      recorder.start();
+      recordingTimerRef.current = window.setTimeout(() => recorder.stop(), 10 * 60 * 1000);
+      setIsRecording(true);
+    } catch {
+      setSubmissionError("We could not access your microphone. Please allow microphone access or upload an audio file instead.");
+    }
+  }
+
+  function stopVoiceRecording() {
+    if (recordingTimerRef.current) {
+      window.clearTimeout(recordingTimerRef.current);
+      recordingTimerRef.current = null;
+    }
+    if (recorderRef.current?.state === "recording") {
+      recorderRef.current.stop();
+    }
+  }
+
   async function submitRecipe(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsSubmitting(true);
@@ -133,6 +207,7 @@ export default function RecipeForm() {
     formData.set("consentVersion", CONSENT_VERSION);
     if (photo) formData.set("photo", photo);
     if (originalRecipe) formData.set("originalRecipe", originalRecipe);
+    if (audioStory) formData.set("audioStory", audioStory);
 
     try {
       const response = await fetch("/api/recipe-submission", {
@@ -154,6 +229,8 @@ export default function RecipeForm() {
     setPhotoPreview("");
     setOriginalRecipe(null);
     setOriginalRecipePreview("");
+    setAudioStory(null);
+    setAudioStoryPreview("");
     setSubmissionComplete(true);
     setIsSubmitting(false);
   }
@@ -180,6 +257,8 @@ export default function RecipeForm() {
             setPhotoPreview("");
             setOriginalRecipe(null);
             setOriginalRecipePreview("");
+            setAudioStory(null);
+            setAudioStoryPreview("");
             window.sessionStorage.removeItem(recipeDraftKey);
             setSubmissionComplete(false);
           }}
@@ -412,6 +491,58 @@ export default function RecipeForm() {
                   Remove original
                 </button>
               </div>
+            </div>
+          ) : null}
+        </div>
+
+        <div className="mt-5 rounded-2xl border border-dashed border-[#B77938]/70 bg-[#F4DDAE]/45 p-5">
+          <p className="text-sm font-medium">
+            Tell us the story in your own words <span className="font-normal text-stone-500">(optional)</span>
+          </p>
+          <p className="mt-3 text-sm leading-6 text-stone-600">
+            A short voice note can bring a family recipe to life. Record it here or choose an existing audio file, up to 10 MB.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            {!isRecording ? (
+              <button
+                type="button"
+                onClick={() => void startVoiceRecording()}
+                className="rounded-full bg-[#123C39] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#08231F]"
+              >
+                Record a voice note
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={stopVoiceRecording}
+                className="rounded-full bg-red-800 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-950"
+              >
+                Stop recording
+              </button>
+            )}
+            {isRecording ? <p className="self-center text-sm font-medium text-red-800">Recording…</p> : null}
+          </div>
+          <label className="mt-5 block text-sm font-medium">
+            Or choose an audio file
+            <input
+              onChange={(event) => chooseAudioStory(event.target.files?.[0] ?? null)}
+              type="file"
+              name="audioStory"
+              accept="audio/*"
+              className="mt-3 block w-full text-sm text-stone-700 file:mr-4 file:rounded-full file:border-0 file:bg-[#123C39] file:px-4 file:py-2 file:font-medium file:text-white hover:file:bg-[#08231F]"
+            />
+          </label>
+          {audioStory ? (
+            <div className="mt-5">
+              <p className="text-sm font-medium text-[#123C39]">{audioStory.name}</p>
+              {audioStoryPreview ? <audio controls src={audioStoryPreview} className="mt-3 w-full" /> : null}
+              <button
+                type="button"
+                onClick={() => chooseAudioStory(null)}
+                className="mt-4 rounded-full border border-[#123C39] px-4 py-2 text-sm font-medium transition hover:bg-[#123C39] hover:text-white"
+              >
+                Remove voice story
+              </button>
             </div>
           ) : null}
         </div>

@@ -4,6 +4,7 @@ import { newSubmissionEmail, recipeReceivedEmail, sendEmail } from "../../../lib
 const adminEmail = "chaten@otherpeoplesrecipes.co.uk";
 const maximumPhotoSize = 5 * 1024 * 1024;
 const maximumOriginalRecipeSize = 10 * 1024 * 1024;
+const maximumAudioStorySize = 10 * 1024 * 1024;
 const acceptedPhotoTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
 const acceptedOriginalRecipeTypes = new Set([
   "image/jpeg",
@@ -12,6 +13,20 @@ const acceptedOriginalRecipeTypes = new Set([
   "image/heic",
   "image/heif",
 ]);
+const acceptedAudioStoryTypes = new Set([
+  "audio/aac",
+  "audio/m4a",
+  "audio/mp4",
+  "audio/mpeg",
+  "audio/ogg",
+  "audio/wav",
+  "audio/webm",
+  "audio/x-m4a",
+]);
+
+function normaliseMimeType(type: string) {
+  return type.split(";", 1)[0].toLowerCase();
+}
 
 function extensionForImage(type: string) {
   const extensions: Record<string, string> = {
@@ -23,6 +38,21 @@ function extensionForImage(type: string) {
   };
 
   return extensions[type] ?? "jpg";
+}
+
+function extensionForAudio(type: string) {
+  const extensions: Record<string, string> = {
+    "audio/aac": "aac",
+    "audio/m4a": "m4a",
+    "audio/mp4": "m4a",
+    "audio/mpeg": "mp3",
+    "audio/ogg": "ogg",
+    "audio/wav": "wav",
+    "audio/webm": "webm",
+    "audio/x-m4a": "m4a",
+  };
+
+  return extensions[normaliseMimeType(type)] ?? "webm";
 }
 
 function readText(formData: FormData, field: string, required = false) {
@@ -57,6 +87,7 @@ export async function POST(request: Request) {
 
     const photo = formData.get("photo");
     const originalRecipe = formData.get("originalRecipe");
+    const audioStory = formData.get("audioStory");
     if (photo instanceof File && photo.size > maximumPhotoSize) {
       return Response.json({ error: "Photo is too large" }, { status: 400 });
     }
@@ -68,6 +99,12 @@ export async function POST(request: Request) {
     }
     if (originalRecipe instanceof File && originalRecipe.size > 0 && !acceptedOriginalRecipeTypes.has(originalRecipe.type)) {
       return Response.json({ error: "Unsupported original recipe image type" }, { status: 400 });
+    }
+    if (audioStory instanceof File && audioStory.size > maximumAudioStorySize) {
+      return Response.json({ error: "Voice story is too large" }, { status: 400 });
+    }
+    if (audioStory instanceof File && audioStory.size > 0 && !acceptedAudioStoryTypes.has(normaliseMimeType(audioStory.type))) {
+      return Response.json({ error: "Unsupported voice story type" }, { status: 400 });
     }
 
     const supabase = createClient(supabaseUrl, secretKey, {
@@ -98,6 +135,19 @@ export async function POST(request: Request) {
       if (uploadError) throw uploadError;
     }
 
+    let audioStoryPath: string | null = null;
+    if (audioStory instanceof File && audioStory.size > 0) {
+      audioStoryPath = `audio/${crypto.randomUUID()}.${extensionForAudio(audioStory.type)}`;
+      const { error: uploadError } = await supabase.storage
+        .from("recipe-photos")
+        .upload(audioStoryPath, audioStory, {
+          contentType: audioStory.type,
+          upsert: false,
+        });
+
+      if (uploadError) throw uploadError;
+    }
+
     const { error: submissionError } = await supabase.from("recipe_submissions").insert({
       name,
       email,
@@ -110,6 +160,7 @@ export async function POST(request: Request) {
       method,
       photo_path: photoPath,
       original_recipe_path: originalRecipePath,
+      audio_story_path: audioStoryPath,
       // Retain the original database field while the newer licence wording is
       // in use. The required licence confirmation explicitly covers featuring
       // the recipe, so this is compatible with existing submissions.

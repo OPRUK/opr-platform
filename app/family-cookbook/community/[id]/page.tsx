@@ -18,6 +18,7 @@ type CommunityRecipe = {
   method: string;
   photo_path: string | null;
   original_recipe_path: string | null;
+  audio_story_path: string | null;
 };
 
 function truncate(text: string, maxLength: number): string {
@@ -30,7 +31,7 @@ function truncate(text: string, maxLength: number): string {
 async function getCommunityRecipe(id: string): Promise<CommunityRecipe | null> {
   const { data } = await supabase
     .from("recipe_submissions")
-    .select("id, title, name, location, category, servings, story, ingredients, method, photo_path, original_recipe_path")
+    .select("id, title, name, location, category, servings, story, ingredients, method, photo_path, original_recipe_path, audio_story_path")
     .eq("id", id)
     .eq("is_published", true)
     .maybeSingle();
@@ -51,6 +52,12 @@ function imageUrlFor(recipe: CommunityRecipe): string | null {
 function originalRecipeImageUrlFor(recipe: CommunityRecipe): string | null {
   return recipe.original_recipe_path
     ? supabase.storage.from("recipe-photos").getPublicUrl(recipe.original_recipe_path).data.publicUrl
+    : null;
+}
+
+function audioStoryUrlFor(recipe: CommunityRecipe): string | null {
+  return recipe.audio_story_path
+    ? supabase.storage.from("recipe-photos").getPublicUrl(recipe.audio_story_path).data.publicUrl
     : null;
 }
 
@@ -113,6 +120,7 @@ export default async function CommunityRecipePage({
 
   const imageUrl = imageUrlFor(recipe);
   const originalRecipeImageUrl = originalRecipeImageUrlFor(recipe);
+  const audioStoryUrl = audioStoryUrlFor(recipe);
   const ingredients = recipe.ingredients.split("\n").filter(Boolean);
   const method = recipe.method.split("\n").filter(Boolean);
 
@@ -174,6 +182,18 @@ export default async function CommunityRecipePage({
           </ul>
         </aside>
       </section>
+      {audioStoryUrl ? (
+        <section className="bg-[#123C39] px-6 py-16 text-white">
+          <div className="mx-auto max-w-4xl text-center">
+            <p className="text-sm uppercase tracking-[0.35em] text-amber-300">Hear the story</p>
+            <h2 className="mt-5 text-4xl font-bold">In their own words.</h2>
+            <p className="mx-auto mt-5 max-w-2xl leading-7 text-stone-200">
+              Press play to hear the memory behind this recipe.
+            </p>
+            <audio controls preload="metadata" src={audioStoryUrl} className="mx-auto mt-8 w-full max-w-2xl" />
+          </div>
+        </section>
+      ) : null}
       {originalRecipeImageUrl ? (
         <section className="bg-[#F4DDAE]/60 px-6 py-20">
           <div className="mx-auto grid max-w-5xl items-center gap-10 rounded-3xl bg-[#FFF3DF] p-7 shadow-xl shadow-[#1C5A50]/10 md:grid-cols-[0.85fr_1.15fr] md:p-10">

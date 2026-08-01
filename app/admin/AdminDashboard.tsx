@@ -22,6 +22,7 @@ type Submission = {
   status: SubmissionStatus;
   photo_path: string | null;
   original_recipe_path: string | null;
+  audio_story_path: string | null;
   is_published: boolean;
 };
 
@@ -69,7 +70,7 @@ export default function AdminDashboard() {
       const { data, error } = await supabase
         .from("recipe_submissions")
         .select(
-          "id, created_at, name, email, location, title, category, servings, story, ingredients, method, permission_to_feature, status, photo_path, original_recipe_path, is_published",
+          "id, created_at, name, email, location, title, category, servings, story, ingredients, method, permission_to_feature, status, photo_path, original_recipe_path, audio_story_path, is_published",
         )
         .order("created_at", { ascending: false });
 
@@ -182,6 +183,9 @@ export default function AdminDashboard() {
     : null;
   const selectedOriginalRecipeUrl = selectedSubmission?.original_recipe_path
     ? supabase.storage.from("recipe-photos").getPublicUrl(selectedSubmission.original_recipe_path).data.publicUrl
+    : null;
+  const selectedAudioStoryUrl = selectedSubmission?.audio_story_path
+    ? supabase.storage.from("recipe-photos").getPublicUrl(selectedSubmission.audio_story_path).data.publicUrl
     : null;
 
   if (loading && !session) {
@@ -362,6 +366,12 @@ export default function AdminDashboard() {
                       alt={`The original recipe for ${selectedSubmission.title}`}
                       className="mt-4 max-h-[36rem] w-full rounded-2xl object-contain shadow-lg"
                     />
+                  </article>
+                ) : null}
+                {selectedAudioStoryUrl ? (
+                  <article>
+                    <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#123C39]">Voice story</h3>
+                    <audio controls preload="metadata" src={selectedAudioStoryUrl} className="mt-4 w-full" />
                   </article>
                 ) : null}
                 <article>
