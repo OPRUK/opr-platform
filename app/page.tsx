@@ -3,7 +3,7 @@ import Navigation from "./components/Navigation";
 import Image from "next/image";
 import Link from "next/link";
 import Footer from "./components/Footer";
-import HeroCarousel from "./components/HeroCarousel";
+import HomeHero from "./components/HomeHero";
 
 export const metadata: Metadata = {
   title: {
@@ -26,9 +26,7 @@ export default function Home() {
       <Navigation />
 
       {/* Hero */}
-      <section className="relative isolate flex min-h-screen items-center justify-center overflow-hidden bg-[#0D342F]">
-        <HeroCarousel />
-
+      <HomeHero>
         <div className="relative z-10 mx-auto max-w-4xl px-8 text-center text-white animate-rise-in">
           <p className="mb-6 text-sm font-semibold uppercase tracking-[0.4em] text-[#FFD58C] drop-shadow-md">
             A Living Cookbook
@@ -60,7 +58,7 @@ export default function Home() {
             </Link>
           </div>
         </div>
-      </section>
+      </HomeHero>
 
       <section className="bg-[#EED8B2] px-8 py-24 animate-rise-in-delayed">
           <div className="mx-auto max-w-6xl text-center">
