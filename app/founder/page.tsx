@@ -1,8 +1,14 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { Allura, Caveat } from "next/font/google";
 import Footer from "../components/Footer";
 import Navigation from "../components/Navigation";
+
+// Caveat gives the letter a warm, natural handwritten feel. Allura is used
+// sparingly for Chaten's signature, so the note still feels personal to read.
+const foundersHand = Caveat({ subsets: ["latin"], weight: ["400", "500", "600"] });
+const signatureHand = Allura({ subsets: ["latin"], weight: "400" });
 
 export const metadata: Metadata = {
   title: "The Founder's Letter",
@@ -58,15 +64,13 @@ export default function FounderPage() {
               <p className="font-serif text-2xl italic text-[#8B5A2B]">2000</p>
             </div>
             <h2
-              className="mt-8 text-4xl font-bold leading-tight text-[#123C39] md:text-5xl"
-              style={{ fontFamily: '"Segoe Print", "Bradley Hand", cursive' }}
+              className={`${foundersHand.className} mt-8 text-4xl font-semibold leading-tight text-[#123C39] md:text-5xl`}
             >
               OPR is as much about you and your family as it is about the recipes we hold dear to our hearts.
             </h2>
 
           <div
-            className="mt-9 space-y-6 text-[1.08rem] leading-8 text-[#5B4834]"
-            style={{ fontFamily: '"Segoe Print", "Bradley Hand", cursive' }}
+            className={`${foundersHand.className} mt-9 space-y-6 text-[1.4rem] leading-[1.55] text-[#5B4834] md:text-[1.55rem]`}
           >
             <p>
               Other People&apos;s Recipes began as an idea back in 2000. It has
@@ -94,8 +98,7 @@ export default function FounderPage() {
           </div>
 
           <p
-            className="mt-10 text-4xl text-[#1C5A50]"
-            style={{ fontFamily: '"Segoe Print", "Bradley Hand", cursive' }}
+            className={`${signatureHand.className} mt-10 text-5xl text-[#1C5A50] md:text-6xl`}
           >
             Chaten
           </p>
