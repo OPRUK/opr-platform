@@ -64,8 +64,11 @@ export async function POST(request: Request) {
       story,
       ingredients,
       method,
-      permission_to_feature: readText(formData, "permission") === "true",
       photo_path: photoPath,
+      licence_accepted: readText(formData, "licenceAccepted") === "true",
+      marketing_opt_in: readText(formData, "marketingOptIn") === "true",
+      consent_version: readText(formData, "consentVersion") || "opr-submission-terms-2026-08-01",
+      consent_given_at: new Date().toISOString(),
     });
 
     if (submissionError) throw submissionError;

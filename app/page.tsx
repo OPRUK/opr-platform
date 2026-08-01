@@ -1,8 +1,24 @@
+import type { Metadata } from "next";
 import Navigation from "./components/Navigation";
 import Image from "next/image";
 import Link from "next/link";
 import Footer from "./components/Footer";
 import HeroCarousel from "./components/HeroCarousel";
+
+export const metadata: Metadata = {
+  title: {
+    absolute: "Other People's Recipes — A Living Cookbook of Family Recipes",
+  },
+  description:
+    "Handwritten, handed-down and half-remembered family recipes from across Britain, preserved with the stories behind them.",
+  alternates: { canonical: "/" },
+  openGraph: {
+    title: "Other People's Recipes — A Living Cookbook of Family Recipes",
+    description:
+      "Handwritten, handed-down and half-remembered family recipes from across Britain, preserved with the stories behind them.",
+    url: "/",
+  },
+};
 
 export default function Home() {
   return (

@@ -63,8 +63,14 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="mx-auto mt-14 max-w-6xl border-t border-[#1C5A50] pt-6 text-sm text-[#DABF8D]">
-        © {new Date().getFullYear()}{" "}Other People&apos;s Recipes. Every recipe has a story.
+      <div className="mx-auto mt-14 flex max-w-6xl flex-col gap-3 border-t border-[#1C5A50] pt-6 text-sm text-[#DABF8D] sm:flex-row sm:items-center sm:justify-between">
+        <p>
+          © {new Date().getFullYear()}{" "}Other People&apos;s Recipes. Every recipe has a story.
+        </p>
+        <p className="flex gap-4">
+          <Link href="/privacy" className="transition hover:text-[#DDB765]">Privacy Policy</Link>
+          <Link href="/terms" className="transition hover:text-[#DDB765]">Terms of Use</Link>
+        </p>
       </div>
     </footer>
   );

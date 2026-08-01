@@ -1,88 +1,65 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import Navigation from "../../components/Navigation";
 import Footer from "../../components/Footer";
 import RecipeActions from "../../components/RecipeActions";
+import { getFeaturedRecipe } from "../../../lib/recipes";
+import { SITE_NAME, absoluteUrl } from "../../../lib/site";
 
-const recipes = {
-  "nans-sunday-rice-pudding": {
-    title: "Nana Serb's Sunday Rice Pudding",
-    place: "Birmingham, England",
-    story:
-      "Every Sunday after church, Nana Serb put this pudding in the oven before we sat down for lunch. By the time we reached dessert, the house smelled of vanilla and nutmeg. She never measured a thing — she simply knew. One spoonful still takes us straight back to her kitchen.",
-    ingredients: [
-      "100g pudding rice",
-      "850ml whole milk",
-      "50g caster sugar",
-      "1 vanilla pod, or 1 teaspoon vanilla extract",
-      "Freshly grated nutmeg",
-      "A small knob of butter",
-    ],
-    method: [
-      "Heat the oven to 150°C fan. Butter a medium ovenproof dish.",
-      "Add the rice, sugar and vanilla to the dish. Pour in the milk and stir gently.",
-      "Dust generously with nutmeg and dot the surface with butter.",
-      "Bake for 1 hour 45 minutes to 2 hours, stirring once after the first 45 minutes, until the rice is tender and the top is golden.",
-      "Let it stand for ten minutes before serving. Nana Serb always insisted it was best with a little extra nutmeg on top.",
-    ],
-    image: "/images/recipes/nana-serbs-rice-pudding.png",
-  },
-  "dads-friday-night-butter-chicken": {
-    title: "Dave's Butter Chicken",
-    place: "New Malden, England",
-    story:
-      "I learned this from my Indian mother-in-law and tweaked it a little by replacing the tinned tomatoes with passata for a smoother, richer taste. I have cooked it in India for family and received their seal of approval — as well as my mother-in-law declaring that mine is better than hers now!",
-    ingredients: [
-      "600g chicken breasts, trimmed and diced",
-      "3 tablespoons tandoori masala",
-      "400g passata",
-      "3 finger or rocket chillies",
-      "50g butter",
-      "1 tablespoon white sugar",
-      "1 teaspoon salt",
-      "150ml double cream",
-      "Olive oil",
-      "Chopped fresh coriander, to garnish",
-    ],
-    method: [
-      "Pour the passata into a large, heavy-bottomed pan — ideally cast iron. Add half the butter, diced into cubes, along with the sugar and salt.",
-      "Keep the chillies whole, but prick each one several times with the point of a knife so the flavour can escape.",
-      "Bring the sauce to the boil, then simmer briskly over a medium heat for 20–25 minutes, using a splash guard rather than a lid. You want the steam to escape and the sauce to reduce, without bubbling or spitting out.",
-      "Meanwhile, place the chicken in a bowl with a good glug of olive oil and the tandoori masala, then coat it well.",
-      "Shallow-fry the chicken with the remaining butter and a dash of oil over a medium-high heat for about 10 minutes, until it is starting to cook evenly.",
-      "Transfer the chicken into the sauce, stir well and leave on a low simmer for 20 minutes. Add a little water if the sauce becomes too thick.",
-      "Just before serving, stir in the double cream. Add it to taste: the more cream you use, the milder the spice and the paler the colour.",
-      "Garnish with chopped coriander and serve with naan or rice.",
-    ],
-    image: "/images/recipes/daves-butter-chicken.png",
-  },
-  "barbaras-beef-casserole": {
-    title: "Barbara's Beef Casserole",
-    place: "Swansea, Wales",
-    story:
-      "Barbara learnt this recipe from her mother, Pat, and made it her own by adding a tablespoon of Bovril. She always prepared it the day before because, as she put it, good things are worth waiting for. We still make it from her flour-dusted recipe book, and nobody is allowed to skip the extra gravy.",
-    ingredients: [
-      "750g braising steak, diced",
-      "2 onions, sliced",
-      "2 carrots, diced",
-      "500ml dark ale",
-      "300ml beef stock",
-      "2 tablespoons plain flour",
-      "1 tablespoon Bovril",
-    ],
-    method: [
-      "Brown the beef in batches, then soften the onions and carrots in the same pan.",
-      "Stir in the flour, then add the ale, stock and Bovril. Return the beef to the pan.",
-      "Simmer gently for two hours until tender. Barbara always prepared it the day before — overnight is even better.",
-      "Reheat slowly until the sauce is rich and glossy, then season to taste.",
-      "Serve in warmed bowls with creamy mash or crusty bread, and plenty of extra gravy.",
-    ],
-    image: "/images/recipes/barbaras-beef-casserole.png",
-  },
-};
+function truncate(text: string, maxLength: number): string {
+  if (text.length <= maxLength) return text;
+  const clipped = text.slice(0, maxLength - 1);
+  const lastSpace = clipped.lastIndexOf(" ");
+  return `${clipped.slice(0, lastSpace > 0 ? lastSpace : clipped.length)}…`;
+}
 
-type RecipeSlug = keyof typeof recipes;
+/** Formats an ISO 8601 duration like "PT1H45M" as "1 hr 45 min". */
+function formatDuration(isoDuration: string): string {
+  const match = /^PT(?:(\d+)H)?(?:(\d+)M)?$/.exec(isoDuration);
+  if (!match) return isoDuration;
+  const [, hours, minutes] = match;
+  const parts: string[] = [];
+  if (hours) parts.push(`${hours} hr`);
+  if (minutes) parts.push(`${minutes} min`);
+  return parts.join(" ") || isoDuration;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const recipe = getFeaturedRecipe(slug);
+  if (!recipe) return {};
+
+  const title = `${recipe.title} — ${recipe.place}`;
+  const description = truncate(recipe.story, 155);
+  const url = `/family-cookbook/${recipe.slug}`;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      title,
+      description,
+      type: "article",
+      url,
+      images: [
+        { url: absoluteUrl(recipe.image), width: 1200, height: 900, alt: recipe.title },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [absoluteUrl(recipe.image)],
+    },
+  };
+}
 
 export default async function RecipePage({
   params,
@@ -90,14 +67,65 @@ export default async function RecipePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const recipe = recipes[slug as RecipeSlug];
+  const recipe = getFeaturedRecipe(slug);
 
   if (!recipe) {
     notFound();
   }
 
+  const recipeJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    name: recipe.title,
+    image: [absoluteUrl(recipe.image)],
+    description: truncate(recipe.story, 300),
+    author: { "@type": "Person", name: recipe.contributorName ?? SITE_NAME },
+    ...(recipe.category ? { recipeCategory: recipe.category } : {}),
+    ...(recipe.cuisine ? { recipeCuisine: recipe.cuisine } : {}),
+    ...(recipe.prepTime ? { prepTime: recipe.prepTime } : {}),
+    ...(recipe.cookTime ? { cookTime: recipe.cookTime } : {}),
+    ...(recipe.serves ? { recipeYield: recipe.serves } : {}),
+    recipeIngredient: recipe.ingredients,
+    recipeInstructions: recipe.method.map((step, index) => ({
+      "@type": "HowToStep",
+      position: index + 1,
+      text: step,
+    })),
+    ...(recipe.datePublished ? { datePublished: recipe.datePublished } : {}),
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Family Cookbook", item: absoluteUrl("/family-cookbook") },
+      { "@type": "ListItem", position: 2, name: recipe.title, item: absoluteUrl(`/family-cookbook/${recipe.slug}`) },
+    ],
+  };
+
+  const timeLabel = [
+    recipe.prepTime ? `${formatDuration(recipe.prepTime)} prep` : null,
+    recipe.cookTime ? `${formatDuration(recipe.cookTime)} cook` : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+
+  const metaStripItems = [
+    timeLabel || null,
+    recipe.serves ? `Serves ${recipe.serves}` : null,
+    recipe.category || null,
+  ].filter((item): item is string => Boolean(item));
+
   return (
     <main className="min-h-screen bg-[#EED8B2] text-[#123C39]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(recipeJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <Navigation />
 
       <section className="bg-[#123C39] px-6 pb-20 pt-40 text-center text-white">
@@ -110,6 +138,11 @@ export default async function RecipePage({
         <p className="mt-6 text-sm uppercase tracking-[0.25em] text-stone-300">
           {recipe.place}
         </p>
+        {metaStripItems.length > 0 ? (
+          <p className="mt-4 text-sm uppercase tracking-[0.2em] text-amber-200">
+            {metaStripItems.join(" · ")}
+          </p>
+        ) : null}
       </section>
 
       <section className="mx-auto grid max-w-6xl gap-14 px-6 py-20 md:grid-cols-[1.1fr_0.9fr] md:px-8">
