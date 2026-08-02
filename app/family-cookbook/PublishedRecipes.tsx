@@ -18,7 +18,6 @@ type FeaturedRecipe = {
   title: string;
   place: string;
   story: string;
-  number: string;
   slug: string;
   image: string;
   category: string;
@@ -33,7 +32,6 @@ type RecipeCard = {
   category: string;
   imageUrl: string | null;
   href: string;
-  number?: string;
 };
 
 export default function PublishedRecipes({
@@ -69,7 +67,6 @@ export default function PublishedRecipes({
       category: recipe.category,
       imageUrl: recipe.image,
       href: `/family-cookbook/${recipe.slug}`,
-      number: recipe.number,
     })),
     ...communityRecipes.map((recipe) => ({
       id: `community-${recipe.id}`,
@@ -163,7 +160,6 @@ export default function PublishedRecipes({
               )}
               <div className="flex min-h-80 flex-col p-8">
                 <p className="text-sm uppercase tracking-[0.16em] text-stone-500">
-                  {recipe.number ? `${recipe.number} · ` : ""}
                   {recipe.category}
                 </p>
                 <h3 className="mt-5 text-3xl font-bold leading-tight">{recipe.title}</h3>
