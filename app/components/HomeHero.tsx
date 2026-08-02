@@ -7,16 +7,41 @@ type HomeHeroProps = {
   children: ReactNode;
 };
 
+const introductionFilms = [
+  {
+    desktop: "/videos/opr-home-introduction.mp4",
+    mobile: "/videos/opr-home-introduction-mobile.mp4",
+    poster: "/images/opr-home-introduction-poster.jpg",
+    label: "Other People's Recipes introduction film",
+  },
+  {
+    desktop: "/videos/opr-home-introduction-original.mp4",
+    mobile: "/videos/opr-home-introduction-original-mobile.mp4",
+    poster: "/images/opr-home-introduction-original-poster.jpg",
+    label: "Other People's Recipes story film",
+  },
+];
+
 export default function HomeHero({ children }: HomeHeroProps) {
   const [introductionComplete, setIntroductionComplete] = useState(false);
+  const [filmIndex, setFilmIndex] = useState(0);
   const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const activeFilm = introductionFilms[filmIndex];
 
   function toggleSound() {
     if (!videoRef.current) return;
 
     videoRef.current.muted = !isMuted;
     setIsMuted((current) => !current);
+  }
+
+  function playNextFilm() {
+    if (filmIndex < introductionFilms.length - 1) {
+      setFilmIndex((current) => current + 1);
+      return;
+    }
+    setIntroductionComplete(true);
   }
 
   return (
@@ -31,23 +56,24 @@ export default function HomeHero({ children }: HomeHeroProps) {
 
       {!introductionComplete ? (
         <video
+          key={activeFilm.desktop}
           ref={videoRef}
           autoPlay
           muted={isMuted}
           playsInline
           preload="auto"
-          poster="/images/opr-home-introduction-poster.jpg"
-          onEnded={() => setIntroductionComplete(true)}
-          onError={() => setIntroductionComplete(true)}
+          poster={activeFilm.poster}
+          onEnded={playNextFilm}
+          onError={playNextFilm}
           className="absolute inset-0 h-full w-full object-cover"
-          aria-label="Other People's Recipes introduction film"
+          aria-label={activeFilm.label}
         >
           <source
             media="(max-width: 640px)"
-            src="/videos/opr-home-introduction-mobile.mp4"
+            src={activeFilm.mobile}
             type="video/mp4"
           />
-          <source src="/videos/opr-home-introduction.mp4" type="video/mp4" />
+          <source src={activeFilm.desktop} type="video/mp4" />
         </video>
       ) : null}
 
