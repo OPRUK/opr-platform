@@ -86,7 +86,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
     ],
     method: [
       "Pour the passata into a large, heavy-bottomed pan — ideally cast iron. Add half the butter, diced into cubes, along with the sugar and salt.",
-      "Keep the chillies whole, but prick each one several times with the point of a knife so the flavour can escape.",
+      "Keep the chillies whole, but prick each one several times with the point of a knife so the flavour can escape, then add them to the passata.",
       "Bring the sauce to the boil, then simmer briskly over a medium heat for 20–25 minutes, using a splash guard rather than a lid. You want the steam to escape and the sauce to reduce, without bubbling or spitting out.",
       "Meanwhile, place the chicken in a bowl with a good glug of olive oil and the tandoori masala, then coat it well.",
       "Shallow-fry the chicken with the remaining butter and a dash of oil over a medium-high heat for about 10 minutes, until it is starting to cook evenly.",
