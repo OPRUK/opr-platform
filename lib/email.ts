@@ -107,6 +107,8 @@ export function foundingTableWelcomeEmail({ name }: { name: string }) {
         <p>Dear ${escapeHtml(name)},</p>
         <p>Thank you for joining the very first people shaping Other People's Recipes.</p>
         <p>You will be first to hear about new family recipes, future tasting events, Recipe of the Month voting and the next chapter of OPR.</p>
+        <p>While you wait, the first stories are already waiting for you in the Family Cookbook.</p>
+        <p><a href="${siteUrl}/family-cookbook" style="display: inline-block; background: #1C5A50; color: #FFF3DF; padding: 12px 18px; border-radius: 999px; text-decoration: none;">Explore the Family Cookbook</a></p>
         <p style="margin-top: 32px;">Warmly,<br /><strong>Chaten &amp; the OPR team</strong></p>
         <p style="border-top: 1px solid #D1AD75; padding-top: 18px; margin-top: 36px; font-size: 13px; color: #6B6254;">Every recipe has a story.</p>
       </div>
