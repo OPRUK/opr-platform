@@ -20,7 +20,7 @@ const slides = [
     label: "Dave's Butter Chicken · New Malden",
   },
   {
-    image: "/images/recipes/barbaras-beef-casserole.png",
+    image: "/images/recipes/barbaras-beef-casserole-wide.png",
     alt: "Barbara's Beef Casserole",
     label: "Barbara's Beef Casserole · Swansea",
   },
