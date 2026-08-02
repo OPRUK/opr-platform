@@ -65,6 +65,7 @@ export default function RecipeForm() {
   const [submissionComplete, setSubmissionComplete] = useState(false);
   const [submissionError, setSubmissionError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [instagramCopied, setInstagramCopied] = useState(false);
 
   useEffect(() => {
     window.sessionStorage.setItem(recipeDraftKey, JSON.stringify(values));
@@ -72,6 +73,38 @@ export default function RecipeForm() {
 
   function updateValue(field: keyof RecipeFormValues, value: string | boolean) {
     setValues((current) => ({ ...current, [field]: value }));
+  }
+
+  function thankYouShareText() {
+    const recipeName = values.title ? ` my family recipe, ${values.title},` : " a family recipe";
+    return `I’ve just shared${recipeName} with Other People's Recipes. What recipe feels like home to you? Share yours: https://otherpeoplesrecipes.co.uk/share`;
+  }
+
+  function shareOnWhatsApp() {
+    window.open(
+      `https://wa.me/?text=${encodeURIComponent(thankYouShareText())}`,
+      "_blank",
+      "noopener,noreferrer",
+    );
+  }
+
+  function shareOnFacebook() {
+    window.open(
+      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent("https://otherpeoplesrecipes.co.uk/share")}&quote=${encodeURIComponent(thankYouShareText())}`,
+      "_blank",
+      "noopener,noreferrer",
+    );
+  }
+
+  async function prepareInstagramShare() {
+    try {
+      await navigator.clipboard.writeText(thankYouShareText());
+      setInstagramCopied(true);
+      window.open("https://www.instagram.com/", "_blank", "noopener,noreferrer");
+      window.setTimeout(() => setInstagramCopied(false), 3500);
+    } catch {
+      setInstagramCopied(false);
+    }
   }
 
   function choosePhoto(file: File | null) {
@@ -249,6 +282,45 @@ export default function RecipeForm() {
           read it and may be in touch if it could become part of the living
           cookbook.
         </p>
+        <div className="mx-auto mt-10 max-w-xl rounded-2xl border border-[#D1AD75]/80 bg-[#F4DDAE]/65 p-6">
+          <p className="text-sm uppercase tracking-[0.27em] text-[#9A622A]">
+            Keep the story moving
+          </p>
+          <h3 className="mt-3 text-2xl font-bold text-[#123C39]">
+            Invite the person who taught it to you.
+          </h3>
+          <p className="mt-3 leading-7 text-stone-700">
+            They might have the next recipe that belongs in the OPR Cookbook.
+          </p>
+          <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
+            <button
+              type="button"
+              onClick={shareOnWhatsApp}
+              className="rounded-full bg-[#1C5A50] px-5 py-3 font-medium text-white transition hover:scale-105 hover:bg-[#123C39]"
+            >
+              Share on WhatsApp
+            </button>
+            <button
+              type="button"
+              onClick={shareOnFacebook}
+              className="rounded-full bg-[#315B9A] px-5 py-3 font-medium text-white transition hover:scale-105 hover:bg-[#244779]"
+            >
+              Share on Facebook
+            </button>
+            <button
+              type="button"
+              onClick={prepareInstagramShare}
+              className="rounded-full border border-[#9A622A] px-5 py-3 font-medium text-[#123C39] transition hover:scale-105 hover:bg-[#FFF3DF]"
+            >
+              {instagramCopied ? "Caption copied" : "Share on Instagram"}
+            </button>
+          </div>
+          {instagramCopied ? (
+            <p className="mt-4 text-sm text-[#1C5A50]">
+              Your caption is copied. Paste it into your Instagram post or Story.
+            </p>
+          ) : null}
+        </div>
         <button
           type="button"
           onClick={() => {
