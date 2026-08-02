@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import HeroCarousel from "./HeroCarousel";
 
 type HomeHeroProps = {
@@ -28,6 +28,15 @@ export default function HomeHero({ children }: HomeHeroProps) {
   const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const activeFilm = introductionFilms[filmIndex];
+
+  useEffect(() => {
+    if (introductionComplete || !videoRef.current) return;
+
+    videoRef.current.muted = isMuted;
+    void videoRef.current.play().catch(() => {
+      // If a browser blocks playback, leave the film visible for the visitor to start.
+    });
+  }, [filmIndex, introductionComplete, isMuted]);
 
   function toggleSound() {
     if (!videoRef.current) return;
