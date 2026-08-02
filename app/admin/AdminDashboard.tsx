@@ -72,16 +72,11 @@ export default function AdminDashboard() {
 
     async function loadSubmissions() {
       setLoading(true);
-      const { data, error } = await supabase
-        .from("recipe_submissions")
-        .select(
-          "id, created_at, name, email, location, title, category, servings, story, ingredients, method, cook_notes, permission_to_feature, status, photo_path, original_recipe_path, audio_story_path, is_published, published_at, is_recipe_of_week, recipe_of_week_note",
-        )
-        .order("created_at", { ascending: false });
-
-      if (error) {
+      const response = await adminRequest("/api/admin/recipe-submission");
+      if (!response.ok) {
         setMessage("We could not load the recipe inbox just now.");
       } else {
+        const { submissions: data } = await response.json();
         setSubmissions((data ?? []) as Submission[]);
       }
       setLoading(false);
@@ -89,6 +84,18 @@ export default function AdminDashboard() {
 
     void loadSubmissions();
   }, [session]);
+
+  async function adminRequest(path: string, options: RequestInit = {}) {
+    const { data } = await supabase.auth.getSession();
+    return fetch(path, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${data.session?.access_token ?? ""}`,
+        ...options.headers,
+      },
+    });
+  }
 
   async function sendMagicLink(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -114,12 +121,11 @@ export default function AdminDashboard() {
   }
 
   async function updateStatus(id: number, status: SubmissionStatus) {
-    const { error } = await supabase
-      .from("recipe_submissions")
-      .update({ status })
-      .eq("id", id);
-
-    if (error) {
+    const response = await adminRequest("/api/admin/recipe-submission", {
+      method: "PATCH",
+      body: JSON.stringify({ id, changes: { status } }),
+    });
+    if (!response.ok) {
       setMessage("We could not update that recipe. Please try again.");
       return;
     }
@@ -137,24 +143,27 @@ export default function AdminDashboard() {
   async function togglePublished(submission: Submission) {
     const willPublish = !submission.is_published;
     setMessage("");
-    const { error } = await supabase
-      .from("recipe_submissions")
-      .update({
+    const publishedAt = willPublish ? new Date().toISOString() : null;
+    const response = await adminRequest("/api/admin/recipe-submission", {
+      method: "PATCH",
+      body: JSON.stringify({
+        id: submission.id,
+        changes: {
         is_published: willPublish,
-        published_at: willPublish ? new Date().toISOString() : null,
+        published_at: publishedAt,
         status: willPublish ? "selected" : submission.status,
         is_recipe_of_week: willPublish ? submission.is_recipe_of_week : false,
-      })
-      .eq("id", submission.id);
-
-    if (error) {
+        },
+      }),
+    });
+    if (!response.ok) {
       setMessage("We could not change this recipe's publishing status. Please try again.");
       return;
     }
 
     const changes = {
       is_published: willPublish,
-      published_at: willPublish ? new Date().toISOString() : null,
+      published_at: publishedAt,
       status: willPublish ? "selected" as SubmissionStatus : submission.status,
       is_recipe_of_week: willPublish ? submission.is_recipe_of_week : false,
     };
@@ -244,27 +253,16 @@ export default function AdminDashboard() {
 
     const willFeature = !submission.is_recipe_of_week;
 
-    if (willFeature) {
-      const { error: clearError } = await supabase
-        .from("recipe_submissions")
-        .update({ is_recipe_of_week: false })
-        .eq("is_recipe_of_week", true);
-
-      if (clearError) {
-        setMessage("We could not update Recipe of the Week just now. Please try again.");
-        return;
-      }
-    }
-
-    const { error } = await supabase
-      .from("recipe_submissions")
-      .update({
-        is_recipe_of_week: willFeature,
-        recipe_of_week_note: willFeature ? submission.recipe_of_week_note?.trim() || null : null,
-      })
-      .eq("id", submission.id);
-
-    if (error) {
+    const response = await adminRequest("/api/admin/recipe-submission", {
+      method: "PATCH",
+      body: JSON.stringify({
+        action: "feature",
+        id: submission.id,
+        featured: willFeature,
+        note: submission.recipe_of_week_note,
+      }),
+    });
+    if (!response.ok) {
       setMessage("We could not update Recipe of the Week just now. Please try again.");
       return;
     }
