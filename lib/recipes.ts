@@ -26,6 +26,8 @@ export type FeaturedRecipe = {
   /** ISO 8601 date, e.g. "2026-01-15". Omit if unknown. */
   datePublished?: string;
   contributorName?: string;
+  /** Optional practical tips and ingredient alternatives from the contributor. */
+  notes?: { title: string; text: string }[];
 };
 
 export const featuredRecipes: FeaturedRecipe[] = [
@@ -53,6 +55,16 @@ export const featuredRecipes: FeaturedRecipe[] = [
     image: "/images/recipes/nana-serbs-rice-pudding-wide.png",
     category: "Dessert",
     number: "01",
+    notes: [
+      {
+        title: "Vanilla",
+        text: "A vanilla pod gives the fullest flavour, but vanilla extract works beautifully too. Use one teaspoon of extract in its place.",
+      },
+      {
+        title: "The best bit",
+        text: "Do not rush the resting time. Ten minutes lets the pudding settle and gives it that soft, comforting texture Nana Serb loved.",
+      },
+    ],
   },
   {
     slug: "dads-friday-night-butter-chicken",
@@ -85,6 +97,20 @@ export const featuredRecipes: FeaturedRecipe[] = [
     image: "/images/recipes/daves-butter-chicken-wide.png",
     category: "Main",
     number: "02",
+    notes: [
+      {
+        title: "Tandoori masala",
+        text: "This is a ready-made Indian spice blend. If you cannot find it, use garam masala with a little mild paprika for warmth and colour — the flavour will be different, but still delicious.",
+      },
+      {
+        title: "About Degi Mirch",
+        text: "Degi mirch is a mild Indian red chilli powder, used mainly for its deep red colour. It is not part of Dave’s current recipe, but mild paprika plus a small pinch of cayenne is a good alternative whenever a recipe calls for it.",
+      },
+      {
+        title: "Choose your chilli",
+        text: "Finger or rocket chillies bring freshness and heat. For a gentler dish, use fewer chillies or remove them before serving.",
+      },
+    ],
   },
   {
     slug: "barbaras-beef-casserole",
@@ -111,6 +137,16 @@ export const featuredRecipes: FeaturedRecipe[] = [
     image: "/images/recipes/barbaras-beef-casserole-wide.png",
     category: "Main",
     number: "03",
+    notes: [
+      {
+        title: "Make it ahead",
+        text: "Barbara’s advice was to prepare it the day before. The flavour deepens overnight, then it only needs warming gently before serving.",
+      },
+      {
+        title: "No ale?",
+        text: "Use extra beef stock instead. You will lose some of the malty depth, but the Bovril will still give the casserole a rich savoury finish.",
+      },
+    ],
   },
 ];
 

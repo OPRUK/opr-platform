@@ -195,6 +195,31 @@ export default async function RecipePage({
         </div>
       </section>
 
+      {recipe.notes?.length ? (
+        <section className="bg-[#EED8B2] px-6 py-20">
+          <div className="mx-auto max-w-5xl rounded-[2rem] border border-[#D1AD75] bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/10 md:p-12">
+            <p className="text-sm font-bold uppercase tracking-[0.35em] text-[#9A622A]">
+              Cook&apos;s notes &amp; swaps
+            </p>
+            <h2 className="mt-4 text-4xl font-bold text-[#123C39]">
+              A little help from the OPR kitchen
+            </h2>
+            <p className="mt-4 max-w-3xl text-lg leading-8 text-stone-700">
+              These are optional pointers for making the recipe your own while
+              keeping the spirit of the original.
+            </p>
+            <div className="mt-9 grid gap-5 md:grid-cols-2">
+              {recipe.notes.map((note) => (
+                <article key={note.title} className="rounded-2xl border border-[#E7CEA2] bg-[#FFF9EC] p-6">
+                  <h3 className="text-xl font-bold text-[#123C39]">{note.title}</h3>
+                  <p className="mt-3 leading-7 text-stone-700">{note.text}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       <RecipeActions title={recipe.title} imageUrl={recipe.image} />
 
       <section className="px-6 py-20 text-center">
