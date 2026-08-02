@@ -86,6 +86,46 @@ export default async function Home() {
         </div>
       </HomeHero>
 
+      <section className="bg-[#EED8B2] px-6 py-10 md:py-14">
+        <div className="mx-auto max-w-6xl overflow-hidden rounded-[2rem] border-2 border-[#DDB765] bg-[#123C39] shadow-2xl shadow-[#08231F]/25">
+          <div className="grid items-stretch md:grid-cols-[0.7fr_1.7fr]">
+            <div className="flex min-h-[200px] flex-col justify-between bg-[#DDB765] p-8 text-[#123C39] md:min-h-full md:p-10">
+              <p className="text-xs font-bold uppercase tracking-[0.3em]">OPR invitation</p>
+              <div>
+                <p className="font-brand text-7xl font-semibold leading-none md:text-8xl">August</p>
+                <p className="mt-2 text-sm font-bold uppercase tracking-[0.22em]">2026</p>
+              </div>
+              <p className="max-w-[13rem] text-sm leading-6">
+                A month for the meals that make a family feel at home.
+              </p>
+            </div>
+
+            <div className="relative px-8 py-11 text-[#FFF3DF] md:px-14 md:py-14">
+              <p className="text-sm font-bold uppercase tracking-[0.38em] text-[#FFD58C]">
+                The Recipe That Feels Like Home
+              </p>
+              <h2 className="mt-5 max-w-3xl text-4xl font-bold leading-tight md:text-6xl">
+                Tell us the story your family always asks for.
+              </h2>
+              <p className="mt-6 max-w-3xl text-lg leading-8 text-[#FFF1D8] md:text-xl">
+                Throughout August, we&apos;re looking for recipes that bring
+                people back to the table — to feature in the OPR Cookbook and
+                share with our growing community.
+              </p>
+              <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
+                <Link
+                  href="/share"
+                  className="inline-flex w-fit rounded-full bg-[#DDB765] px-8 py-4 text-base font-bold text-[#08231F] transition hover:scale-105 hover:bg-[#FFD58C]"
+                >
+                  Share your recipe →
+                </Link>
+                <p className="text-sm text-[#F0D4A0]">Your family story could be next.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="bg-[#EED8B2] px-8 py-24 animate-rise-in-delayed">
           <div className="mx-auto max-w-6xl text-center">
             <p className="mb-4 uppercase tracking-[0.35em] text-amber-700">
@@ -153,41 +193,6 @@ export default async function Home() {
               </Link>
             </div>
           </div>
-      </section>
-
-      <section className="bg-[#123C39] px-6 py-20 text-[#FFF3DF]">
-        <div className="mx-auto max-w-5xl rounded-[2rem] border border-[#DDB765]/50 bg-[#184A42] px-8 py-14 text-center shadow-2xl shadow-[#08231F]/20 md:px-16">
-          <p className="text-sm uppercase tracking-[0.38em] text-[#FFD58C]">
-            August invitation
-          </p>
-          <h2 className="mt-5 text-4xl font-bold leading-tight md:text-6xl">
-            The Recipe That Feels Like Home
-          </h2>
-          <p className="mx-auto mt-7 max-w-3xl text-lg leading-8 text-[#FFF1D8] md:text-xl">
-            Is there one dish your family asks for again and again? The one
-            that makes a kitchen smell like home? Share its recipe and the
-            story that travelled with it.
-          </p>
-          <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-[#F0D4A0]">
-            Throughout August, we&apos;re looking for the recipes that bring
-            families back to the table — to feature in the OPR Cookbook and
-            share with our growing community.
-          </p>
-          <div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row">
-            <Link
-              href="/share"
-              className="rounded-full bg-[#DDB765] px-8 py-4 text-base font-semibold text-[#08231F] transition hover:scale-105 hover:bg-[#FFD58C]"
-            >
-              Share your recipe →
-            </Link>
-            <Link
-              href="/family-cookbook"
-              className="rounded-full border border-[#FFF3DF]/70 px-8 py-4 text-base font-semibold transition hover:bg-[#FFF3DF] hover:text-[#123C39]"
-            >
-              Explore the cookbook
-            </Link>
-          </div>
-        </div>
       </section>
 
       <section className="bg-[#FFF3DF] px-6 py-24">
