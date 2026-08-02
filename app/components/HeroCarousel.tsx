@@ -5,17 +5,17 @@ import { useEffect, useState } from "react";
 
 const slides = [
   {
-    image: "/images/hero-kitchen.png",
+    image: "/images/hero-kitchen-wide.png",
     alt: "The Other People's Recipes kitchen table",
     label: "Other People's Recipes · Every recipe has a story",
   },
   {
-    image: "/images/recipes/nana-serbs-rice-pudding.png",
+    image: "/images/recipes/nana-serbs-rice-pudding-wide.png",
     alt: "Nana Serb's Sunday Rice Pudding",
     label: "Nana Serb's Sunday Rice Pudding · Birmingham",
   },
   {
-    image: "/images/recipes/daves-butter-chicken.png",
+    image: "/images/recipes/daves-butter-chicken-wide.png",
     alt: "Dave's Butter Chicken",
     label: "Dave's Butter Chicken · New Malden",
   },
