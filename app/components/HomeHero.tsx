@@ -36,11 +36,17 @@ export default function HomeHero({ children }: HomeHeroProps) {
           muted={isMuted}
           playsInline
           preload="auto"
+          poster="/images/opr-home-introduction-poster.jpg"
           onEnded={() => setIntroductionComplete(true)}
           onError={() => setIntroductionComplete(true)}
           className="absolute inset-0 h-full w-full object-cover"
           aria-label="Other People's Recipes introduction film"
         >
+          <source
+            media="(max-width: 640px)"
+            src="/videos/opr-home-introduction-mobile.mp4"
+            type="video/mp4"
+          />
           <source src="/videos/opr-home-introduction.mp4" type="video/mp4" />
         </video>
       ) : null}
