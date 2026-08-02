@@ -2,8 +2,9 @@ import { createClient } from "@supabase/supabase-js";
 
 const adminEmail = "chaten@otherpeoplesrecipes.co.uk";
 
-const submissionFields =
-  "id, created_at, name, email, location, title, category, servings, story, ingredients, method, cook_notes, permission_to_feature, status, photo_path, original_recipe_path, audio_story_path, is_published, published_at, is_recipe_of_week, recipe_of_week_note";
+// Use every field that exists on the table. This keeps the private inbox working
+// while optional recipe features are added over time.
+const submissionFields = "*";
 
 async function getAdminClient(request: Request) {
   const token = request.headers.get("authorization")?.replace("Bearer ", "");
@@ -33,7 +34,10 @@ export async function GET(request: Request) {
     .select(submissionFields)
     .order("created_at", { ascending: false });
 
-  if (error) return Response.json({ error: "Could not load recipes" }, { status: 400 });
+  if (error) {
+    console.error("OPR recipe inbox load failed", error);
+    return Response.json({ error: `Could not load recipes: ${error.message}` }, { status: 400 });
+  }
   return Response.json({ submissions: data ?? [] });
 }
 

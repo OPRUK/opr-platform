@@ -74,7 +74,12 @@ export default function AdminDashboard() {
       setLoading(true);
       const response = await adminRequest("/api/admin/recipe-submission");
       if (!response.ok) {
-        setMessage("We could not load the recipe inbox just now.");
+        const payload = await response.json().catch(() => null);
+        setMessage(
+          payload?.error
+            ? `Recipe inbox error: ${payload.error}`
+            : `Recipe inbox error: ${response.status}`,
+        );
       } else {
         const { submissions: data } = await response.json();
         setSubmissions((data ?? []) as Submission[]);
