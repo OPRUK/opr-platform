@@ -49,14 +49,17 @@ export default function FounderPage() {
           </div>
 
           <article
-            className={`${foundersHand.className} relative ml-auto mt-14 max-w-2xl rotate-[0.35deg] overflow-hidden rounded-sm border border-[#C29A60]/60 bg-[#F7E7C4]/95 p-8 shadow-2xl shadow-black/45 backdrop-blur-[1px] md:mt-18 md:p-12`}
+            className={`${foundersHand.className} relative ml-auto mt-14 max-w-2xl rotate-[0.35deg] overflow-hidden rounded-sm border border-[#9B6935]/75 bg-[#EAD09B] p-8 shadow-2xl shadow-black/45 md:mt-18 md:p-12`}
             style={{
               backgroundImage:
-                "repeating-linear-gradient(to bottom, transparent 0, transparent 33px, rgba(125, 83, 41, 0.13) 34px)",
+                "radial-gradient(ellipse at 14% 10%, rgba(112, 68, 26, 0.22) 0%, transparent 23%), radial-gradient(ellipse at 88% 84%, rgba(112, 68, 26, 0.18) 0%, transparent 25%), radial-gradient(ellipse at 42% 64%, rgba(255, 247, 218, 0.48) 0%, transparent 32%), repeating-linear-gradient(to bottom, transparent 0, transparent 33px, rgba(125, 83, 41, 0.16) 34px)",
+              boxShadow:
+                "inset 0 0 46px rgba(74, 42, 14, 0.42), inset 0 0 8px rgba(90, 48, 14, 0.45), 0 24px 52px rgba(0, 0, 0, 0.45)",
             }}
           >
-          <div className="absolute -top-3 left-1/2 h-7 w-28 -translate-x-1/2 rotate-[-2deg] bg-[#D9B66D]/70 shadow-sm" />
-          <div className="relative">
+          <div className="absolute inset-0 opacity-35" style={{ backgroundImage: "linear-gradient(105deg, rgba(89, 52, 20, 0.14), transparent 19%, transparent 80%, rgba(89, 52, 20, 0.16))" }} />
+          <div className="absolute -top-3 left-1/2 z-20 h-7 w-28 -translate-x-1/2 rotate-[-2deg] bg-[#C9A55B]/70 shadow-sm" />
+          <div className="relative z-10">
             <div className="flex items-start justify-between gap-4 border-b border-[#9A622A]/35 pb-5">
               <p className="text-xs uppercase tracking-[0.3em] text-[#8B5A2B]">
                 A founder&apos;s letter
