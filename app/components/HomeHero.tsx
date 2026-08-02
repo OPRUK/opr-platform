@@ -74,7 +74,7 @@ export default function HomeHero({ children }: HomeHeroProps) {
           poster={activeFilm.poster}
           onEnded={playNextFilm}
           onError={playNextFilm}
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 h-full w-full object-contain sm:object-cover"
           aria-label={activeFilm.label}
         >
           <source
