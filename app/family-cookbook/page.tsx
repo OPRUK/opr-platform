@@ -27,7 +27,7 @@ export default function FamilyCookbook() {
           muted
           playsInline
           preload="auto"
-          poster="/images/recipes/barbaras-beef-casserole.png"
+          poster="/images/recipes/barbaras-beef-casserole-wide.png"
           aria-hidden="true"
         >
           <source src="/videos/opr-recipe-stories-film-v2.mp4" type="video/mp4" />

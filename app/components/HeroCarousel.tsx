@@ -25,7 +25,7 @@ const slides = [
     label: "Barbara's Beef Casserole · Swansea",
   },
   {
-    image: "/images/recipes/sudeshs-bhindi.png",
+    image: "/images/recipes/sudeshs-bhindi-wide.png",
     alt: "Sudesh's Bhindi",
     label: "Sudesh's Bhindi",
   },

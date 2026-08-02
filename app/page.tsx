@@ -162,7 +162,7 @@ export default async function Home() {
               recipeOfWeekImage ? <img src={recipeOfWeekImage} alt={recipeOfWeek.title} className="h-full w-full object-cover" /> : <div className="flex h-full items-center justify-center bg-[#DDBB82] p-8 text-center text-2xl font-bold text-[#123C39]">A treasured family recipe</div>
             ) : (
               <Image
-                src="/images/recipes/daves-butter-chicken.png"
+                src="/images/recipes/daves-butter-chicken-wide.png"
                 alt="Dave's Butter Chicken"
                 fill
                 sizes="(min-width: 768px) 50vw, 100vw"
@@ -200,7 +200,7 @@ export default async function Home() {
       >
           <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2">
             <Image
-              src="/images/hero-kitchen.png"
+              src="/images/hero-kitchen-wide.png"
               alt="Vintage recipe book"
               width={1000}
               height={750}

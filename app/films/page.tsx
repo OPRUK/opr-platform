@@ -15,7 +15,7 @@ const films = [
     description:
       "A short OPR film celebrating Nana Serb’s rice pudding, Dave’s butter chicken and Barbara’s beef casserole.",
     source: "/videos/opr-recipe-stories-film-v2.mp4",
-    poster: "/images/recipes/nana-serbs-rice-pudding.png",
+    poster: "/images/recipes/nana-serbs-rice-pudding-wide.png",
   },
   {
     title: "The OPR Story",
@@ -50,7 +50,7 @@ export default function FilmsPage() {
           muted
           playsInline
           preload="auto"
-          poster="/images/recipes/barbaras-beef-casserole.png"
+          poster="/images/recipes/barbaras-beef-casserole-wide.png"
           aria-hidden="true"
         >
           <source src="/videos/opr-recipe-stories-film-v2.mp4" type="video/mp4" />
