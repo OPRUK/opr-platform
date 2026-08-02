@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
+import { Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import { SITE_NAME, SITE_URL, absoluteUrl } from "../lib/site";
+
+const cormorantGaramond = Cormorant_Garamond({
+  subsets: ["latin"],
+  variable: "--font-brand",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -58,7 +64,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full antialiased">
+    <html lang="en" className={`h-full antialiased ${cormorantGaramond.variable}`}>
       <body className="min-h-full flex flex-col">
         {children}
         <script

@@ -20,6 +20,10 @@ body {
   background-size: 9px 9px;
 }
 
+.font-brand {
+  font-family: var(--font-brand), Georgia, "Times New Roman", serif;
+}
+
 @keyframes rise-in {
   from {
     opacity: 0;

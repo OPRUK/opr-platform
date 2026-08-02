@@ -21,7 +21,7 @@ export default function Navigation() {
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-8 py-5">
         <Link
           href="/"
-          className="text-xl font-bold tracking-wide text-[#123C39] transition hover:text-[#9A622A]"
+          className="font-brand text-3xl font-semibold leading-none tracking-[0.01em] text-[#123C39] transition hover:text-[#9A622A]"
         >
           Other People&apos;s Recipes
         </Link>

@@ -5,7 +5,7 @@ export default function Footer() {
     <footer className="bg-[#08231F] px-6 py-16 text-[#FFF3DF]">
       <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
-          <p className="text-2xl font-bold tracking-wide">Other People&apos;s Recipes</p>
+          <p className="font-brand text-4xl font-semibold leading-none tracking-[0.01em]">Other People&apos;s Recipes</p>
           <p className="mt-5 max-w-sm leading-7 text-[#E7CEA2]">
             Preserving recipes. Celebrating people. Sharing stories around the
             table.
