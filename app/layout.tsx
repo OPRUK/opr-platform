@@ -10,6 +10,11 @@ export const metadata: Metadata = {
   },
   description: "Every recipe has a story.",
   metadataBase: new URL(SITE_URL),
+  verification: {
+    other: {
+      "msvalidate.01": "009D35C64947BC371E16705EC522B712",
+    },
+  },
   openGraph: {
     title: SITE_NAME,
     description: "Every recipe has a story.",
