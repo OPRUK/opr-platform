@@ -24,6 +24,7 @@ type Submission = {
   original_recipe_path: string | null;
   audio_story_path: string | null;
   is_published: boolean;
+  published_at: string | null;
   is_recipe_of_week: boolean;
   recipe_of_week_note: string | null;
 };
@@ -72,7 +73,7 @@ export default function AdminDashboard() {
       const { data, error } = await supabase
         .from("recipe_submissions")
         .select(
-          "id, created_at, name, email, location, title, category, servings, story, ingredients, method, permission_to_feature, status, photo_path, original_recipe_path, audio_story_path, is_published, is_recipe_of_week, recipe_of_week_note",
+          "id, created_at, name, email, location, title, category, servings, story, ingredients, method, permission_to_feature, status, photo_path, original_recipe_path, audio_story_path, is_published, published_at, is_recipe_of_week, recipe_of_week_note",
         )
         .order("created_at", { ascending: false });
 
@@ -133,6 +134,7 @@ export default function AdminDashboard() {
 
   async function togglePublished(submission: Submission) {
     const willPublish = !submission.is_published;
+    setMessage("");
     const { error } = await supabase
       .from("recipe_submissions")
       .update({
@@ -150,6 +152,7 @@ export default function AdminDashboard() {
 
     const changes = {
       is_published: willPublish,
+      published_at: willPublish ? new Date().toISOString() : null,
       status: willPublish ? "selected" as SubmissionStatus : submission.status,
       is_recipe_of_week: willPublish ? submission.is_recipe_of_week : false,
     };
@@ -161,6 +164,7 @@ export default function AdminDashboard() {
     );
 
     if (willPublish) {
+      setMessage(`Published: ${submission.title} is now live in the Family Cookbook.`);
       try {
         const { data: sessionData } = await supabase.auth.getSession();
         await fetch("/api/recipe-published", {
@@ -179,6 +183,8 @@ export default function AdminDashboard() {
       } catch {
         // Publishing remains successful even if the email service is temporarily unavailable.
       }
+    } else {
+      setMessage(`${submission.title} has been removed from the public Family Cookbook.`);
     }
   }
 
@@ -341,7 +347,11 @@ export default function AdminDashboard() {
         </button>
       </header>
 
-      {message ? <p className="mx-auto mt-8 max-w-7xl text-sm text-red-800">{message}</p> : null}
+      {message ? (
+        <p className={`mx-auto mt-8 max-w-7xl text-sm ${message.startsWith("Published:") || message.includes("removed from") ? "text-[#2E5A35]" : "text-red-800"}`}>
+          {message}
+        </p>
+      ) : null}
 
       <section className="mx-auto mt-10 grid max-w-7xl gap-8 lg:grid-cols-[0.9fr_1.1fr]">
         <div className="overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-xl shadow-[#1C5A50]/10">
@@ -405,11 +415,11 @@ export default function AdminDashboard() {
 
               <div className="mt-7 rounded-2xl border border-[#D1AD75]/70 bg-[#F4DDAE]/45 p-5 md:flex md:items-center md:justify-between md:gap-6">
                 <div>
-                  <h3 className="font-bold">{selectedSubmission.is_published ? "Live in the Family Cookbook" : "Ready to share?"}</h3>
+                  <h3 className="font-bold">{selectedSubmission.is_published ? "Live in the Family Cookbook" : "Approve and publish"}</h3>
                   <p className="mt-1 text-sm leading-6 text-stone-700">
                     {selectedSubmission.is_published
                       ? "This recipe is visible to everyone in the public cookbook."
-                      : "Publishing makes this recipe, its story and its photo visible in the public Family Cookbook."}
+                      : "When you approve it, this recipe, its story and its photo become visible in the public Family Cookbook."}
                   </p>
                 </div>
                 <button
@@ -417,9 +427,19 @@ export default function AdminDashboard() {
                   onClick={() => void togglePublished(selectedSubmission)}
                   className="mt-4 rounded-full bg-[#123C39] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#08231F] md:mt-0"
                 >
-                  {selectedSubmission.is_published ? "Remove from cookbook" : "Publish to cookbook"}
+                  {selectedSubmission.is_published ? "Remove from cookbook" : "Approve & publish"}
                 </button>
               </div>
+              {selectedSubmission.is_published ? (
+                <a
+                  href={`/family-cookbook/community/${selectedSubmission.id}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-4 inline-flex rounded-full border border-[#123C39] px-5 py-2.5 text-sm font-medium text-[#123C39] transition hover:bg-[#123C39] hover:text-white"
+                >
+                  View public recipe →
+                </a>
+              ) : null}
 
               <div className="mt-5 rounded-2xl border border-[#D1AD75]/70 bg-[#FFF3DF] p-5">
                 <div className="md:flex md:items-start md:justify-between md:gap-6">
