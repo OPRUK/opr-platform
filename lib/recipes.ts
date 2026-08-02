@@ -32,7 +32,7 @@ export type FeaturedRecipe = {
 
 export const featuredRecipes: FeaturedRecipe[] = [
   {
-    slug: "nans-sunday-rice-pudding",
+    slug: "nana-serbs-sunday-rice-pudding",
     title: "Nana Serb's Sunday Rice Pudding",
     place: "Birmingham, England",
     story:
@@ -67,7 +67,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
     ],
   },
   {
-    slug: "dads-friday-night-butter-chicken",
+    slug: "daves-butter-chicken",
     title: "Dave's Butter Chicken",
     place: "New Malden, England",
     story:
