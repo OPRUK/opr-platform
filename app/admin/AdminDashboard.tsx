@@ -44,6 +44,7 @@ export default function AdminDashboard() {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [selectedSubmission, setSelectedSubmission] = useState<Submission | null>(null);
   const [loading, setLoading] = useState(true);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
 
   useEffect(() => {
     async function checkSession() {
@@ -185,6 +186,37 @@ export default function AdminDashboard() {
       }
     } else {
       setMessage(`${submission.title} has been removed from the public Family Cookbook.`);
+    }
+  }
+
+  async function deleteSubmission(submission: Submission) {
+    const confirmed = window.confirm(
+      `Permanently delete “${submission.title}”? This also removes any recipe photos, the original recipe image and voice story. This cannot be undone.`,
+    );
+    if (!confirmed) return;
+
+    setDeletingId(submission.id);
+    setMessage("");
+    try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const response = await fetch("/api/admin/recipe-submission", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${sessionData.session?.access_token ?? ""}`,
+        },
+        body: JSON.stringify({ id: submission.id }),
+      });
+
+      if (!response.ok) throw new Error("Recipe could not be deleted");
+
+      setSubmissions((current) => current.filter((item) => item.id !== submission.id));
+      setSelectedSubmission(null);
+      setMessage(`Deleted: ${submission.title} has been permanently removed.`);
+    } catch {
+      setMessage("We could not permanently delete that recipe. Please try again.");
+    } finally {
+      setDeletingId(null);
     }
   }
 
@@ -348,7 +380,7 @@ export default function AdminDashboard() {
       </header>
 
       {message ? (
-        <p className={`mx-auto mt-8 max-w-7xl text-sm ${message.startsWith("Published:") || message.includes("removed from") ? "text-[#2E5A35]" : "text-red-800"}`}>
+        <p className={`mx-auto mt-8 max-w-7xl text-sm ${message.startsWith("Published:") || message.startsWith("Deleted:") || message.includes("removed from") ? "text-[#2E5A35]" : "text-red-800"}`}>
           {message}
         </p>
       ) : null}
@@ -427,7 +459,7 @@ export default function AdminDashboard() {
                   onClick={() => void togglePublished(selectedSubmission)}
                   className="mt-4 rounded-full bg-[#123C39] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#08231F] md:mt-0"
                 >
-                  {selectedSubmission.is_published ? "Remove from cookbook" : "Approve & publish"}
+                  {selectedSubmission.is_published ? "Hide from cookbook" : "Approve & publish"}
                 </button>
               </div>
               {selectedSubmission.is_published ? (
@@ -515,6 +547,20 @@ export default function AdminDashboard() {
                   {selectedSubmission.servings ? ` · Serves ${selectedSubmission.servings}` : ""}
                   {selectedSubmission.permission_to_feature ? " · Happy to be contacted about featuring" : " · No feature contact permission"}
                 </p>
+                <div className="rounded-2xl border border-red-300 bg-red-50 p-5">
+                  <h3 className="font-bold text-red-900">Permanent removal</h3>
+                  <p className="mt-1 text-sm leading-6 text-red-800">
+                    Use this only for spam, tests, duplicates or a submission you no longer need. It deletes the recipe and any files attached to it.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => void deleteSubmission(selectedSubmission)}
+                    disabled={deletingId === selectedSubmission.id}
+                    className="mt-4 rounded-full bg-red-700 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-red-900 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {deletingId === selectedSubmission.id ? "Deleting..." : "Delete permanently"}
+                  </button>
+                </div>
               </div>
             </>
           ) : (
