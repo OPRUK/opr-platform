@@ -155,6 +155,41 @@ export default async function Home() {
           </div>
       </section>
 
+      <section className="bg-[#123C39] px-6 py-20 text-[#FFF3DF]">
+        <div className="mx-auto max-w-5xl rounded-[2rem] border border-[#DDB765]/50 bg-[#184A42] px-8 py-14 text-center shadow-2xl shadow-[#08231F]/20 md:px-16">
+          <p className="text-sm uppercase tracking-[0.38em] text-[#FFD58C]">
+            August invitation
+          </p>
+          <h2 className="mt-5 text-4xl font-bold leading-tight md:text-6xl">
+            The Recipe That Feels Like Home
+          </h2>
+          <p className="mx-auto mt-7 max-w-3xl text-lg leading-8 text-[#FFF1D8] md:text-xl">
+            Is there one dish your family asks for again and again? The one
+            that makes a kitchen smell like home? Share its recipe and the
+            story that travelled with it.
+          </p>
+          <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-[#F0D4A0]">
+            Throughout August, we&apos;re looking for the recipes that bring
+            families back to the table — to feature in the OPR Cookbook and
+            share with our growing community.
+          </p>
+          <div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row">
+            <Link
+              href="/share"
+              className="rounded-full bg-[#DDB765] px-8 py-4 text-base font-semibold text-[#08231F] transition hover:scale-105 hover:bg-[#FFD58C]"
+            >
+              Share your recipe →
+            </Link>
+            <Link
+              href="/family-cookbook"
+              className="rounded-full border border-[#FFF3DF]/70 px-8 py-4 text-base font-semibold transition hover:bg-[#FFF3DF] hover:text-[#123C39]"
+            >
+              Explore the cookbook
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <section className="bg-[#FFF3DF] px-6 py-24">
         <div className="mx-auto grid max-w-6xl overflow-hidden rounded-[2rem] bg-[#1C5A50] shadow-2xl md:grid-cols-2">
           <div className="relative min-h-[340px]">
