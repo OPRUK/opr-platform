@@ -49,7 +49,7 @@ export default function FounderPage() {
           </div>
 
           <article
-            className="relative ml-auto mt-14 max-w-2xl rotate-[0.35deg] overflow-hidden rounded-sm border border-[#C29A60]/60 bg-[#F7E7C4]/95 p-8 shadow-2xl shadow-black/45 backdrop-blur-[1px] md:mt-18 md:p-12"
+            className={`${foundersHand.className} relative ml-auto mt-14 max-w-2xl rotate-[0.35deg] overflow-hidden rounded-sm border border-[#C29A60]/60 bg-[#F7E7C4]/95 p-8 shadow-2xl shadow-black/45 backdrop-blur-[1px] md:mt-18 md:p-12`}
             style={{
               backgroundImage:
                 "repeating-linear-gradient(to bottom, transparent 0, transparent 33px, rgba(125, 83, 41, 0.13) 34px)",
@@ -61,7 +61,7 @@ export default function FounderPage() {
               <p className="text-xs uppercase tracking-[0.3em] text-[#8B5A2B]">
                 A founder&apos;s letter
               </p>
-              <p className="font-serif text-2xl italic text-[#8B5A2B]">2000</p>
+              <p className="text-3xl italic text-[#8B5A2B]">2000</p>
             </div>
             <h2
               className={`${foundersHand.className} mt-8 text-4xl font-semibold leading-tight text-[#123C39] md:text-5xl`}
