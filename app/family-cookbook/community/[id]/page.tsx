@@ -16,6 +16,7 @@ type CommunityRecipe = {
   story: string;
   ingredients: string;
   method: string;
+  cook_notes: string | null;
   photo_path: string | null;
   original_recipe_path: string | null;
   audio_story_path: string | null;
@@ -31,7 +32,7 @@ function truncate(text: string, maxLength: number): string {
 async function getCommunityRecipe(id: string): Promise<CommunityRecipe | null> {
   const { data } = await supabase
     .from("recipe_submissions")
-    .select("id, title, name, location, category, servings, story, ingredients, method, photo_path, original_recipe_path, audio_story_path")
+    .select("id, title, name, location, category, servings, story, ingredients, method, cook_notes, photo_path, original_recipe_path, audio_story_path")
     .eq("id", id)
     .eq("is_published", true)
     .maybeSingle();
@@ -220,6 +221,15 @@ export default async function CommunityRecipePage({
           </ol>
         </div>
       </section>
+      {recipe.cook_notes ? (
+        <section className="bg-[#EED8B2] px-6 py-20">
+          <div className="mx-auto max-w-5xl rounded-[2rem] border border-[#D1AD75] bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/10 md:p-12">
+            <p className="text-sm font-bold uppercase tracking-[0.35em] text-[#9A622A]">Cook&apos;s notes &amp; swaps</p>
+            <h2 className="mt-4 text-4xl font-bold text-[#123C39]">A little help from the OPR kitchen</h2>
+            <p className="mt-6 whitespace-pre-wrap text-lg leading-8 text-stone-700">{recipe.cook_notes}</p>
+          </div>
+        </section>
+      ) : null}
       <RecipeActions title={recipe.title} imageUrl={imageUrl} />
       <section className="px-6 py-20 text-center">
         <Link

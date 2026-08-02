@@ -63,7 +63,7 @@ export default function FoundingTableForm() {
           type="checkbox"
           className="mt-1 h-4 w-4 accent-[#DDB765]"
         />
-        <span>Keep me posted about OPR news, events and future invitations.</span>
+        <span>Keep me posted about OPR news, events and future invitations. You can unsubscribe at any time.</span>
       </label>
       <label className="block text-sm font-medium text-[#FFF3DF]">
         Email address

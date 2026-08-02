@@ -17,6 +17,7 @@ type RecipeFormValues = {
   story: string;
   ingredients: string;
   method: string;
+  cookNotes: string;
   licenceAccepted: boolean;
   marketingOptIn: boolean;
 };
@@ -31,6 +32,7 @@ const initialValues: RecipeFormValues = {
   story: "",
   ingredients: "",
   method: "",
+  cookNotes: "",
   licenceAccepted: false,
   marketingOptIn: false,
 };
@@ -57,6 +59,8 @@ export default function RecipeForm() {
   const [photoPreview, setPhotoPreview] = useState("");
   const [originalRecipe, setOriginalRecipe] = useState<File | null>(null);
   const [originalRecipePreview, setOriginalRecipePreview] = useState("");
+  const [isReadingRecipe, setIsReadingRecipe] = useState(false);
+  const [recipeReadMessage, setRecipeReadMessage] = useState("");
   const [audioStory, setAudioStory] = useState<File | null>(null);
   const [audioStoryPreview, setAudioStoryPreview] = useState("");
   const [isRecording, setIsRecording] = useState(false);
@@ -147,8 +151,44 @@ export default function RecipeForm() {
     }
 
     setSubmissionError("");
+    setRecipeReadMessage("");
     setOriginalRecipe(file);
     setOriginalRecipePreview(URL.createObjectURL(file));
+  }
+
+  async function readOriginalRecipe() {
+    if (!originalRecipe) {
+      setSubmissionError("Choose a photo of the original recipe first.");
+      return;
+    }
+
+    setIsReadingRecipe(true);
+    setSubmissionError("");
+    setRecipeReadMessage("");
+
+    try {
+      const formData = new FormData();
+      formData.set("recipeImage", originalRecipe);
+      const response = await fetch("/api/recipe-scan", { method: "POST", body: formData });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "We could not read that recipe.");
+
+      const draft = result.draft as Partial<RecipeFormValues>;
+      setValues((current) => ({
+        ...current,
+        title: draft.title || current.title,
+        category: draft.category || current.category,
+        servings: draft.servings || current.servings,
+        ingredients: draft.ingredients || current.ingredients,
+        method: draft.method || current.method,
+        cookNotes: draft.cookNotes || current.cookNotes,
+      }));
+      setRecipeReadMessage("We have made a first draft below. Please check every detail before you share it — old handwriting can be wonderfully unpredictable.");
+    } catch (error) {
+      setSubmissionError(error instanceof Error ? error.message : "We could not read that recipe just now.");
+    } finally {
+      setIsReadingRecipe(false);
+    }
   }
 
   function chooseAudioStory(file: File | null) {
@@ -235,6 +275,7 @@ export default function RecipeForm() {
     formData.set("story", values.story);
     formData.set("ingredients", values.ingredients);
     formData.set("method", values.method);
+    formData.set("cookNotes", values.cookNotes);
     formData.set("licenceAccepted", String(values.licenceAccepted));
     formData.set("marketingOptIn", String(values.marketingOptIn));
     formData.set("consentVersion", CONSENT_VERSION);
@@ -498,6 +539,21 @@ export default function RecipeForm() {
           />
         </label>
 
+        <label className="mt-7 block rounded-2xl border border-[#D1AD75] bg-[#F4DDAE]/45 p-5 text-sm font-medium">
+          Cook&apos;s notes &amp; swaps <span className="font-normal text-stone-500">(optional)</span>
+          <textarea
+            value={values.cookNotes}
+            onChange={(event) => updateValue("cookNotes", event.target.value)}
+            name="cookNotes"
+            rows={4}
+            placeholder="For example: If you cannot find this ingredient, use this instead. Or share a helpful tip that makes the recipe work."
+            className={`${inputClassName} mt-3 bg-[#FFF9EC]`}
+          />
+          <p className="mt-3 font-normal leading-6 text-stone-600">
+            A lovely place for substitutions, serving ideas or a family tip.
+          </p>
+        </label>
+
         <div className="mt-7 rounded-2xl border border-dashed border-[#B77938]/70 bg-[#F4DDAE]/45 p-5">
           <label className="block text-sm font-medium">
             Add a photo <span className="font-normal text-stone-500">(optional)</span>
@@ -562,9 +618,21 @@ export default function RecipeForm() {
                 >
                   Remove original
                 </button>
+                <button
+                  type="button"
+                  onClick={() => void readOriginalRecipe()}
+                  disabled={isReadingRecipe}
+                  className="mt-3 block rounded-full bg-[#123C39] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#08231F] disabled:cursor-not-allowed disabled:opacity-70"
+                >
+                  {isReadingRecipe ? "Reading your recipe…" : "Read my recipe with AI"}
+                </button>
               </div>
             </div>
           ) : null}
+          {recipeReadMessage ? <p className="mt-5 rounded-xl bg-[#E2F2E7] px-4 py-3 text-sm leading-6 text-[#123C39]">{recipeReadMessage}</p> : null}
+          <p className="mt-4 text-xs leading-5 text-stone-600">
+            When you choose “Read my recipe with AI”, the image is sent only to create this editable draft. It is not saved by the reader itself.
+          </p>
         </div>
 
         <div className="mt-5 rounded-2xl border border-dashed border-[#B77938]/70 bg-[#F4DDAE]/45 p-5">

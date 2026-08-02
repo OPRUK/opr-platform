@@ -62,6 +62,7 @@ export default function PrivacyPolicyPage() {
                 <li>A photograph of the finished dish</li>
                 <li>A photograph of the recipe as originally written (if you provide one)</li>
                 <li>An audio recording of you or someone else telling the recipe&apos;s story (if you provide one)</li>
+                <li>An AI-generated draft of the recipe text, only if you choose to use the optional “Read my recipe with AI” helper</li>
               </ul>
               <p className="mt-3">
                 If you join the Founding Table, we collect your name and email address.
@@ -69,6 +70,9 @@ export default function PrivacyPolicyPage() {
               <p className="mt-3">
                 We do not knowingly collect information from children.{" "}
                 <strong>[LEGAL REVIEW REQUIRED — confirm age restriction / parental consent position if under-18 submissions are possible.]</strong>
+              </p>
+              <p className="mt-3">
+                If you choose the optional AI recipe-reading helper, the image is sent to our AI provider solely to create an editable draft for you to review. We do not store a separate copy through that helper. The original image is stored only if you choose to submit it with your recipe.
               </p>
             </div>
 
@@ -110,9 +114,10 @@ export default function PrivacyPolicyPage() {
                 We use third-party services to run the site and process submissions. As of this draft:
               </p>
               <ul className="mt-3 list-disc space-y-2 pl-6">
-                <li>Hosting: [PROVIDER — TO BE CONFIRMED]</li>
-                <li>Form / submission processing: [PROVIDER — TO BE CONFIRMED]</li>
-                <li>Email / mailing list: [PROVIDER — TO BE CONFIRMED]</li>
+                <li>Hosting: Vercel</li>
+                <li>Form / submission processing and secure database: Supabase</li>
+                <li>Email / mailing list: Resend</li>
+                <li>Optional handwritten-recipe transcription: OpenAI, only when you choose to use that helper</li>
               </ul>
               <p className="mt-3">
                 We do not sell your personal information.{" "}

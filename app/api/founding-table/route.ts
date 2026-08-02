@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { foundingTableWelcomeEmail, newFoundingTableEmail, sendEmail } from "../../../lib/email";
+import { createUnsubscribeLink } from "../../../lib/unsubscribe";
 
 const adminEmail = "chaten@otherpeoplesrecipes.co.uk";
 
@@ -30,15 +31,24 @@ export async function POST(request: Request) {
       auth: { persistSession: false, autoRefreshToken: false },
     });
 
+    const wantsMarketing = marketingOptIn === true;
     const { error: saveError } = await supabase.from("founding_table_members").insert({
       name,
       email,
-      marketing_opt_in: marketingOptIn === true,
+      marketing_opt_in: wantsMarketing,
       source: "website",
     });
 
     if (saveError) {
       if (saveError.code === "23505") {
+        // A new, explicit opt-in is consent to resume optional updates.
+        if (wantsMarketing) {
+          const { error: rejoinError } = await supabase
+            .from("founding_table_members")
+            .update({ marketing_opt_in: true, marketing_unsubscribed_at: null })
+            .eq("email", email);
+          if (rejoinError) throw rejoinError;
+        }
         return Response.json({ alreadyJoined: true });
       }
 
@@ -46,7 +56,14 @@ export async function POST(request: Request) {
     }
 
     await Promise.all([
-      sendEmail({ to: email, ...foundingTableWelcomeEmail({ name }) }),
+      sendEmail({
+        to: email,
+        ...foundingTableWelcomeEmail({
+          name,
+          unsubscribeUrl: wantsMarketing ? createUnsubscribeLink(email) : null,
+          marketingOptIn: wantsMarketing,
+        }),
+      }),
       sendEmail({ to: adminEmail, ...newFoundingTableEmail({ name, email }) }),
     ]);
 

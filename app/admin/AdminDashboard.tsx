@@ -18,6 +18,7 @@ type Submission = {
   story: string;
   ingredients: string;
   method: string;
+  cook_notes: string | null;
   permission_to_feature: boolean;
   status: SubmissionStatus;
   photo_path: string | null;
@@ -74,7 +75,7 @@ export default function AdminDashboard() {
       const { data, error } = await supabase
         .from("recipe_submissions")
         .select(
-          "id, created_at, name, email, location, title, category, servings, story, ingredients, method, permission_to_feature, status, photo_path, original_recipe_path, audio_story_path, is_published, published_at, is_recipe_of_week, recipe_of_week_note",
+          "id, created_at, name, email, location, title, category, servings, story, ingredients, method, cook_notes, permission_to_feature, status, photo_path, original_recipe_path, audio_story_path, is_published, published_at, is_recipe_of_week, recipe_of_week_note",
         )
         .order("created_at", { ascending: false });
 
@@ -542,6 +543,12 @@ export default function AdminDashboard() {
                   <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#123C39]">Method</h3>
                   <p className="mt-3 whitespace-pre-wrap leading-8">{selectedSubmission.method}</p>
                 </article>
+                {selectedSubmission.cook_notes ? (
+                  <article>
+                    <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#123C39]">Cook&apos;s notes &amp; swaps</h3>
+                    <p className="mt-3 whitespace-pre-wrap leading-8">{selectedSubmission.cook_notes}</p>
+                  </article>
+                ) : null}
                 <p className="border-t border-[#D1AD75]/70 pt-6 text-sm">
                   Contact: <a className="underline" href={`mailto:${selectedSubmission.email}`}>{selectedSubmission.email}</a>
                   {selectedSubmission.servings ? ` · Serves ${selectedSubmission.servings}` : ""}

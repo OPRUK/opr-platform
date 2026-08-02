@@ -158,6 +158,7 @@ export async function POST(request: Request) {
       story,
       ingredients,
       method,
+      cook_notes: readText(formData, "cookNotes") || null,
       photo_path: photoPath,
       original_recipe_path: originalRecipePath,
       audio_story_path: audioStoryPath,
