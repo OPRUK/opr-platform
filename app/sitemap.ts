@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
+import { createClient } from "@supabase/supabase-js";
 import { featuredRecipes } from "../lib/recipes";
-import { supabase } from "../lib/supabase/client";
 import { SITE_URL } from "../lib/site";
 
 const staticRoutes: Array<{ path: string; changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"]; priority: number }> = [
@@ -32,6 +32,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
   }
 
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+
+  // Keep the public sitemap available even while a preview build has no
+  // database settings. Production adds community recipes when they are set.
+  if (!supabaseUrl || !supabaseKey) {
+    return entries;
+  }
+
+  const supabase = createClient(supabaseUrl, supabaseKey);
   const { data: communityRecipes } = await supabase
     .from("recipe_submissions")
     .select("id, published_at")

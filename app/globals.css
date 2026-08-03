@@ -3,6 +3,9 @@
 :root {
   --background: #eed8b2;
   --foreground: #4a4232;
+  --font-brand: "Cormorant Garamond";
+  --font-founder-hand: "Caveat";
+  --font-founder-signature: "Allura";
 }
 
 @theme inline {
@@ -22,6 +25,14 @@ body {
 
 .font-brand {
   font-family: var(--font-brand), Georgia, "Times New Roman", serif;
+}
+
+.font-founder-hand {
+  font-family: var(--font-founder-hand), "Bradley Hand", cursive;
+}
+
+.font-founder-signature {
+  font-family: var(--font-founder-signature), "Bradley Hand", cursive;
 }
 
 @keyframes rise-in {

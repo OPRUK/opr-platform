@@ -1,13 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { Allura, Caveat } from "next/font/google";
 import Navigation from "../components/Navigation";
-
-// Caveat gives the letter a warm, natural handwritten feel. Allura is used
-// sparingly for Chaten's signature, so the note still feels personal to read.
-const foundersHand = Caveat({ subsets: ["latin"], weight: ["400", "500", "600"] });
-const signatureHand = Allura({ subsets: ["latin"], weight: "400" });
 
 export const metadata: Metadata = {
   title: "The Founder's Letter",
@@ -48,7 +42,7 @@ export default function FounderPage() {
           </div>
 
           <article
-            className={`${foundersHand.className} relative ml-auto mt-14 max-w-2xl rotate-[0.35deg] overflow-hidden rounded-sm border border-[#9B6935]/75 bg-[#EAD09B] p-8 shadow-2xl shadow-black/45 md:mt-18 md:p-12`}
+            className="font-founder-hand relative ml-auto mt-14 max-w-2xl rotate-[0.35deg] overflow-hidden rounded-sm border border-[#9B6935]/75 bg-[#EAD09B] p-8 shadow-2xl shadow-black/45 md:mt-18 md:p-12"
             style={{
               backgroundImage:
                 "radial-gradient(ellipse at 14% 10%, rgba(112, 68, 26, 0.22) 0%, transparent 23%), radial-gradient(ellipse at 88% 84%, rgba(112, 68, 26, 0.18) 0%, transparent 25%), radial-gradient(ellipse at 42% 64%, rgba(255, 247, 218, 0.48) 0%, transparent 32%), repeating-linear-gradient(to bottom, transparent 0, transparent 33px, rgba(125, 83, 41, 0.16) 34px)",
@@ -66,13 +60,13 @@ export default function FounderPage() {
               <p className="text-3xl italic text-[#8B5A2B]">2000</p>
             </div>
             <h2
-              className={`${foundersHand.className} mt-8 text-4xl font-semibold leading-tight text-[#123C39] md:text-5xl`}
+              className="font-founder-hand mt-8 text-4xl font-semibold leading-tight text-[#123C39] md:text-5xl"
             >
               OPR is as much about you and your family as it is about the recipes we hold dear to our hearts.
             </h2>
 
           <div
-            className={`${foundersHand.className} mt-9 space-y-6 text-[1.4rem] leading-[1.55] text-[#5B4834] md:text-[1.55rem]`}
+            className="font-founder-hand mt-9 space-y-6 text-[1.4rem] leading-[1.55] text-[#5B4834] md:text-[1.55rem]"
           >
             <p>
               Other People&apos;s Recipes began as an idea back in 2000. It has
@@ -100,7 +94,7 @@ export default function FounderPage() {
           </div>
 
           <p
-            className={`${signatureHand.className} mt-10 text-5xl text-[#1C5A50] md:text-6xl`}
+            className="font-founder-signature mt-10 text-5xl text-[#1C5A50] md:text-6xl"
           >
             Chaten
           </p>
