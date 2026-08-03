@@ -85,6 +85,14 @@ export async function POST(request: Request) {
     const ingredients = readText(formData, "ingredients", true);
     const method = readText(formData, "method", true);
 
+    if (readText(formData, "licenceAccepted") !== "true") {
+      return Response.json({ error: "Submission licence confirmation is required" }, { status: 400 });
+    }
+
+    if (readText(formData, "thirdPartyPermissionAccepted") !== "true") {
+      return Response.json({ error: "Permission confirmation is required" }, { status: 400 });
+    }
+
     const photo = formData.get("photo");
     const originalRecipe = formData.get("originalRecipe");
     const audioStory = formData.get("audioStory");
@@ -168,7 +176,9 @@ export async function POST(request: Request) {
       permission_to_feature: true,
       licence_accepted: readText(formData, "licenceAccepted") === "true",
       marketing_opt_in: readText(formData, "marketingOptIn") === "true",
-      consent_version: readText(formData, "consentVersion") || "opr-submission-terms-2026-08-01",
+      // This version records agreement to both the submission licence and the
+      // separate confirmation covering people identifiable in uploaded media.
+      consent_version: readText(formData, "consentVersion") || "opr-submission-terms-2026-08-03",
       consent_given_at: new Date().toISOString(),
     });
 
