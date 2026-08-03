@@ -90,19 +90,34 @@ export default function PublishedRecipes({
     { value: "main", label: "Main", matches: ["Main", "Main course"] },
     { value: "dessert", label: "Dessert", matches: ["Dessert", "Dessert or baking"] },
   ];
+  const categoryOrder: Record<string, number> = {
+    Starter: 1,
+    "Starter or side": 1,
+    Main: 2,
+    "Main course": 2,
+    Dessert: 3,
+    "Dessert or baking": 3,
+  };
   const query = search.trim().toLowerCase();
-  const visibleRecipes = cards.filter((recipe) => {
-    const selectedCategory = categories.find((item) => item.value === category);
-    const matchesCategory = category === "all" || selectedCategory?.matches.includes(recipe.category);
-    const matchesSearch =
-      !query ||
-      [recipe.title, recipe.contributor, recipe.location ?? "", recipe.story, recipe.category]
-        .join(" ")
-        .toLowerCase()
-        .includes(query);
+  const visibleRecipes = cards
+    .filter((recipe) => {
+      const selectedCategory = categories.find((item) => item.value === category);
+      const matchesCategory = category === "all" || selectedCategory?.matches.includes(recipe.category);
+      const matchesSearch =
+        !query ||
+        [recipe.title, recipe.contributor, recipe.location ?? "", recipe.story, recipe.category]
+          .join(" ")
+          .toLowerCase()
+          .includes(query);
 
-    return matchesCategory && matchesSearch;
-  });
+      return matchesCategory && matchesSearch;
+    })
+    .sort((firstRecipe, secondRecipe) => {
+      const courseDifference =
+        (categoryOrder[firstRecipe.category] ?? 4) - (categoryOrder[secondRecipe.category] ?? 4);
+
+      return courseDifference || firstRecipe.title.localeCompare(secondRecipe.title, "en");
+    });
 
   return (
     <section>
