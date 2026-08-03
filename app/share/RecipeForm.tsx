@@ -5,7 +5,7 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 
 // Bump this whenever the submission licence wording on /terms changes, so we
 // always know exactly which version of the terms a contributor agreed to.
-const CONSENT_VERSION = "opr-submission-terms-2026-08-03";
+const CONSENT_VERSION = "opr-submission-terms-2026-08-03-age";
 
 type RecipeFormValues = {
   name: string;
@@ -20,6 +20,7 @@ type RecipeFormValues = {
   cookNotes: string;
   licenceAccepted: boolean;
   thirdPartyPermissionAccepted: boolean;
+  isAtLeast18: boolean;
   marketingOptIn: boolean;
 };
 
@@ -36,6 +37,7 @@ const initialValues: RecipeFormValues = {
   cookNotes: "",
   licenceAccepted: false,
   thirdPartyPermissionAccepted: false,
+  isAtLeast18: false,
   marketingOptIn: false,
 };
 
@@ -280,6 +282,7 @@ export default function RecipeForm() {
     formData.set("cookNotes", values.cookNotes);
     formData.set("licenceAccepted", String(values.licenceAccepted));
     formData.set("thirdPartyPermissionAccepted", String(values.thirdPartyPermissionAccepted));
+    formData.set("isAtLeast18", String(values.isAtLeast18));
     formData.set("marketingOptIn", String(values.marketingOptIn));
     formData.set("consentVersion", CONSENT_VERSION);
     if (photo) formData.set("photo", photo);
@@ -731,6 +734,21 @@ export default function RecipeForm() {
         <span>
           I confirm that I have permission to share any person identifiable in
           my photos, recipe-card images or voice recording with OPR.
+        </span>
+      </label>
+
+      <label className="mt-4 flex gap-4 rounded-2xl border border-[#D1AD75]/80 bg-[#F4DDAE]/70 p-5 text-sm leading-6">
+        <input
+          required
+          checked={values.isAtLeast18}
+          onChange={(event) => updateValue("isAtLeast18", event.target.checked)}
+          type="checkbox"
+          name="isAtLeast18"
+          className="mt-1 h-4 w-4 accent-[#123C39]"
+        />
+        <span>
+          I confirm that I am aged 18 or over. Recipe submissions are currently
+          open to adults only.
         </span>
       </label>
 

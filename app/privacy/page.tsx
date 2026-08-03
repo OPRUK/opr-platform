@@ -44,6 +44,7 @@ export default function PrivacyPolicyPage() {
                 <li>anonymous, aggregated website-usage information.</li>
               </ul>
               <p className="mt-3">Please avoid including anyone else&apos;s private information in a recipe, photo or story unless you have permission to share it.</p>
+              <p className="mt-3">Recipe submissions are currently for adults aged 18 and over. We do not knowingly collect recipe submissions from children. If you believe a child&apos;s information has been sent to us, please contact us and we will investigate and remove it where appropriate.</p>
             </div>
 
             <div>

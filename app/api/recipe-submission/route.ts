@@ -93,6 +93,10 @@ export async function POST(request: Request) {
       return Response.json({ error: "Permission confirmation is required" }, { status: 400 });
     }
 
+    if (readText(formData, "isAtLeast18") !== "true") {
+      return Response.json({ error: "Recipe submissions are currently for adults only" }, { status: 400 });
+    }
+
     const photo = formData.get("photo");
     const originalRecipe = formData.get("originalRecipe");
     const audioStory = formData.get("audioStory");
@@ -178,7 +182,7 @@ export async function POST(request: Request) {
       marketing_opt_in: readText(formData, "marketingOptIn") === "true",
       // This version records agreement to both the submission licence and the
       // separate confirmation covering people identifiable in uploaded media.
-      consent_version: readText(formData, "consentVersion") || "opr-submission-terms-2026-08-03",
+      consent_version: readText(formData, "consentVersion") || "opr-submission-terms-2026-08-03-age",
       consent_given_at: new Date().toISOString(),
     });
 

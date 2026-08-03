@@ -24,6 +24,7 @@ export default function TermsPage() {
             <div>
               <h2 className="text-2xl font-bold text-[#123C39]">1. Sharing a recipe</h2>
               <p className="mt-3">When you submit a recipe, story, image or audio, you confirm that you have the right to share it and that it is not copied from a cookbook, blog or other source without permission. You also confirm that you have permission from anyone identifiable in a photo, recipe-card image or voice recording that you share with us.</p>
+              <p className="mt-3">Recipe submissions are currently open to people aged 18 and over. Please do not submit personal information on behalf of a child.</p>
               <p className="mt-3">By ticking the submission licence box, you grant OPR a perpetual, worldwide, royalty-free licence to publish, edit, adapt and reproduce your submission in connection with OPR, including on the site, in print, film, social media, events and a future OPR restaurant. We will credit you in the way agreed with you.</p>
               <p className="mt-3">You can ask us to remove a published submission from the site. This will not affect material already printed, recorded or shared before removal was reasonably possible.</p>
             </div>
