@@ -586,19 +586,26 @@ export default function RecipeForm() {
           ) : null}
         </div>
 
-        <div className="mt-5 rounded-2xl border border-dashed border-[#B77938]/70 bg-[#F4DDAE]/45 p-5">
-          <label className="block text-sm font-medium">
-            The original recipe <span className="font-normal text-stone-500">(optional)</span>
+        <div className="mt-5 rounded-2xl border-2 border-dashed border-[#B77938]/70 bg-[#F4DDAE]/45 p-5 shadow-sm">
+          <p className="text-sm uppercase tracking-[0.22em] text-[#9A622A]">
+            Bring an old recipe back to life
+          </p>
+          <h3 className="mt-2 text-xl font-bold text-[#123C39]">Scan a handwritten recipe card</h3>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-700">
+            Take a clear photo of a recipe card or notebook page and OPR will make an editable first draft of the title, ingredients and method. You stay in control and can correct every word before sharing.
+          </p>
+          <label className="mt-5 block text-sm font-medium">
+            Choose the recipe card <span className="font-normal text-stone-500">(optional)</span>
             <input
               onChange={(event) => chooseOriginalRecipe(event.target.files?.[0] ?? null)}
               type="file"
               name="originalRecipe"
-              accept="image/jpeg,image/png,image/webp,image/heic,image/heif"
+              accept="image/jpeg,image/png,image/webp"
               className="mt-3 block w-full text-sm text-stone-700 file:mr-4 file:rounded-full file:border-0 file:bg-[#123C39] file:px-4 file:py-2 file:font-medium file:text-white hover:file:bg-[#08231F]"
             />
           </label>
           <p className="mt-3 text-sm leading-6 text-stone-600">
-            A photo of the recipe card, a handwritten notebook page or even the back of an envelope can be the most precious part of the story. JPG, PNG, WebP or HEIC, up to 10 MB.
+            A photo of the recipe card, a handwritten notebook page or even the back of an envelope can be the most precious part of the story. JPG, PNG or WebP, up to 10 MB.
           </p>
           {originalRecipe ? (
             <div className="mt-5 flex items-start gap-4">
@@ -624,7 +631,7 @@ export default function RecipeForm() {
                   disabled={isReadingRecipe}
                   className="mt-3 block rounded-full bg-[#123C39] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#08231F] disabled:cursor-not-allowed disabled:opacity-70"
                 >
-                  {isReadingRecipe ? "Reading your recipe…" : "Read my recipe with AI"}
+                  {isReadingRecipe ? "Reading your recipe…" : "Create my editable recipe draft"}
                 </button>
               </div>
             </div>
