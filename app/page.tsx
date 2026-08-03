@@ -195,6 +195,46 @@ export default async function Home() {
           </div>
       </section>
 
+      <section className="bg-[#FFF3DF] px-6 py-24 md:px-8">
+        <div className="mx-auto grid max-w-6xl overflow-hidden rounded-[2rem] bg-[#123C39] shadow-2xl shadow-[#08231F]/25 md:grid-cols-[0.95fr_1.05fr]">
+          <div className="relative flex min-h-[390px] items-center justify-center overflow-hidden bg-[#DDB765] p-8 md:min-h-full md:p-14">
+            <div className="absolute inset-0 opacity-20 [background-image:radial-gradient(#6C472A_1px,transparent_1px)] [background-size:12px_12px]" />
+            <div className="relative w-full max-w-sm rotate-[-4deg] rounded-sm bg-[#FFF3DF] p-8 text-[#123C39] shadow-2xl md:p-10">
+              <p className="font-brand text-3xl leading-tight md:text-4xl">Nana&apos;s recipe</p>
+              <div className="mt-7 space-y-3 opacity-75">
+                <div className="h-0.5 w-4/5 bg-[#9A622A]" />
+                <div className="h-0.5 w-full bg-[#9A622A]" />
+                <div className="h-0.5 w-3/5 bg-[#9A622A]" />
+                <div className="h-0.5 w-11/12 bg-[#9A622A]" />
+                <div className="h-0.5 w-2/3 bg-[#9A622A]" />
+              </div>
+              <p className="mt-10 text-sm italic text-[#6C472A]">Written down with love.</p>
+            </div>
+          </div>
+
+          <div className="flex flex-col justify-center p-9 text-[#FFF3DF] md:p-14">
+            <p className="text-sm uppercase tracking-[0.35em] text-[#FFD58C]">
+              Bring an old recipe back to life
+            </p>
+            <h2 className="mt-5 text-4xl font-bold leading-tight md:text-6xl">
+              Scan a handwritten recipe card
+            </h2>
+            <p className="mt-7 max-w-xl text-lg leading-8 text-[#FFF1D8] md:text-xl">
+              Take a clear photo of a recipe card or notebook page and OPR will
+              make an editable first draft of the title, ingredients and method.
+              You stay in control and can correct every word before sharing.
+            </p>
+            <Link
+              href="/share#scan-a-recipe"
+              className="mt-10 inline-flex w-fit items-center rounded-full bg-[#DDB765] px-8 py-4 text-lg font-bold text-[#08231F] transition hover:scale-105 hover:bg-[#FFD58C]"
+            >
+              Choose the recipe card →
+            </Link>
+            <p className="mt-4 text-sm text-[#F0D4A0]">Your original stays yours. The draft is always editable.</p>
+          </div>
+        </div>
+      </section>
+
       <section className="bg-[#FFF3DF] px-6 py-24">
         <div className="mx-auto grid max-w-6xl overflow-hidden rounded-[2rem] bg-[#1C5A50] shadow-2xl md:grid-cols-2">
           <div className="relative min-h-[340px]">

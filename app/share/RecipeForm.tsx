@@ -586,7 +586,7 @@ export default function RecipeForm() {
           ) : null}
         </div>
 
-        <div className="mt-5 rounded-2xl border-2 border-dashed border-[#B77938]/70 bg-[#F4DDAE]/45 p-5 shadow-sm">
+        <div id="scan-a-recipe" className="mt-5 rounded-2xl border-2 border-dashed border-[#B77938]/70 bg-[#F4DDAE]/45 p-5 shadow-sm scroll-mt-8">
           <p className="text-sm uppercase tracking-[0.22em] text-[#9A622A]">
             Bring an old recipe back to life
           </p>
