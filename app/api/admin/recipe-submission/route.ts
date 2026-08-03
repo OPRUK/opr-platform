@@ -125,7 +125,19 @@ export async function DELETE(request: Request) {
       return Response.json({ error: "Recipe not found" }, { status: 404 });
     }
 
-    const files = [recipe.photo_path, recipe.contributor_photo_path, recipe.original_recipe_path, recipe.audio_story_path].filter(
+    const { data: communityPosts, error: communityPostsError } = await adminClient
+      .from("recipe_community_cooks")
+      .select("photo_path")
+      .eq("recipe_submission_id", id);
+    if (communityPostsError) throw communityPostsError;
+
+    const files = [
+      recipe.photo_path,
+      recipe.contributor_photo_path,
+      recipe.original_recipe_path,
+      recipe.audio_story_path,
+      ...(communityPosts ?? []).map((post) => post.photo_path),
+    ].filter(
       (path): path is string => typeof path === "string" && path.length > 0,
     );
     if (files.length) {

@@ -31,6 +31,17 @@ type Submission = {
   recipe_of_week_note: string | null;
 };
 
+type CommunityCook = {
+  id: number;
+  recipe_submission_id: number;
+  name: string;
+  note: string | null;
+  photo_path: string | null;
+  is_approved: boolean;
+  created_at: string;
+  recipe_submissions: { title: string } | null;
+};
+
 const allowedEmail = "chaten@otherpeoplesrecipes.co.uk";
 
 const statusStyle: Record<SubmissionStatus, string> = {
@@ -44,6 +55,7 @@ export default function AdminDashboard() {
   const [email, setEmail] = useState(allowedEmail);
   const [message, setMessage] = useState("");
   const [submissions, setSubmissions] = useState<Submission[]>([]);
+  const [communityCooks, setCommunityCooks] = useState<CommunityCook[]>([]);
   const [selectedSubmission, setSelectedSubmission] = useState<Submission | null>(null);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<number | null>(null);
@@ -73,17 +85,26 @@ export default function AdminDashboard() {
 
     async function loadSubmissions() {
       setLoading(true);
-      const response = await adminRequest("/api/admin/recipe-submission");
-      if (!response.ok) {
-        const payload = await response.json().catch(() => null);
+      const [recipeResponse, communityResponse] = await Promise.all([
+        adminRequest("/api/admin/recipe-submission"),
+        adminRequest("/api/admin/community-cook"),
+      ]);
+      if (!recipeResponse.ok) {
+        const payload = await recipeResponse.json().catch(() => null);
         setMessage(
           payload?.error
             ? `Recipe inbox error: ${payload.error}`
-            : `Recipe inbox error: ${response.status}`,
+            : `Recipe inbox error: ${recipeResponse.status}`,
         );
       } else {
-        const { submissions: data } = await response.json();
+        const { submissions: data } = await recipeResponse.json();
         setSubmissions((data ?? []) as Submission[]);
+      }
+      if (communityResponse.ok) {
+        const { communityCooks: data } = await communityResponse.json();
+        setCommunityCooks((data ?? []) as CommunityCook[]);
+      } else if (recipeResponse.ok) {
+        setMessage("The recipe inbox loaded, but community posts could not be loaded just now.");
       }
       setLoading(false);
     }
@@ -246,6 +267,33 @@ export default function AdminDashboard() {
     }
   }
 
+  async function updateCommunityCook(cook: CommunityCook, isApproved: boolean) {
+    const response = await adminRequest("/api/admin/community-cook", {
+      method: "PATCH",
+      body: JSON.stringify({ id: cook.id, isApproved }),
+    });
+    if (!response.ok) {
+      setMessage("We could not update that community post. Please try again.");
+      return;
+    }
+    setCommunityCooks((current) => current.map((item) => item.id === cook.id ? { ...item, is_approved: isApproved } : item));
+    setMessage(isApproved ? `Approved ${cook.name}'s community post.` : `Hid ${cook.name}'s community post.`);
+  }
+
+  async function deleteCommunityCook(cook: CommunityCook) {
+    if (!window.confirm(`Permanently delete ${cook.name}'s community post?`)) return;
+    const response = await adminRequest("/api/admin/community-cook", {
+      method: "DELETE",
+      body: JSON.stringify({ id: cook.id }),
+    });
+    if (!response.ok) {
+      setMessage("We could not delete that community post. Please try again.");
+      return;
+    }
+    setCommunityCooks((current) => current.filter((item) => item.id !== cook.id));
+    setMessage(`Deleted ${cook.name}'s community post.`);
+  }
+
   function updateRecipeOfWeekNote(value: string) {
     if (!selectedSubmission) return;
 
@@ -317,6 +365,12 @@ export default function AdminDashboard() {
   const selectedAudioStoryUrl = selectedSubmission?.audio_story_path
     ? supabase.storage.from("recipe-photos").getPublicUrl(selectedSubmission.audio_story_path).data.publicUrl
     : null;
+
+  function communityCookPhotoUrl(cook: CommunityCook) {
+    return cook.photo_path
+      ? supabase.storage.from("recipe-photos").getPublicUrl(cook.photo_path).data.publicUrl
+      : null;
+  }
 
   if (loading && !session) {
     return <main className="min-h-screen bg-[#EED8B2]" />;
@@ -606,6 +660,39 @@ export default function AdminDashboard() {
             </div>
           )}
         </section>
+      </section>
+
+      <section className="mx-auto mt-10 max-w-7xl overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-xl shadow-[#1C5A50]/10">
+        <div className="border-b border-[#D1AD75]/70 px-6 py-5 md:px-8">
+          <p className="text-sm uppercase tracking-[0.3em] text-amber-700">Cooked by our community</p>
+          <h2 className="mt-2 text-2xl font-bold">Community posts awaiting your review</h2>
+          <p className="mt-2 text-sm leading-6 text-stone-700">Approve a post to show it on the recipe page, hide it again at any time, or remove it permanently.</p>
+        </div>
+        {communityCooks.length ? (
+          <div className="divide-y divide-[#D1AD75]/50">
+            {communityCooks.map((cook) => {
+              const photoUrl = communityCookPhotoUrl(cook);
+              return (
+                <article key={cook.id} className="flex flex-col gap-5 px-6 py-6 md:flex-row md:items-center md:justify-between md:px-8">
+                  <div className="flex min-w-0 items-center gap-4">
+                    {photoUrl ? <img src={photoUrl} alt="" className="h-16 w-16 shrink-0 rounded-full object-cover" /> : <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#F4DDAE] font-bold">{cook.name.charAt(0).toUpperCase()}</div>}
+                    <div>
+                      <p className="font-bold">{cook.name} <span className="font-normal text-stone-500">cooked {cook.recipe_submissions?.title ?? "an OPR recipe"}</span></p>
+                      {cook.note ? <p className="mt-1 max-w-2xl text-sm leading-6 text-stone-700">“{cook.note}”</p> : <p className="mt-1 text-sm text-stone-500">No note supplied.</p>}
+                      <p className={`mt-2 text-xs font-bold uppercase tracking-[0.18em] ${cook.is_approved ? "text-[#2E5A35]" : "text-[#9A622A]"}`}>{cook.is_approved ? "Live on recipe page" : "Awaiting approval"}</p>
+                    </div>
+                  </div>
+                  <div className="flex shrink-0 flex-wrap gap-3">
+                    <button type="button" onClick={() => void updateCommunityCook(cook, !cook.is_approved)} className="rounded-full bg-[#123C39] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#08231F]">
+                      {cook.is_approved ? "Hide post" : "Approve post"}
+                    </button>
+                    <button type="button" onClick={() => void deleteCommunityCook(cook)} className="rounded-full border border-red-700 px-4 py-2 text-sm font-medium text-red-800 transition hover:bg-red-50">Delete</button>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        ) : <p className="px-6 py-8 text-stone-700 md:px-8">No community posts have arrived yet.</p>}
       </section>
     </main>
   );
