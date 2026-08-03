@@ -5,7 +5,7 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 
 // Bump this whenever the submission licence wording on /terms changes, so we
 // always know exactly which version of the terms a contributor agreed to.
-const CONSENT_VERSION = "opr-submission-terms-2026-08-03-age";
+const CONSENT_VERSION = "opr-submission-terms-2026-08-03-combined";
 
 type RecipeFormValues = {
   name: string;
@@ -18,9 +18,7 @@ type RecipeFormValues = {
   ingredients: string;
   method: string;
   cookNotes: string;
-  licenceAccepted: boolean;
-  thirdPartyPermissionAccepted: boolean;
-  isAtLeast18: boolean;
+  submissionAgreementAccepted: boolean;
   marketingOptIn: boolean;
 };
 
@@ -35,9 +33,7 @@ const initialValues: RecipeFormValues = {
   ingredients: "",
   method: "",
   cookNotes: "",
-  licenceAccepted: false,
-  thirdPartyPermissionAccepted: false,
-  isAtLeast18: false,
+  submissionAgreementAccepted: false,
   marketingOptIn: false,
 };
 
@@ -280,9 +276,7 @@ export default function RecipeForm() {
     formData.set("ingredients", values.ingredients);
     formData.set("method", values.method);
     formData.set("cookNotes", values.cookNotes);
-    formData.set("licenceAccepted", String(values.licenceAccepted));
-    formData.set("thirdPartyPermissionAccepted", String(values.thirdPartyPermissionAccepted));
-    formData.set("isAtLeast18", String(values.isAtLeast18));
+    formData.set("submissionAgreementAccepted", String(values.submissionAgreementAccepted));
     formData.set("marketingOptIn", String(values.marketingOptIn));
     formData.set("consentVersion", CONSENT_VERSION);
     if (photo) formData.set("photo", photo);
@@ -705,50 +699,23 @@ export default function RecipeForm() {
       <label className="mt-10 flex gap-4 rounded-2xl border border-[#D1AD75]/80 bg-[#F4DDAE]/70 p-5 text-sm leading-6">
         <input
           required
-          checked={values.licenceAccepted}
-          onChange={(event) => updateValue("licenceAccepted", event.target.checked)}
+          checked={values.submissionAgreementAccepted}
+          onChange={(event) => updateValue("submissionAgreementAccepted", event.target.checked)}
           type="checkbox"
-          name="licenceAccepted"
+          name="submissionAgreementAccepted"
           className="mt-1 h-4 w-4 accent-[#123C39]"
         />
         <span>
-          I confirm this recipe and story are mine to share, and I grant Other
+          I confirm that I am aged 18 or over; that this recipe and story are
+          mine to share; and that I have permission to share anyone identifiable
+          in my photos, recipe-card images or voice recording. I grant Other
           People&apos;s Recipes a perpetual, worldwide, royalty-free licence to
-          publish, edit, adapt and reproduce them including in print, film,
-          at OPR events and, if we ever open one, an OPR restaurant.{" "}
+          publish, edit, adapt and reproduce the recipe, story and submitted
+          media, including in print, film, at OPR events and, if we ever open
+          one, an OPR restaurant. {" "}
           <Link href="/terms" className="underline underline-offset-4">
             Read our full terms.
           </Link>
-        </span>
-      </label>
-
-      <label className="mt-4 flex gap-4 rounded-2xl border border-[#D1AD75]/80 bg-[#F4DDAE]/70 p-5 text-sm leading-6">
-        <input
-          required
-          checked={values.thirdPartyPermissionAccepted}
-          onChange={(event) => updateValue("thirdPartyPermissionAccepted", event.target.checked)}
-          type="checkbox"
-          name="thirdPartyPermissionAccepted"
-          className="mt-1 h-4 w-4 accent-[#123C39]"
-        />
-        <span>
-          I confirm that I have permission to share any person identifiable in
-          my photos, recipe-card images or voice recording with OPR.
-        </span>
-      </label>
-
-      <label className="mt-4 flex gap-4 rounded-2xl border border-[#D1AD75]/80 bg-[#F4DDAE]/70 p-5 text-sm leading-6">
-        <input
-          required
-          checked={values.isAtLeast18}
-          onChange={(event) => updateValue("isAtLeast18", event.target.checked)}
-          type="checkbox"
-          name="isAtLeast18"
-          className="mt-1 h-4 w-4 accent-[#123C39]"
-        />
-        <span>
-          I confirm that I am aged 18 or over. Recipe submissions are currently
-          open to adults only.
         </span>
       </label>
 

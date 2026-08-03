@@ -85,16 +85,8 @@ export async function POST(request: Request) {
     const ingredients = readText(formData, "ingredients", true);
     const method = readText(formData, "method", true);
 
-    if (readText(formData, "licenceAccepted") !== "true") {
-      return Response.json({ error: "Submission licence confirmation is required" }, { status: 400 });
-    }
-
-    if (readText(formData, "thirdPartyPermissionAccepted") !== "true") {
-      return Response.json({ error: "Permission confirmation is required" }, { status: 400 });
-    }
-
-    if (readText(formData, "isAtLeast18") !== "true") {
-      return Response.json({ error: "Recipe submissions are currently for adults only" }, { status: 400 });
+    if (readText(formData, "submissionAgreementAccepted") !== "true") {
+      return Response.json({ error: "Submission agreement is required" }, { status: 400 });
     }
 
     const photo = formData.get("photo");
@@ -174,15 +166,13 @@ export async function POST(request: Request) {
       photo_path: photoPath,
       original_recipe_path: originalRecipePath,
       audio_story_path: audioStoryPath,
-      // Retain the original database field while the newer licence wording is
-      // in use. The required licence confirmation explicitly covers featuring
-      // the recipe, so this is compatible with existing submissions.
+      // Retain the original database field while the combined submission
+      // agreement covers licence, permission to share identifiable people in
+      // submitted media, and adult-only eligibility.
       permission_to_feature: true,
-      licence_accepted: readText(formData, "licenceAccepted") === "true",
+      licence_accepted: true,
       marketing_opt_in: readText(formData, "marketingOptIn") === "true",
-      // This version records agreement to both the submission licence and the
-      // separate confirmation covering people identifiable in uploaded media.
-      consent_version: readText(formData, "consentVersion") || "opr-submission-terms-2026-08-03-age",
+      consent_version: readText(formData, "consentVersion") || "opr-submission-terms-2026-08-03-combined",
       consent_given_at: new Date().toISOString(),
     });
 
