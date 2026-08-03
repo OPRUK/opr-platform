@@ -45,6 +45,7 @@ const organizationJsonLd = {
     "https://www.facebook.com/61592736388045",
     "https://www.pinterest.com/0kg0zcynwbbvmoqk092xgf1u83r3r6/",
     "https://www.youtube.com/channel/UCdRQdldwQPFPoMr5N-FwIkQ",
+    "https://www.tiktok.com/@opr_uk",
   ],
 };
 
