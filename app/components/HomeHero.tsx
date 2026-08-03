@@ -7,27 +7,17 @@ type HomeHeroProps = {
   children: ReactNode;
 };
 
-const introductionFilms = [
-  {
-    desktop: "/videos/opr-home-introduction.mp4",
-    mobile: "/videos/opr-home-introduction-mobile.mp4",
-    poster: "/images/opr-home-introduction-poster.jpg",
-    label: "Other People's Recipes introduction film",
-  },
-  {
-    desktop: "/videos/opr-home-introduction-original.mp4",
-    mobile: "/videos/opr-home-introduction-original-mobile.mp4",
-    poster: "/images/opr-home-introduction-original-poster.jpg",
-    label: "Other People's Recipes story film",
-  },
-];
+const introductionFilm = {
+  desktop: "/videos/opr-home-introduction-complete.mp4",
+  mobile: "/videos/opr-home-introduction-complete-mobile.mp4",
+  poster: "/images/opr-home-introduction-poster.jpg",
+  label: "Other People's Recipes introduction films",
+};
 
 export default function HomeHero({ children }: HomeHeroProps) {
   const [introductionComplete, setIntroductionComplete] = useState(false);
-  const [filmIndex, setFilmIndex] = useState(0);
   const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const activeFilm = introductionFilms[filmIndex];
 
   useEffect(() => {
     if (introductionComplete || !videoRef.current) return;
@@ -36,7 +26,7 @@ export default function HomeHero({ children }: HomeHeroProps) {
     void videoRef.current.play().catch(() => {
       // If a browser blocks playback, leave the film visible for the visitor to start.
     });
-  }, [filmIndex, introductionComplete, isMuted]);
+  }, [introductionComplete, isMuted]);
 
   function toggleSound() {
     if (!videoRef.current) return;
@@ -45,11 +35,7 @@ export default function HomeHero({ children }: HomeHeroProps) {
     setIsMuted((current) => !current);
   }
 
-  function playNextFilm() {
-    if (filmIndex < introductionFilms.length - 1) {
-      setFilmIndex((current) => current + 1);
-      return;
-    }
+  function finishIntroduction() {
     setIntroductionComplete(true);
   }
 
@@ -65,24 +51,23 @@ export default function HomeHero({ children }: HomeHeroProps) {
 
       {!introductionComplete ? (
         <video
-          key={activeFilm.desktop}
           ref={videoRef}
           autoPlay
           muted={isMuted}
           playsInline
           preload="auto"
-          poster={activeFilm.poster}
-          onEnded={playNextFilm}
-          onError={playNextFilm}
+          poster={introductionFilm.poster}
+          onEnded={finishIntroduction}
+          onError={finishIntroduction}
           className="absolute inset-0 h-full w-full object-contain sm:object-cover"
-          aria-label={activeFilm.label}
+          aria-label={introductionFilm.label}
         >
           <source
             media="(max-width: 640px)"
-            src={activeFilm.mobile}
+            src={introductionFilm.mobile}
             type="video/mp4"
           />
-          <source src={activeFilm.desktop} type="video/mp4" />
+          <source src={introductionFilm.desktop} type="video/mp4" />
         </video>
       ) : null}
 
