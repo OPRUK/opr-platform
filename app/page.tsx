@@ -211,10 +211,10 @@ export default async function Home() {
               <p className="mt-5 text-3xl font-semibold italic leading-tight text-[#123C39] md:text-4xl">Krishna Vanti&apos;s Baingan ka Bharta</p>
               <div className="mt-8 space-y-1 text-[1.25rem] leading-[1.4] text-[#5F3B23] md:text-[1.45rem]">
                 <p>onions, cooked till pink</p>
-                <p>4–5 tomatoes, cooked till mashed</p>
-                <p>salt &amp; deghi mirch</p>
-                <p>mashed bhuna baingan</p>
-                <p className="pl-5">2 slit green chillies</p>
+                <p>tomatoes, salt &amp; deghi mirch</p>
+                <p>2 slit green chillies</p>
+                <p>fold in mashed bhuna baingan</p>
+                <p className="pl-5">simmer till smoky &amp; rich</p>
               </div>
               <p className="mt-9 text-xl italic text-[#6C472A]">Don&apos;t let it turn brown.</p>
             </div>
@@ -225,9 +225,14 @@ export default async function Home() {
               Bring an old recipe back to life
             </p>
             <h2 className="mt-5 max-w-xl text-4xl font-bold leading-tight md:text-6xl">
-              Scan a handwritten recipe card
+              From the kitchen drawer to your kitchen
             </h2>
             <p className="mt-7 max-w-xl text-lg leading-8 text-[#F1DFC5] md:text-xl">
+              Krishna Vanti&apos;s handwritten Baingan ka Bharta is the perfect
+              example: a note tucked away in a drawer, translated into a clear
+              recipe for every family to cook, share and make their own.
+            </p>
+            <p className="mt-5 max-w-xl text-lg leading-8 text-[#F1DFC5] md:text-xl">
               Take a clear photo of a recipe card or notebook page and OPR will
               make an editable first draft of the title, ingredients and method.
               You stay in control and can correct every word before sharing.
