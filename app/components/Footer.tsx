@@ -58,6 +58,17 @@ export default function Footer() {
                   <path d="M13.7 21v-8h2.7l.4-3.1h-3.1V8c0-.9.3-1.6 1.7-1.6H17V3.6c-.3 0-1.3-.1-2.4-.1-2.4 0-4.1 1.5-4.1 4.2v2.3H7.8V13h2.7v8h3.2Z" />
                 </svg>
               </a>
+              <a
+                href="https://www.pinterest.com/0kg0zcynwbbvmoqk092xgf1u83r3r6/"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Follow Other People's Recipes on Pinterest"
+                className="rounded-full border border-[#8B6B42] p-2.5 text-[#FFF3DF] transition hover:-translate-y-0.5 hover:border-[#DDB765] hover:bg-[#DDB765] hover:text-[#08231F]"
+              >
+                <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 fill-current">
+                  <path d="M12 2.2a9.8 9.8 0 0 0-3.6 18.9c-.1-1.6 0-3.5.4-5.2l1.1-4.6s-.3-.7-.3-1.8c0-1.7 1-3 2.2-3 1 0 1.5.8 1.5 1.7 0 1-.7 2.6-1.1 4-.3 1.2.6 2.1 1.8 2.1 2.2 0 3.7-2.8 3.7-6.1 0-2.5-1.7-4.3-4.8-4.3-3.5 0-5.6 2.6-5.6 5.5 0 1 .3 1.8.9 2.4.2.2.2.3.1.6l-.3 1.1c-.1.4-.4.5-.7.4-2-.8-2.9-3-2.9-5.4 0-4 3.3-8.8 9.8-8.8 5.2 0 8.6 3.8 8.6 7.8 0 5.3-2.9 9.3-7.2 9.3-1.4 0-2.8-.8-3.2-1.6l-.9 3.4c-.3 1.3-1 2.7-1.6 3.7.9.3 1.9.5 2.9.5A9.8 9.8 0 0 0 12 2.2Z" />
+                </svg>
+              </a>
             </li>
           </ul>
         </div>
