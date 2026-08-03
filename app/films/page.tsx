@@ -20,6 +20,26 @@ const films = [
     poster: "/images/recipes/nana-serbs-rice-pudding-wide.png",
   },
   {
+    title: "The OPR Restaurant Idea",
+    label: "A future OPR concept",
+    synopsis:
+      "A glimpse of a menu beginning with recipes from real home kitchens: three starters, three mains and three desserts, selected for the food and the story behind every plate.",
+    relevance:
+      "The restaurant is an exciting future direction for OPR. The living cookbook and the community come first — they are the foundation that could one day bring this table to life.",
+    source: "/videos/opr-the-idea.mp4",
+    poster: "/images/opr-the-idea-poster.jpg",
+  },
+  {
+    title: "Every Story Stays",
+    label: "The OPR memory wall",
+    synopsis:
+      "A wall of handwritten family recipes grows as more people share the dishes, memories and traditions they want the next generation to keep.",
+    relevance:
+      "This is the emotional heart of OPR: recipes are not only instructions. They are a way of keeping people, places and stories close.",
+    source: "/videos/opr-emotional-payoff.mp4",
+    poster: "/images/opr-emotional-payoff-poster.jpg",
+  },
+  {
     title: "A Menu Written by the People",
     label: "A future OPR concept",
     synopsis:
