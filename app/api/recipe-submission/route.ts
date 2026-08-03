@@ -90,6 +90,7 @@ export async function POST(request: Request) {
     }
 
     const photo = formData.get("photo");
+    const contributorPhoto = formData.get("contributorPhoto");
     const originalRecipe = formData.get("originalRecipe");
     const audioStory = formData.get("audioStory");
     if (photo instanceof File && photo.size > maximumPhotoSize) {
@@ -97,6 +98,12 @@ export async function POST(request: Request) {
     }
     if (photo instanceof File && !acceptedPhotoTypes.has(photo.type)) {
       return Response.json({ error: "Unsupported photo type" }, { status: 400 });
+    }
+    if (contributorPhoto instanceof File && contributorPhoto.size > maximumPhotoSize) {
+      return Response.json({ error: "Cook photo is too large" }, { status: 400 });
+    }
+    if (contributorPhoto instanceof File && contributorPhoto.size > 0 && !acceptedPhotoTypes.has(contributorPhoto.type)) {
+      return Response.json({ error: "Unsupported cook photo type" }, { status: 400 });
     }
     if (originalRecipe instanceof File && originalRecipe.size > maximumOriginalRecipeSize) {
       return Response.json({ error: "Original recipe image is too large" }, { status: 400 });
@@ -139,6 +146,19 @@ export async function POST(request: Request) {
       if (uploadError) throw uploadError;
     }
 
+    let contributorPhotoPath: string | null = null;
+    if (contributorPhoto instanceof File && contributorPhoto.size > 0) {
+      contributorPhotoPath = `contributors/${crypto.randomUUID()}.${extensionForImage(contributorPhoto.type)}`;
+      const { error: uploadError } = await supabase.storage
+        .from("recipe-photos")
+        .upload(contributorPhotoPath, contributorPhoto, {
+          contentType: contributorPhoto.type,
+          upsert: false,
+        });
+
+      if (uploadError) throw uploadError;
+    }
+
     let audioStoryPath: string | null = null;
     if (audioStory instanceof File && audioStory.size > 0) {
       audioStoryPath = `audio/${crypto.randomUUID()}.${extensionForAudio(audioStory.type)}`;
@@ -164,6 +184,7 @@ export async function POST(request: Request) {
       method,
       cook_notes: readText(formData, "cookNotes") || null,
       photo_path: photoPath,
+      contributor_photo_path: contributorPhotoPath,
       original_recipe_path: originalRecipePath,
       audio_story_path: audioStoryPath,
       // Retain the original database field while the combined submission

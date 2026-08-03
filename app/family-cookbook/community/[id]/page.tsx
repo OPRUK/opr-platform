@@ -18,6 +18,7 @@ type CommunityRecipe = {
   method: string;
   cook_notes: string | null;
   photo_path: string | null;
+  contributor_photo_path: string | null;
   original_recipe_path: string | null;
   audio_story_path: string | null;
 };
@@ -32,7 +33,7 @@ function truncate(text: string, maxLength: number): string {
 async function getCommunityRecipe(id: string): Promise<CommunityRecipe | null> {
   const { data } = await supabase
     .from("recipe_submissions")
-    .select("id, title, name, location, category, servings, story, ingredients, method, cook_notes, photo_path, original_recipe_path, audio_story_path")
+    .select("id, title, name, location, category, servings, story, ingredients, method, cook_notes, photo_path, contributor_photo_path, original_recipe_path, audio_story_path")
     .eq("id", id)
     .eq("is_published", true)
     .maybeSingle();
@@ -53,6 +54,12 @@ function imageUrlFor(recipe: CommunityRecipe): string | null {
 function originalRecipeImageUrlFor(recipe: CommunityRecipe): string | null {
   return recipe.original_recipe_path
     ? supabase.storage.from("recipe-photos").getPublicUrl(recipe.original_recipe_path).data.publicUrl
+    : null;
+}
+
+function contributorPhotoUrlFor(recipe: CommunityRecipe): string | null {
+  return recipe.contributor_photo_path
+    ? supabase.storage.from("recipe-photos").getPublicUrl(recipe.contributor_photo_path).data.publicUrl
     : null;
 }
 
@@ -120,6 +127,7 @@ export default async function CommunityRecipePage({
   }
 
   const imageUrl = imageUrlFor(recipe);
+  const contributorPhotoUrl = contributorPhotoUrlFor(recipe);
   const originalRecipeImageUrl = originalRecipeImageUrlFor(recipe);
   const audioStoryUrl = audioStoryUrlFor(recipe);
   const ingredients = recipe.ingredients.split("\n").filter(Boolean);
@@ -171,6 +179,20 @@ export default async function CommunityRecipePage({
         <article className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-12">
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">The story</p>
           <p className="mt-7 text-2xl leading-relaxed">“{recipe.story}”</p>
+          {contributorPhotoUrl ? (
+            <div className="mt-10 flex items-center gap-4 border-t border-[#D1AD75] pt-6">
+              <img
+                src={contributorPhotoUrl}
+                alt={`${recipe.name}, who shared ${recipe.title}`}
+                className="h-16 w-16 rounded-full object-cover shadow-md"
+              />
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.22em] text-amber-700">Meet the cook</p>
+                <p className="mt-1 text-lg font-bold text-[#123C39]">{recipe.name}</p>
+                {recipe.location ? <p className="text-sm text-stone-600">{recipe.location}</p> : null}
+              </div>
+            </div>
+          ) : null}
           <p className="mt-10 border-t border-[#D1AD75] pt-6 text-sm italic text-stone-600">Shared with the Other People&apos;s Recipes community.</p>
         </article>
         <aside className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-12">

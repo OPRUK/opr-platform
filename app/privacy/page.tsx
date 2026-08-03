@@ -29,7 +29,7 @@ export default function PrivacyPolicyPage() {
 
             <div>
               <h2 className="text-2xl font-bold text-[#123C39]">1. Contact us</h2>
-              <p className="mt-3">We are the controller of the information described in this notice. For privacy questions, requests or concerns, email <a className="underline underline-offset-4" href="mailto:chaten@otherpeoplesrecipes.co.uk">chaten@otherpeoplesrecipes.co.uk</a>.</p>
+              <p className="mt-3">We are the controller of the information described in this notice. For privacy questions, requests or concerns, email <a className="underline underline-offset-4" href="mailto:info@otherpeoplesrecipes.co.uk">info@otherpeoplesrecipes.co.uk</a>.</p>
             </div>
 
             <div>
@@ -87,7 +87,7 @@ export default function PrivacyPolicyPage() {
 
             <div>
               <h2 className="text-2xl font-bold text-[#123C39]">7. Your rights</h2>
-              <p className="mt-3">You may ask us to access, correct, delete, restrict or transfer your personal information, or object to our use of it. You can withdraw marketing consent at any time. Email <a className="underline underline-offset-4" href="mailto:chaten@otherpeoplesrecipes.co.uk">chaten@otherpeoplesrecipes.co.uk</a> and we will respond within the time required by law.</p>
+              <p className="mt-3">You may ask us to access, correct, delete, restrict or transfer your personal information, or object to our use of it. You can withdraw marketing consent at any time. Email <a className="underline underline-offset-4" href="mailto:info@otherpeoplesrecipes.co.uk">info@otherpeoplesrecipes.co.uk</a> and we will respond within the time required by law.</p>
             </div>
 
             <div>

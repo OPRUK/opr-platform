@@ -57,6 +57,8 @@ export default function RecipeForm() {
   const [values, setValues] = useState(getInitialValues);
   const [photo, setPhoto] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState("");
+  const [contributorPhoto, setContributorPhoto] = useState<File | null>(null);
+  const [contributorPhotoPreview, setContributorPhotoPreview] = useState("");
   const [originalRecipe, setOriginalRecipe] = useState<File | null>(null);
   const [originalRecipePreview, setOriginalRecipePreview] = useState("");
   const [isReadingRecipe, setIsReadingRecipe] = useState(false);
@@ -131,6 +133,28 @@ export default function RecipeForm() {
     setSubmissionError("");
     setPhoto(file);
     setPhotoPreview(URL.createObjectURL(file));
+  }
+
+  function chooseContributorPhoto(file: File | null) {
+    if (!file) {
+      setContributorPhoto(null);
+      setContributorPhotoPreview("");
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      setSubmissionError("Please choose an image file for the cook's photo.");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setSubmissionError("Please choose a cook's photo smaller than 5 MB.");
+      return;
+    }
+
+    setSubmissionError("");
+    setContributorPhoto(file);
+    setContributorPhotoPreview(URL.createObjectURL(file));
   }
 
   function chooseOriginalRecipe(file: File | null) {
@@ -280,6 +304,7 @@ export default function RecipeForm() {
     formData.set("marketingOptIn", String(values.marketingOptIn));
     formData.set("consentVersion", CONSENT_VERSION);
     if (photo) formData.set("photo", photo);
+    if (contributorPhoto) formData.set("contributorPhoto", contributorPhoto);
     if (originalRecipe) formData.set("originalRecipe", originalRecipe);
     if (audioStory) formData.set("audioStory", audioStory);
 
@@ -301,6 +326,8 @@ export default function RecipeForm() {
     window.sessionStorage.removeItem(recipeDraftKey);
     setPhoto(null);
     setPhotoPreview("");
+    setContributorPhoto(null);
+    setContributorPhotoPreview("");
     setOriginalRecipe(null);
     setOriginalRecipePreview("");
     setAudioStory(null);
@@ -368,6 +395,8 @@ export default function RecipeForm() {
             setValues(initialValues);
             setPhoto(null);
             setPhotoPreview("");
+            setContributorPhoto(null);
+            setContributorPhotoPreview("");
             setOriginalRecipe(null);
             setOriginalRecipePreview("");
             setAudioStory(null);
@@ -586,6 +615,39 @@ export default function RecipeForm() {
           ) : null}
         </div>
 
+        <div className="mt-5 rounded-2xl border border-dashed border-[#B77938]/70 bg-[#F4DDAE]/45 p-5">
+          <p className="text-sm uppercase tracking-[0.22em] text-[#9A622A]">Meet the cook</p>
+          <label className="mt-3 block text-sm font-medium">
+            Add a photo of the person behind the recipe <span className="font-normal text-stone-500">(optional)</span>
+            <input
+              onChange={(event) => chooseContributorPhoto(event.target.files?.[0] ?? null)}
+              type="file"
+              name="contributorPhoto"
+              accept="image/jpeg,image/png,image/webp"
+              className="mt-3 block w-full text-sm text-stone-700 file:mr-4 file:rounded-full file:border-0 file:bg-[#123C39] file:px-4 file:py-2 file:font-medium file:text-white hover:file:bg-[#08231F]"
+            />
+          </label>
+          <p className="mt-3 text-sm leading-6 text-stone-600">
+            Put a face to the story. If OPR publishes the recipe, we may show this portrait alongside the contributor&apos;s story in the cookbook. JPG, PNG or WebP, up to 5 MB.
+          </p>
+          {contributorPhotoPreview ? (
+            <div className="mt-5 flex items-center gap-4">
+              <img
+                src={contributorPhotoPreview}
+                alt="Cook photo preview"
+                className="h-24 w-24 rounded-full object-cover shadow-md"
+              />
+              <button
+                type="button"
+                onClick={() => chooseContributorPhoto(null)}
+                className="rounded-full border border-[#123C39] px-4 py-2 text-sm font-medium transition hover:bg-[#123C39] hover:text-white"
+              >
+                Remove cook&apos;s photo
+              </button>
+            </div>
+          ) : null}
+        </div>
+
         <div id="scan-a-recipe" className="mt-5 rounded-2xl border-2 border-dashed border-[#B77938]/70 bg-[#F4DDAE]/45 p-5 shadow-sm scroll-mt-8">
           <p className="text-sm uppercase tracking-[0.22em] text-[#9A622A]">
             Bring an old recipe back to life
@@ -708,7 +770,7 @@ export default function RecipeForm() {
         <span>
           I confirm that I am aged 18 or over; that this recipe and story are
           mine to share; and that I have permission to share anyone identifiable
-          in my photos, recipe-card images or voice recording. I grant Other
+          in my photos, including an optional Meet the cook photo, recipe-card images or voice recording. I grant Other
           People&apos;s Recipes a perpetual, worldwide, royalty-free licence to
           publish, edit, adapt and reproduce the recipe, story and submitted
           media, including in print, film, at OPR events and, if we ever open

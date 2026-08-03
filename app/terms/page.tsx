@@ -50,7 +50,7 @@ export default function TermsPage() {
             </div>
             <div>
               <h2 className="text-2xl font-bold text-[#123C39]">7. Contact and governing law</h2>
-              <p className="mt-3">Questions? Email <a className="underline underline-offset-4" href="mailto:chaten@otherpeoplesrecipes.co.uk">chaten@otherpeoplesrecipes.co.uk</a>. These terms are governed by the law of England and Wales.</p>
+              <p className="mt-3">Questions? Email <a className="underline underline-offset-4" href="mailto:info@otherpeoplesrecipes.co.uk">info@otherpeoplesrecipes.co.uk</a>. These terms are governed by the law of England and Wales.</p>
             </div>
           </div>
         </div>

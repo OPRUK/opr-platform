@@ -22,6 +22,7 @@ type Submission = {
   permission_to_feature: boolean;
   status: SubmissionStatus;
   photo_path: string | null;
+  contributor_photo_path: string | null;
   original_recipe_path: string | null;
   audio_story_path: string | null;
   is_published: boolean;
@@ -310,6 +311,9 @@ export default function AdminDashboard() {
   const selectedOriginalRecipeUrl = selectedSubmission?.original_recipe_path
     ? supabase.storage.from("recipe-photos").getPublicUrl(selectedSubmission.original_recipe_path).data.publicUrl
     : null;
+  const selectedContributorPhotoUrl = selectedSubmission?.contributor_photo_path
+    ? supabase.storage.from("recipe-photos").getPublicUrl(selectedSubmission.contributor_photo_path).data.publicUrl
+    : null;
   const selectedAudioStoryUrl = selectedSubmission?.audio_story_path
     ? supabase.storage.from("recipe-photos").getPublicUrl(selectedSubmission.audio_story_path).data.publicUrl
     : null;
@@ -526,6 +530,19 @@ export default function AdminDashboard() {
                       alt={selectedSubmission.title}
                       className="mt-4 max-h-[28rem] w-full rounded-2xl object-cover shadow-lg"
                     />
+                  </article>
+                ) : null}
+                {selectedContributorPhotoUrl ? (
+                  <article>
+                    <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#123C39]">Meet the cook</h3>
+                    <div className="mt-4 flex items-center gap-4">
+                      <img
+                        src={selectedContributorPhotoUrl}
+                        alt={`${selectedSubmission.name}, who shared ${selectedSubmission.title}`}
+                        className="h-24 w-24 rounded-full object-cover shadow-lg"
+                      />
+                      <p className="font-medium text-[#123C39]">{selectedSubmission.name}</p>
+                    </div>
                   </article>
                 ) : null}
                 {selectedOriginalRecipeUrl ? (

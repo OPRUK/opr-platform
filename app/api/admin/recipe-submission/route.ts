@@ -117,7 +117,7 @@ export async function DELETE(request: Request) {
 
     const { data: recipe, error: readError } = await adminClient
       .from("recipe_submissions")
-      .select("photo_path, original_recipe_path, audio_story_path")
+      .select("photo_path, contributor_photo_path, original_recipe_path, audio_story_path")
       .eq("id", id)
       .maybeSingle();
 
@@ -125,7 +125,7 @@ export async function DELETE(request: Request) {
       return Response.json({ error: "Recipe not found" }, { status: 404 });
     }
 
-    const files = [recipe.photo_path, recipe.original_recipe_path, recipe.audio_story_path].filter(
+    const files = [recipe.photo_path, recipe.contributor_photo_path, recipe.original_recipe_path, recipe.audio_story_path].filter(
       (path): path is string => typeof path === "string" && path.length > 0,
     );
     if (files.length) {

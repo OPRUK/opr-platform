@@ -31,7 +31,7 @@ export default function CookieNoticePage() {
             </div>
             <div>
               <h2 className="text-2xl font-bold text-[#123C39]">If this changes</h2>
-              <p className="mt-3">If OPR adds non-essential cookies in future, we will update this notice and ask for consent before those cookies are used. Questions about privacy can be sent to <a className="underline underline-offset-4" href="mailto:chaten@otherpeoplesrecipes.co.uk">chaten@otherpeoplesrecipes.co.uk</a>.</p>
+              <p className="mt-3">If OPR adds non-essential cookies in future, we will update this notice and ask for consent before those cookies are used. Questions about privacy can be sent to <a className="underline underline-offset-4" href="mailto:info@otherpeoplesrecipes.co.uk">info@otherpeoplesrecipes.co.uk</a>.</p>
             </div>
           </div>
         </div>
