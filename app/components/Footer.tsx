@@ -80,6 +80,17 @@ export default function Footer() {
                   <path d="M21.6 7.1a2.95 2.95 0 0 0-2.1-2.1C17.6 4.5 12 4.5 12 4.5s-5.6 0-7.5.5A2.95 2.95 0 0 0 2.4 7.1C1.9 9 1.9 12 1.9 12s0 3 .5 4.9A2.95 2.95 0 0 0 4.5 19c1.9.5 7.5.5 7.5.5s5.6 0 7.5-.5a2.95 2.95 0 0 0 2.1-2.1c.5-1.9.5-4.9.5-4.9s0-3-.5-4.9ZM10 15.5v-7l6 3.5-6 3.5Z" />
                 </svg>
               </a>
+              <a
+                href="https://www.tiktok.com/@opr_uk"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Follow Other People's Recipes on TikTok"
+                className="rounded-full border border-[#8B6B42] p-2.5 text-[#FFF3DF] transition hover:-translate-y-0.5 hover:border-[#DDB765] hover:bg-[#DDB765] hover:text-[#08231F]"
+              >
+                <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 fill-current">
+                  <path d="M16.7 3c.4 2.7 1.9 4.3 4.3 4.5v3.1c-1.6.1-3-.4-4.2-1.2v6.8c0 4.3-4.7 6.8-8.2 4.6-2.1-1.3-2.9-4.3-1.8-6.6 1.1-2.3 3.9-3.3 6.2-2.4v3.2c-.9-.4-2-.1-2.5.7-.5.8-.3 1.9.5 2.5 1 .8 2.7.1 2.7-1.3V3h3Z" />
+                </svg>
+              </a>
             </li>
           </ul>
         </div>
