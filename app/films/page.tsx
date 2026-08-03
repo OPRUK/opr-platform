@@ -20,6 +20,16 @@ const films = [
     poster: "/images/recipes/nana-serbs-rice-pudding-wide.png",
   },
   {
+    title: "Krishna Vanti’s Baingan Ka Bharta",
+    label: "A recipe from the kitchen drawer",
+    synopsis:
+      "A grandmother cooks baingan ka bharta with her family beside her: roasted aubergine, gently softened onions, tomatoes and chillies becoming a dish that has travelled through generations.",
+    relevance:
+      "This is OPR at its most personal. A recipe once held in a drawer can be carefully translated, shared with the world and made part of another family’s table.",
+    source: "/videos/opr-krishna-vanti-film.mp4",
+    poster: "/images/opr-krishna-vanti-film-poster.jpg",
+  },
+  {
     title: "The OPR Restaurant Idea",
     label: "A future OPR concept",
     synopsis:
