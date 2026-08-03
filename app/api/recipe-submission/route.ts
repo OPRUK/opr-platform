@@ -5,6 +5,7 @@ const adminEmail = "chaten@otherpeoplesrecipes.co.uk";
 const maximumPhotoSize = 5 * 1024 * 1024;
 const maximumOriginalRecipeSize = 10 * 1024 * 1024;
 const maximumAudioStorySize = 10 * 1024 * 1024;
+const maximumRecipeVideoSize = 20 * 1024 * 1024;
 const acceptedPhotoTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
 const acceptedOriginalRecipeTypes = new Set([
   "image/jpeg",
@@ -22,6 +23,11 @@ const acceptedAudioStoryTypes = new Set([
   "audio/wav",
   "audio/webm",
   "audio/x-m4a",
+]);
+const acceptedRecipeVideoTypes = new Set([
+  "video/mp4",
+  "video/quicktime",
+  "video/webm",
 ]);
 
 function normaliseMimeType(type: string) {
@@ -53,6 +59,16 @@ function extensionForAudio(type: string) {
   };
 
   return extensions[normaliseMimeType(type)] ?? "webm";
+}
+
+function extensionForVideo(type: string) {
+  const extensions: Record<string, string> = {
+    "video/mp4": "mp4",
+    "video/quicktime": "mov",
+    "video/webm": "webm",
+  };
+
+  return extensions[normaliseMimeType(type)] ?? "mp4";
 }
 
 function readText(formData: FormData, field: string, required = false) {
@@ -93,6 +109,7 @@ export async function POST(request: Request) {
     const contributorPhoto = formData.get("contributorPhoto");
     const originalRecipe = formData.get("originalRecipe");
     const audioStory = formData.get("audioStory");
+    const recipeVideo = formData.get("recipeVideo");
     if (photo instanceof File && photo.size > maximumPhotoSize) {
       return Response.json({ error: "Photo is too large" }, { status: 400 });
     }
@@ -116,6 +133,12 @@ export async function POST(request: Request) {
     }
     if (audioStory instanceof File && audioStory.size > 0 && !acceptedAudioStoryTypes.has(normaliseMimeType(audioStory.type))) {
       return Response.json({ error: "Unsupported voice story type" }, { status: 400 });
+    }
+    if (recipeVideo instanceof File && recipeVideo.size > maximumRecipeVideoSize) {
+      return Response.json({ error: "Recipe video is too large" }, { status: 400 });
+    }
+    if (recipeVideo instanceof File && recipeVideo.size > 0 && !acceptedRecipeVideoTypes.has(normaliseMimeType(recipeVideo.type))) {
+      return Response.json({ error: "Unsupported recipe video type" }, { status: 400 });
     }
 
     const supabase = createClient(supabaseUrl, secretKey, {
@@ -172,6 +195,19 @@ export async function POST(request: Request) {
       if (uploadError) throw uploadError;
     }
 
+    let recipeVideoPath: string | null = null;
+    if (recipeVideo instanceof File && recipeVideo.size > 0) {
+      recipeVideoPath = `videos/${crypto.randomUUID()}.${extensionForVideo(recipeVideo.type)}`;
+      const { error: uploadError } = await supabase.storage
+        .from("recipe-photos")
+        .upload(recipeVideoPath, recipeVideo, {
+          contentType: recipeVideo.type,
+          upsert: false,
+        });
+
+      if (uploadError) throw uploadError;
+    }
+
     const { error: submissionError } = await supabase.from("recipe_submissions").insert({
       name,
       email,
@@ -187,6 +223,7 @@ export async function POST(request: Request) {
       contributor_photo_path: contributorPhotoPath,
       original_recipe_path: originalRecipePath,
       audio_story_path: audioStoryPath,
+      recipe_video_path: recipeVideoPath,
       // Retain the original database field while the combined submission
       // agreement covers licence, permission to share identifiable people in
       // submitted media, and adult-only eligibility.

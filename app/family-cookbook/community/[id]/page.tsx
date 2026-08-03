@@ -21,6 +21,7 @@ type CommunityRecipe = {
   contributor_photo_path: string | null;
   original_recipe_path: string | null;
   audio_story_path: string | null;
+  recipe_video_path: string | null;
 };
 
 type CommunityCook = {
@@ -40,7 +41,7 @@ function truncate(text: string, maxLength: number): string {
 async function getCommunityRecipe(id: string): Promise<CommunityRecipe | null> {
   const { data } = await supabase
     .from("recipe_submissions")
-    .select("id, title, name, location, category, servings, story, ingredients, method, cook_notes, photo_path, contributor_photo_path, original_recipe_path, audio_story_path")
+    .select("id, title, name, location, category, servings, story, ingredients, method, cook_notes, photo_path, contributor_photo_path, original_recipe_path, audio_story_path, recipe_video_path")
     .eq("id", id)
     .eq("is_published", true)
     .maybeSingle();
@@ -73,6 +74,12 @@ function contributorPhotoUrlFor(recipe: CommunityRecipe): string | null {
 function audioStoryUrlFor(recipe: CommunityRecipe): string | null {
   return recipe.audio_story_path
     ? supabase.storage.from("recipe-photos").getPublicUrl(recipe.audio_story_path).data.publicUrl
+    : null;
+}
+
+function recipeVideoUrlFor(recipe: CommunityRecipe): string | null {
+  return recipe.recipe_video_path
+    ? supabase.storage.from("recipe-photos").getPublicUrl(recipe.recipe_video_path).data.publicUrl
     : null;
 }
 
@@ -158,6 +165,7 @@ export default async function CommunityRecipePage({
   const contributorPhotoUrl = contributorPhotoUrlFor(recipe);
   const originalRecipeImageUrl = originalRecipeImageUrlFor(recipe);
   const audioStoryUrl = audioStoryUrlFor(recipe);
+  const recipeVideoUrl = recipeVideoUrlFor(recipe);
   const ingredients = recipe.ingredients.split("\n").filter(Boolean);
   const method = recipe.method.split("\n").filter(Boolean);
 
@@ -242,6 +250,16 @@ export default async function CommunityRecipePage({
               Press play to hear the memory behind this recipe.
             </p>
             <audio controls preload="metadata" src={audioStoryUrl} className="mx-auto mt-8 w-full max-w-2xl" />
+          </div>
+        </section>
+      ) : null}
+      {recipeVideoUrl ? (
+        <section className="bg-[#F4DDAE]/60 px-6 py-20">
+          <div className="mx-auto max-w-4xl text-center">
+            <p className="text-sm uppercase tracking-[0.35em] text-amber-700">Watch it come to life</p>
+            <h2 className="mt-5 text-4xl font-bold">Made in their kitchen.</h2>
+            <p className="mx-auto mt-5 max-w-2xl leading-7 text-stone-700">A short film shared by the cook behind this recipe.</p>
+            <video controls playsInline preload="metadata" src={recipeVideoUrl} className="mx-auto mt-8 aspect-video w-full max-w-3xl rounded-3xl bg-black shadow-xl shadow-[#1C5A50]/15" />
           </div>
         </section>
       ) : null}

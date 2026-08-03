@@ -65,6 +65,8 @@ export default function RecipeForm() {
   const [recipeReadMessage, setRecipeReadMessage] = useState("");
   const [audioStory, setAudioStory] = useState<File | null>(null);
   const [audioStoryPreview, setAudioStoryPreview] = useState("");
+  const [recipeVideo, setRecipeVideo] = useState<File | null>(null);
+  const [recipeVideoPreview, setRecipeVideoPreview] = useState("");
   const [isRecording, setIsRecording] = useState(false);
   const recorderRef = useRef<MediaRecorder | null>(null);
   const recordingTimerRef = useRef<number | null>(null);
@@ -237,6 +239,28 @@ export default function RecipeForm() {
     setAudioStoryPreview(URL.createObjectURL(file));
   }
 
+  function chooseRecipeVideo(file: File | null) {
+    if (!file) {
+      setRecipeVideo(null);
+      setRecipeVideoPreview("");
+      return;
+    }
+
+    if (!file.type.startsWith("video/")) {
+      setSubmissionError("Please choose a video file for the recipe.");
+      return;
+    }
+
+    if (file.size > 20 * 1024 * 1024) {
+      setSubmissionError("Please choose a recipe video smaller than 20 MB.");
+      return;
+    }
+
+    setSubmissionError("");
+    setRecipeVideo(file);
+    setRecipeVideoPreview(URL.createObjectURL(file));
+  }
+
   async function startVoiceRecording() {
     if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === "undefined") {
       setSubmissionError("Voice recording is not available in this browser. You can still upload an audio file below.");
@@ -307,6 +331,7 @@ export default function RecipeForm() {
     if (contributorPhoto) formData.set("contributorPhoto", contributorPhoto);
     if (originalRecipe) formData.set("originalRecipe", originalRecipe);
     if (audioStory) formData.set("audioStory", audioStory);
+    if (recipeVideo) formData.set("recipeVideo", recipeVideo);
 
     try {
       const response = await fetch("/api/recipe-submission", {
@@ -332,6 +357,8 @@ export default function RecipeForm() {
     setOriginalRecipePreview("");
     setAudioStory(null);
     setAudioStoryPreview("");
+    setRecipeVideo(null);
+    setRecipeVideoPreview("");
     setSubmissionComplete(true);
     setIsSubmitting(false);
   }
@@ -401,6 +428,8 @@ export default function RecipeForm() {
             setOriginalRecipePreview("");
             setAudioStory(null);
             setAudioStoryPreview("");
+            setRecipeVideo(null);
+            setRecipeVideoPreview("");
             window.sessionStorage.removeItem(recipeDraftKey);
             setSubmissionComplete(false);
           }}
@@ -752,6 +781,38 @@ export default function RecipeForm() {
                 className="mt-4 rounded-full border border-[#123C39] px-4 py-2 text-sm font-medium transition hover:bg-[#123C39] hover:text-white"
               >
                 Remove voice story
+              </button>
+            </div>
+          ) : null}
+        </div>
+
+        <div className="mt-5 rounded-2xl border border-dashed border-[#B77938]/70 bg-[#F4DDAE]/45 p-5">
+          <p className="text-sm font-medium">
+            Show us how it is made <span className="font-normal text-stone-500">(optional)</span>
+          </p>
+          <p className="mt-3 text-sm leading-6 text-stone-600">
+            Add a short recipe video, up to 20 MB. We will review it before it appears alongside your recipe in the cookbook.
+          </p>
+          <label className="mt-5 block text-sm font-medium">
+            Choose a recipe video
+            <input
+              onChange={(event) => chooseRecipeVideo(event.target.files?.[0] ?? null)}
+              type="file"
+              name="recipeVideo"
+              accept="video/mp4,video/quicktime,video/webm"
+              className="mt-3 block w-full text-sm text-stone-700 file:mr-4 file:rounded-full file:border-0 file:bg-[#123C39] file:px-4 file:py-2 file:font-medium file:text-white hover:file:bg-[#08231F]"
+            />
+          </label>
+          {recipeVideo ? (
+            <div className="mt-5">
+              <p className="text-sm font-medium text-[#123C39]">{recipeVideo.name}</p>
+              {recipeVideoPreview ? <video controls playsInline preload="metadata" src={recipeVideoPreview} className="mt-3 aspect-video w-full rounded-xl bg-black" /> : null}
+              <button
+                type="button"
+                onClick={() => chooseRecipeVideo(null)}
+                className="mt-4 rounded-full border border-[#123C39] px-4 py-2 text-sm font-medium transition hover:bg-[#123C39] hover:text-white"
+              >
+                Remove recipe video
               </button>
             </div>
           ) : null}

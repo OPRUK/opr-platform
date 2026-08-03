@@ -25,6 +25,7 @@ type Submission = {
   contributor_photo_path: string | null;
   original_recipe_path: string | null;
   audio_story_path: string | null;
+  recipe_video_path: string | null;
   is_published: boolean;
   published_at: string | null;
   is_recipe_of_week: boolean;
@@ -238,7 +239,7 @@ export default function AdminDashboard() {
 
   async function deleteSubmission(submission: Submission) {
     const confirmed = window.confirm(
-      `Permanently delete “${submission.title}”? This also removes any recipe photos, the original recipe image and voice story. This cannot be undone.`,
+      `Permanently delete “${submission.title}”? This also removes any recipe photos, the original recipe image, voice story and recipe video. This cannot be undone.`,
     );
     if (!confirmed) return;
 
@@ -364,6 +365,9 @@ export default function AdminDashboard() {
     : null;
   const selectedAudioStoryUrl = selectedSubmission?.audio_story_path
     ? supabase.storage.from("recipe-photos").getPublicUrl(selectedSubmission.audio_story_path).data.publicUrl
+    : null;
+  const selectedRecipeVideoUrl = selectedSubmission?.recipe_video_path
+    ? supabase.storage.from("recipe-photos").getPublicUrl(selectedSubmission.recipe_video_path).data.publicUrl
     : null;
 
   function communityCookPhotoUrl(cook: CommunityCook) {
@@ -613,6 +617,12 @@ export default function AdminDashboard() {
                   <article>
                     <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#123C39]">Voice story</h3>
                     <audio controls preload="metadata" src={selectedAudioStoryUrl} className="mt-4 w-full" />
+                  </article>
+                ) : null}
+                {selectedRecipeVideoUrl ? (
+                  <article>
+                    <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#123C39]">Recipe video</h3>
+                    <video controls playsInline preload="metadata" src={selectedRecipeVideoUrl} className="mt-4 aspect-video w-full rounded-2xl bg-black" />
                   </article>
                 ) : null}
                 <article>

@@ -117,7 +117,7 @@ export async function DELETE(request: Request) {
 
     const { data: recipe, error: readError } = await adminClient
       .from("recipe_submissions")
-      .select("photo_path, contributor_photo_path, original_recipe_path, audio_story_path")
+      .select("photo_path, contributor_photo_path, original_recipe_path, audio_story_path, recipe_video_path")
       .eq("id", id)
       .maybeSingle();
 
@@ -136,6 +136,7 @@ export async function DELETE(request: Request) {
       recipe.contributor_photo_path,
       recipe.original_recipe_path,
       recipe.audio_story_path,
+      recipe.recipe_video_path,
       ...(communityPosts ?? []).map((post) => post.photo_path),
     ].filter(
       (path): path is string => typeof path === "string" && path.length > 0,
