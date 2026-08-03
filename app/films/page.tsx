@@ -123,6 +123,29 @@ export default function FilmsPage() {
         ))}
       </section>
 
+      <section className="bg-[#123C39] px-6 py-24 text-center text-[#FFF3DF]">
+        <div className="mx-auto max-w-3xl">
+          <p className="text-sm uppercase tracking-[0.35em] text-[#DDB765]">
+            Watch on YouTube
+          </p>
+          <h2 className="mt-5 text-4xl font-bold leading-tight md:text-5xl">
+            Follow the OPR Film Collection.
+          </h2>
+          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-[#E7CEA2]">
+            New recipe stories, conversations from the kitchen and future OPR
+            films live on our YouTube channel.
+          </p>
+          <a
+            href="https://www.youtube.com/channel/UCdRQdldwQPFPoMr5N-FwIkQ"
+            target="_blank"
+            rel="noreferrer"
+            className="mt-9 inline-flex items-center rounded-full bg-[#DDB765] px-8 py-4 text-lg font-bold text-[#123C39] transition hover:scale-105 hover:bg-[#F0CC7A]"
+          >
+            Visit OPR on YouTube <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </section>
+
       <section className="bg-[#FFF3DF] px-6 py-24 text-center">
         <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
           The next chapter

@@ -208,14 +208,15 @@ export default async function Home() {
               <div className="pointer-events-none absolute -left-10 top-20 h-28 w-28 rounded-full bg-[#6A4022]/10 blur-2xl" />
               <div className="pointer-events-none absolute -right-10 bottom-2 h-24 w-36 rotate-12 rounded-full bg-[#704323]/15 blur-2xl" />
               <p className="text-xs uppercase tracking-[0.28em] text-[#8B5A2B]">From the kitchen drawer</p>
-              <p className="mt-5 text-4xl font-semibold italic leading-tight text-[#123C39] md:text-5xl">Nana&apos;s recipe</p>
-              <div className="mt-8 space-y-1 text-[1.45rem] leading-[1.45] text-[#5F3B23] md:text-[1.6rem]">
-                <p>1 cup of milk</p>
-                <p>a little butter</p>
-                <p>rice, sugar &amp; nutmeg</p>
-                <p className="pl-5">bake till golden</p>
+              <p className="mt-5 text-3xl font-semibold italic leading-tight text-[#123C39] md:text-4xl">Krishna Vanti&apos;s Baingan ka Bharta</p>
+              <div className="mt-8 space-y-1 text-[1.25rem] leading-[1.4] text-[#5F3B23] md:text-[1.45rem]">
+                <p>onions, cooked till pink</p>
+                <p>4–5 tomatoes, cooked till mashed</p>
+                <p>salt &amp; deghi mirch</p>
+                <p>mashed bhuna baingan</p>
+                <p className="pl-5">2 slit green chillies</p>
               </div>
-              <p className="mt-12 text-xl italic text-[#6C472A]">Written down with love.</p>
+              <p className="mt-9 text-xl italic text-[#6C472A]">Don&apos;t let it turn brown.</p>
             </div>
           </div>
 
