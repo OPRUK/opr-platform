@@ -194,68 +194,48 @@ export default async function Home() {
           </div>
       </section>
 
-      <section className="bg-[#FFF3DF] px-6 py-24 md:px-8">
-        <div className="mx-auto max-w-6xl rounded-[2rem] border border-[#9A622A]/35 bg-[#704725] p-3 shadow-2xl shadow-[#3B2615]/30">
-          <div
-            className="grid overflow-hidden rounded-[1.55rem] border border-[#E7C782]/40 md:grid-cols-[0.95fr_1.05fr]"
-            style={{
-              backgroundImage:
-                "linear-gradient(115deg, rgba(255,238,197,0.13), transparent 28%, transparent 72%, rgba(49,27,13,0.24)), repeating-linear-gradient(0deg, rgba(76,43,18,0.12) 0, rgba(76,43,18,0.12) 1px, transparent 1px, transparent 6px)",
-            }}
-          >
-            <div className="relative flex min-h-[440px] items-center justify-center overflow-hidden bg-[#B98749] p-8 md:min-h-full md:p-14">
-              <div className="absolute inset-0 opacity-35 [background-image:radial-gradient(#5B3519_1px,transparent_1px)] [background-size:11px_11px]" />
-              <div className="absolute inset-x-10 top-8 h-8 rotate-[-1deg] bg-[#E8C36E]/35 blur-sm" />
-              <div className="absolute bottom-9 left-8 h-24 w-24 rounded-full border-[10px] border-[#6C421F]/20" />
-
-              <div
-                className="relative z-10 w-full max-w-sm rotate-[-4deg] border border-[#A57236] bg-[#FFF1D8] p-8 text-[#123C39] shadow-[10px_15px_22px_rgba(55,31,14,0.42)] md:p-10"
-                style={{
-                  backgroundImage:
-                    "radial-gradient(ellipse at 90% 10%, rgba(151,95,38,0.18), transparent 25%), radial-gradient(ellipse at 12% 88%, rgba(151,95,38,0.12), transparent 28%), repeating-linear-gradient(to bottom, transparent 0, transparent 35px, rgba(155,98,40,0.18) 36px)",
-                }}
-              >
-                <div className="absolute -top-3 left-1/2 h-7 w-28 -translate-x-1/2 rotate-[1deg] bg-[#DAB567]/70 shadow-sm" />
-                <p className="text-xs uppercase tracking-[0.28em] text-[#8B5A2B]">From the kitchen drawer</p>
-                <p className="mt-5 text-4xl italic leading-tight text-[#123C39] md:text-5xl">Nana&apos;s recipe</p>
-                <div className="mt-8 space-y-3 opacity-75">
-                  <div className="h-0.5 w-4/5 bg-[#8B5A2B]" />
-                  <div className="h-0.5 w-full bg-[#8B5A2B]" />
-                  <div className="h-0.5 w-3/5 bg-[#8B5A2B]" />
-                  <div className="h-0.5 w-11/12 bg-[#8B5A2B]" />
-                  <div className="h-0.5 w-2/3 bg-[#8B5A2B]" />
-                </div>
-                <p className="mt-11 text-lg italic text-[#6C472A]">Written down with love.</p>
-              </div>
-            </div>
-
+      <section className="bg-[#123C39] px-6 py-24 md:px-8">
+        <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2">
+          <div className="relative flex min-h-[360px] items-center justify-center overflow-hidden rounded-[2rem] bg-[#79502D] p-8 shadow-2xl md:min-h-[480px] md:p-14">
+            <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,232,181,0.16),transparent_42%,rgba(45,24,10,0.35))]" />
             <div
-              className="relative flex flex-col justify-center bg-[#F6E4BE] p-9 text-[#123C39] md:p-14"
+              className="relative w-full max-w-sm -rotate-3 border border-[#B98B51] bg-[#FFF1D8] p-8 text-[#123C39] shadow-[10px_15px_22px_rgba(31,18,8,0.46)] md:p-10"
               style={{
                 backgroundImage:
-                  "radial-gradient(ellipse at 96% 10%, rgba(138,83,31,0.14), transparent 28%), radial-gradient(ellipse at 14% 92%, rgba(138,83,31,0.1), transparent 30%)",
+                  "repeating-linear-gradient(to bottom, transparent 0, transparent 35px, rgba(155,98,40,0.16) 36px)",
               }}
             >
-              <div className="absolute inset-y-8 left-0 w-px bg-[#9A622A]/25" />
-              <p className="text-sm uppercase tracking-[0.35em] text-[#9A622A]">
-                Bring an old recipe back to life
-              </p>
-              <h2 className="mt-5 max-w-xl text-4xl font-bold leading-tight md:text-6xl">
-                Scan a handwritten recipe card
-              </h2>
-              <p className="mt-7 max-w-xl text-lg leading-8 text-[#5B4834] md:text-xl">
-                Take a clear photo of a recipe card or notebook page and OPR will
-                make an editable first draft of the title, ingredients and method.
-                You stay in control and can correct every word before sharing.
-              </p>
-              <Link
-                href="/share#scan-a-recipe"
-                className="mt-10 inline-flex w-fit items-center rounded-full bg-[#123C39] px-8 py-4 text-lg font-bold text-[#FFF3DF] shadow-lg transition hover:scale-105 hover:bg-[#1C5A50]"
-              >
-                Choose the recipe card →
-              </Link>
-              <p className="mt-5 text-sm italic text-[#795432]">Your original stays yours. The draft is always editable.</p>
+              <p className="text-xs uppercase tracking-[0.28em] text-[#8B5A2B]">From the kitchen drawer</p>
+              <p className="mt-5 text-4xl italic leading-tight text-[#123C39] md:text-5xl">Nana&apos;s recipe</p>
+              <div className="mt-9 space-y-3 opacity-70">
+                <div className="h-0.5 w-4/5 bg-[#8B5A2B]" />
+                <div className="h-0.5 w-full bg-[#8B5A2B]" />
+                <div className="h-0.5 w-3/5 bg-[#8B5A2B]" />
+                <div className="h-0.5 w-11/12 bg-[#8B5A2B]" />
+              </div>
+              <p className="mt-12 text-lg italic text-[#6C472A]">Written down with love.</p>
             </div>
+          </div>
+
+          <div className="text-[#FFF3DF]">
+            <p className="text-sm uppercase tracking-[0.35em] text-[#FFD58C]">
+              Bring an old recipe back to life
+            </p>
+            <h2 className="mt-5 max-w-xl text-4xl font-bold leading-tight md:text-6xl">
+              Scan a handwritten recipe card
+            </h2>
+            <p className="mt-7 max-w-xl text-lg leading-8 text-[#F1DFC5] md:text-xl">
+              Take a clear photo of a recipe card or notebook page and OPR will
+              make an editable first draft of the title, ingredients and method.
+              You stay in control and can correct every word before sharing.
+            </p>
+            <Link
+              href="/share#scan-a-recipe"
+              className="mt-10 inline-flex w-fit items-center rounded-full bg-[#DDB765] px-8 py-4 text-lg font-bold text-[#123C39] shadow-lg transition hover:scale-105 hover:bg-[#F0CC7A]"
+            >
+              Choose the recipe card →
+            </Link>
+            <p className="mt-5 text-sm italic text-[#DABF91]">Your original stays yours. The draft is always editable.</p>
           </div>
         </div>
       </section>
