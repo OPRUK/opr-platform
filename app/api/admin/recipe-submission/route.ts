@@ -12,22 +12,30 @@ async function getAdminClient(request: Request) {
   const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
   const secretKey = process.env.SUPABASE_SECRET_KEY;
 
-  if (!token || !publicUrl || !publishableKey || !secretKey) return null;
+  if (!token) return { client: null, error: "Your secure sign-in has expired. Please sign out and use a new sign-in link." };
+  if (!publicUrl || !publishableKey || !secretKey) {
+    return { client: null, error: "The private inbox connection is not fully configured." };
+  }
 
   const authClient = createClient(publicUrl, publishableKey, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
-  const { data: authData } = await authClient.auth.getUser(token);
-  if (authData.user?.email !== adminEmail) return null;
+  const { data: authData, error: authError } = await authClient.auth.getUser(token);
+  if (authError || authData.user?.email?.toLowerCase() !== adminEmail) {
+    return { client: null, error: "This secure sign-in is not authorised for the OPR inbox. Please sign out and use the OPR team email." };
+  }
 
-  return createClient(publicUrl, secretKey, {
-    auth: { persistSession: false, autoRefreshToken: false },
-  });
+  return {
+    client: createClient(publicUrl, secretKey, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    }),
+    error: null,
+  };
 }
 
 export async function GET(request: Request) {
-  const adminClient = await getAdminClient(request);
-  if (!adminClient) return Response.json({ error: "Not authorised" }, { status: 401 });
+  const { client: adminClient, error: accessError } = await getAdminClient(request);
+  if (!adminClient) return Response.json({ error: accessError }, { status: 401 });
 
   const { data, error } = await adminClient
     .from("recipe_submissions")
@@ -42,8 +50,8 @@ export async function GET(request: Request) {
 }
 
 export async function PATCH(request: Request) {
-  const adminClient = await getAdminClient(request);
-  if (!adminClient) return Response.json({ error: "Not authorised" }, { status: 401 });
+  const { client: adminClient, error: accessError } = await getAdminClient(request);
+  if (!adminClient) return Response.json({ error: accessError }, { status: 401 });
 
   try {
     const body = await request.json();
@@ -98,8 +106,8 @@ export async function PATCH(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const adminClient = await getAdminClient(request);
-  if (!adminClient) return Response.json({ error: "Not authorised" }, { status: 401 });
+  const { client: adminClient, error: accessError } = await getAdminClient(request);
+  if (!adminClient) return Response.json({ error: accessError }, { status: 401 });
 
   try {
     const { id } = await request.json();

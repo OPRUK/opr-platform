@@ -92,11 +92,21 @@ export default function AdminDashboard() {
 
   async function adminRequest(path: string, options: RequestInit = {}) {
     const { data } = await supabase.auth.getSession();
+    let accessToken = data.session?.access_token ?? "";
+    const expiresSoon = data.session?.expires_at
+      ? data.session.expires_at * 1000 - Date.now() < 60_000
+      : false;
+
+    if (expiresSoon) {
+      const { data: refreshed } = await supabase.auth.refreshSession();
+      accessToken = refreshed.session?.access_token ?? accessToken;
+    }
+
     return fetch(path, {
       ...options,
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${data.session?.access_token ?? ""}`,
+        Authorization: `Bearer ${accessToken}`,
         ...options.headers,
       },
     });
