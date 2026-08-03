@@ -199,21 +199,23 @@ export default async function Home() {
           <div className="relative flex min-h-[360px] items-center justify-center overflow-hidden rounded-[2rem] bg-[#79502D] p-8 shadow-2xl md:min-h-[480px] md:p-14">
             <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,232,181,0.16),transparent_42%,rgba(45,24,10,0.35))]" />
             <div
-              className="relative w-full max-w-sm -rotate-3 border border-[#B98B51] bg-[#FFF1D8] p-8 text-[#123C39] shadow-[10px_15px_22px_rgba(31,18,8,0.46)] md:p-10"
+              className="font-founder-hand relative w-full max-w-sm -rotate-3 overflow-hidden border border-[#A46C36] bg-[#E7C58D] p-8 text-[#123C39] shadow-[10px_15px_22px_rgba(31,18,8,0.46)] md:p-10"
               style={{
                 backgroundImage:
-                  "repeating-linear-gradient(to bottom, transparent 0, transparent 35px, rgba(155,98,40,0.16) 36px)",
+                  "radial-gradient(ellipse at 9% 8%, rgba(91,57,25,0.22), transparent 20%), radial-gradient(ellipse at 92% 84%, rgba(114,68,29,0.2), transparent 24%), radial-gradient(ellipse at 54% 43%, rgba(255,244,211,0.38), transparent 55%), repeating-linear-gradient(to bottom, transparent 0, transparent 35px, rgba(126,74,35,0.2) 36px)",
               }}
             >
+              <div className="pointer-events-none absolute -left-10 top-20 h-28 w-28 rounded-full bg-[#6A4022]/10 blur-2xl" />
+              <div className="pointer-events-none absolute -right-10 bottom-2 h-24 w-36 rotate-12 rounded-full bg-[#704323]/15 blur-2xl" />
               <p className="text-xs uppercase tracking-[0.28em] text-[#8B5A2B]">From the kitchen drawer</p>
-              <p className="mt-5 text-4xl italic leading-tight text-[#123C39] md:text-5xl">Nana&apos;s recipe</p>
-              <div className="mt-9 space-y-3 opacity-70">
-                <div className="h-0.5 w-4/5 bg-[#8B5A2B]" />
-                <div className="h-0.5 w-full bg-[#8B5A2B]" />
-                <div className="h-0.5 w-3/5 bg-[#8B5A2B]" />
-                <div className="h-0.5 w-11/12 bg-[#8B5A2B]" />
+              <p className="mt-5 text-4xl font-semibold italic leading-tight text-[#123C39] md:text-5xl">Nana&apos;s recipe</p>
+              <div className="mt-8 space-y-1 text-[1.45rem] leading-[1.45] text-[#5F3B23] md:text-[1.6rem]">
+                <p>1 cup of milk</p>
+                <p>a little butter</p>
+                <p>rice, sugar &amp; nutmeg</p>
+                <p className="pl-5">bake till golden</p>
               </div>
-              <p className="mt-12 text-lg italic text-[#6C472A]">Written down with love.</p>
+              <p className="mt-12 text-xl italic text-[#6C472A]">Written down with love.</p>
             </div>
           </div>
 
