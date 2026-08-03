@@ -25,6 +25,11 @@ const slides = [
     label: "Barbara's Beef Casserole · Swansea",
   },
   {
+    image: "/images/recipes/krishna-vantis-baingan-ka-bharta-wide.png",
+    alt: "Krishna Vanti's Baingan Ka Bharta",
+    label: "Krishna Vanti's Baingan Ka Bharta · From the family kitchen",
+  },
+  {
     image: "/images/recipes/sudeshs-bhindi-wide.png",
     alt: "Sudesh's Bhindi",
     label: "Sudesh's Bhindi",

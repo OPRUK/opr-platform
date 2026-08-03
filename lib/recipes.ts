@@ -148,6 +148,44 @@ export const featuredRecipes: FeaturedRecipe[] = [
       },
     ],
   },
+  {
+    slug: "krishna-vantis-baingan-ka-bharta",
+    title: "Krishna Vanti's Baingan Ka Bharta",
+    place: "From the family kitchen",
+    story:
+      "Once kept in a kitchen drawer, Krishna Vanti's baingan ka bharta has been carefully translated so everyone can make it their own. Smoky roasted aubergine, softly pink onions, tomatoes and fresh green chillies make a dish that carries a family story to every new table.",
+    ingredients: [
+      "1 large aubergine (eggplant)",
+      "Oil or ghee",
+      "Chopped onions",
+      "4–5 tomatoes, chopped",
+      "Salt",
+      "Degi mirch (Kashmiri red chilli powder)",
+      "2 green chillies, slit lengthways",
+    ],
+    method: [
+      "Roast the whole aubergine directly over an open gas flame, or in the oven, until the skin is completely charred and blackened and the inside is soft and collapsed.",
+      "Let it cool slightly, then peel away the charred skin and coarsely mash the soft flesh with a fork.",
+      "Heat oil or ghee in a pan over a medium heat. Add the chopped onions and cook only until soft and pink — do not let them turn brown.",
+      "Stir in the tomatoes, salt and degi mirch. Cook until the tomatoes break down completely and become part of the onions.",
+      "Add the two slit green chillies to the bubbling tomato-onion base so their fresh heat can infuse the masala.",
+      "Fold in the mashed roasted aubergine and stir thoroughly to coat it in the masala.",
+      "Lower the heat and simmer gently for 5–7 minutes, allowing the smoky aubergine to absorb the spices. Serve warm and make it your own.",
+    ],
+    image: "/images/recipes/krishna-vantis-baingan-ka-bharta-wide.png",
+    category: "Main",
+    number: "04",
+    notes: [
+      {
+        title: "Degi mirch",
+        text: "Degi mirch is a mild Kashmiri red chilli powder, used for its rich red colour as much as its gentle warmth. If you cannot find it, use mild paprika with a small pinch of cayenne to bring back a little heat.",
+      },
+      {
+        title: "Keep the onions pink",
+        text: "This is the key instruction from Krishna Vanti's recipe. Let the onions soften, but do not allow them to brown — it keeps the finished bharta sweet, fresh and light.",
+      },
+    ],
+  },
 ];
 
 export function getFeaturedRecipe(slug: string): FeaturedRecipe | undefined {
