@@ -3,7 +3,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import Navigation from "../../components/Navigation";
-import Footer from "../../components/Footer";
 import RecipeActions from "../../components/RecipeActions";
 import { getFeaturedRecipe } from "../../../lib/recipes";
 import { SITE_NAME, absoluteUrl } from "../../../lib/site";
@@ -230,7 +229,6 @@ export default async function RecipePage({
           Return to the Cookbook
         </Link>
       </section>
-      <Footer />
     </main>
   );
 }

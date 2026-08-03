@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Navigation from "./components/Navigation";
 import Image from "next/image";
 import Link from "next/link";
-import Footer from "./components/Footer";
 import HomeHero from "./components/HomeHero";
 import { supabase } from "../lib/supabase/client";
 
@@ -308,7 +307,6 @@ export default async function Home() {
             </div>
           </div>
       </section>
-      <Footer />
     </main>
   );
 }

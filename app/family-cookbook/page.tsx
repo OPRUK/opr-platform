@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Navigation from "../components/Navigation";
-import Footer from "../components/Footer";
 import PublishedRecipes from "./PublishedRecipes";
 import { featuredRecipes } from "../../lib/recipes";
 
@@ -76,7 +75,6 @@ export default function FamilyCookbook() {
           Share Your Story
         </Link>
       </section>
-      <Footer />
     </main>
   );
 }

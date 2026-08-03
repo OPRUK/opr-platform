@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Allura, Caveat } from "next/font/google";
-import Footer from "../components/Footer";
 import Navigation from "../components/Navigation";
 
 // Caveat gives the letter a warm, natural handwritten feel. Allura is used
@@ -142,7 +141,6 @@ export default function FounderPage() {
         </div>
       </section>
 
-      <Footer />
     </main>
   );
 }

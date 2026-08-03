@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Footer from "../components/Footer";
 import Navigation from "../components/Navigation";
 
 export const metadata: Metadata = {
@@ -36,7 +35,6 @@ export default function CookieNoticePage() {
           </div>
         </div>
       </section>
-      <Footer />
     </main>
   );
 }

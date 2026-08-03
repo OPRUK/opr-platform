@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Navigation from "../components/Navigation";
 import RecipeForm from "./RecipeForm";
-import Footer from "../components/Footer";
 
 export const metadata: Metadata = {
   title: "Share Your Family's Recipe",
@@ -52,7 +51,6 @@ export default function ShareYourStory() {
           </div>
         </div>
       </section>
-      <Footer />
     </main>
   );
 }

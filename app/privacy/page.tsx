@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Navigation from "../components/Navigation";
-import Footer from "../components/Footer";
 
 export const metadata: Metadata = {
   title: "Privacy Notice",
@@ -102,7 +101,6 @@ export default function PrivacyPolicyPage() {
           </div>
         </div>
       </section>
-      <Footer />
     </main>
   );
 }

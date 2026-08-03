@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Footer from "../components/Footer";
 import Navigation from "../components/Navigation";
 import UnsubscribeForm from "./UnsubscribeForm";
 import { hasValidUnsubscribeToken } from "../../lib/unsubscribe";
@@ -42,7 +41,6 @@ export default async function UnsubscribePage({
           )}
         </div>
       </section>
-      <Footer />
     </main>
   );
 }

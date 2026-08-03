@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Footer from "../components/Footer";
 import HeroCarousel from "../components/HeroCarousel";
 import Navigation from "../components/Navigation";
 import FoundingTableForm from "./FoundingTableForm";
@@ -87,7 +86,6 @@ export default function FoundingTablePage() {
         </h2>
       </section>
 
-      <Footer />
     </main>
   );
 }

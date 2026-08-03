@@ -3,6 +3,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import { SITE_NAME, SITE_URL, absoluteUrl } from "../lib/site";
+import SiteFooter from "./components/SiteFooter";
 
 const cormorantGaramond = Cormorant_Garamond({
   subsets: ["latin"],
@@ -67,6 +68,7 @@ export default function RootLayout({
     <html lang="en" className={`h-full antialiased ${cormorantGaramond.variable}`}>
       <body className="min-h-full flex flex-col">
         {children}
+        <SiteFooter />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Navigation from "../components/Navigation";
-import Footer from "../components/Footer";
 
 export const metadata: Metadata = {
   title: "The OPR Film Collection",
@@ -113,7 +112,6 @@ export default function FilmsPage() {
           Every recipe has a story. Perhaps yours is the one we tell next.
         </h2>
       </section>
-      <Footer />
     </main>
   );
 }

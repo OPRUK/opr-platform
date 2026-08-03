@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Navigation from "../components/Navigation";
-import Footer from "../components/Footer";
 
 export const metadata: Metadata = {
   title: "Terms of Use",
@@ -55,7 +54,6 @@ export default function TermsPage() {
           </div>
         </div>
       </section>
-      <Footer />
     </main>
   );
 }
