@@ -165,7 +165,7 @@ export default async function Home() {
                 className="group rounded-3xl bg-[#FFF3DF] p-10 text-left shadow-lg shadow-[#1C5A50]/15 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
               >
                 <h3 className="mb-4 text-2xl font-bold text-[#123C39]">
-                  Treasured Recipes
+                  Kitchen Keepsakes
                 </h3>
 
                 <p className="text-stone-600">
