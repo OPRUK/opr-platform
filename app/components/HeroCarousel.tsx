@@ -29,11 +29,6 @@ const slides = [
     alt: "Krishna Vanti's Baingan Ka Bharta",
     label: "Krishna Vanti's Baingan Ka Bharta · From the family kitchen",
   },
-  {
-    image: "/images/recipes/sudeshs-bhindi-wide.png",
-    alt: "Sudesh's Bhindi",
-    label: "Sudesh's Bhindi",
-  },
 ];
 
 export default function HeroCarousel() {

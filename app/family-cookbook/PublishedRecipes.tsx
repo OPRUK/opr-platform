@@ -77,9 +77,7 @@ export default function PublishedRecipes({
       category: recipe.category,
       imageUrl: recipe.photo_path
         ? supabase.storage.from("recipe-photos").getPublicUrl(recipe.photo_path).data.publicUrl
-        : recipe.title.toLowerCase().includes("sudesh") && recipe.title.toLowerCase().includes("bhindi")
-          ? "/images/recipes/sudeshs-bhindi-wide.png"
-          : null,
+        : null,
       href: `/family-cookbook/community/${recipe.id}`,
     })),
   ];
