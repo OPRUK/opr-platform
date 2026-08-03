@@ -135,6 +135,25 @@ export default function PublishedRecipes({
         </div>
       </div>
 
+      <div className="mt-8 rounded-3xl border border-[#D1AD75]/70 bg-[#F4DDAE]/55 px-6 py-6 md:flex md:items-center md:justify-between md:gap-8">
+        <div>
+          <p className="text-sm uppercase tracking-[0.22em] text-[#9A622A]">
+            The cookbook is growing
+          </p>
+          <p className="mt-2 max-w-2xl leading-7 text-stone-700">
+            These are the first {cards.length} family recipes to find their place
+            in the OPR cookbook. Have a recipe waiting in a drawer, notebook or
+            memory? Help write the next page.
+          </p>
+        </div>
+        <Link
+          href="/share"
+          className="mt-5 inline-flex shrink-0 rounded-full bg-[#123C39] px-5 py-3 font-medium text-white transition hover:scale-105 md:mt-0"
+        >
+          Share your recipe →
+        </Link>
+      </div>
+
       <p className="mt-8 text-sm text-stone-600">
         {visibleRecipes.length} {visibleRecipes.length === 1 ? "recipe" : "recipes"} to discover
       </p>
