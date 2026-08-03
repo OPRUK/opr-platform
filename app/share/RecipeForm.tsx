@@ -638,7 +638,8 @@ export default function RecipeForm() {
           ) : null}
           {recipeReadMessage ? <p className="mt-5 rounded-xl bg-[#E2F2E7] px-4 py-3 text-sm leading-6 text-[#123C39]">{recipeReadMessage}</p> : null}
           <p className="mt-4 text-xs leading-5 text-stone-600">
-            When you choose “Read my recipe with AI”, the image is sent only to create this editable draft. It is not saved by the reader itself.
+            When you choose “Read my recipe with AI”, the image is securely sent to OpenAI only to create this editable draft. Check every detail before sharing. It is not saved by the reader itself. Read our{" "}
+            <Link href="/privacy" className="underline underline-offset-2">Privacy Notice</Link>.
           </p>
         </div>
 
@@ -723,7 +724,7 @@ export default function RecipeForm() {
           name="marketingOptIn"
           className="mt-1 h-4 w-4 accent-[#123C39]"
         />
-        <span>Keep me posted about OPR news and events.</span>
+        <span>Keep me posted about OPR news and events. You can unsubscribe at any time.</span>
       </label>
 
       <button
@@ -742,7 +743,8 @@ export default function RecipeForm() {
 
       <p className="mt-5 text-sm leading-6 text-stone-600">
         Your recipe is sent securely to the OPR team. We&apos;ll only use your
-        details to respond about your submission.
+        details to respond about your submission. Read our{" "}
+        <Link href="/privacy" className="underline underline-offset-4">Privacy Notice</Link>.
       </p>
     </form>
   );

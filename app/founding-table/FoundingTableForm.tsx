@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { FormEvent, useState } from "react";
 
 export default function FoundingTableForm() {
@@ -85,7 +86,8 @@ export default function FoundingTableForm() {
         {isSubmitting ? "Joining the table…" : "Join the Founding Table"}
       </button>
       <p className="text-center text-xs leading-5 text-[#F0D4A0]">
-        Your details are kept securely for the Founding Table. You can unsubscribe from optional news at any time.
+        Your details are kept securely for the Founding Table. You can unsubscribe from optional news at any time. Read our{" "}
+        <Link href="/privacy" className="underline underline-offset-2">Privacy Notice</Link>.
       </p>
       {message ? <p className="text-center text-sm text-[#FFE4A3]">{message}</p> : null}
     </form>
