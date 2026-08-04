@@ -91,7 +91,6 @@ export default function HomeHero({ children }: HomeHeroProps) {
         poster={activeFilm.poster}
         data-film-index={filmIndex}
         onEnded={(event) => playNextFilm(Number(event.currentTarget.dataset.filmIndex))}
-        onError={(event) => playNextFilm(Number(event.currentTarget.dataset.filmIndex))}
         onCanPlay={() => {
           void videoRef.current?.play().catch(() => {
             // Some browsers require the visitor to start a muted video manually.
