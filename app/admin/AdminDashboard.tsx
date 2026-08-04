@@ -2,6 +2,7 @@
 
 import type { Session } from "@supabase/supabase-js";
 import { FormEvent, useEffect, useState } from "react";
+import { featuredRecipes } from "../../lib/recipes";
 import { supabase } from "../../lib/supabase/client";
 
 type SubmissionStatus = "new" | "reviewed" | "selected";
@@ -43,6 +44,12 @@ type CommunityCook = {
   recipe_submissions: { title: string } | null;
 };
 
+type RecipeOfMonthResults = {
+  monthKey: string;
+  totals: Record<string, number>;
+  totalVotes: number;
+};
+
 const allowedEmail = "chaten@otherpeoplesrecipes.co.uk";
 
 const statusStyle: Record<SubmissionStatus, string> = {
@@ -57,6 +64,7 @@ export default function AdminDashboard() {
   const [message, setMessage] = useState("");
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [communityCooks, setCommunityCooks] = useState<CommunityCook[]>([]);
+  const [recipeOfMonthResults, setRecipeOfMonthResults] = useState<RecipeOfMonthResults | null>(null);
   const [selectedSubmission, setSelectedSubmission] = useState<Submission | null>(null);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<number | null>(null);
@@ -86,9 +94,10 @@ export default function AdminDashboard() {
 
     async function loadSubmissions() {
       setLoading(true);
-      const [recipeResponse, communityResponse] = await Promise.all([
+      const [recipeResponse, communityResponse, votingResponse] = await Promise.all([
         adminRequest("/api/admin/recipe-submission"),
         adminRequest("/api/admin/community-cook"),
+        adminRequest("/api/admin/recipe-of-month"),
       ]);
       if (!recipeResponse.ok) {
         const payload = await recipeResponse.json().catch(() => null);
@@ -106,6 +115,9 @@ export default function AdminDashboard() {
         setCommunityCooks((data ?? []) as CommunityCook[]);
       } else if (recipeResponse.ok) {
         setMessage("The recipe inbox loaded, but community posts could not be loaded just now.");
+      }
+      if (votingResponse.ok) {
+        setRecipeOfMonthResults((await votingResponse.json()) as RecipeOfMonthResults);
       }
       setLoading(false);
     }
@@ -376,6 +388,15 @@ export default function AdminDashboard() {
       : null;
   }
 
+  const recipeVoteLabels = new Map<string, string>(
+    featuredRecipes.map((recipe) => [`featured-${recipe.slug}`, recipe.title]),
+  );
+  for (const submission of submissions) {
+    recipeVoteLabels.set(`community-${submission.id}`, submission.title);
+  }
+  const monthlyVoteLeaders = Object.entries(recipeOfMonthResults?.totals ?? {})
+    .sort(([, firstVotes], [, secondVotes]) => secondVotes - firstVotes);
+
   if (loading && !session) {
     return <main className="min-h-screen bg-[#EED8B2]" />;
   }
@@ -460,6 +481,34 @@ export default function AdminDashboard() {
           {message}
         </p>
       ) : null}
+
+      <section className="mx-auto mt-10 max-w-7xl overflow-hidden rounded-3xl border border-[#D1AD75]/70 bg-[#123C39] px-6 py-7 text-[#FFF3DF] shadow-xl shadow-[#1C5A50]/15 md:px-8">
+        <p className="text-sm uppercase tracking-[0.3em] text-[#F0C45A]">Recipe of the Month</p>
+        <div className="mt-3 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+          <div>
+            <h2 className="text-2xl font-bold">This month&apos;s voting</h2>
+            <p className="mt-2 text-sm leading-6 text-[#F6E3BE]">
+              {recipeOfMonthResults
+                ? `${recipeOfMonthResults.totalVotes} ${recipeOfMonthResults.totalVotes === 1 ? "vote has" : "votes have"} been cast in ${new Intl.DateTimeFormat("en-GB", { month: "long", timeZone: "Europe/London" }).format(new Date(`${recipeOfMonthResults.monthKey}-01T12:00:00Z`))}.`
+                : "Voting results will appear here once the new voting table is live."}
+            </p>
+          </div>
+          <p className="max-w-md text-sm leading-6 text-[#F6E3BE]">At month-end, use the leading recipe as your clear winner, then announce it through the homepage and social channels.</p>
+        </div>
+        {recipeOfMonthResults ? (
+          monthlyVoteLeaders.length ? (
+            <ol className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {monthlyVoteLeaders.map(([recipeKey, votes], index) => (
+                <li key={recipeKey} className="rounded-2xl border border-[#D1AD75]/60 bg-white/10 px-4 py-4">
+                  <p className="text-xs uppercase tracking-[0.18em] text-[#F0C45A]">{index === 0 ? "Leading recipe" : `Place ${index + 1}`}</p>
+                  <p className="mt-2 font-bold text-white">{recipeVoteLabels.get(recipeKey) ?? "A recipe shared with OPR"}</p>
+                  <p className="mt-1 text-sm text-[#F6E3BE]">{votes} {votes === 1 ? "vote" : "votes"}</p>
+                </li>
+              ))}
+            </ol>
+          ) : <p className="mt-6 rounded-2xl border border-[#D1AD75]/60 bg-white/10 px-4 py-4 text-sm text-[#F6E3BE]">No votes yet. The first visitor can choose the recipe that should take this month&apos;s table.</p>
+        ) : null}
+      </section>
 
       <section className="mx-auto mt-10 grid max-w-7xl gap-8 lg:grid-cols-[0.9fr_1.1fr]">
         <div className="overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-xl shadow-[#1C5A50]/10">

@@ -34,6 +34,12 @@ type RecipeCard = {
   href: string;
 };
 
+type VoteResults = {
+  monthKey: string;
+  selectedRecipeKey: string | null;
+  totals: Record<string, number>;
+};
+
 function recipeTitleKey(title: string) {
   return title
     .toLocaleLowerCase("en-GB")
@@ -49,6 +55,9 @@ export default function PublishedRecipes({
   const [communityRecipes, setCommunityRecipes] = useState<PublishedRecipe[]>([]);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
+  const [voteResults, setVoteResults] = useState<VoteResults | null>(null);
+  const [voteError, setVoteError] = useState("");
+  const [votingFor, setVotingFor] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadPublishedRecipes() {
@@ -62,6 +71,20 @@ export default function PublishedRecipes({
     }
 
     void loadPublishedRecipes();
+  }, []);
+
+  useEffect(() => {
+    async function loadVoting() {
+      try {
+        const response = await fetch("/api/recipe-of-month", { cache: "no-store" });
+        if (!response.ok) return;
+        setVoteResults((await response.json()) as VoteResults);
+      } catch {
+        // The cookbook still works if voting has not yet been switched on.
+      }
+    }
+
+    void loadVoting();
   }, []);
 
   const curatedRecipeTitles = new Set(
@@ -134,6 +157,34 @@ export default function PublishedRecipes({
       return courseDifference || firstRecipe.title.localeCompare(secondRecipe.title, "en");
     });
 
+  const monthName = voteResults
+    ? new Intl.DateTimeFormat("en-GB", { month: "long", timeZone: "Europe/London" }).format(
+        new Date(`${voteResults.monthKey}-01T12:00:00Z`),
+      )
+    : new Intl.DateTimeFormat("en-GB", { month: "long", timeZone: "Europe/London" }).format(new Date());
+  const hasVoted = Boolean(voteResults?.selectedRecipeKey);
+
+  async function voteForRecipe(recipeKey: string) {
+    if (hasVoted || votingFor) return;
+
+    setVotingFor(recipeKey);
+    setVoteError("");
+    try {
+      const response = await fetch("/api/recipe-of-month", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ recipeKey }),
+      });
+      const payload = (await response.json()) as VoteResults & { error?: string };
+      if (!response.ok) throw new Error(payload.error ?? "Your vote could not be saved just now.");
+      setVoteResults(payload);
+    } catch (error) {
+      setVoteError(error instanceof Error ? error.message : "Your vote could not be saved just now.");
+    } finally {
+      setVotingFor(null);
+    }
+  }
+
   return (
     <section>
       <div className="rounded-3xl border border-[#D1AD75]/70 bg-[#FFF3DF] p-5 shadow-sm shadow-[#1C5A50]/10 md:flex md:items-center md:justify-between md:gap-6 md:p-6">
@@ -183,6 +234,45 @@ export default function PublishedRecipes({
           Share your recipe →
         </Link>
       </div>
+
+      <section className="mt-10 overflow-hidden rounded-3xl border border-[#D1AD75]/80 bg-[#123C39] px-6 py-9 text-[#FFF3DF] shadow-xl shadow-[#1C5A50]/20 md:px-10">
+        <div className="max-w-3xl">
+          <p className="text-sm uppercase tracking-[0.28em] text-[#F0C45A]">OPR Recipe of the Month</p>
+          <h2 className="mt-3 text-4xl font-bold leading-tight md:text-5xl">Which recipe should take the table this {monthName}?</h2>
+          <p className="mt-4 max-w-2xl leading-7 text-[#F6E3BE]">
+            Choose the family recipe you would most like to cook. The winning story becomes OPR&apos;s Recipe of the Month.
+          </p>
+          <p className="mt-4 text-sm text-[#F0C45A]">
+            {hasVoted ? "Your vote is safely recorded. Thank you for helping choose this month’s recipe." : "One vote per person each month."}
+          </p>
+        </div>
+
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {cards.map((recipe) => {
+            const selected = voteResults?.selectedRecipeKey === recipe.id;
+            const votes = voteResults?.totals[recipe.id] ?? 0;
+
+            return (
+              <div key={recipe.id} className={`rounded-2xl border p-5 ${selected ? "border-[#F0C45A] bg-[#1D665C]" : "border-[#D1AD75]/60 bg-white/10"}`}>
+                <p className="text-xs uppercase tracking-[0.18em] text-[#F0C45A]">{recipe.category}</p>
+                <h3 className="mt-2 text-xl font-bold text-white">{recipe.title}</h3>
+                <p className="mt-1 text-sm text-[#F6E3BE]">{recipe.location ?? "From the OPR cookbook"}</p>
+                <button
+                  type="button"
+                  onClick={() => voteForRecipe(recipe.id)}
+                  disabled={hasVoted || Boolean(votingFor)}
+                  className={`mt-5 rounded-full px-4 py-2.5 text-sm font-semibold transition ${selected ? "bg-[#F0C45A] text-[#123C39]" : hasVoted ? "cursor-default border border-[#D1AD75]/70 text-[#F6E3BE]" : "bg-[#F0C45A] text-[#123C39] hover:scale-105"}`}
+                >
+                  {selected ? "Your choice ✓" : votingFor === recipe.id ? "Saving your vote…" : hasVoted ? "Voting complete" : "Vote for this recipe"}
+                </button>
+                {hasVoted ? <p className="mt-3 text-sm text-[#F6E3BE]">{votes} {votes === 1 ? "vote" : "votes"}</p> : null}
+              </div>
+            );
+          })}
+        </div>
+
+        {voteError ? <p className="mt-5 rounded-xl border border-red-300/70 bg-red-950/30 px-4 py-3 text-sm text-red-100">{voteError}</p> : null}
+      </section>
 
       <p className="mt-8 text-sm text-stone-600">
         {visibleRecipes.length} {visibleRecipes.length === 1 ? "recipe" : "recipes"} to discover
