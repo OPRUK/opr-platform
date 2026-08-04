@@ -9,6 +9,12 @@ type HomeHeroProps = {
 
 const introductionFilms = [
   {
+    desktop: "/videos/opr-kitchen-drawer-film.mp4",
+    mobile: "/videos/opr-kitchen-drawer-film-mobile.mp4",
+    poster: "/images/opr-kitchen-drawer-film-poster.jpg",
+    label: "A recipe brought back from the kitchen drawer",
+  },
+  {
     desktop: "/videos/opr-home-introduction-complete.mp4",
     mobile: "/videos/opr-home-introduction-complete-mobile.mp4",
     poster: "/images/opr-home-introduction-poster.jpg",
