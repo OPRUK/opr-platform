@@ -23,13 +23,24 @@ export async function POST(request: Request) {
     }
 
     const formData = await request.formData();
-    const recipeId = Number(readText(formData, "recipeId", true));
+    const recipeIdText = readText(formData, "recipeId");
+    const recipeId = recipeIdText ? Number(recipeIdText) : null;
+    const recipeSlug = readText(formData, "recipeSlug");
+    const recipeTitle = readText(formData, "recipeTitle");
     const name = readText(formData, "name", true);
     const note = readText(formData, "note");
     const agreementAccepted = readText(formData, "agreementAccepted") === "true";
     const photo = formData.get("photo");
 
-    if (!Number.isInteger(recipeId) || recipeId < 1) {
+    const isCommunityRecipe = recipeId !== null;
+    const isCuratedRecipe = Boolean(recipeSlug);
+    if ((!isCommunityRecipe && !isCuratedRecipe) || (isCommunityRecipe && isCuratedRecipe)) {
+      return Response.json({ error: "A valid recipe is required" }, { status: 400 });
+    }
+    if (isCommunityRecipe && (!Number.isInteger(recipeId) || recipeId < 1)) {
+      return Response.json({ error: "A valid recipe is required" }, { status: 400 });
+    }
+    if (isCuratedRecipe && (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(recipeSlug) || recipeTitle.length > 160 || !recipeTitle)) {
       return Response.json({ error: "A valid recipe is required" }, { status: 400 });
     }
     if (name.length > 80 || note.length > 1000) {
@@ -48,14 +59,16 @@ export async function POST(request: Request) {
     const supabase = createClient(supabaseUrl, secretKey, {
       auth: { persistSession: false, autoRefreshToken: false },
     });
-    const { data: recipe, error: recipeError } = await supabase
-      .from("recipe_submissions")
-      .select("id")
-      .eq("id", recipeId)
-      .eq("is_published", true)
-      .maybeSingle();
-    if (recipeError || !recipe) {
-      return Response.json({ error: "This recipe is not available for community sharing" }, { status: 404 });
+    if (isCommunityRecipe) {
+      const { data: recipe, error: recipeError } = await supabase
+        .from("recipe_submissions")
+        .select("id")
+        .eq("id", recipeId)
+        .eq("is_published", true)
+        .maybeSingle();
+      if (recipeError || !recipe) {
+        return Response.json({ error: "This recipe is not available for community sharing" }, { status: 404 });
+      }
     }
 
     let photoPath: string | null = null;
@@ -69,6 +82,8 @@ export async function POST(request: Request) {
 
     const { error: insertError } = await supabase.from("recipe_community_cooks").insert({
       recipe_submission_id: recipeId,
+      recipe_slug: recipeSlug || null,
+      recipe_title: recipeTitle || null,
       name,
       note: note || null,
       photo_path: photoPath,

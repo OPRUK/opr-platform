@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Navigation from "../../../components/Navigation";
 import RecipeActions from "../../../components/RecipeActions";
-import CommunityCookForm from "./CommunityCookForm";
+import CommunityCookForm from "../../../components/CommunityCookForm";
+import FamiliesWhoMadeThis from "../../../components/FamiliesWhoMadeThis";
 import { supabase } from "../../../../lib/supabase/client";
+import { getApprovedCommunityCooks } from "../../../../lib/community-cooks";
 import { SITE_NAME, absoluteUrl } from "../../../../lib/site";
 
 export const dynamic = "force-dynamic";
@@ -24,13 +26,6 @@ type CommunityRecipe = {
   original_recipe_path: string | null;
   audio_story_path: string | null;
   recipe_video_path: string | null;
-};
-
-type CommunityCook = {
-  id: number;
-  name: string;
-  note: string | null;
-  photo_path: string | null;
 };
 
 function truncate(text: string, maxLength: number): string {
@@ -82,27 +77,6 @@ function audioStoryUrlFor(recipe: CommunityRecipe): string | null {
 function recipeVideoUrlFor(recipe: CommunityRecipe): string | null {
   return recipe.recipe_video_path
     ? supabase.storage.from("recipe-photos").getPublicUrl(recipe.recipe_video_path).data.publicUrl
-    : null;
-}
-
-async function getCommunityCooks(recipeId: number): Promise<CommunityCook[]> {
-  const { data, error } = await supabase
-    .from("recipe_community_cooks")
-    .select("id, name, note, photo_path")
-    .eq("recipe_submission_id", recipeId)
-    .eq("is_approved", true)
-    .order("approved_at", { ascending: false });
-
-  if (error) {
-    console.error("OPR community cooks could not be loaded", error);
-    return [];
-  }
-  return (data ?? []) as CommunityCook[];
-}
-
-function communityCookPhotoUrlFor(cook: CommunityCook): string | null {
-  return cook.photo_path
-    ? supabase.storage.from("recipe-photos").getPublicUrl(cook.photo_path).data.publicUrl
     : null;
 }
 
@@ -163,7 +137,7 @@ export default async function CommunityRecipePage({
   }
 
   const imageUrl = imageUrlFor(recipe);
-  const communityCooks = await getCommunityCooks(recipe.id);
+  const communityCooks = await getApprovedCommunityCooks({ recipeId: recipe.id });
   const contributorPhotoUrl = contributorPhotoUrlFor(recipe);
   const originalRecipeImageUrl = originalRecipeImageUrlFor(recipe);
   const audioStoryUrl = audioStoryUrlFor(recipe);
@@ -300,35 +274,7 @@ export default async function CommunityRecipePage({
           </div>
         </section>
       ) : null}
-      {communityCooks.length ? (
-        <section className="bg-[#123C39] px-6 py-20 text-white">
-          <div className="mx-auto max-w-6xl">
-            <div className="max-w-2xl">
-              <p className="text-sm uppercase tracking-[0.35em] text-amber-300">Cooked by our community</p>
-              <h2 className="mt-5 text-4xl font-bold">This recipe has found new tables.</h2>
-              <p className="mt-5 leading-7 text-stone-200">A few of the people who have brought this recipe into their own homes.</p>
-            </div>
-            <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {communityCooks.map((cook) => {
-                const cookPhotoUrl = communityCookPhotoUrlFor(cook);
-                return (
-                  <article key={cook.id} className="rounded-3xl bg-white/10 p-6">
-                    <div className="flex items-center gap-4">
-                      {cookPhotoUrl ? (
-                        <img src={cookPhotoUrl} alt={`${cook.name}'s version of ${recipe.title}`} className="h-16 w-16 rounded-full object-cover" />
-                      ) : (
-                        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-amber-300 font-bold text-[#123C39]">{cook.name.charAt(0).toUpperCase()}</div>
-                      )}
-                      <p className="text-lg font-bold">{cook.name}</p>
-                    </div>
-                    {cook.note ? <p className="mt-5 leading-7 text-stone-100">“{cook.note}”</p> : null}
-                  </article>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-      ) : null}
+      <FamiliesWhoMadeThis cooks={communityCooks} recipeTitle={recipe.title} />
       <CommunityCookForm recipeId={recipe.id} recipeTitle={recipe.title} />
       <RecipeActions title={recipe.title} imageUrl={imageUrl} />
       <section className="px-6 py-20 text-center">

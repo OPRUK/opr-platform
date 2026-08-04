@@ -26,7 +26,7 @@ export async function GET(request: Request) {
 
   const { data, error } = await adminClient
     .from("recipe_community_cooks")
-    .select("id, recipe_submission_id, name, note, photo_path, is_approved, created_at, recipe_submissions(title)")
+    .select("id, recipe_submission_id, recipe_slug, recipe_title, name, note, photo_path, is_approved, created_at, recipe_submissions(title)")
     .order("created_at", { ascending: false });
   if (error) return Response.json({ error: error.message }, { status: 400 });
   return Response.json({ communityCooks: data ?? [] });

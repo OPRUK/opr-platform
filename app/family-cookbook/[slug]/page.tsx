@@ -4,8 +4,13 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import Navigation from "../../components/Navigation";
 import RecipeActions from "../../components/RecipeActions";
+import CommunityCookForm from "../../components/CommunityCookForm";
+import FamiliesWhoMadeThis from "../../components/FamiliesWhoMadeThis";
 import { getFeaturedRecipe } from "../../../lib/recipes";
+import { getApprovedCommunityCooks } from "../../../lib/community-cooks";
 import { SITE_NAME, absoluteUrl } from "../../../lib/site";
+
+export const dynamic = "force-dynamic";
 
 function truncate(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text;
@@ -71,6 +76,8 @@ export default async function RecipePage({
   if (!recipe) {
     notFound();
   }
+
+  const communityCooks = await getApprovedCommunityCooks({ recipeSlug: recipe.slug });
 
   const recipeJsonLd = {
     "@context": "https://schema.org",
@@ -218,6 +225,9 @@ export default async function RecipePage({
           </div>
         </section>
       ) : null}
+
+      <FamiliesWhoMadeThis cooks={communityCooks} recipeTitle={recipe.title} />
+      <CommunityCookForm recipeSlug={recipe.slug} recipeTitle={recipe.title} />
 
       <RecipeActions title={recipe.title} imageUrl={recipe.image} />
 

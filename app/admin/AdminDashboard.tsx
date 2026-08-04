@@ -35,7 +35,9 @@ type Submission = {
 
 type CommunityCook = {
   id: number;
-  recipe_submission_id: number;
+  recipe_submission_id: number | null;
+  recipe_slug: string | null;
+  recipe_title: string | null;
   name: string;
   note: string | null;
   photo_path: string | null;
@@ -736,7 +738,7 @@ export default function AdminDashboard() {
                   <div className="flex min-w-0 items-center gap-4">
                     {photoUrl ? <img src={photoUrl} alt="" className="h-16 w-16 shrink-0 rounded-full object-cover" /> : <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#F4DDAE] font-bold">{cook.name.charAt(0).toUpperCase()}</div>}
                     <div>
-                      <p className="font-bold">{cook.name} <span className="font-normal text-stone-500">cooked {cook.recipe_submissions?.title ?? "an OPR recipe"}</span></p>
+                      <p className="font-bold">{cook.name} <span className="font-normal text-stone-500">cooked {cook.recipe_submissions?.title ?? cook.recipe_title ?? "an OPR recipe"}</span></p>
                       {cook.note ? <p className="mt-1 max-w-2xl text-sm leading-6 text-stone-700">“{cook.note}”</p> : <p className="mt-1 text-sm text-stone-500">No note supplied.</p>}
                       <p className={`mt-2 text-xs font-bold uppercase tracking-[0.18em] ${cook.is_approved ? "text-[#2E5A35]" : "text-[#9A622A]"}`}>{cook.is_approved ? "Live on recipe page" : "Awaiting approval"}</p>
                     </div>
