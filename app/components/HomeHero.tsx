@@ -7,17 +7,33 @@ type HomeHeroProps = {
   children: ReactNode;
 };
 
-const introductionFilm = {
-  desktop: "/videos/opr-home-introduction-complete.mp4",
-  mobile: "/videos/opr-home-introduction-complete-mobile.mp4",
-  poster: "/images/opr-home-introduction-poster.jpg",
-  label: "Other People's Recipes introduction films",
-};
+const introductionFilms = [
+  {
+    desktop: "/videos/opr-home-introduction-complete.mp4",
+    mobile: "/videos/opr-home-introduction-complete-mobile.mp4",
+    poster: "/images/opr-home-introduction-poster.jpg",
+    label: "Other People's Recipes introduction film one",
+  },
+  {
+    desktop: "/videos/opr-home-introduction-original.mp4",
+    mobile: "/videos/opr-home-introduction-original-mobile.mp4",
+    poster: "/images/opr-home-introduction-poster.jpg",
+    label: "Other People's Recipes introduction film two",
+  },
+  {
+    desktop: "/videos/opr-make-your-recipe-film.mp4",
+    mobile: "/videos/opr-make-your-recipe-film-mobile.mp4",
+    poster: "/images/opr-make-your-recipe-film-poster.jpg",
+    label: "Other People's Recipes introduction film three",
+  },
+];
 
 export default function HomeHero({ children }: HomeHeroProps) {
   const [introductionComplete, setIntroductionComplete] = useState(false);
+  const [filmIndex, setFilmIndex] = useState(0);
   const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const activeFilm = introductionFilms[filmIndex];
 
   useEffect(() => {
     if (introductionComplete || !videoRef.current) return;
@@ -35,7 +51,12 @@ export default function HomeHero({ children }: HomeHeroProps) {
     setIsMuted((current) => !current);
   }
 
-  function finishIntroduction() {
+  function playNextFilm() {
+    if (filmIndex < introductionFilms.length - 1) {
+      setFilmIndex((current) => current + 1);
+      return;
+    }
+
     setIntroductionComplete(true);
   }
 
@@ -51,23 +72,24 @@ export default function HomeHero({ children }: HomeHeroProps) {
 
       {!introductionComplete ? (
         <video
+          key={activeFilm.desktop}
           ref={videoRef}
           autoPlay
           muted={isMuted}
           playsInline
           preload="auto"
-          poster={introductionFilm.poster}
-          onEnded={finishIntroduction}
-          onError={finishIntroduction}
+          poster={activeFilm.poster}
+          onEnded={playNextFilm}
+          onError={playNextFilm}
           className="absolute inset-0 h-full w-full object-contain sm:object-cover"
-          aria-label={introductionFilm.label}
+          aria-label={activeFilm.label}
         >
           <source
             media="(max-width: 640px)"
-            src={introductionFilm.mobile}
+            src={activeFilm.mobile}
             type="video/mp4"
           />
-          <source src={introductionFilm.desktop} type="video/mp4" />
+          <source src={activeFilm.desktop} type="video/mp4" />
         </video>
       ) : null}
 
