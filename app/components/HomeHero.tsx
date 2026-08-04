@@ -71,16 +71,20 @@ export default function HomeHero({ children }: HomeHeroProps) {
       </div>
 
       {!introductionComplete ? (
-        <video
-          key={activeFilm.desktop}
-          ref={videoRef}
+      <video
+        key={activeFilm.desktop}
+        ref={videoRef}
           autoPlay
           muted={isMuted}
           playsInline
-          preload="auto"
-          poster={activeFilm.poster}
-          onEnded={playNextFilm}
-          onError={playNextFilm}
+        preload="auto"
+        poster={activeFilm.poster}
+        onEnded={playNextFilm}
+        onCanPlay={() => {
+          void videoRef.current?.play().catch(() => {
+            // Some browsers require the visitor to start a muted video manually.
+          });
+        }}
           className="absolute inset-0 h-full w-full object-contain sm:object-cover"
           aria-label={activeFilm.label}
         >
