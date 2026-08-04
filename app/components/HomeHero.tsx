@@ -33,6 +33,7 @@ export default function HomeHero({ children }: HomeHeroProps) {
   const [filmIndex, setFilmIndex] = useState(0);
   const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const completedFilmIndexRef = useRef<number | null>(null);
   const activeFilm = introductionFilms[filmIndex];
 
   useEffect(() => {
@@ -52,8 +53,16 @@ export default function HomeHero({ children }: HomeHeroProps) {
   }
 
   function playNextFilm() {
+    // Some browsers can emit a second "ended" event while swapping sources.
+    // Record the completed clip so that each film advances the sequence once.
+    if (completedFilmIndexRef.current === filmIndex) {
+      return;
+    }
+
+    completedFilmIndexRef.current = filmIndex;
+
     if (filmIndex < introductionFilms.length - 1) {
-      setFilmIndex((current) => current + 1);
+      setFilmIndex(filmIndex + 1);
       return;
     }
 
