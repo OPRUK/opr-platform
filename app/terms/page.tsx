@@ -14,7 +14,7 @@ export default function TermsPage() {
       <section className="bg-[#123C39] px-6 pb-20 pt-40 text-center text-white">
         <p className="mb-5 text-sm uppercase tracking-[0.4em] text-amber-300">Legal</p>
         <h1 className="mx-auto max-w-3xl text-5xl font-bold leading-tight md:text-6xl">Terms of Use</h1>
-        <p className="mt-6 text-sm uppercase tracking-[0.25em] text-stone-300">Last updated: 3 August 2026</p>
+        <p className="mt-6 text-sm uppercase tracking-[0.25em] text-stone-300">Last updated: 5 August 2026</p>
       </section>
       <section className="px-6 py-20">
         <div className="mx-auto max-w-3xl rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-12">
@@ -49,7 +49,7 @@ export default function TermsPage() {
             </div>
             <div>
               <h2 className="text-2xl font-bold text-[#123C39]">7. Contact and governing law</h2>
-              <p className="mt-3">Questions? Email <a className="underline underline-offset-4" href="mailto:info@otherpeoplesrecipes.co.uk">info@otherpeoplesrecipes.co.uk</a>. These terms are governed by the law of England and Wales.</p>
+              <p className="mt-3">Questions? Email <a className="underline underline-offset-4" href="mailto:info@otherpeoplesrecipes.co.uk">info@otherpeoplesrecipes.co.uk</a> or write to us at 1a Bazalgette Close, New Malden, KT3 5HG. These terms are governed by the law of England and Wales.</p>
             </div>
           </div>
         </div>

@@ -52,17 +52,18 @@ export default function HomeHero({ children }: HomeHeroProps) {
     setIsMuted((current) => !current);
   }
 
-  function playNextFilm() {
-    // Some browsers can emit a second "ended" event while swapping sources.
-    // Record the completed clip so that each film advances the sequence once.
-    if (completedFilmIndexRef.current === filmIndex) {
+  function playNextFilm(completedIndex: number) {
+    // Some browsers can emit a late second event while React is swapping the
+    // video element. Tie the event to the film that actually finished so an
+    // old clip can never skip a newer one.
+    if (completedFilmIndexRef.current === completedIndex) {
       return;
     }
 
-    completedFilmIndexRef.current = filmIndex;
+    completedFilmIndexRef.current = completedIndex;
 
-    if (filmIndex < introductionFilms.length - 1) {
-      setFilmIndex(filmIndex + 1);
+    if (completedIndex < introductionFilms.length - 1) {
+      setFilmIndex(completedIndex + 1);
       return;
     }
 
@@ -88,7 +89,8 @@ export default function HomeHero({ children }: HomeHeroProps) {
           playsInline
         preload="auto"
         poster={activeFilm.poster}
-        onEnded={playNextFilm}
+        onEnded={() => playNextFilm(filmIndex)}
+        onError={() => playNextFilm(filmIndex)}
         onCanPlay={() => {
           void videoRef.current?.play().catch(() => {
             // Some browsers require the visitor to start a muted video manually.

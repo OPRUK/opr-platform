@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/privacy" },
 };
 
-const updated = "3 August 2026";
+const updated = "5 August 2026";
 
 export default function PrivacyPolicyPage() {
   return (
@@ -28,7 +28,8 @@ export default function PrivacyPolicyPage() {
 
             <div>
               <h2 className="text-2xl font-bold text-[#123C39]">1. Contact us</h2>
-              <p className="mt-3">We are the controller of the information described in this notice. For privacy questions, requests or concerns, email <a className="underline underline-offset-4" href="mailto:info@otherpeoplesrecipes.co.uk">info@otherpeoplesrecipes.co.uk</a>.</p>
+              <p className="mt-3">We are the controller of the information described in this notice. For privacy questions, requests or concerns, email <a className="underline underline-offset-4" href="mailto:info@otherpeoplesrecipes.co.uk">info@otherpeoplesrecipes.co.uk</a> or write to us at 1a Bazalgette Close, New Malden, KT3 5HG.</p>
+              <p className="mt-3">Our UK data-protection registration reference is <strong>ZC211828</strong>, issued by the Information Commissioner&apos;s Office.</p>
             </div>
 
             <div>
