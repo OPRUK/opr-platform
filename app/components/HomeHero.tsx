@@ -42,7 +42,7 @@ export default function HomeHero({ children }: HomeHeroProps) {
     void videoRef.current.play().catch(() => {
       // If a browser blocks playback, leave the film visible for the visitor to start.
     });
-  }, [introductionComplete, isMuted]);
+  }, [filmIndex, introductionComplete, isMuted]);
 
   function toggleSound() {
     if (!videoRef.current) return;
