@@ -232,6 +232,57 @@ export const featuredRecipes: FeaturedRecipe[] = [
       },
     ],
   },
+  {
+    slug: "adas-jollof-rice",
+    title: "Ada's Jollof Rice",
+    place: "Nigeria",
+    story:
+      "Ada's Jollof Rice celebrates the unmistakable smoky flavour of Nigerian party Jollof: a deeply reduced pepper base, rich stock and a final moment of heat that creates that treasured, lightly scorched bottom layer. It is the kind of dish made for a full table, shared plates and second helpings.",
+    ingredients: [
+      "3 red bell peppers (tatashe)",
+      "1 can plum tomatoes, or 4 fresh Roma tomatoes",
+      "2 Scotch bonnet peppers (ata rodo), adjusted to taste",
+      "1 medium red onion",
+      "3 garlic cloves",
+      "1 thumb-sized piece fresh ginger",
+      "3 cups long-grain parboiled rice or Golden Sella basmati, thoroughly washed",
+      "⅓ cup vegetable oil",
+      "1 large onion, sliced",
+      "3 tablespoons tomato paste",
+      "2 cups rich chicken or beef stock",
+      "1 tablespoon curry powder",
+      "1 tablespoon dried thyme",
+      "2 bay leaves",
+      "2 seasoning cubes (Knorr or Maggi)",
+      "1 tablespoon butter",
+      "Salt, to taste",
+    ],
+    method: [
+      "Blend the red peppers, tomatoes, Scotch bonnets, medium red onion, garlic and ginger with as little water as possible until smooth. Pour into a saucepan and boil over a medium-high heat for 10–12 minutes, until reduced by about half and the excess water has evaporated.",
+      "Heat the vegetable oil in a heavy-bottomed pot over a medium heat. Fry the sliced onion for 3–4 minutes. Add the tomato paste and fry for 5–7 minutes, stirring constantly, until it is dark red and no longer tastes sour.",
+      "Pour in the reduced pepper blend with the curry powder, thyme, crushed seasoning cubes and bay leaves. Cook for 10–15 minutes, until the oil separates to the top.",
+      "Pour in the rich stock and season with salt. The liquid should taste slightly over-seasoned, because the rice will absorb a great deal of flavour. Bring it to a gentle simmer.",
+      "Rinse the rice repeatedly in warm water until the water runs clear. Stir it into the sauce, making sure the liquid only just covers the rice; add only a small splash of hot water if needed.",
+      "Cover the pot tightly with aluminium foil, then secure the lid to trap the steam. Cook on low for 25 minutes.",
+      "Uncover, add the butter and extra sliced fresh onion, then cover tightly again. Steam on low for another 10 minutes, until the rice is fluffy.",
+      "For the final 3 minutes, turn the heat to medium-high, allowing the bottom layer to scorch very slightly. This creates the signature smoky party Jollof aroma. Fluff gently and serve.",
+    ],
+    image: "/images/recipes/adas-jollof-rice-wide.png",
+    category: "Main",
+    number: "06",
+    cuisine: "Nigerian",
+    contributorName: "Ada",
+    notes: [
+      {
+        title: "The party Jollof finish",
+        text: "The gentle scorched layer at the bottom is where the signature smoky aroma comes from. Keep a close eye on the final three minutes: you want a little char, never a burnt pot.",
+      },
+      {
+        title: "Heat and flavour",
+        text: "Scotch bonnet peppers bring the characteristic heat and fruitiness. Use fewer peppers for a milder rice, but keep the rich stock and thoroughly reduced pepper base for the fullest flavour.",
+      },
+    ],
+  },
 ];
 
 export function getFeaturedRecipe(slug: string): FeaturedRecipe | undefined {
