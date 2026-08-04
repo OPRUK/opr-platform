@@ -32,6 +32,7 @@ type RecipeCard = {
   category: string;
   imageUrl: string | null;
   href: string;
+  comingSoon?: boolean;
 };
 
 export default function PublishedRecipes({
@@ -80,6 +81,18 @@ export default function PublishedRecipes({
         : null,
       href: `/family-cookbook/community/${recipe.id}`,
     })),
+    {
+      id: "coming-soon-sudeshs-bhindi",
+      title: "Sudesh's Bhindi",
+      contributor: "From the OPR collection",
+      location: null,
+      story:
+        "A treasured family recipe, soon to have its own place in the OPR cookbook.",
+      category: "Main",
+      imageUrl: "/images/recipes/sudeshs-bhindi-wide.png",
+      href: "#sudeshs-bhindi",
+      comingSoon: true,
+    },
   ];
 
   const categories = [
@@ -173,12 +186,9 @@ export default function PublishedRecipes({
 
       {visibleRecipes.length ? (
         <div className="mt-5 grid gap-8 md:grid-cols-3">
-          {visibleRecipes.map((recipe) => (
-            <Link
-              key={recipe.id}
-              href={recipe.href}
-              className="group overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/15 transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
-            >
+          {visibleRecipes.map((recipe) => {
+            const cardContent = (
+              <>
               {recipe.imageUrl ? (
                 <img
                   src={recipe.imageUrl}
@@ -201,11 +211,30 @@ export default function PublishedRecipes({
                 </p>
                 <p className="mt-6 grow leading-7 text-stone-700">“{recipe.story}”</p>
                 <span className="mt-8 font-medium transition group-hover:text-amber-700">
-                  Open recipe →
+                  {recipe.comingSoon ? "Recipe coming soon" : "Open recipe →"}
                 </span>
               </div>
-            </Link>
-          ))}
+              </>
+            );
+
+            return recipe.comingSoon ? (
+              <article
+                key={recipe.id}
+                id="sudeshs-bhindi"
+                className="group overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/15"
+              >
+                {cardContent}
+              </article>
+            ) : (
+              <Link
+                key={recipe.id}
+                href={recipe.href}
+                className="group overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/15 transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
+              >
+                {cardContent}
+              </Link>
+            );
+          })}
         </div>
       ) : (
         <div className="mt-8 rounded-3xl border border-dashed border-[#D1AD75] bg-[#FFF3DF]/60 px-8 py-14 text-center">
