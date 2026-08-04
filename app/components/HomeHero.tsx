@@ -89,8 +89,9 @@ export default function HomeHero({ children }: HomeHeroProps) {
           playsInline
         preload="auto"
         poster={activeFilm.poster}
-        onEnded={() => playNextFilm(filmIndex)}
-        onError={() => playNextFilm(filmIndex)}
+        data-film-index={filmIndex}
+        onEnded={(event) => playNextFilm(Number(event.currentTarget.dataset.filmIndex))}
+        onError={(event) => playNextFilm(Number(event.currentTarget.dataset.filmIndex))}
         onCanPlay={() => {
           void videoRef.current?.play().catch(() => {
             // Some browsers require the visitor to start a muted video manually.
