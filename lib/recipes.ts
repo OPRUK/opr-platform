@@ -186,6 +186,52 @@ export const featuredRecipes: FeaturedRecipe[] = [
       },
     ],
   },
+  {
+    slug: "sudeshs-bhindi",
+    title: "Sudesh's Bhindi",
+    place: "From the OPR collection",
+    story:
+      "A simple bhindi masala built from the everyday flavours of onion, tomatoes, ginger and warming Indian spices. The okra is cooked first, gently and patiently, until its sliminess almost disappears, then folded through the masala. Sudesh loves it with warm roti and dal, though it is just as good with paratha or rice.",
+    ingredients: [
+      "Bhindi (okra), washed, dried and sliced into rounds",
+      "2½ tablespoons oil, divided",
+      "Cumin seeds",
+      "1 onion, chopped",
+      "Fresh ginger, chopped, plus ginger juliennes to garnish (optional)",
+      "1 green chilli, chopped",
+      "Tomatoes, chopped",
+      "Coriander powder",
+      "Turmeric",
+      "Amchur (dried mango powder)",
+      "Red chilli powder",
+      "Salt",
+      "Garam masala",
+    ],
+    method: [
+      "Wash and thoroughly pat dry each bhindi with kitchen paper. Remove the head and a little from the tail, then chop into rounds.",
+      "Heat 1 tablespoon of oil in a pan over a medium heat. Add the bhindi and cook for 10 minutes, stirring often. Lower the heat and cook for another 5 minutes, until it is mostly cooked and very little sliminess remains. Transfer it to a bowl.",
+      "In another pan — or the same pan once emptied — heat the remaining 1½ tablespoons of oil over a medium heat. Add the cumin seeds and let them sizzle for a few seconds.",
+      "Add the chopped onion and sauté for 2–3 minutes until soft. Add the ginger and green chilli, then cook for one more minute.",
+      "Add the chopped tomatoes and cook for around 4 minutes, until soft and mushy.",
+      "Stir in the coriander powder, turmeric, amchur, red chilli powder and salt. Add a tablespoon of water so the spices do not burn, then stir well.",
+      "Add the cooked bhindi, mix well and cook uncovered over a low-medium heat for 5 minutes.",
+      "Finish with garam masala and, if you like, ginger juliennes. Serve with warm roti and dal, paratha or rice.",
+    ],
+    image: "/images/recipes/sudeshs-bhindi-wide.png",
+    category: "Main",
+    number: "05",
+    contributorName: "Sudesh",
+    notes: [
+      {
+        title: "How to make bhindi less slimy",
+        text: "Bhindi releases mucilage, which is what makes it sticky. Wash it first, then dry it completely before chopping. Spread the okra in a single layer on kitchen paper, let it dry for a while, and pat each piece dry. If you can plan ahead, wash it and leave it to air-dry overnight — it will be ready to use in the morning.",
+      },
+      {
+        title: "Cook it gently",
+        text: "Frying the okra in a little oil before it joins the masala helps the sliminess disappear. Give it around 15 minutes over a medium-low heat and avoid a high flame: bhindi can brown before the stickiness has had time to cook away.",
+      },
+    ],
+  },
 ];
 
 export function getFeaturedRecipe(slug: string): FeaturedRecipe | undefined {
