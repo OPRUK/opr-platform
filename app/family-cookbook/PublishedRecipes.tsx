@@ -34,6 +34,13 @@ type RecipeCard = {
   href: string;
 };
 
+function recipeTitleKey(title: string) {
+  return title
+    .toLocaleLowerCase("en-GB")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
 export default function PublishedRecipes({
   featuredRecipes,
 }: {
@@ -57,6 +64,16 @@ export default function PublishedRecipes({
     void loadPublishedRecipes();
   }, []);
 
+  const curatedRecipeTitles = new Set(
+    featuredRecipes.map((recipe) => recipeTitleKey(recipe.title)),
+  );
+
+  // Keep an original submission in the private inbox, but once OPR has
+  // published a curated recipe page, show only that finished version publicly.
+  const uniqueCommunityRecipes = communityRecipes.filter(
+    (recipe) => !curatedRecipeTitles.has(recipeTitleKey(recipe.title)),
+  );
+
   const cards: RecipeCard[] = [
     ...featuredRecipes.map((recipe) => ({
       id: `featured-${recipe.slug}`,
@@ -68,7 +85,7 @@ export default function PublishedRecipes({
       imageUrl: recipe.image,
       href: `/family-cookbook/${recipe.slug}`,
     })),
-    ...communityRecipes.map((recipe) => ({
+    ...uniqueCommunityRecipes.map((recipe) => ({
       id: `community-${recipe.id}`,
       title: recipe.title,
       contributor: recipe.name,
