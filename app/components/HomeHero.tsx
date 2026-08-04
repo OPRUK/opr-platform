@@ -21,12 +21,6 @@ const introductionFilms = [
     label: "Other People's Recipes introduction film one",
   },
   {
-    desktop: "/videos/opr-home-introduction-original.mp4",
-    mobile: "/videos/opr-home-introduction-original-mobile.mp4",
-    poster: "/images/opr-home-introduction-poster.jpg",
-    label: "Other People's Recipes introduction film two",
-  },
-  {
     desktop: "/videos/opr-make-your-recipe-film.mp4",
     mobile: "/videos/opr-make-your-recipe-film-mobile.mp4",
     poster: "/images/opr-make-your-recipe-film-poster.jpg",
