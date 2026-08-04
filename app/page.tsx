@@ -208,7 +208,7 @@ export default async function Home() {
               <div className="pointer-events-none absolute -left-10 top-20 h-28 w-28 rounded-full bg-[#6A4022]/10 blur-2xl" />
               <div className="pointer-events-none absolute -right-10 bottom-2 h-24 w-36 rotate-12 rounded-full bg-[#704323]/15 blur-2xl" />
               <p className="text-xs uppercase tracking-[0.28em] text-[#8B5A2B]">From the kitchen drawer</p>
-              <p className="mt-5 text-3xl font-semibold italic leading-tight text-[#123C39] md:text-4xl">Krishna Vanti&apos;s Baingan ka Bharta</p>
+              <p className="mt-5 text-3xl font-semibold italic leading-tight text-[#123C39] md:text-4xl">Krishna Anand&apos;s Baingan ka Bharta</p>
               <div className="mt-8 space-y-1 text-[1.25rem] leading-[1.4] text-[#5F3B23] md:text-[1.45rem]">
                 <p>onions, cooked till pink</p>
                 <p>tomatoes, salt &amp; deghi mirch</p>
@@ -228,9 +228,10 @@ export default async function Home() {
               From the kitchen drawer to your kitchen
             </h2>
             <p className="mt-7 max-w-xl text-lg leading-8 text-[#F1DFC5] md:text-xl">
-              Krishna Vanti&apos;s handwritten Baingan ka Bharta is the perfect
-              example: a note tucked away in a drawer, translated into a clear
-              recipe for every family to cook, share and make their own.
+              Krishna Anand was the late grandmother of OPR founder Chaten.
+              Her handwritten Baingan ka Bharta is the perfect example: a note
+              tucked away in a drawer, translated into a clear recipe for every
+              family to cook, share and make their own.
             </p>
             <p className="mt-5 max-w-xl text-lg leading-8 text-[#F1DFC5] md:text-xl">
               Take a clear photo of a recipe card or notebook page and OPR will

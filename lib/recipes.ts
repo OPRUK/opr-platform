@@ -149,11 +149,11 @@ export const featuredRecipes: FeaturedRecipe[] = [
     ],
   },
   {
-    slug: "krishna-vantis-baingan-ka-bharta",
-    title: "Krishna Vanti's Baingan Ka Bharta",
+    slug: "krishna-anands-baingan-ka-bharta",
+    title: "Krishna Anand's Baingan Ka Bharta",
     place: "From the family kitchen",
     story:
-      "Once kept in a kitchen drawer, Krishna Vanti's baingan ka bharta has been carefully translated so everyone can make it their own. Smoky roasted aubergine, softly pink onions, tomatoes and fresh green chillies make a dish that carries a family story to every new table.",
+      "Once kept in a kitchen drawer, Krishna Anand's baingan ka bharta has been carefully translated so everyone can make it their own. Krishna was the late grandmother of OPR founder Chaten, and this smoky aubergine dish — with softly pink onions, tomatoes and fresh green chillies — carries her family story to every new table.",
     ingredients: [
       "1 large aubergine (eggplant)",
       "Oil or ghee",
@@ -182,7 +182,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
       },
       {
         title: "Keep the onions pink",
-        text: "This is the key instruction from Krishna Vanti's recipe. Let the onions soften, but do not allow them to brown — it keeps the finished bharta sweet, fresh and light.",
+        text: "This is the key instruction from Krishna Anand's recipe. Let the onions soften, but do not allow them to brown — it keeps the finished bharta sweet, fresh and light.",
       },
     ],
   },

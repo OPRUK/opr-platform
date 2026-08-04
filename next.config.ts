@@ -13,6 +13,11 @@ const nextConfig: NextConfig = {
         destination: "/family-cookbook/nana-serbs-sunday-rice-pudding",
         permanent: true,
       },
+      {
+        source: "/family-cookbook/krishna-vantis-baingan-ka-bharta",
+        destination: "/family-cookbook/krishna-anands-baingan-ka-bharta",
+        permanent: true,
+      },
     ];
   },
 };

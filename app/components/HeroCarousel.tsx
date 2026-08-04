@@ -26,8 +26,8 @@ const slides = [
   },
   {
     image: "/images/recipes/krishna-vantis-baingan-ka-bharta-wide.png",
-    alt: "Krishna Vanti's Baingan Ka Bharta",
-    label: "Krishna Vanti's Baingan Ka Bharta · From the family kitchen",
+    alt: "Krishna Anand's Baingan Ka Bharta",
+    label: "Krishna Anand's Baingan Ka Bharta · From the family kitchen",
   },
   {
     image: "/images/recipes/sudeshs-bhindi-wide.png",
