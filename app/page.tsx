@@ -5,6 +5,8 @@ import Link from "next/link";
 import HomeHero from "./components/HomeHero";
 import { supabase } from "../lib/supabase/client";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: {
     absolute: "Other People's Recipes — A Living Cookbook of Family Recipes",

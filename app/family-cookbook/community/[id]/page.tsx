@@ -6,6 +6,8 @@ import CommunityCookForm from "./CommunityCookForm";
 import { supabase } from "../../../../lib/supabase/client";
 import { SITE_NAME, absoluteUrl } from "../../../../lib/site";
 
+export const dynamic = "force-dynamic";
+
 type CommunityRecipe = {
   id: number;
   title: string;
