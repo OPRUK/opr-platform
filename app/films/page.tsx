@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Navigation from "../components/Navigation";
+import FilmEmbed from "../components/FilmEmbed";
 import { films } from "../../lib/films";
 
 export const metadata: Metadata = {
@@ -46,61 +47,18 @@ export default function FilmsPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-20 md:px-8">
-        <p className="text-center text-sm uppercase tracking-[0.35em] text-amber-700">
-          Watch every film on our YouTube channel
-        </p>
-        <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {films.map((film) => (
-            <a
-              key={film.youtubeUrl}
-              href={film.youtubeUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="group overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/15 transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
+            <article
+              key={film.id}
+              className="overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/15"
             >
-              <div className="relative aspect-video w-full overflow-hidden bg-black">
-                <img
-                  src={film.thumbnail}
-                  alt=""
-                  className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 flex items-center justify-center bg-black/25">
-                  <svg width="52" height="52" viewBox="0 0 24 24" fill="#FFF3DF">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </div>
-              </div>
+              <FilmEmbed id={film.id} title={film.title} className="aspect-video w-full" />
               <div className="p-6">
                 <h2 className="text-xl font-bold leading-snug">{film.title}</h2>
-                <span className="mt-4 inline-block font-medium text-amber-700 transition group-hover:text-amber-800">
-                  Watch on YouTube →
-                </span>
               </div>
-            </a>
+            </article>
           ))}
-        </div>
-      </section>
-
-      <section className="bg-[#123C39] px-6 py-24 text-center text-[#FFF3DF]">
-        <div className="mx-auto max-w-3xl">
-          <p className="text-sm uppercase tracking-[0.35em] text-[#DDB765]">
-            Watch on YouTube
-          </p>
-          <h2 className="mt-5 text-4xl font-bold leading-tight md:text-5xl">
-            Follow the OPR Film Collection.
-          </h2>
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-[#E7CEA2]">
-            New recipe stories, conversations from the kitchen and future OPR
-            films live on our YouTube channel.
-          </p>
-          <a
-            href="https://www.youtube.com/channel/UCdRQdldwQPFPoMr5N-FwIkQ"
-            target="_blank"
-            rel="noreferrer"
-            className="mt-9 inline-flex items-center rounded-full bg-[#DDB765] px-8 py-4 text-lg font-bold text-[#123C39] transition hover:scale-105 hover:bg-[#F0CC7A]"
-          >
-            Visit OPR on YouTube <span aria-hidden="true">→</span>
-          </a>
         </div>
       </section>
 
