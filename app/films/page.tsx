@@ -50,10 +50,10 @@ export default function FilmsPage() {
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {films.map((film) => (
             <article
-              key={film.id}
+              key={film.video}
               className="overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/15"
             >
-              <FilmEmbed id={film.id} title={film.title} className="aspect-video w-full" />
+              <FilmEmbed video={film.video} poster={film.poster} title={film.title} className="aspect-video w-full" />
               <div className="p-6">
                 <h2 className="text-xl font-bold leading-snug">{film.title}</h2>
               </div>

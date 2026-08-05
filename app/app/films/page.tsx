@@ -17,8 +17,8 @@ export default function FilmsScreen() {
       <div className="flex-1 overflow-y-auto px-5 py-5">
         <div className="flex flex-col gap-6">
           {films.map((film) => (
-            <article key={film.id}>
-              <FilmEmbed id={film.id} title={film.title} className="aspect-video w-full" />
+            <article key={film.video}>
+              <FilmEmbed video={film.video} poster={film.poster} title={film.title} className="aspect-video w-full" />
               <h2 className="mt-3 text-[17px] font-bold leading-snug">{film.title}</h2>
             </article>
           ))}
