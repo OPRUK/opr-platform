@@ -34,11 +34,13 @@ export default function HomeHero({ children }: HomeHeroProps) {
   const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const completedFilmIndexRef = useRef<number | null>(null);
+  const activeFilmIndexRef = useRef(0);
   const activeFilm = introductionFilms[filmIndex];
 
   useEffect(() => {
     if (introductionComplete || !videoRef.current) return;
 
+    activeFilmIndexRef.current = filmIndex;
     videoRef.current.muted = isMuted;
     void videoRef.current.play().catch(() => {
       // If a browser blocks playback, leave the film visible for the visitor to start.
@@ -53,10 +55,13 @@ export default function HomeHero({ children }: HomeHeroProps) {
   }
 
   function playNextFilm(completedIndex: number) {
-    // Some browsers can emit a late second event while React is swapping the
-    // video element. Tie the event to the film that actually finished so an
-    // old clip can never skip a newer one.
-    if (completedFilmIndexRef.current === completedIndex) {
+    // Browsers can deliver a late `ended` event while React is swapping clips.
+    // Only the film currently on screen is allowed to advance the playlist,
+    // and each film gets exactly one turn.
+    if (
+      completedIndex !== activeFilmIndexRef.current ||
+      completedFilmIndexRef.current === completedIndex
+    ) {
       return;
     }
 

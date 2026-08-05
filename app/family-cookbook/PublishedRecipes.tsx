@@ -91,10 +91,27 @@ export default function PublishedRecipes({
     featuredRecipes.map((recipe) => recipeTitleKey(recipe.title)),
   );
 
+  function isCuratedRecipeVersion(recipe: PublishedRecipe) {
+    const submittedTitle = recipeTitleKey(recipe.title);
+
+    if (curatedRecipeTitles.has(submittedTitle)) return true;
+
+    // Sudesh's original submission is retained privately in the recipe inbox.
+    // The public cookbook should show the finished, curated Bhindi recipe once.
+    return (
+      submittedTitle.includes("sudesh") &&
+      submittedTitle.includes("bhindi") &&
+      featuredRecipes.some((featuredRecipe) => {
+        const featuredTitle = recipeTitleKey(featuredRecipe.title);
+        return featuredTitle.includes("sudesh") && featuredTitle.includes("bhindi");
+      })
+    );
+  }
+
   // Keep an original submission in the private inbox, but once OPR has
   // published a curated recipe page, show only that finished version publicly.
   const uniqueCommunityRecipes = communityRecipes.filter(
-    (recipe) => !curatedRecipeTitles.has(recipeTitleKey(recipe.title)),
+    (recipe) => !isCuratedRecipeVersion(recipe),
   );
 
   const cards: RecipeCard[] = [

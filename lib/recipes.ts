@@ -150,7 +150,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
   },
   {
     slug: "krishna-anands-baingan-ka-bharta",
-    title: "Krishna Anand's Baingan Ka Bharta",
+    title: "Krishna Anand's Baingan ka Bharta",
     place: "From the family kitchen",
     story:
       "Once kept in a kitchen drawer, Krishna Anand's baingan ka bharta has been carefully translated so everyone can make it their own. Krishna was the late grandmother of OPR founder Chaten, and this smoky aubergine dish — with softly pink onions, tomatoes and fresh green chillies — carries her family story to every new table.",

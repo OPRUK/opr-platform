@@ -20,7 +20,7 @@ const films = [
     poster: "/images/recipes/nana-serbs-rice-pudding-wide.png",
   },
   {
-    title: "Krishna Anand’s Baingan Ka Bharta",
+    title: "Krishna Anand’s Baingan ka Bharta",
     label: "A recipe from the kitchen drawer",
     synopsis:
       "Krishna Anand, the late grandmother of OPR founder Chaten, cooks baingan ka bharta with her family beside her: roasted aubergine, gently softened onions, tomatoes and chillies becoming a dish that has travelled through generations.",
