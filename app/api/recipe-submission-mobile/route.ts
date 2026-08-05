@@ -34,7 +34,7 @@ async function uploadIfPresent(
   if (!acceptedTypes.has(file.type)) throw new Error(`Unsupported ${field} type`);
 
   const extension = file.type.split("/")[1]?.replace("quicktime", "mov") || extensionFallback;
-  const path = `${folder}/${crypto.randomUUID()}.${extension}`;
+  const path = folder ? `${folder}/${crypto.randomUUID()}.${extension}` : `${crypto.randomUUID()}.${extension}`;
   const { error } = await supabase.storage.from("recipe-photos").upload(path, file, { contentType: file.type, upsert: false });
   if (error) throw error;
   return path;
