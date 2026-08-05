@@ -59,7 +59,7 @@ export default function Footer() {
                 </svg>
               </a>
               <a
-                href="https://www.pinterest.com/0kg0zcynwbbvmoqk092xgf1u83r3r6/"
+                href="https://www.pinterest.com/otherpeoplesrecipes/"
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Follow Other People's Recipes on Pinterest"
