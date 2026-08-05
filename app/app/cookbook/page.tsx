@@ -35,7 +35,7 @@ export default async function CookbookScreen() {
                     <img
                       src={recipe.image}
                       alt={recipe.title}
-                      className="h-24 w-24 grayscale object-cover"
+                      className="h-24 w-24 object-cover"
                     />
                   ) : null}
                 </div>

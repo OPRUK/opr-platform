@@ -68,7 +68,7 @@ export default function VoteList() {
             <div className="h-16 w-16 flex-shrink-0 bg-[#F5E6C4]">
               {candidate.image ? (
                 // eslint-disable-next-line @next/next/no-img-element -- may be a Supabase Storage URL, not a configured Image domain
-                <img src={candidate.image} alt={candidate.title} className="h-16 w-16 grayscale object-cover" />
+                <img src={candidate.image} alt={candidate.title} className="h-16 w-16 object-cover" />
               ) : null}
             </div>
             <div className="min-w-0 flex-1">

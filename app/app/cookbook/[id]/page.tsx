@@ -29,7 +29,7 @@ export default async function RecipeDetailScreen({ params }: { params: Promise<{
         <div className="h-[260px] w-full bg-[#EAD8AE]">
           {recipe.image ? (
             // eslint-disable-next-line @next/next/no-img-element -- may be a Supabase Storage URL, not a configured Image domain
-            <img src={recipe.image} alt={recipe.title} className="h-[260px] w-full grayscale object-cover" />
+            <img src={recipe.image} alt={recipe.title} className="h-[260px] w-full object-cover" />
           ) : null}
         </div>
         <div className="absolute left-4 top-14">
