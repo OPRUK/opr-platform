@@ -82,6 +82,7 @@ export default async function RecipePage({
   const recipeJsonLd = {
     "@context": "https://schema.org",
     "@type": "Recipe",
+    "@id": `${absoluteUrl(`/family-cookbook/${recipe.slug}`)}#recipe`,
     name: recipe.title,
     url: absoluteUrl(`/family-cookbook/${recipe.slug}`),
     mainEntityOfPage: absoluteUrl(`/family-cookbook/${recipe.slug}`),
@@ -129,11 +130,15 @@ export default async function RecipePage({
     <main className="min-h-screen bg-[#EED8B2] text-[#123C39]">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(recipeJsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(recipeJsonLd).replace(/</g, "\\u003c"),
+        }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, "\\u003c"),
+        }}
       />
       <Navigation />
 
