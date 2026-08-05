@@ -341,7 +341,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
   {
     slug: "phils-and-serbs-three-cheese-souffle",
     title: "Phil & Serb's Three-Cheese Soufflé",
-    place: "From the OPR collection",
+    place: "New Malden, England",
     story:
       "Phil & Serb’s three-cheese soufflé is all about balance: Gruyère for melt, aged Cheddar for a sharp edge and Parmigiano-Reggiano for nutty depth. The béchamel is made patiently, the egg whites folded gently, and the finished soufflé goes straight from oven to table at its highest, lightest moment.",
     ingredients: [
