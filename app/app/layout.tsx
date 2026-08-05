@@ -15,6 +15,13 @@ export const metadata: Metadata = {
     template: "%s — OPR",
   },
   description: "Every recipe has a story.",
+  // These screens largely mirror content already indexed under
+  // /family-cookbook — keep them out of search results to avoid competing
+  // with (and diluting) the canonical pages for the same recipes.
+  robots: {
+    index: false,
+    follow: true,
+  },
   manifest: "/app-manifest.webmanifest",
   appleWebApp: {
     title: "OPR",
