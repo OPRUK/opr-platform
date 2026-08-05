@@ -15,6 +15,16 @@ const tabs: { href: string; label: string; icon: ReactNode }[] = [
     ),
   },
   {
+    href: "/app/films",
+    label: "Films",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <rect x="2.5" y="4.5" width="19" height="15" rx="0" />
+        <path d="M7 4.5v15M17 4.5v15M2.5 9h4.5M17 9h4.5M2.5 15h4.5M17 15h4.5" />
+      </svg>
+    ),
+  },
+  {
     href: "/app/share",
     label: "Share",
     icon: (
