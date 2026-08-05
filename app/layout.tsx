@@ -42,7 +42,7 @@ const organizationJsonLd = {
   logo: absoluteUrl("/icon.svg"),
   sameAs: [
     "https://www.instagram.com/opr_uk/",
-    "https://www.facebook.com/61592736388045",
+    "https://www.facebook.com/otherpeoplesrecipesuk/",
     "https://www.pinterest.com/otherpeoplesrecipes/",
     "https://www.youtube.com/channel/UCdRQdldwQPFPoMr5N-FwIkQ",
     "https://www.tiktok.com/@opr_uk",

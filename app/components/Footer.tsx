@@ -48,7 +48,7 @@ export default function Footer() {
                 </svg>
               </a>
               <a
-                href="https://www.facebook.com/61592736388045"
+                href="https://www.facebook.com/otherpeoplesrecipesuk/"
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Follow Other People's Recipes on Facebook"
