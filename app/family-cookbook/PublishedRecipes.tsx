@@ -163,6 +163,9 @@ export default function PublishedRecipes({
       )
     : new Intl.DateTimeFormat("en-GB", { month: "long", timeZone: "Europe/London" }).format(new Date());
   const hasVoted = Boolean(voteResults?.selectedRecipeKey);
+  const votingRecipes = [...cards].sort((firstRecipe, secondRecipe) =>
+    firstRecipe.title.localeCompare(secondRecipe.title, "en"),
+  );
 
   async function voteForRecipe(recipeKey: string) {
     if (hasVoted || votingFor) return;
@@ -248,7 +251,7 @@ export default function PublishedRecipes({
         </div>
 
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {cards.map((recipe) => {
+          {votingRecipes.map((recipe) => {
             const selected = voteResults?.selectedRecipeKey === recipe.id;
             const votes = voteResults?.totals[recipe.id] ?? 0;
 
