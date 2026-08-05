@@ -338,6 +338,51 @@ export const featuredRecipes: FeaturedRecipe[] = [
       },
     ],
   },
+  {
+    slug: "phils-and-serbs-three-cheese-souffle",
+    title: "Phil & Serb's Three-Cheese Soufflé",
+    place: "From the OPR collection",
+    story:
+      "Phil & Serb’s three-cheese soufflé is all about balance: Gruyère for melt, aged Cheddar for a sharp edge and Parmigiano-Reggiano for nutty depth. The béchamel is made patiently, the egg whites folded gently, and the finished soufflé goes straight from oven to table at its highest, lightest moment.",
+    ingredients: [
+      "1 tbsp unsalted butter, softened (for the dish)",
+      "2 tbsp Parmigiano-Reggiano, finely grated (for coating)",
+      "3 tbsp (45g) unsalted butter",
+      "3 tbsp (30g) all-purpose flour",
+      "1 cup (240ml) whole milk, warmed",
+      "½ tsp Dijon mustard",
+      "⅛ tsp freshly grated nutmeg",
+      "⅛ tsp cayenne pepper",
+      "Salt and freshly ground black pepper, to taste",
+      "½ cup (50g) Gruyère, finely grated",
+      "½ cup (50g) sharp aged Cheddar, finely grated",
+      "¼ cup (25g) Parmigiano-Reggiano, finely grated",
+      "4 large egg yolks, at room temperature",
+      "5 large egg whites, at room temperature",
+      "⅛ tsp cream of tartar",
+    ],
+    method: [
+      "Heat the oven to 190°C (375°F), with a rack in the lower third. Brush a 4-cup soufflé dish, or four 6oz ramekins, with the softened butter using upward strokes. Dust with the grated Parmigiano-Reggiano, turning to coat and tapping out the excess.",
+      "Melt 3 tbsp butter in a saucepan over a medium heat. Whisk in the flour and cook for 1–2 minutes. Gradually whisk in the warm milk until smooth, then cook for 2–3 minutes until the sauce thickens. Remove from the heat and stir in Dijon, nutmeg, cayenne, salt and pepper. Let it cool for 2 minutes, then whisk in the egg yolks one at a time.",
+      "Fold the Gruyère, Cheddar and Parmigiano-Reggiano into the warm sauce until melted and silky. Transfer to a large bowl and let the mixture cool until just lukewarm.",
+      "In a clean bowl, beat the egg whites with the cream of tartar until stiff peaks form but still look glossy. Stir one-third into the cheese base to loosen it, then gently fold in the rest in two batches using a cut-and-roll motion until no streaks remain.",
+      "Pour the mixture into the prepared dish until about three-quarters full. Run your thumb around the inside rim through the batter to create a channel for a neat rise. Put it in the oven, immediately reduce the heat to 180°C (350°F), and bake for 30–35 minutes, or 20–22 minutes for ramekins, until puffed, golden and gently jiggly. Keep the oven door closed for the first 25 minutes.",
+    ],
+    image: "/images/recipes/phils-and-serbs-three-cheese-souffle-wide.png",
+    category: "Starter",
+    number: "08",
+    contributorName: "Phil & Serb",
+    notes: [
+      {
+        title: "The upward brush strokes",
+        text: "Brush the butter vertically from base to rim. It gives the soufflé a straight, clean path to rise.",
+      },
+      {
+        title: "Keep the door closed",
+        text: "Do not open the oven during the first 25 minutes. A rush of cold air can deflate the airy structure.",
+      },
+    ],
+  },
 ];
 
 export function getFeaturedRecipe(slug: string): FeaturedRecipe | undefined {
