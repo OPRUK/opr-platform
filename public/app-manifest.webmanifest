@@ -1,0 +1,25 @@
+{
+  "name": "Other People's Recipes",
+  "short_name": "OPR",
+  "description": "A living cookbook of family recipes from across Britain, preserved with the stories behind them.",
+  "start_url": "/app",
+  "scope": "/app/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#EED8B2",
+  "theme_color": "#123C39",
+  "icons": [
+    {
+      "src": "/app/icon-192",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/app/icon-512",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

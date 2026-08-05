@@ -18,8 +18,8 @@ type CommunityRecipe = {
   category: string;
   servings: string | null;
   story: string;
-  ingredients: string;
-  method: string;
+  ingredients: string | null;
+  method: string | null;
   cook_notes: string | null;
   photo_path: string | null;
   contributor_photo_path: string | null;
@@ -142,8 +142,8 @@ export default async function CommunityRecipePage({
   const originalRecipeImageUrl = originalRecipeImageUrlFor(recipe);
   const audioStoryUrl = audioStoryUrlFor(recipe);
   const recipeVideoUrl = recipeVideoUrlFor(recipe);
-  const ingredients = recipe.ingredients.split("\n").filter(Boolean);
-  const method = recipe.method.split("\n").filter(Boolean);
+  const ingredients = recipe.ingredients ? recipe.ingredients.split("\n").filter(Boolean) : [];
+  const method = recipe.method ? recipe.method.split("\n").filter(Boolean) : [];
 
   const recipeJsonLd = {
     "@context": "https://schema.org",
