@@ -40,7 +40,7 @@ export default async function RecipeDetailScreen({ params }: { params: Promise<{
       <div className="px-5 pt-5">
         <div className="mb-2.5 flex items-center gap-2">
           <Tag>{recipe.category}</Tag>
-          <span className="text-xs uppercase tracking-[0.1em] text-[#123C39]/55">{recipe.place}</span>
+          <span className="text-xs uppercase tracking-[0.1em] text-[#123C39]/80">{recipe.place}</span>
         </div>
         <h1 className="mb-4 text-[30px]">{recipe.title}</h1>
         <Divider />

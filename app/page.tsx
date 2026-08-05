@@ -200,7 +200,7 @@ export default async function Home() {
         <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2">
           <div className="overflow-hidden rounded-[2rem] shadow-2xl">
             <img
-              src="/images/recipes/krishna-vantis-baingan-ka-bharta-wide.png"
+              src="/images/recipes/krishna-vantis-baingan-ka-bharta-wide.webp"
               alt="Krishna Anand's Baingan ka Bharta"
               className="h-full min-h-[360px] w-full object-cover md:min-h-[530px]"
             />
@@ -243,7 +243,7 @@ export default async function Home() {
               recipeOfWeekImage ? <img src={recipeOfWeekImage} alt={recipeOfWeek.title} className="h-full w-full object-cover" /> : <div className="flex h-full items-center justify-center bg-[#DDBB82] p-8 text-center text-2xl font-bold text-[#123C39]">A treasured family recipe</div>
             ) : (
               <Image
-                src="/images/recipes/daves-butter-chicken-feature.png"
+                src="/images/recipes/daves-butter-chicken-feature.webp"
                 alt="Dave's Butter Chicken"
                 fill
                 sizes="(min-width: 768px) 50vw, 100vw"
@@ -281,7 +281,7 @@ export default async function Home() {
       >
           <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2">
             <Image
-              src="/images/living-cookbook-feature.png"
+              src="/images/living-cookbook-feature.webp"
               alt="Vintage recipe book"
               width={1000}
               height={750}

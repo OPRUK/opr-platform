@@ -51,7 +51,7 @@ function imageUrlFor(recipe: CommunityRecipe): string | null {
     return supabase.storage.from("recipe-photos").getPublicUrl(recipe.photo_path).data.publicUrl;
   }
   if (recipe.title.toLowerCase().includes("sudesh") && recipe.title.toLowerCase().includes("bhindi")) {
-    return "/images/recipes/sudeshs-bhindi-wide.png";
+    return "/images/recipes/sudeshs-bhindi-wide.webp";
   }
   return null;
 }

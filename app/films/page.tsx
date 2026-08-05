@@ -23,7 +23,7 @@ export default function FilmsPage() {
           muted
           playsInline
           preload="auto"
-          poster="/images/recipes/barbaras-beef-casserole-wide.png"
+          poster="/images/recipes/barbaras-beef-casserole-wide.webp"
           aria-hidden="true"
         >
           <source src="/videos/opr-recipe-stories-film-v2.mp4" type="video/mp4" />

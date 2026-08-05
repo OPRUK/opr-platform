@@ -18,7 +18,7 @@ export default async function CookbookScreen() {
 
       <div className="flex-1 overflow-y-auto px-5 py-4">
         {recipes.length === 0 ? (
-          <p className="py-10 text-center text-sm opacity-70">
+          <p className="py-10 text-center text-sm opacity-80">
             No recipes are published yet — check back soon.
           </p>
         ) : (
@@ -42,10 +42,10 @@ export default async function CookbookScreen() {
                 <div className="flex min-w-0 flex-col gap-1.5">
                   <div className="flex items-center gap-2">
                     <Tag>{recipe.category}</Tag>
-                    <span className="text-xs text-[#123C39]/55">{recipe.place}</span>
+                    <span className="text-xs text-[#123C39]/80">{recipe.place}</span>
                   </div>
                   <div className="text-[19px] font-bold leading-tight">{recipe.title}</div>
-                  <div className="line-clamp-2 text-sm opacity-75">{recipe.story}</div>
+                  <div className="line-clamp-2 text-sm opacity-80">{recipe.story}</div>
                 </div>
               </Link>
             ))}

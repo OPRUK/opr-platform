@@ -17,7 +17,7 @@ export default function FounderPage() {
 
       <section className="relative isolate overflow-hidden px-6 pb-24 pt-36 md:px-8 md:pt-44">
         <Image
-          src="/images/founders-letter-desk.png"
+          src="/images/founders-letter-desk.webp"
           alt="A handwritten note kept in a treasured wooden desk drawer"
           fill
           priority

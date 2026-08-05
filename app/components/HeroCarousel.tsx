@@ -5,32 +5,32 @@ import { useEffect, useState } from "react";
 
 const slides = [
   {
-    image: "/images/hero-kitchen-wide.png",
+    image: "/images/hero-kitchen-wide.webp",
     alt: "The Other People's Recipes kitchen table",
     label: "Other People's Recipes · Every recipe has a story",
   },
   {
-    image: "/images/recipes/nana-serbs-rice-pudding-wide.png",
+    image: "/images/recipes/nana-serbs-rice-pudding-wide.webp",
     alt: "Nana Serb's Sunday Rice Pudding",
     label: "Nana Serb's Sunday Rice Pudding · Birmingham",
   },
   {
-    image: "/images/recipes/daves-butter-chicken-wide.png",
+    image: "/images/recipes/daves-butter-chicken-wide.webp",
     alt: "Dave's Butter Chicken",
     label: "Dave's Butter Chicken · New Malden",
   },
   {
-    image: "/images/recipes/barbaras-beef-casserole-wide.png",
+    image: "/images/recipes/barbaras-beef-casserole-wide.webp",
     alt: "Barbara's Beef Casserole",
     label: "Barbara's Beef Casserole · Swansea",
   },
   {
-    image: "/images/recipes/krishna-vantis-baingan-ka-bharta-wide.png",
+    image: "/images/recipes/krishna-vantis-baingan-ka-bharta-wide.webp",
     alt: "Krishna Anand's Baingan ka Bharta",
     label: "Krishna Anand's Baingan ka Bharta · From the family kitchen",
   },
   {
-    image: "/images/recipes/sudeshs-bhindi-wide.png",
+    image: "/images/recipes/sudeshs-bhindi-wide.webp",
     alt: "Sudesh's Bhindi",
     label: "Sudesh's Bhindi · From the OPR collection",
   },

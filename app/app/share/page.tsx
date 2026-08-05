@@ -11,7 +11,7 @@ export default function ShareScreen() {
       <div className="flex-1 overflow-y-auto px-5 pb-6 pt-16">
         <Eyebrow className="mb-2">Whet our appetite</Eyebrow>
         <h1 className="mb-2 text-[27px]">Share your family&apos;s recipe</h1>
-        <p className="mb-5 text-sm opacity-75">Every one carries a memory worth preserving.</p>
+        <p className="mb-5 text-sm opacity-80">Every one carries a memory worth preserving.</p>
         <MobileShareForm />
       </div>
       <MobileTabBar />

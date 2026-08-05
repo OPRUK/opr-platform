@@ -65,7 +65,7 @@ export default function MobileTabBar() {
           <Link
             key={tab.href}
             href={tab.href}
-            className={`flex flex-col items-center gap-1 ${active ? "text-[#123C39]" : "text-[#123C39]/45"}`}
+            className={`flex flex-col items-center gap-1 ${active ? "text-[#123C39]" : "text-[#123C39]/80"}`}
           >
             {tab.icon}
             <span className={`text-[11px] ${active ? "font-semibold" : ""}`}>{tab.label}</span>

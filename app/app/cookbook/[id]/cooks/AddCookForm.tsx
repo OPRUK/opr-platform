@@ -139,7 +139,7 @@ export default function AddCookForm({
           <path d="M12 5v14M5 12h14" />
         </svg>
       </button>
-      <p className="mt-3 text-center text-[11px] opacity-60">Reviewed by OPR before it appears publicly.</p>
+      <p className="mt-3 text-center text-[11px] opacity-80">Reviewed by OPR before it appears publicly.</p>
     </>
   );
 }

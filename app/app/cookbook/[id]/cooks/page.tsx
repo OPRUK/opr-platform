@@ -52,7 +52,7 @@ export default async function CommunityCooksScreen({ params }: { params: Promise
           ))}
         </div>
       ) : (
-        <p className="border-b-2 border-[#123C39]/35 py-4 text-sm opacity-70">
+        <p className="border-b-2 border-[#123C39]/35 py-4 text-sm opacity-80">
           No families have shared a photo or note yet — be the first.
         </p>
       )}
