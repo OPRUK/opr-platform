@@ -45,43 +45,40 @@ export default function FilmsPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl space-y-20 px-6 py-20 md:px-8">
-        {films.map((film, index) => (
-          <article
-            key={film.title}
-            className={`grid items-center gap-10 md:grid-cols-2 ${index % 2 === 1 ? "md:[&>*:first-child]:order-2" : ""}`}
-          >
-            <div className="overflow-hidden rounded-3xl bg-black shadow-2xl">
-              <video
-                className="aspect-video w-full"
-                controls
-                preload="metadata"
-                poster={film.poster}
-              >
-                <source src={film.source} type="video/mp4" />
-                Your browser does not support video playback.
-              </video>
-            </div>
-
-            <div className="max-w-xl">
-              <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
-                Film {String(index + 1).padStart(2, "0")} · {film.label}
-              </p>
-              <h2 className="mt-5 text-4xl font-bold leading-tight md:text-5xl">
-                {film.title}
-              </h2>
-              <p className="mt-6 text-lg leading-8 text-stone-700">
-                {film.synopsis}
-              </p>
-              <div className="mt-7 rounded-2xl border border-[#D1AD75] bg-[#FFF3DF] p-5">
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-amber-800">
-                  Where it sits today
-                </p>
-                <p className="mt-3 leading-7 text-stone-700">{film.relevance}</p>
+      <section className="mx-auto max-w-6xl px-6 py-20 md:px-8">
+        <p className="text-center text-sm uppercase tracking-[0.35em] text-amber-700">
+          Watch every film on our YouTube channel
+        </p>
+        <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {films.map((film) => (
+            <a
+              key={film.youtubeUrl}
+              href={film.youtubeUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="group overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/15 transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
+            >
+              <div className="relative aspect-video w-full overflow-hidden bg-black">
+                <img
+                  src={film.thumbnail}
+                  alt=""
+                  className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 flex items-center justify-center bg-black/25">
+                  <svg width="52" height="52" viewBox="0 0 24 24" fill="#FFF3DF">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </div>
               </div>
-            </div>
-          </article>
-        ))}
+              <div className="p-6">
+                <h2 className="text-xl font-bold leading-snug">{film.title}</h2>
+                <span className="mt-4 inline-block font-medium text-amber-700 transition group-hover:text-amber-800">
+                  Watch on YouTube →
+                </span>
+              </div>
+            </a>
+          ))}
+        </div>
       </section>
 
       <section className="bg-[#123C39] px-6 py-24 text-center text-[#FFF3DF]">
