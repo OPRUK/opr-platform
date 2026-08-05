@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { CheckIcon, Divider } from "../_components/primitives";
+import { supabase } from "../../../lib/supabase/client";
 
 // Matches the desktop form's combined agreement (see app/share/RecipeForm.tsx):
 // age 18+, licence to publish, and permission to share identifiable people
@@ -14,11 +15,12 @@ const inputClassName =
 
 type AttachmentKey = "photo" | "audioStory" | "recipeVideo" | "originalRecipePhoto";
 
-const attachments: { key: AttachmentKey; label: string; accept: string; icon: React.ReactNode }[] = [
+const attachments: { key: AttachmentKey; label: string; accept: string; folder: string; icon: React.ReactNode }[] = [
   {
     key: "photo",
     label: "Photo of the dish",
     accept: "image/jpeg,image/png,image/webp",
+    folder: "",
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <rect x="3" y="6" width="18" height="14" />
@@ -31,6 +33,7 @@ const attachments: { key: AttachmentKey; label: string; accept: string; icon: Re
     key: "audioStory",
     label: "Record an audio story",
     accept: "audio/aac,audio/m4a,audio/mp4,audio/mpeg,audio/ogg,audio/wav,audio/webm,audio/x-m4a",
+    folder: "audio",
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <rect x="9" y="2" width="6" height="12" rx="3" />
@@ -42,6 +45,7 @@ const attachments: { key: AttachmentKey; label: string; accept: string; icon: Re
     key: "recipeVideo",
     label: "Upload a short video",
     accept: "video/mp4,video/quicktime,video/webm",
+    folder: "videos",
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <rect x="2" y="5" width="15" height="14" />
@@ -53,6 +57,7 @@ const attachments: { key: AttachmentKey; label: string; accept: string; icon: Re
     key: "originalRecipePhoto",
     label: "Photo of the handwritten recipe",
     accept: "image/jpeg,image/png,image/webp",
+    folder: "originals",
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
@@ -61,6 +66,13 @@ const attachments: { key: AttachmentKey; label: string; accept: string; icon: Re
     ),
   },
 ];
+
+function extensionFor(file: File) {
+  const fromType = file.type.split("/")[1]?.replace("quicktime", "mov");
+  if (fromType) return fromType;
+  const fromName = file.name.split(".").pop();
+  return fromName || "bin";
+}
 
 export default function MobileShareForm() {
   const [title, setTitle] = useState("");
@@ -89,25 +101,61 @@ export default function MobileShareForm() {
     setIsSubmitting(true);
     setError("");
 
-    const formData = new FormData();
-    formData.set("title", title);
-    formData.set("name", name);
-    formData.set("location", place);
-    formData.set("story", story);
-    formData.set("submissionAgreementAccepted", String(agreementAccepted));
-    formData.set("marketingOptIn", String(marketing));
-    formData.set("consentVersion", CONSENT_VERSION);
-    for (const attachment of attachments) {
-      const file = files[attachment.key];
-      if (file) formData.set(attachment.key, file);
-    }
-
     try {
-      const response = await fetch("/api/recipe-submission-mobile", { method: "POST", body: formData });
-      if (!response.ok) throw new Error("failed");
+      // Upload attachments straight from the browser to Supabase Storage.
+      // Proxying multi-MB files through the API route hits Vercel's
+      // serverless function request-size limit (~4.5MB) once more than one
+      // attachment is combined — uploading client-side avoids that entirely,
+      // since the route only ever receives short storage paths, not bytes.
+      const paths: Partial<Record<AttachmentKey, string>> = {};
+      for (const attachment of attachments) {
+        const file = files[attachment.key];
+        if (!file) continue;
+
+        const path = attachment.folder
+          ? `${attachment.folder}/${crypto.randomUUID()}.${extensionFor(file)}`
+          : `${crypto.randomUUID()}.${extensionFor(file)}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from("recipe-photos")
+          .upload(path, file, { contentType: file.type, upsert: false });
+
+        if (uploadError) {
+          throw new Error(`We couldn't upload "${attachment.label.toLowerCase()}" — ${uploadError.message}`);
+        }
+        paths[attachment.key] = path;
+      }
+
+      const response = await fetch("/api/recipe-submission-mobile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title,
+          name,
+          location: place,
+          story,
+          submissionAgreementAccepted: agreementAccepted,
+          marketingOptIn: marketing,
+          consentVersion: CONSENT_VERSION,
+          photoPath: paths.photo,
+          audioStoryPath: paths.audioStory,
+          recipeVideoPath: paths.recipeVideo,
+          originalRecipePath: paths.originalRecipePhoto,
+        }),
+      });
+
+      if (!response.ok) {
+        const payload = await response.json().catch(() => null);
+        throw new Error(payload?.error || "failed");
+      }
+
       setSubmitted(true);
-    } catch {
-      setError("We could not save your recipe just now. Please try again in a moment.");
+    } catch (submitError) {
+      setError(
+        submitError instanceof Error && submitError.message !== "failed"
+          ? submitError.message
+          : "We could not save your recipe just now. Please try again in a moment.",
+      );
     }
 
     setIsSubmitting(false);
