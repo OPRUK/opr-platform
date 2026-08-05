@@ -148,6 +148,7 @@ export default async function CommunityRecipePage({
   const recipeJsonLd = {
     "@context": "https://schema.org",
     "@type": "Recipe",
+    "@id": `${absoluteUrl(`/family-cookbook/community/${recipe.id}`)}#recipe`,
     name: recipe.title,
     url: absoluteUrl(`/family-cookbook/community/${recipe.id}`),
     mainEntityOfPage: absoluteUrl(`/family-cookbook/community/${recipe.id}`),
@@ -178,11 +179,15 @@ export default async function CommunityRecipePage({
     <main className="min-h-screen bg-[#EED8B2] text-[#123C39]">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(recipeJsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(recipeJsonLd).replace(/</g, "\\u003c"),
+        }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, "\\u003c"),
+        }}
       />
       <Navigation />
       <section className="bg-[#123C39] px-6 pb-20 pt-40 text-center text-white">

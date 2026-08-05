@@ -3,6 +3,7 @@ import Link from "next/link";
 import Navigation from "../components/Navigation";
 import PublishedRecipes from "./PublishedRecipes";
 import { featuredRecipes } from "../../lib/recipes";
+import { absoluteUrl } from "../../lib/site";
 
 export const metadata: Metadata = {
   title: "The Family Cookbook",
@@ -11,11 +12,50 @@ export const metadata: Metadata = {
   alternates: { canonical: "/family-cookbook" },
 };
 
-const recipes = featuredRecipes;
+const categoryOrder: Record<string, number> = {
+  Starter: 1,
+  "Starter or side": 1,
+  Main: 2,
+  "Main course": 2,
+  Dessert: 3,
+  "Dessert or baking": 3,
+};
+
+// Keep this list in the same order visitors see on the cookbook page. Google
+// can use an ItemList on a recipe collection page to understand the recipes
+// that belong together and their canonical destinations.
+const recipes = [...featuredRecipes].sort((firstRecipe, secondRecipe) => {
+  const courseDifference =
+    (categoryOrder[firstRecipe.category] ?? 4) - (categoryOrder[secondRecipe.category] ?? 4);
+
+  return courseDifference || firstRecipe.title.localeCompare(secondRecipe.title, "en");
+});
+
+const cookbookJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "The Family Cookbook",
+  description:
+    "Real recipes from real family kitchens, each one saved with the memory that made it matter.",
+  url: absoluteUrl("/family-cookbook"),
+  numberOfItems: recipes.length,
+  itemListElement: recipes.map((recipe, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    name: recipe.title,
+    url: absoluteUrl(`/family-cookbook/${recipe.slug}`),
+  })),
+};
 
 export default function FamilyCookbook() {
   return (
     <main className="min-h-screen bg-[#EED8B2] text-[#123C39]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(cookbookJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       <Navigation />
 
       <section className="relative isolate overflow-hidden bg-[#123C39] px-6 pb-24 pt-40 text-center text-white">
