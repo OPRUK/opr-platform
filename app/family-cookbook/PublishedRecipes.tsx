@@ -40,6 +40,18 @@ type VoteResults = {
   totals: Record<string, number>;
 };
 
+type MapPin = {
+  recipe: RecipeCard;
+  left: string;
+  top: string;
+};
+
+const knownPlaces = [
+  { match: "birmingham", left: "52%", top: "55%" },
+  { match: "new malden", left: "63%", top: "68%" },
+  { match: "swansea", left: "40%", top: "64%" },
+] as const;
+
 function recipeTitleKey(title: string) {
   return title
     .toLocaleLowerCase("en-GB")
@@ -138,6 +150,40 @@ export default function PublishedRecipes({
       href: `/family-cookbook/community/${recipe.id}`,
     })),
   ];
+
+  const mapPins: MapPin[] = cards.flatMap((recipe) => {
+    const place = recipe.location?.toLowerCase() ?? "";
+    const knownPlace = knownPlaces.find(({ match }) => place.includes(match));
+    if (!knownPlace) return [];
+
+    const existingPinsAtPlace = cards
+      .slice(0, cards.indexOf(recipe))
+      .filter((item) => item.location?.toLowerCase().includes(knownPlace.match)).length;
+
+    return [
+      {
+        recipe,
+        left: `calc(${knownPlace.left} + ${existingPinsAtPlace * 18}px)`,
+        top: `calc(${knownPlace.top} + ${existingPinsAtPlace * 15}px)`,
+      },
+    ];
+  });
+
+  const beyondBritainRecipes = cards.filter((recipe) =>
+    recipe.location?.toLowerCase().includes("nigeria"),
+  );
+  const recipePlaces = Array.from(
+    new Map(
+      cards
+        .filter(
+          (recipe) =>
+            recipe.location &&
+            !recipe.location.toLowerCase().startsWith("from the opr") &&
+            !recipe.location.toLowerCase().startsWith("from the family"),
+        )
+        .map((recipe) => [`${recipe.location}-${recipe.href}`, recipe]),
+    ).values(),
+  );
 
   const categories = [
     { value: "all", label: "All Recipes", matches: [] },
@@ -257,6 +303,87 @@ export default function PublishedRecipes({
           Share your recipe →
         </Link>
       </div>
+
+      <section className="mt-10 overflow-hidden rounded-3xl border border-[#D1AD75]/70 bg-[#123C39] p-6 text-[#FFF3DF] shadow-xl shadow-[#1C5A50]/20 md:p-10">
+        <div className="max-w-3xl">
+          <p className="text-sm uppercase tracking-[0.28em] text-[#F0C45A]">From kitchen to kitchen</p>
+          <h2 className="mt-3 text-4xl font-bold leading-tight md:text-5xl">The OPR recipe map</h2>
+          <p className="mt-4 max-w-2xl leading-7 text-[#F6E3BE]">
+            Every pin begins with a person, a place and a recipe worth passing on. Explore the kitchens that make up the OPR cookbook so far.
+          </p>
+        </div>
+
+        <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1.45fr)_minmax(15rem,0.75fr)]">
+          <div className="relative min-h-[25rem] overflow-hidden rounded-3xl border border-[#D1AD75]/60 bg-[#E8C67C]">
+            <svg viewBox="0 0 720 480" className="absolute inset-0 h-full w-full" aria-hidden="true">
+              <rect width="720" height="480" fill="#E8C67C" />
+              <path
+                d="M280 43c26-18 67-12 78 18l-7 34 25 25-13 31 29 25-4 40-35 26 4 45-28 35 3 43-32 30-7 51-42-13-27-42-34-23 2-46-25-37 18-38-9-51 25-28 1-47 30-24 5-44 31-14Z"
+                fill="#F8E7BF"
+                stroke="#805126"
+                strokeWidth="4"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M173 199l28 17 2 39-23 20-23-22 4-34 12-20Z"
+                fill="#F8E7BF"
+                stroke="#805126"
+                strokeWidth="4"
+                strokeLinejoin="round"
+              />
+              <path d="M70 113c70 24 91 85 72 139M471 80c63 24 105 77 99 137M424 330c68 14 116 51 139 105" fill="none" stroke="#9A622A" strokeDasharray="4 12" strokeWidth="2" opacity=".55" />
+              <text x="235" y="122" fill="#805126" fontSize="19" letterSpacing="4">SCOTLAND</text>
+              <text x="278" y="275" fill="#805126" fontSize="19" letterSpacing="4">ENGLAND</text>
+              <text x="172" y="300" fill="#805126" fontSize="16" letterSpacing="3">WALES</text>
+              <text x="41" y="450" fill="#805126" fontSize="15" letterSpacing="3">RECIPES IN BRITAIN</text>
+            </svg>
+
+            {mapPins.map(({ recipe, left, top }) => (
+              <Link
+                key={recipe.id}
+                href={recipe.href}
+                style={{ left, top }}
+                className="group absolute -translate-x-1/2 -translate-y-1/2"
+                aria-label={`Open ${recipe.title}, from ${recipe.location}`}
+              >
+                <span className="flex h-11 w-11 items-center justify-center rounded-full border-4 border-[#FFF3DF] bg-[#123C39] text-[#F0C45A] shadow-lg transition duration-200 group-hover:scale-110">✦</span>
+                <span className="pointer-events-none absolute left-1/2 top-12 z-10 w-max max-w-40 -translate-x-1/2 rounded-lg bg-[#123C39] px-3 py-2 text-center text-xs font-semibold leading-4 text-[#FFF3DF] opacity-0 shadow-lg transition group-hover:opacity-100">
+                  {recipe.title}<br /><span className="font-normal text-[#F0C45A]">{recipe.location}</span>
+                </span>
+              </Link>
+            ))}
+          </div>
+
+          <div className="rounded-3xl border border-[#D1AD75]/60 bg-[#0F312F] p-6">
+            <p className="text-sm uppercase tracking-[0.22em] text-[#F0C45A]">Beyond Britain</p>
+            <p className="mt-3 leading-7 text-[#F6E3BE]">OPR is a living cookbook for recipes that travel across borders, generations and families.</p>
+            {beyondBritainRecipes.length ? (
+              <div className="mt-6 space-y-3">
+                {beyondBritainRecipes.map((recipe) => (
+                  <Link key={recipe.id} href={recipe.href} className="block rounded-2xl border border-[#D1AD75]/50 bg-white/10 p-4 transition hover:bg-white/15">
+                    <span className="block text-xs uppercase tracking-[0.18em] text-[#F0C45A]">{recipe.location}</span>
+                    <span className="mt-1 block font-semibold text-white">{recipe.title} →</span>
+                  </Link>
+                ))}
+              </div>
+            ) : null}
+            <Link href="/share" className="mt-7 inline-block font-medium text-[#F0C45A] underline underline-offset-4">Put your family on the map →</Link>
+          </div>
+        </div>
+
+        {recipePlaces.length ? (
+          <div className="mt-7 border-t border-[#D1AD75]/40 pt-6">
+            <p className="text-sm uppercase tracking-[0.22em] text-[#F0C45A]">Browse by place</p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {recipePlaces.map((recipe) => (
+                <Link key={recipe.id} href={recipe.href} className="rounded-full border border-[#D1AD75]/60 px-4 py-2 text-sm text-[#FFF3DF] transition hover:bg-white/10">
+                  {recipe.location}
+                </Link>
+              ))}
+            </div>
+          </div>
+        ) : null}
+      </section>
 
       <section className="mt-10 overflow-hidden rounded-3xl border border-[#D1AD75]/80 bg-[#123C39] px-6 py-9 text-[#FFF3DF] shadow-xl shadow-[#1C5A50]/20 md:px-10">
         <div className="max-w-3xl">
