@@ -9,7 +9,7 @@ export default function VideoBrandMark({ className = "" }: { className?: string 
   return (
     <span
       aria-hidden="true"
-      className={`pointer-events-none absolute left-4 top-4 z-20 inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#E7B84B]/80 bg-[#0D342F]/90 p-1 shadow-lg shadow-black/30 ${className}`}
+      className={`pointer-events-none absolute left-5 top-5 z-20 inline-flex h-16 w-16 items-center justify-center rounded-full border-2 border-[#E7B84B] bg-[#0D342F]/95 p-1.5 shadow-xl shadow-black/40 sm:h-20 sm:w-20 ${className}`}
     >
       <Image
         src="/images/social/opr-pinterest-profile.png"
