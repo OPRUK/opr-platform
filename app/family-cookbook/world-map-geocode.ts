@@ -8,6 +8,7 @@ const PROJECTION_TRANSLATE: [number, number] = [480, 240];
 const DEG_TO_RAD = Math.PI / 180;
 
 export const WORLD_MAP_VIEWBOX = `0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`;
+export const WORLD_MAP_SIZE = { width: MAP_WIDTH, height: MAP_HEIGHT };
 
 function project([lon, lat]: [number, number]): [number, number] {
   const x = lon * DEG_TO_RAD * PROJECTION_SCALE + PROJECTION_TRANSLATE[0];

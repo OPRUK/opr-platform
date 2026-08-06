@@ -42,10 +42,10 @@ type VoteResults = {
   totals: Record<string, number>;
 };
 
-type MapPin = {
-  recipe: RecipeCard;
-  left: string;
-  top: string;
+type MapCluster = {
+  key: string;
+  coordinates: [number, number];
+  recipes: RecipeCard[];
 };
 
 function recipeTitleKey(title: string) {
@@ -66,6 +66,7 @@ export default function PublishedRecipes({
   const [voteResults, setVoteResults] = useState<VoteResults | null>(null);
   const [voteError, setVoteError] = useState("");
   const [votingFor, setVotingFor] = useState<string | null>(null);
+  const [expandedClusterKey, setExpandedClusterKey] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadPublishedRecipes() {
@@ -147,30 +148,30 @@ export default function PublishedRecipes({
     })),
   ];
 
-  const mapPins: MapPin[] = cards.flatMap((recipe) => {
+  // Cities close together in the real world (e.g. Guildford and Maidenhead)
+  // sit only a few pixels apart on a world-scale map, so individual pins
+  // become fiddly to tell apart or click. Group anything within
+  // CLUSTER_RADIUS_PX of an existing cluster's anchor into one marker;
+  // clicking it opens a small list of the recipes inside instead of trying
+  // to hit a single pin.
+  const CLUSTER_RADIUS_PX = 20;
+  const mapClusters: MapCluster[] = [];
+  for (const recipe of cards) {
     const coordinates = coordinatesForLocation(recipe.location);
-    if (!coordinates) return [];
+    if (!coordinates) continue;
 
-    // Nudge each additional pin at the same city so they don't stack
-    // exactly on top of one another (e.g. two recipes from New Malden).
-    const siblingsAtSameCity = cards
-      .slice(0, cards.indexOf(recipe))
-      .filter(
-        (item) =>
-          item.location &&
-          recipe.location &&
-          coordinatesForLocation(item.location)?.join(",") === coordinates.join(","),
-      ).length;
+    const existingCluster = mapClusters.find(
+      (cluster) =>
+        Math.hypot(cluster.coordinates[0] - coordinates[0], cluster.coordinates[1] - coordinates[1]) <
+        CLUSTER_RADIUS_PX,
+    );
 
-    const { left, top } = percentPosition(coordinates);
-    return [
-      {
-        recipe,
-        left: siblingsAtSameCity ? `calc(${left} + ${siblingsAtSameCity * 16}px)` : left,
-        top: siblingsAtSameCity ? `calc(${top} + ${siblingsAtSameCity * 14}px)` : top,
-      },
-    ];
-  });
+    if (existingCluster) {
+      existingCluster.recipes.push(recipe);
+    } else {
+      mapClusters.push({ key: recipe.id, coordinates, recipes: [recipe] });
+    }
+  }
 
   const recipePlaces = Array.from(
     new Map(
@@ -313,30 +314,82 @@ export default function PublishedRecipes({
           </p>
         </div>
 
-        <div className="relative mt-8 overflow-hidden rounded-3xl border border-[#D1AD75]/60 bg-[#0B2622]">
-          <svg viewBox={WORLD_MAP_VIEWBOX} className="block w-full" aria-hidden="true">
-            <rect width="960" height="480" fill="#0B2622" />
-            <path d={WORLD_LAND_PATH} fill="#E8C67C" stroke="#805126" strokeWidth="0.75" strokeLinejoin="round" />
-          </svg>
+        {/* The map and the pins/popovers are separate layers on purpose: the
+            map needs overflow-hidden to keep its rounded corners, but a
+            cluster popover must be able to spill outside the map's own
+            bounds without getting clipped by that same rule. */}
+        <div className="relative mt-8">
+          <div className="overflow-hidden rounded-3xl border border-[#D1AD75]/60 bg-[#0B2622]">
+            <svg viewBox={WORLD_MAP_VIEWBOX} className="block w-full" aria-hidden="true">
+              <rect width="960" height="480" fill="#0B2622" />
+              <path d={WORLD_LAND_PATH} fill="#E8C67C" stroke="#805126" strokeWidth="0.75" strokeLinejoin="round" />
+            </svg>
+          </div>
 
-          {mapPins.map(({ recipe, left, top }) => (
-            <Link
-              key={recipe.id}
-              href={recipe.href}
-              style={{ left, top }}
-              className="group absolute -translate-x-1/2 -translate-y-1/2"
-              aria-label={`Open ${recipe.title}, from ${recipe.location}`}
-            >
-              <span className="flex h-8 w-8 items-center justify-center rounded-full border-[3px] border-[#FFF3DF] bg-[#123C39] text-sm text-[#F0C45A] shadow-lg transition duration-200 group-hover:scale-125 sm:h-9 sm:w-9 sm:text-base">
-                ✦
-              </span>
-              <span className="pointer-events-none absolute left-1/2 top-10 z-10 w-max max-w-40 -translate-x-1/2 rounded-lg bg-[#123C39] px-3 py-2 text-center text-xs font-semibold leading-4 text-[#FFF3DF] opacity-0 shadow-lg transition group-hover:opacity-100 sm:top-11">
-                {recipe.title}
-                <br />
-                <span className="font-normal text-[#F0C45A]">{recipe.location}</span>
-              </span>
-            </Link>
-          ))}
+          {mapClusters.map((cluster) => {
+            const { left, top } = percentPosition(cluster.coordinates);
+
+            if (cluster.recipes.length === 1) {
+              const recipe = cluster.recipes[0];
+              return (
+                <Link
+                  key={cluster.key}
+                  href={recipe.href}
+                  style={{ left, top }}
+                  className="group absolute -translate-x-1/2 -translate-y-1/2"
+                  aria-label={`Open ${recipe.title}, from ${recipe.location}`}
+                >
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full border-[3px] border-[#FFF3DF] bg-[#123C39] text-sm text-[#F0C45A] shadow-lg transition duration-200 group-hover:scale-125 sm:h-9 sm:w-9 sm:text-base">
+                    ✦
+                  </span>
+                  <span className="pointer-events-none absolute left-1/2 top-10 z-10 w-max max-w-40 -translate-x-1/2 rounded-lg bg-[#123C39] px-3 py-2 text-center text-xs font-semibold leading-4 text-[#FFF3DF] opacity-0 shadow-lg transition group-hover:opacity-100 sm:top-11">
+                    {recipe.title}
+                    <br />
+                    <span className="font-normal text-[#F0C45A]">{recipe.location}</span>
+                  </span>
+                </Link>
+              );
+            }
+
+            const expanded = expandedClusterKey === cluster.key;
+            return (
+              <div key={cluster.key} style={{ left, top }} className="absolute -translate-x-1/2 -translate-y-1/2">
+                <button
+                  type="button"
+                  onClick={() => setExpandedClusterKey(expanded ? null : cluster.key)}
+                  aria-expanded={expanded}
+                  aria-label={`${cluster.recipes.length} recipes clustered here — press to see them`}
+                  className={`flex h-9 w-9 items-center justify-center rounded-full border-[3px] text-sm font-bold shadow-lg transition duration-200 hover:scale-125 sm:h-10 sm:w-10 sm:text-base ${
+                    expanded
+                      ? "border-[#F0C45A] bg-[#F0C45A] text-[#123C39]"
+                      : "border-[#FFF3DF] bg-[#123C39] text-[#F0C45A]"
+                  }`}
+                >
+                  {cluster.recipes.length}
+                </button>
+
+                {expanded ? (
+                  <div className="absolute left-1/2 top-11 z-20 w-56 -translate-x-1/2 rounded-2xl border border-[#D1AD75]/60 bg-[#123C39] p-3 text-left shadow-2xl sm:top-12">
+                    <p className="px-1 pb-2 text-[11px] uppercase tracking-[0.14em] text-[#F0C45A]">
+                      {cluster.recipes.length} recipes near here
+                    </p>
+                    <div className="space-y-1">
+                      {cluster.recipes.map((recipe) => (
+                        <Link
+                          key={recipe.id}
+                          href={recipe.href}
+                          className="block rounded-lg px-2 py-1.5 transition hover:bg-white/10"
+                        >
+                          <span className="block text-sm font-semibold text-[#FFF3DF]">{recipe.title}</span>
+                          <span className="block text-xs text-[#F0C45A]">{recipe.location}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            );
+          })}
         </div>
 
         <p className="mt-5 text-center text-sm text-[#F6E3BE]">
