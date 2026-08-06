@@ -12,12 +12,12 @@ export const metadata: Metadata = {
     absolute: "Other People's Recipes — A Living Cookbook of Family Recipes",
   },
   description:
-    "Handwritten, handed-down and half-remembered family recipes from across Britain, preserved with the stories behind them.",
+    "Handwritten, handed-down and half-remembered family recipes from across the world, preserved with the stories behind them.",
   alternates: { canonical: "/" },
   openGraph: {
     title: "Other People's Recipes — A Living Cookbook of Family Recipes",
     description:
-      "Handwritten, handed-down and half-remembered family recipes from across Britain, preserved with the stories behind them.",
+      "Handwritten, handed-down and half-remembered family recipes from across the world, preserved with the stories behind them.",
     url: "/",
   },
 };

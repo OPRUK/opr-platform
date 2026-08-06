@@ -39,7 +39,7 @@ const organizationJsonLd = {
   "@type": "Organization",
   name: SITE_NAME,
   url: SITE_URL,
-  logo: absoluteUrl("/icon.svg"),
+  logo: absoluteUrl("/icon"),
   sameAs: [
     "https://www.instagram.com/opr_uk/",
     "https://www.facebook.com/otherpeoplesrecipesuk/",

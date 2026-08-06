@@ -10,7 +10,7 @@ export default function SplashScreen() {
         <h1 className="text-[56px] leading-[0.98] text-[#EED8B2]">Every recipe has a story.</h1>
         <Divider className="my-7 bg-[#EED8B2]/60" />
         <p className="max-w-[26ch] text-[17px] leading-[1.5]">
-          A living cookbook of family recipes from across Britain, preserved with the stories behind them.
+          A living cookbook of family recipes from across the world, preserved with the stories behind them.
         </p>
       </div>
       <PrimaryButton href="/app/cookbook" inverted>
