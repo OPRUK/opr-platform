@@ -26,7 +26,6 @@ export const films: Film[] = [
   film("Sam & Nadine’s Shepherd’s Pie | A Recipe Worth Passing On", "sam-and-nadines-shepherds-pie"),
   film("Krishna Anand’s Baingan Ka Bharta | From the Kitchen Drawer", "krishna-anands-baingan-ka-bharta-kitchen-drawer"),
   film("Krishna Anand’s Baingan ka Bharta | A Family Recipe", "krishna-anands-baingan-ka-bharta-family-recipe"),
-  film("The First Step to Baingan Ka Bharta | OPR", "first-step-to-baingan-ka-bharta"),
   film("Preserving Nani’s Secret Baingan Bharta | Other People’s Recipes", "preserving-nanis-secret-baingan-bharta"),
   film("The OPR Idea | A Menu Written by the People", "the-opr-idea"),
   film("A Menu Written by the People | The OPR Vision", "a-menu-written-by-the-people"),
