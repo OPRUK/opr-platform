@@ -151,7 +151,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
   {
     slug: "krishna-anands-baingan-ka-bharta",
     title: "Krishna Anand's Baingan ka Bharta",
-    place: "From the family kitchen",
+    place: "New Delhi, India",
     story:
       "Once kept in a kitchen drawer, Krishna Anand's baingan ka bharta has been carefully translated so everyone can make it their own. Krishna was the late grandmother of OPR founder Chaten, and this smoky aubergine dish — with softly pink onions, tomatoes and fresh green chillies — carries her family story to every new table.",
     ingredients: [
@@ -189,7 +189,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
   {
     slug: "sudeshs-bhindi",
     title: "Sudesh's Bhindi",
-    place: "From the OPR collection",
+    place: "Maidenhead, England",
     story:
       "A simple bhindi masala built from the everyday flavours of onion, tomatoes, ginger and warming Indian spices. The okra is cooked first, gently and patiently, until its sliminess almost disappears, then folded through the masala. Sudesh loves it with warm roti and dal, though it is just as good with paratha or rice.",
     ingredients: [
@@ -235,7 +235,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
   {
     slug: "adas-jollof-rice",
     title: "Ada's Jollof Rice",
-    place: "Nigeria",
+    place: "Lagos, Nigeria",
     story:
       "Ada's Jollof Rice celebrates the unmistakable smoky flavour of Nigerian party Jollof: a deeply reduced pepper base, rich stock and a final moment of heat that creates that treasured, lightly scorched bottom layer. It is the kind of dish made for a full table, shared plates and second helpings.",
     ingredients: [
@@ -288,7 +288,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
   {
     slug: "sams-shepherds-pie",
     title: "Sam's Shepherd's Pie",
-    place: "From the OPR collection",
+    place: "Guildford, England",
     story:
       "Sam's Shepherd's Pie is built slowly from lamb, vegetables and a quietly brilliant savoury trick: white anchovies and Marmite melt into the gravy, leaving only deep, rounded flavour. Beneath its crisp potato topping is the kind of comforting dish made for a table full of people.",
     ingredients: [

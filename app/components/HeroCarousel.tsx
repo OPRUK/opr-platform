@@ -27,12 +27,12 @@ const slides = [
   {
     image: "/images/recipes/krishna-vantis-baingan-ka-bharta-wide.webp",
     alt: "Krishna Anand's Baingan ka Bharta",
-    label: "Krishna Anand's Baingan ka Bharta · From the family kitchen",
+    label: "Krishna Anand's Baingan ka Bharta · New Delhi",
   },
   {
     image: "/images/recipes/sudeshs-bhindi-wide.webp",
     alt: "Sudesh's Bhindi",
-    label: "Sudesh's Bhindi · From the OPR collection",
+    label: "Sudesh's Bhindi · Maidenhead",
   },
 ];
 
