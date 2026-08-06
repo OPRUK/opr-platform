@@ -9,22 +9,22 @@ type HomeHeroProps = {
 
 const introductionFilms = [
   {
-    desktop: "/videos/opr-home-introduction-complete.mp4",
-    mobile: "/videos/opr-home-introduction-complete-mobile.mp4",
-    poster: "/images/opr-home-introduction-poster.jpg",
-    label: "Other People's Recipes introduction film one",
+    desktop: "/videos/opr-add-your-recipe-promo.mp4",
+    mobile: "/videos/opr-add-your-recipe-promo-mobile.mp4",
+    poster: "/images/opr-add-your-recipe-promo-poster.jpg",
+    label: "Add your family recipe to Other People's Recipes",
   },
   {
-    desktop: "/videos/opr-kitchen-drawer-film.mp4",
-    mobile: "/videos/opr-kitchen-drawer-film-mobile.mp4",
-    poster: "/images/opr-kitchen-drawer-film-poster.jpg",
-    label: "A recipe brought back from the kitchen drawer",
+    desktop: "/videos/opr-sam-and-nadines-shepherds-pie.mp4",
+    mobile: "/videos/opr-sam-and-nadines-shepherds-pie-mobile.mp4",
+    poster: "/images/opr-sam-and-nadines-shepherds-pie-poster.jpg",
+    label: "Sam & Nadine's Shepherd's Pie | A Recipe Worth Passing On",
   },
   {
-    desktop: "/videos/opr-make-your-recipe-film.mp4",
-    mobile: "/videos/opr-make-your-recipe-film-mobile.mp4",
-    poster: "/images/opr-make-your-recipe-film-poster.jpg",
-    label: "Other People's Recipes introduction film three",
+    desktop: "/videos/opr-krishna-kitchen-drawer.mp4",
+    mobile: "/videos/opr-krishna-kitchen-drawer-mobile.mp4",
+    poster: "/images/opr-krishna-kitchen-drawer-poster.jpg",
+    label: "Krishna Anand's Baingan Ka Bharta | From the Kitchen Drawer",
   },
 ];
 
