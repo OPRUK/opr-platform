@@ -2,6 +2,7 @@
 
 import { ReactNode, useEffect, useRef, useState } from "react";
 import HeroCarousel from "./HeroCarousel";
+import VideoBrandMark from "./VideoBrandMark";
 
 type HomeHeroProps = {
   children: ReactNode;
@@ -86,9 +87,10 @@ export default function HomeHero({ children }: HomeHeroProps) {
       </div>
 
       {!introductionComplete ? (
-      <video
-        key={activeFilm.desktop}
-        ref={videoRef}
+      <>
+        <video
+          key={activeFilm.desktop}
+          ref={videoRef}
           autoPlay
           muted={isMuted}
           playsInline
@@ -111,6 +113,8 @@ export default function HomeHero({ children }: HomeHeroProps) {
           />
           <source src={activeFilm.desktop} type="video/mp4" />
         </video>
+        <VideoBrandMark className="z-30" />
+      </>
       ) : null}
 
       <div className="absolute inset-0 z-[1] bg-[#08231F]/35" />

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Navigation from "../components/Navigation";
+import VideoBrandMark from "../components/VideoBrandMark";
 import PublishedRecipes from "./PublishedRecipes";
 import { featuredRecipes } from "../../lib/recipes";
 import { absoluteUrl } from "../../lib/site";
@@ -71,6 +72,7 @@ export default function FamilyCookbook() {
         >
           <source src="/videos/opr-recipe-stories-film-v2.mp4" type="video/mp4" />
         </video>
+        <VideoBrandMark />
         <div className="absolute inset-0 -z-10 bg-[#0D342F]/75" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#08231F]/65 via-[#123C39]/45 to-[#08231F]/80" />
 

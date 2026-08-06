@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import VideoBrandMark from "./VideoBrandMark";
 
 /**
  * Click-to-play video, self-hosted on Supabase Storage. Starts as a poster
@@ -22,17 +23,20 @@ export default function FilmEmbed({
 
   if (playing) {
     return (
-      <video
-        className={className}
-        src={video}
-        controls
-        autoPlay
-        playsInline
-        preload="metadata"
-        poster={poster}
-      >
-        Your browser does not support video playback.
-      </video>
+      <div className={`relative ${className}`}>
+        <video
+          className="h-full w-full"
+          src={video}
+          controls
+          autoPlay
+          playsInline
+          preload="metadata"
+          poster={poster}
+        >
+          Your browser does not support video playback.
+        </video>
+        <VideoBrandMark />
+      </div>
     );
   }
 
