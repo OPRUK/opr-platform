@@ -180,9 +180,12 @@ export default function PublishedRecipes({
       )
     : new Intl.DateTimeFormat("en-GB", { month: "long", timeZone: "Europe/London" }).format(new Date());
   const hasVoted = Boolean(voteResults?.selectedRecipeKey);
-  const votingRecipes = [...cards].sort((firstRecipe, secondRecipe) =>
-    firstRecipe.title.localeCompare(secondRecipe.title, "en"),
-  );
+  const votingRecipes = [...cards].sort((firstRecipe, secondRecipe) => {
+    const courseDifference =
+      (categoryOrder[firstRecipe.category] ?? 4) - (categoryOrder[secondRecipe.category] ?? 4);
+
+    return courseDifference || firstRecipe.title.localeCompare(secondRecipe.title, "en");
+  });
 
   async function voteForRecipe(recipeKey: string) {
     if (hasVoted || votingFor) return;

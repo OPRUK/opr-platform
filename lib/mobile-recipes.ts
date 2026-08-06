@@ -104,10 +104,9 @@ export async function getAllMobileRecipes(): Promise<MobileRecipeSummary[]> {
   });
 }
 
-/** Every recipe is a Recipe of the Month candidate, alphabetically. */
+/** Every recipe is a Recipe of the Month candidate, in course order (starter, main, dessert), then alphabetically. */
 export async function getVoteCandidates(): Promise<MobileRecipeSummary[]> {
-  const cards = await getAllMobileRecipes();
-  return [...cards].sort((a, b) => a.title.localeCompare(b.title, "en"));
+  return getAllMobileRecipes();
 }
 
 export async function getMobileRecipe(id: string): Promise<MobileRecipeDetail | null> {
