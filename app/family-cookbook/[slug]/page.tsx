@@ -142,7 +142,7 @@ export default async function RecipePage({
       />
       <Navigation />
 
-      <section className="bg-[#123C39] px-6 pb-20 pt-40 text-center text-white">
+      <section className="bg-[#241221] px-6 pb-20 pt-40 text-center text-white">
         <p className="mb-5 text-sm uppercase tracking-[0.4em] text-amber-300">
           A page from the family cookbook
         </p>

@@ -59,7 +59,7 @@ export default function FamilyCookbook() {
       />
       <Navigation />
 
-      <section className="relative isolate overflow-hidden bg-[#123C39] px-6 pb-24 pt-40 text-center text-white">
+      <section className="relative isolate overflow-hidden bg-[#241221] px-6 pb-24 pt-40 text-center text-white">
         <video
           className="absolute inset-0 -z-20 h-full w-full object-cover"
           autoPlay

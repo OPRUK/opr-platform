@@ -88,7 +88,7 @@ export default async function Home() {
       </HomeHero>
 
       <section className="bg-[#EED8B2] px-6 py-10 md:py-14">
-        <div className="mx-auto max-w-6xl overflow-hidden rounded-[2rem] border-2 border-[#DDB765] bg-[#123C39] shadow-2xl shadow-[#08231F]/25">
+        <div className="mx-auto max-w-6xl overflow-hidden rounded-[2rem] border-2 border-[#DDB765] bg-[#241221] shadow-2xl shadow-black/30">
           <div className="grid items-stretch md:grid-cols-[0.7fr_1.7fr]">
             <div className="flex min-h-[200px] flex-col justify-between bg-[#DDB765] p-8 text-[#123C39] md:min-h-full md:p-10">
               <p className="text-xs font-bold uppercase tracking-[0.3em]">OPR invitation</p>
@@ -196,7 +196,7 @@ export default async function Home() {
           </div>
       </section>
 
-      <section className="bg-[#123C39] px-6 py-24 md:px-8">
+      <section className="bg-[#241221] px-6 py-24 md:px-8">
         <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2">
           <div className="overflow-hidden rounded-[2rem] shadow-2xl">
             <img
@@ -277,7 +277,7 @@ export default async function Home() {
 
       <section
         id="cookbook"
-        className="bg-[#123C39] px-6 py-24 animate-rise-in-delayed"
+        className="bg-[#241221] px-6 py-24 animate-rise-in-delayed"
       >
           <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2">
             <Image

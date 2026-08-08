@@ -9,7 +9,7 @@ export default function FamiliesWhoMadeThis({ cooks, recipeTitle }: { cooks: Com
   if (!cooks.length) return null;
 
   return (
-    <section className="bg-[#123C39] px-6 py-20 text-white">
+    <section className="bg-[#241221] px-6 py-20 text-white">
       <div className="mx-auto max-w-6xl">
         <div className="max-w-2xl">
           <p className="text-sm uppercase tracking-[0.35em] text-amber-300">Families who&apos;ve made this</p>

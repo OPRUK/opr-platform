@@ -190,7 +190,7 @@ export default async function CommunityRecipePage({
         }}
       />
       <Navigation />
-      <section className="bg-[#123C39] px-6 pb-20 pt-40 text-center text-white">
+      <section className="bg-[#241221] px-6 pb-20 pt-40 text-center text-white">
         <p className="text-sm uppercase tracking-[0.4em] text-amber-300">A page from the community cookbook</p>
         <h1 className="font-display mx-auto mt-5 max-w-4xl text-5xl font-bold leading-tight md:text-7xl">{recipe.title}</h1>
         <p className="mt-6 text-sm uppercase tracking-[0.25em] text-stone-300">Shared by {recipe.name}{recipe.location ? ` · ${recipe.location}` : ""}</p>
@@ -226,7 +226,7 @@ export default async function CommunityRecipePage({
         </aside>
       </section>
       {audioStoryUrl ? (
-        <section className="bg-[#123C39] px-6 py-16 text-white">
+        <section className="bg-[#241221] px-6 py-16 text-white">
           <div className="mx-auto max-w-4xl text-center">
             <p className="text-sm uppercase tracking-[0.35em] text-amber-300">Hear the story</p>
             <h2 className="mt-5 text-4xl font-bold">In their own words.</h2>

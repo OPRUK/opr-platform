@@ -305,7 +305,7 @@ export default function PublishedRecipes({
         </Link>
       </div>
 
-      <section className="mt-10 overflow-hidden rounded-3xl border border-[#4A2E45]/70 bg-[#123C39] p-6 text-[#FFF3DF] shadow-xl shadow-[#1C5A50]/20 md:p-10">
+      <section className="mt-10 overflow-hidden rounded-3xl border border-[#4A2E45]/70 bg-[#241221] p-6 text-[#FFF3DF] shadow-xl shadow-black/30 md:p-10">
         <div className="max-w-3xl">
           <p className="text-sm uppercase tracking-[0.28em] text-[#F0C45A]">From kitchen to kitchen</p>
           <h2 className="font-display mt-3 text-4xl font-bold leading-tight md:text-5xl">The OPR recipe map</h2>
