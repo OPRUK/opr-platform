@@ -180,6 +180,7 @@ export default function HomeHero({ children }: HomeHeroProps) {
             ? "translate-y-0 opacity-100"
             : "pointer-events-none translate-y-4 opacity-0"
         }`}
+        style={{ transitionDelay: introductionComplete ? `${CROSSFADE_MS}ms` : "0ms" }}
       >
         {children}
       </div>
