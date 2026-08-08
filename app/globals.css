@@ -1,19 +1,10 @@
 @import "tailwindcss";
 
 :root {
-  --background: #24111f;
-  --foreground: #f4e8ce;
-  --opr-plum-950: #1c0b18;
-  --opr-plum-900: #24111f;
-  --opr-plum-850: #301529;
-  --opr-plum-800: #3a1b31;
-  --opr-cream: #f4e8ce;
-  --opr-cream-muted: #ddcba9;
-  --opr-gold: #d7ad5c;
-  --opr-gold-soft: #ecd08d;
-  --opr-teal: #629b91;
-  --font-brand: "Cormorant Garamond", Georgia, "Times New Roman", serif;
-  --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --background: #eed8b2;
+  --foreground: #4a4232;
+  --font-brand: "Gill Sans MT", "Gill Sans", Avenir, Corbel, Arial, sans-serif;
+  --font-display: Didot, "Bodoni MT", Georgia, "Times New Roman", serif;
   --font-founder-hand: "Caveat";
   --font-founder-signature: "Allura";
 }
@@ -29,9 +20,8 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-brand);
-  font-size: 1.06rem;
-  letter-spacing: 0.01em;
-  background-image: linear-gradient(120deg, rgba(255, 243, 213, 0.025), transparent 38%);
+  background-image: radial-gradient(rgba(112, 79, 46, 0.08) 0.7px, transparent 0.7px);
+  background-size: 9px 9px;
 }
 
 .font-brand {
@@ -40,7 +30,6 @@ body {
 
 .font-display {
   font-family: var(--font-display);
-  font-weight: 500;
 }
 
 .font-founder-hand {
@@ -49,105 +38,6 @@ body {
 
 .font-founder-signature {
   font-family: var(--font-founder-signature), "Bradley Hand", cursive;
-}
-
-/* OPR's editorial plum identity. These rules deliberately sit after Tailwind so
-   every existing public page adopts the same visual language without changing
-   its content, forms or functionality. */
-body :where(h1, h2, h3, h4, h5, h6):not(.font-founder-hand):not(.font-founder-signature),
-body .font-brand {
-  font-family: var(--font-display);
-  font-weight: 600;
-}
-
-body :where(p, li, label, input, textarea, select, button) {
-  font-family: var(--font-brand);
-}
-
-/* Page and card surfaces */
-[class*="bg-[#EED8B2]"],
-[class*="bg-[#FFF3DF]"],
-[class*="bg-[#F4DDAE]"],
-[class*="bg-[#F6E3BE]"],
-[class*="bg-[#FCE9C7]"] {
-  background-color: var(--opr-plum-900) !important;
-}
-
-[class*="bg-[#123C39]"],
-[class*="bg-[#08231F]"],
-[class*="bg-[#0D342F]"],
-[class*="bg-[#0E5C3E]"],
-[class*="bg-[#1C5A50]"] {
-  background-color: var(--opr-plum-950) !important;
-}
-
-[class*="bg-[#241221]"] {
-  background-color: var(--opr-plum-850) !important;
-}
-
-/* Type */
-[class*="text-[#123C39]"],
-[class*="text-[#08231F]"],
-[class*="text-[#0E5C3E]"],
-[class*="text-[#1C5A50]"] {
-  color: var(--opr-cream) !important;
-}
-
-[class*="text-[#4A4232]"],
-[class*="text-[#4A2E45]"],
-[class*="text-stone-600"],
-[class*="text-stone-700"] {
-  color: var(--opr-cream-muted) !important;
-}
-
-[class*="text-[#DDB765]"],
-[class*="text-[#FFD58C]"],
-[class*="text-amber-300"] {
-  color: var(--opr-gold-soft) !important;
-}
-
-/* Fine gold rules rather than soft green borders and shadows */
-[class*="border-[#123C39]"],
-[class*="border-[#1C5A50]"],
-[class*="border-[#4A2E45]"],
-[class*="border-[#8B6B42]"],
-[class*="border-[#DDB765]"] {
-  border-color: rgba(215, 173, 92, 0.52) !important;
-}
-
-[class*="shadow-[#1C5A50]"] {
-  --tw-shadow-color: rgba(5, 0, 4, 0.5) !important;
-}
-
-/* The specimen uses modest book-like corners, not oversized app cards. */
-[class*="rounded-3xl"],
-[class*="rounded-[2rem]"] {
-  border-radius: 0.55rem !important;
-}
-
-button[class*="rounded-full"],
-a.inline-flex[class*="rounded-full"] {
-  border-radius: 0.125rem !important;
-  font-family: var(--font-brand);
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-}
-
-[class*="bg-[#DDB765]"],
-[class*="bg-[#F0C45A]"],
-[class*="bg-[#FFD58C]"] {
-  background-color: var(--opr-gold) !important;
-  color: var(--opr-plum-950) !important;
-}
-
-input, textarea, select {
-  background-color: rgba(244, 232, 206, 0.06) !important;
-  border-color: rgba(215, 173, 92, 0.55) !important;
-  color: var(--opr-cream) !important;
-}
-
-input::placeholder, textarea::placeholder {
-  color: rgba(244, 232, 206, 0.55) !important;
 }
 
 @keyframes rise-in {
