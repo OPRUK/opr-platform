@@ -308,7 +308,7 @@ export default function PublishedRecipes({
       <section className="mt-10 overflow-hidden rounded-3xl border border-[#D1AD75]/70 bg-[#123C39] p-6 text-[#FFF3DF] shadow-xl shadow-[#1C5A50]/20 md:p-10">
         <div className="max-w-3xl">
           <p className="text-sm uppercase tracking-[0.28em] text-[#F0C45A]">From kitchen to kitchen</p>
-          <h2 className="mt-3 text-4xl font-bold leading-tight md:text-5xl">The OPR recipe map</h2>
+          <h2 className="font-display mt-3 text-4xl font-bold leading-tight md:text-5xl">The OPR recipe map</h2>
           <p className="mt-4 max-w-2xl leading-7 text-[#F6E3BE]">
             Every pin begins with a person, a place and a recipe worth passing on. Explore the kitchens that make up the OPR cookbook so far.
           </p>
@@ -416,7 +416,7 @@ export default function PublishedRecipes({
       <section className="mt-10 overflow-hidden rounded-3xl border border-[#D1AD75]/80 bg-[#123C39] px-6 py-9 text-[#FFF3DF] shadow-xl shadow-[#1C5A50]/20 md:px-10">
         <div className="max-w-3xl">
           <p className="text-sm uppercase tracking-[0.28em] text-[#F0C45A]">OPR Recipe of the Month</p>
-          <h2 className="mt-3 text-4xl font-bold leading-tight md:text-5xl">Which recipe should take the table this {monthName}?</h2>
+          <h2 className="font-display mt-3 text-4xl font-bold leading-tight md:text-5xl">Which recipe should take the table this {monthName}?</h2>
           <p className="mt-4 max-w-2xl leading-7 text-[#F6E3BE]">
             Choose the family recipe you would most like to cook. The winning story becomes OPR&apos;s Recipe of the Month.
           </p>
@@ -457,7 +457,7 @@ export default function PublishedRecipes({
       </p>
 
       {visibleRecipes.length ? (
-        <div className="mt-5 grid gap-px overflow-hidden border border-[#123C39]/25 bg-[#123C39]/25 md:grid-cols-3">
+        <div className="mt-5 grid gap-px overflow-hidden border border-[#4A2E45]/45 bg-[#4A2E45]/45 md:grid-cols-3">
           {visibleRecipes.map((recipe, index) => (
             <Link
               key={recipe.id}
@@ -477,12 +477,12 @@ export default function PublishedRecipes({
               )}
               <div className="flex min-h-80 flex-col p-8">
                 <p
-                  className="text-[11px] uppercase tracking-[0.14em] text-[#9A622A]"
+                  className="text-[11px] uppercase tracking-[0.14em] text-[#0E5C3E]"
                   style={{ fontFamily: "'Courier New', ui-monospace, monospace" }}
                 >
                   No. {String(index + 1).padStart(2, "0")} &middot; {recipe.category}
                 </p>
-                <h3 className="mt-5 text-3xl font-bold leading-tight">{recipe.title}</h3>
+                <h3 className="font-display mt-5 text-3xl font-bold leading-tight">{recipe.title}</h3>
                 <p className="mt-3 text-sm uppercase tracking-[0.16em] text-stone-500">
                   {recipe.contributor}
                   {recipe.location ? ` · ${recipe.location}` : ""}

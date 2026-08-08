@@ -77,7 +77,7 @@ export default function FamilyCookbook() {
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#08231F]/65 via-[#123C39]/45 to-[#08231F]/80" />
 
         <div
-          className="absolute right-6 top-24 hidden h-24 w-24 rotate-[8deg] items-center justify-center rounded-full border-2 border-[#F0C45A]/80 text-center text-[9px] font-bold uppercase leading-tight tracking-[0.06em] text-[#F0C45A]/90 sm:flex md:right-10 md:top-28"
+          className="absolute right-6 top-24 hidden h-24 w-24 rotate-[8deg] items-center justify-center rounded-full border-2 border-[#0E5C3E] text-center text-[9px] font-bold uppercase leading-tight tracking-[0.06em] text-[#4FAE85] sm:flex md:right-10 md:top-28"
           style={{ fontFamily: "'Courier New', ui-monospace, monospace" }}
           aria-hidden="true"
         >
@@ -94,7 +94,7 @@ export default function FamilyCookbook() {
           <p className="mb-5 text-sm uppercase tracking-[0.4em] text-amber-200">
             The Family Cookbook
           </p>
-          <h1 className="text-5xl font-bold leading-tight drop-shadow-lg md:text-7xl">
+          <h1 className="font-display text-5xl font-bold leading-tight drop-shadow-lg md:text-7xl">
             Every recipe has travelled through time before finding its way here.
           </h1>
         </div>
@@ -105,7 +105,7 @@ export default function FamilyCookbook() {
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
             Choose a recipe
           </p>
-          <h2 className="mt-4 text-4xl font-bold md:text-5xl">
+          <h2 className="font-display mt-4 text-4xl font-bold md:text-5xl">
             Stories from family kitchens
           </h2>
           <p className="mt-6 text-lg leading-8 text-stone-700">
@@ -121,7 +121,7 @@ export default function FamilyCookbook() {
         <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
           Whet Our Appetite
         </p>
-        <h2 className="mx-auto mt-5 max-w-3xl text-4xl font-bold md:text-5xl">
+        <h2 className="font-display mx-auto mt-5 max-w-3xl text-4xl font-bold md:text-5xl">
           Could your family&apos;s recipe be next?
         </h2>
         <Link

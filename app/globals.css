@@ -4,6 +4,7 @@
   --background: #eed8b2;
   --foreground: #4a4232;
   --font-brand: "Gill Sans MT", "Gill Sans", Avenir, Corbel, Arial, sans-serif;
+  --font-display: Didot, "Bodoni MT", Georgia, "Times New Roman", serif;
   --font-founder-hand: "Caveat";
   --font-founder-signature: "Allura";
 }
@@ -25,6 +26,10 @@ body {
 
 .font-brand {
   font-family: var(--font-brand);
+}
+
+.font-display {
+  font-family: var(--font-display);
 }
 
 .font-founder-hand {
