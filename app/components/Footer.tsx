@@ -2,37 +2,37 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#08231F] px-6 py-16 text-[#FFF3DF]">
+    <footer className="border-t border-[#DDB765]/40 bg-[#1C0B18] px-6 py-16 text-[#F4E8CE]">
       <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
-          <p className="font-brand text-4xl font-semibold leading-none tracking-[0.01em]">Other People&apos;s Recipes</p>
-          <p className="mt-5 max-w-sm leading-7 text-[#E7CEA2]">
+          <p className="font-display max-w-[14rem] text-4xl font-semibold leading-[0.92] tracking-[-0.02em]">Other People&apos;s Recipes</p>
+          <p className="mt-5 max-w-sm leading-7 text-[#DDCBA9]">
             Preserving recipes. Celebrating people. Sharing stories around the
             table.
           </p>
         </div>
 
         <div>
-          <p className="text-sm uppercase tracking-[0.3em] text-[#DDB765]">
+          <p className="text-sm uppercase tracking-[0.3em] text-[#E8C66F]">
             Explore
           </p>
-          <ul className="mt-5 space-y-3 text-[#FFF3DF]">
-            <li><Link href="/" className="transition hover:text-[#DDB765]">Home</Link></li>
-            <li><Link href="/our-story" className="transition hover:text-[#DDB765]">Your Story</Link></li>
-            <li><Link href="/founder" className="transition hover:text-[#DDB765]">Founder</Link></li>
-            <li><Link href="/family-cookbook" className="transition hover:text-[#DDB765]">Family Cookbook</Link></li>
-            <li><Link href="/films" className="transition hover:text-[#DDB765]">Films</Link></li>
+          <ul className="mt-5 space-y-3 text-[#F4E8CE]">
+            <li><Link href="/" className="transition hover:text-[#E8C66F]">Home</Link></li>
+            <li><Link href="/our-story" className="transition hover:text-[#E8C66F]">Your Story</Link></li>
+            <li><Link href="/founder" className="transition hover:text-[#E8C66F]">Founder</Link></li>
+            <li><Link href="/family-cookbook" className="transition hover:text-[#E8C66F]">Family Cookbook</Link></li>
+            <li><Link href="/films" className="transition hover:text-[#E8C66F]">Films</Link></li>
           </ul>
         </div>
 
         <div>
-          <p className="text-sm uppercase tracking-[0.3em] text-[#DDB765]">
+          <p className="text-sm uppercase tracking-[0.3em] text-[#E8C66F]">
             Get involved
           </p>
-          <ul className="mt-5 space-y-3 text-[#FFF3DF]">
-            <li><Link href="/share" className="transition hover:text-[#DDB765]">Share your recipe</Link></li>
-            <li><Link href="/founding-table" className="transition hover:text-[#DDB765]">Join the Founding Table</Link></li>
-            <li><a href="mailto:info@otherpeoplesrecipes.co.uk" className="transition hover:text-[#DDB765]">Contact OPR</a></li>
+          <ul className="mt-5 space-y-3 text-[#F4E8CE]">
+            <li><Link href="/share" className="transition hover:text-[#E8C66F]">Share your recipe</Link></li>
+            <li><Link href="/founding-table" className="transition hover:text-[#E8C66F]">Join the Founding Table</Link></li>
+            <li><a href="mailto:info@otherpeoplesrecipes.co.uk" className="transition hover:text-[#E8C66F]">Contact OPR</a></li>
             <li className="flex items-center gap-4 pt-2">
               <a
                 href="https://www.instagram.com/opr_uk/"
@@ -96,15 +96,15 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="mx-auto mt-14 flex max-w-6xl flex-col gap-3 border-t border-[#1C5A50] pt-6 text-sm text-[#DABF8D] sm:flex-row sm:items-center sm:justify-between">
+      <div className="mx-auto mt-14 flex max-w-6xl flex-col gap-3 border-t border-[#DDB765]/35 pt-6 text-sm text-[#DDCBA9] sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p>© {new Date().getFullYear()} Other People&apos;s Recipes. Every recipe has a story.</p>
           <p className="mt-1 text-xs uppercase text-[#BFA77B]">Other Peoples Recipes Ltd · Company no. 17370145</p>
         </div>
         <p className="flex gap-4">
-          <Link href="/privacy" className="transition hover:text-[#DDB765]">Privacy Policy</Link>
-          <Link href="/cookies" className="transition hover:text-[#DDB765]">Cookies</Link>
-          <Link href="/terms" className="transition hover:text-[#DDB765]">Terms of Use</Link>
+          <Link href="/privacy" className="transition hover:text-[#E8C66F]">Privacy Policy</Link>
+          <Link href="/cookies" className="transition hover:text-[#E8C66F]">Cookies</Link>
+          <Link href="/terms" className="transition hover:text-[#E8C66F]">Terms of Use</Link>
         </p>
       </div>
     </footer>
