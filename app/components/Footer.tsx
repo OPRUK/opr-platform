@@ -99,7 +99,7 @@ export default function Footer() {
       <div className="mx-auto mt-14 flex max-w-6xl flex-col gap-3 border-t border-[#1C5A50] pt-6 text-sm text-[#DABF8D] sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p>© {new Date().getFullYear()} Other People&apos;s Recipes. Every recipe has a story.</p>
-          <p className="mt-1 text-xs text-[#BFA77B]">OTHER PEOPLES RECIPES LTD · Company no. 17370145</p>
+          <p className="mt-1 text-xs uppercase text-[#BFA77B]">Other Peoples Recipes Ltd · Company no. 17370145</p>
         </div>
         <p className="flex gap-4">
           <Link href="/privacy" className="transition hover:text-[#DDB765]">Privacy Policy</Link>

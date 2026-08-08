@@ -29,51 +29,93 @@ const introductionFilms = [
   },
 ];
 
+// How long the crossfade between clips takes, and (in seconds) how far from
+// the end of a clip we start blending into the next one, so the two
+// visibly overlap instead of hard-cutting.
+const CROSSFADE_MS = 900;
+const CROSSFADE_LEAD_SECONDS = CROSSFADE_MS / 1000;
+
 export default function HomeHero({ children }: HomeHeroProps) {
   const [introductionComplete, setIntroductionComplete] = useState(false);
-  const [filmIndex, setFilmIndex] = useState(0);
+  const [videosDone, setVideosDone] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const completedFilmIndexRef = useRef<number | null>(null);
-  const activeFilmIndexRef = useRef(0);
-  const activeFilm = introductionFilms[filmIndex];
+  // Two alternating <video> elements so the incoming clip can start playing
+  // underneath the outgoing one and we crossfade opacity between them,
+  // rather than hard-swapping a single video's `src` (the previous jump cut).
+  const [activeSlot, setActiveSlot] = useState<0 | 1>(0);
+  const [slotFilm, setSlotFilm] = useState<[number, number]>([0, 1 % introductionFilms.length]);
+  const videoRefs = [useRef<HTMLVideoElement | null>(null), useRef<HTMLVideoElement | null>(null)];
+  const currentIndexRef = useRef(0);
+  const transitioningRef = useRef(false);
 
   useEffect(() => {
-    if (introductionComplete || !videoRef.current) return;
-
-    activeFilmIndexRef.current = filmIndex;
-    videoRef.current.muted = isMuted;
-    void videoRef.current.play().catch(() => {
-      // If a browser blocks playback, leave the film visible for the visitor to start.
+    const el = videoRefs[activeSlot].current;
+    if (!el) return;
+    el.muted = isMuted;
+    void el.play().catch(() => {
+      // If a browser blocks autoplay, the poster stays visible for the visitor to start.
     });
-  }, [filmIndex, introductionComplete, isMuted]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function toggleSound() {
-    if (!videoRef.current) return;
-
-    videoRef.current.muted = !isMuted;
-    setIsMuted((current) => !current);
+    const current = videoRefs[activeSlot].current;
+    if (!current) return;
+    current.muted = !isMuted;
+    setIsMuted((value) => !value);
   }
 
-  function playNextFilm(completedIndex: number) {
-    // Browsers can deliver a late `ended` event while React is swapping clips.
-    // Only the film currently on screen is allowed to advance the playlist,
-    // and each film gets exactly one turn.
-    if (
-      completedIndex !== activeFilmIndexRef.current ||
-      completedFilmIndexRef.current === completedIndex
-    ) {
+  function beginCrossfade() {
+    if (transitioningRef.current) return;
+    transitioningRef.current = true;
+
+    const currentIndex = currentIndexRef.current;
+    const isLastFilm = currentIndex >= introductionFilms.length - 1;
+
+    if (isLastFilm) {
+      // Fade the final clip out while the photo carousel fades in underneath
+      // (see the wrapping div below), instead of unmounting the video the
+      // instant it ends.
+      setIntroductionComplete(true);
+      window.setTimeout(() => setVideosDone(true), CROSSFADE_MS + 100);
       return;
     }
 
-    completedFilmIndexRef.current = completedIndex;
+    const nextIndex = currentIndex + 1;
+    const nextSlot: 0 | 1 = activeSlot === 0 ? 1 : 0;
+    const previousSlot = activeSlot;
 
-    if (completedIndex < introductionFilms.length - 1) {
-      setFilmIndex(completedIndex + 1);
-      return;
+    setSlotFilm(([a, b]) => (nextSlot === 0 ? [nextIndex, b] : [a, nextIndex]));
+
+    // Wait a frame for React to commit the new <source> children before we
+    // reload and play — <video> elements don't pick up source changes on
+    // their own.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const el = videoRefs[nextSlot].current;
+        if (el) {
+          el.muted = isMuted;
+          el.load();
+          void el.play().catch(() => {});
+        }
+        setActiveSlot(nextSlot);
+        currentIndexRef.current = nextIndex;
+
+        window.setTimeout(() => {
+          videoRefs[previousSlot].current?.pause();
+          transitioningRef.current = false;
+        }, CROSSFADE_MS);
+      });
+    });
+  }
+
+  function handleTimeUpdate(slot: 0 | 1) {
+    if (slot !== activeSlot || transitioningRef.current) return;
+    const el = videoRefs[slot].current;
+    if (!el || !el.duration) return;
+    if (el.duration - el.currentTime <= CROSSFADE_LEAD_SECONDS) {
+      beginCrossfade();
     }
-
-    setIntroductionComplete(true);
   }
 
   return (
@@ -86,35 +128,37 @@ export default function HomeHero({ children }: HomeHeroProps) {
         <HeroCarousel />
       </div>
 
-      {!introductionComplete ? (
-      <>
-        <video
-          key={activeFilm.desktop}
-          ref={videoRef}
-          autoPlay
-          muted={isMuted}
-          playsInline
-        preload="auto"
-        poster={activeFilm.poster}
-        data-film-index={filmIndex}
-        onEnded={(event) => playNextFilm(Number(event.currentTarget.dataset.filmIndex))}
-        onCanPlay={() => {
-          void videoRef.current?.play().catch(() => {
-            // Some browsers require the visitor to start a muted video manually.
-          });
-        }}
-          className="absolute inset-0 h-full w-full object-contain sm:object-cover"
-          aria-label={activeFilm.label}
-        >
-          <source
-            media="(max-width: 640px)"
-            src={activeFilm.mobile}
-            type="video/mp4"
-          />
-          <source src={activeFilm.desktop} type="video/mp4" />
-        </video>
-        <VideoBrandMark className="z-30" />
-      </>
+      {!videosDone ? (
+        <>
+          {([0, 1] as const).map((slot) => {
+            const film = introductionFilms[slotFilm[slot]];
+            const isVisible = slot === activeSlot && !introductionComplete;
+            return (
+              <video
+                key={slot}
+                ref={videoRefs[slot]}
+                muted={isMuted}
+                playsInline
+                preload="auto"
+                poster={film.poster}
+                onTimeUpdate={() => handleTimeUpdate(slot)}
+                onCanPlay={() => {
+                  if (slot === activeSlot) {
+                    void videoRefs[slot].current?.play().catch(() => {});
+                  }
+                }}
+                className="absolute inset-0 h-full w-full object-contain transition-opacity ease-in-out sm:object-cover"
+                style={{ transitionDuration: `${CROSSFADE_MS}ms`, opacity: isVisible ? 1 : 0 }}
+                aria-label={film.label}
+                aria-hidden={!isVisible}
+              >
+                <source media="(max-width: 640px)" src={film.mobile} type="video/mp4" />
+                <source src={film.desktop} type="video/mp4" />
+              </video>
+            );
+          })}
+          <VideoBrandMark className="z-30" />
+        </>
       ) : null}
 
       <div className="absolute inset-0 z-[1] bg-[#08231F]/35" />
