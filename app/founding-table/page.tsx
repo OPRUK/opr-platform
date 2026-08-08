@@ -29,7 +29,7 @@ export default function FoundingTablePage() {
           <p className="mb-5 text-sm uppercase tracking-[0.4em] text-[#FFD58C]">
             The Founding Table
           </p>
-          <h1 className="mx-auto max-w-4xl text-5xl font-bold leading-tight drop-shadow-2xl md:text-7xl">
+          <h1 className="font-display mx-auto max-w-4xl text-5xl font-bold leading-tight drop-shadow-2xl md:text-7xl">
             Be there at the beginning.
           </h1>
           <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-[#FFF1D8]">

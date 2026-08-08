@@ -59,7 +59,7 @@ export default async function Home() {
             A Living Cookbook
           </p>
 
-          <h1 className="font-brand text-7xl font-semibold leading-[0.9] tracking-[-0.02em] drop-shadow-2xl md:text-9xl">
+          <h1 className="font-display text-7xl font-semibold leading-[0.9] tracking-[-0.02em] drop-shadow-2xl md:text-9xl">
             Other People&apos;s Recipes
           </h1>
 

@@ -192,7 +192,7 @@ export default async function CommunityRecipePage({
       <Navigation />
       <section className="bg-[#123C39] px-6 pb-20 pt-40 text-center text-white">
         <p className="text-sm uppercase tracking-[0.4em] text-amber-300">A page from the community cookbook</p>
-        <h1 className="mx-auto mt-5 max-w-4xl text-5xl font-bold leading-tight md:text-7xl">{recipe.title}</h1>
+        <h1 className="font-display mx-auto mt-5 max-w-4xl text-5xl font-bold leading-tight md:text-7xl">{recipe.title}</h1>
         <p className="mt-6 text-sm uppercase tracking-[0.25em] text-stone-300">Shared by {recipe.name}{recipe.location ? ` · ${recipe.location}` : ""}</p>
       </section>
       <section className="mx-auto grid max-w-6xl gap-14 px-6 py-20 md:grid-cols-[1.1fr_0.9fr] md:px-8">

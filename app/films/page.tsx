@@ -37,7 +37,7 @@ export default function FilmsPage() {
           <p className="mb-5 text-sm uppercase tracking-[0.4em] text-amber-200">
             The OPR Film Collection
           </p>
-          <h1 className="text-5xl font-bold leading-tight drop-shadow-lg md:text-7xl">
+          <h1 className="font-display text-5xl font-bold leading-tight drop-shadow-lg md:text-7xl">
             Some stories are best told around a table. Others deserve a screen.
           </h1>
           <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-[#FFF1D8]">

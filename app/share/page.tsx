@@ -18,7 +18,7 @@ export default function ShareYourStory() {
         <p className="mb-5 text-sm uppercase tracking-[0.4em] text-amber-300">
           Add a page to the book
         </p>
-        <h1 className="mx-auto max-w-4xl text-5xl font-bold leading-tight md:text-7xl">
+        <h1 className="font-display mx-auto max-w-4xl text-5xl font-bold leading-tight md:text-7xl">
           Share your family&apos;s recipe.
         </h1>
         <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-stone-200">

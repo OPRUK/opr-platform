@@ -31,7 +31,7 @@ export default function FounderPage() {
             <p className="mb-5 text-sm uppercase tracking-[0.4em] text-[#FFD58C]">
               A note to my future self
             </p>
-            <h1 className="text-5xl font-bold leading-tight drop-shadow-lg md:text-7xl">
+            <h1 className="font-display text-5xl font-bold leading-tight drop-shadow-lg md:text-7xl">
               A founder&apos;s letter,
               <span className="block text-[#FFD58C]">written in 2000.</span>
             </h1>

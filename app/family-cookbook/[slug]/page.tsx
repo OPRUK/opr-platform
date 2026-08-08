@@ -146,7 +146,7 @@ export default async function RecipePage({
         <p className="mb-5 text-sm uppercase tracking-[0.4em] text-amber-300">
           A page from the family cookbook
         </p>
-        <h1 className="mx-auto max-w-4xl text-5xl font-bold leading-tight md:text-7xl">
+        <h1 className="font-display mx-auto max-w-4xl text-5xl font-bold leading-tight md:text-7xl">
           {recipe.title}
         </h1>
         <p className="mt-6 text-sm uppercase tracking-[0.25em] text-stone-300">
