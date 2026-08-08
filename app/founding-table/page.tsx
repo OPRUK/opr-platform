@@ -41,7 +41,7 @@ export default function FoundingTablePage() {
 
       <section className="mx-auto grid max-w-6xl gap-12 px-6 py-20 md:grid-cols-[1.05fr_0.95fr] md:px-8">
         <div>
-          <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
+          <p className="text-sm uppercase tracking-[0.35em] text-[#0E5C3E]">
             Your seat is waiting
           </p>
           <h2 className="mt-5 text-4xl font-bold leading-tight md:text-5xl">
@@ -61,7 +61,7 @@ export default function FoundingTablePage() {
             ))}
           </ul>
           <p className="mt-10 text-stone-700">
-            Have a recipe ready now? <Link href="/share" className="font-semibold text-[#9A622A] underline decoration-[#D1AD75] underline-offset-4">Share it with OPR.</Link>
+            Have a recipe ready now? <Link href="/share" className="font-semibold text-[#9A622A] underline decoration-[#4A2E45] underline-offset-4">Share it with OPR.</Link>
           </p>
         </div>
 
@@ -80,7 +80,7 @@ export default function FoundingTablePage() {
       </section>
 
       <section className="bg-[#FFF3DF] px-6 py-20 text-center">
-        <p className="text-sm uppercase tracking-[0.35em] text-amber-700">From one family to another</p>
+        <p className="text-sm uppercase tracking-[0.35em] text-[#0E5C3E]">From one family to another</p>
         <h2 className="mx-auto mt-5 max-w-3xl text-4xl font-bold leading-tight md:text-5xl">
           The recipes we save today become the stories we share tomorrow.
         </h2>

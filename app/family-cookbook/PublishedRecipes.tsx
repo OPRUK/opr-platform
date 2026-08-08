@@ -257,7 +257,7 @@ export default function PublishedRecipes({
 
   return (
     <section>
-      <div className="rounded-3xl border border-[#D1AD75]/70 bg-[#FFF3DF] p-5 shadow-sm shadow-[#1C5A50]/10 md:flex md:items-center md:justify-between md:gap-6 md:p-6">
+      <div className="rounded-3xl border border-[#4A2E45]/70 bg-[#FFF3DF] p-5 shadow-sm shadow-[#1C5A50]/10 md:flex md:items-center md:justify-between md:gap-6 md:p-6">
         <label className="block flex-1">
           <span className="sr-only">Search recipes</span>
           <input
@@ -265,7 +265,7 @@ export default function PublishedRecipes({
             onChange={(event) => setSearch(event.target.value)}
             type="search"
             placeholder="Search by recipe, story, cook or place"
-            className="w-full rounded-xl border border-[#D1AD75] bg-white px-5 py-3.5 text-[#123C39] outline-none transition placeholder:text-stone-500 focus:border-[#9A622A] focus:ring-2 focus:ring-[#D1AD75]/50"
+            className="w-full rounded-xl border border-[#4A2E45] bg-white px-5 py-3.5 text-[#123C39] outline-none transition placeholder:text-stone-500 focus:border-[#9A622A] focus:ring-2 focus:ring-[#4A2E45]/50"
           />
         </label>
         <div className="mt-4 flex flex-wrap gap-2 md:mt-0">
@@ -277,7 +277,7 @@ export default function PublishedRecipes({
               className={`rounded-full px-4 py-2 text-sm font-medium transition ${
                 category === item.value
                   ? "bg-[#123C39] text-white"
-                  : "border border-[#D1AD75] text-[#123C39] hover:bg-[#F4DDAE]"
+                  : "border border-[#4A2E45] text-[#123C39] hover:bg-[#F4DDAE]"
               }`}
             >
               {item.label}
@@ -286,7 +286,7 @@ export default function PublishedRecipes({
         </div>
       </div>
 
-      <div className="mt-8 rounded-3xl border border-[#D1AD75]/70 bg-[#F4DDAE]/55 px-6 py-6 md:flex md:items-center md:justify-between md:gap-8">
+      <div className="mt-8 rounded-3xl border border-[#4A2E45]/70 bg-[#F4DDAE]/55 px-6 py-6 md:flex md:items-center md:justify-between md:gap-8">
         <div>
           <p className="text-sm uppercase tracking-[0.22em] text-[#9A622A]">
             The cookbook is growing
@@ -305,7 +305,7 @@ export default function PublishedRecipes({
         </Link>
       </div>
 
-      <section className="mt-10 overflow-hidden rounded-3xl border border-[#D1AD75]/70 bg-[#123C39] p-6 text-[#FFF3DF] shadow-xl shadow-[#1C5A50]/20 md:p-10">
+      <section className="mt-10 overflow-hidden rounded-3xl border border-[#4A2E45]/70 bg-[#123C39] p-6 text-[#FFF3DF] shadow-xl shadow-[#1C5A50]/20 md:p-10">
         <div className="max-w-3xl">
           <p className="text-sm uppercase tracking-[0.28em] text-[#F0C45A]">From kitchen to kitchen</p>
           <h2 className="font-display mt-3 text-4xl font-bold leading-tight md:text-5xl">The OPR recipe map</h2>
@@ -319,7 +319,7 @@ export default function PublishedRecipes({
             cluster popover must be able to spill outside the map's own
             bounds without getting clipped by that same rule. */}
         <div className="relative mt-8">
-          <div className="overflow-hidden rounded-3xl border border-[#D1AD75]/60 bg-[#0B2622]">
+          <div className="overflow-hidden rounded-3xl border border-[#4A2E45]/60 bg-[#0B2622]">
             <svg viewBox={WORLD_MAP_VIEWBOX} className="block w-full" aria-hidden="true">
               <rect width="960" height="480" fill="#0B2622" />
               <path d={WORLD_LAND_PATH} fill="#E8C67C" stroke="#805126" strokeWidth="0.75" strokeLinejoin="round" />
@@ -369,7 +369,7 @@ export default function PublishedRecipes({
                 </button>
 
                 {expanded ? (
-                  <div className="absolute left-1/2 top-11 z-20 w-56 -translate-x-1/2 rounded-2xl border border-[#D1AD75]/60 bg-[#123C39] p-3 text-left shadow-2xl sm:top-12">
+                  <div className="absolute left-1/2 top-11 z-20 w-56 -translate-x-1/2 rounded-2xl border border-[#4A2E45]/60 bg-[#123C39] p-3 text-left shadow-2xl sm:top-12">
                     <p className="px-1 pb-2 text-[11px] uppercase tracking-[0.14em] text-[#F0C45A]">
                       {cluster.recipes.length} recipes near here
                     </p>
@@ -400,11 +400,11 @@ export default function PublishedRecipes({
         </p>
 
         {recipePlaces.length ? (
-          <div className="mt-7 border-t border-[#D1AD75]/40 pt-6">
+          <div className="mt-7 border-t border-[#4A2E45]/40 pt-6">
             <p className="text-sm uppercase tracking-[0.22em] text-[#F0C45A]">Browse by place</p>
             <div className="mt-4 flex flex-wrap gap-2">
               {recipePlaces.map((recipe) => (
-                <Link key={recipe.id} href={recipe.href} className="rounded-full border border-[#D1AD75]/60 px-4 py-2 text-sm text-[#FFF3DF] transition hover:bg-white/10">
+                <Link key={recipe.id} href={recipe.href} className="rounded-full border border-[#4A2E45]/60 px-4 py-2 text-sm text-[#FFF3DF] transition hover:bg-white/10">
                   {recipe.location}
                 </Link>
               ))}
@@ -413,7 +413,7 @@ export default function PublishedRecipes({
         ) : null}
       </section>
 
-      <section className="mt-10 overflow-hidden rounded-3xl border border-[#D1AD75]/80 bg-[#123C39] px-6 py-9 text-[#FFF3DF] shadow-xl shadow-[#1C5A50]/20 md:px-10">
+      <section className="mt-10 overflow-hidden rounded-3xl border border-[#4A2E45]/80 bg-[#123C39] px-6 py-9 text-[#FFF3DF] shadow-xl shadow-[#1C5A50]/20 md:px-10">
         <div className="max-w-3xl">
           <p className="text-sm uppercase tracking-[0.28em] text-[#F0C45A]">OPR Recipe of the Month</p>
           <h2 className="font-display mt-3 text-4xl font-bold leading-tight md:text-5xl">Which recipe should take the table this {monthName}?</h2>
@@ -431,7 +431,7 @@ export default function PublishedRecipes({
             const votes = voteResults?.totals[recipe.id] ?? 0;
 
             return (
-              <div key={recipe.id} className={`rounded-2xl border p-5 ${selected ? "border-[#F0C45A] bg-[#1D665C]" : "border-[#D1AD75]/60 bg-white/10"}`}>
+              <div key={recipe.id} className={`rounded-2xl border p-5 ${selected ? "border-[#F0C45A] bg-[#1D665C]" : "border-[#4A2E45]/60 bg-white/10"}`}>
                 <p className="text-xs uppercase tracking-[0.18em] text-[#F0C45A]">{recipe.category}</p>
                 <h3 className="mt-2 text-xl font-bold text-white">{recipe.title}</h3>
                 <p className="mt-1 text-sm text-[#F6E3BE]">{recipe.location ?? "From the OPR cookbook"}</p>
@@ -439,7 +439,7 @@ export default function PublishedRecipes({
                   type="button"
                   onClick={() => voteForRecipe(recipe.id)}
                   disabled={hasVoted || Boolean(votingFor)}
-                  className={`mt-5 rounded-full px-4 py-2.5 text-sm font-semibold transition ${selected ? "bg-[#F0C45A] text-[#123C39]" : hasVoted ? "cursor-default border border-[#D1AD75]/70 text-[#F6E3BE]" : "bg-[#F0C45A] text-[#123C39] hover:scale-105"}`}
+                  className={`mt-5 rounded-full px-4 py-2.5 text-sm font-semibold transition ${selected ? "bg-[#F0C45A] text-[#123C39]" : hasVoted ? "cursor-default border border-[#4A2E45]/70 text-[#F6E3BE]" : "bg-[#F0C45A] text-[#123C39] hover:scale-105"}`}
                 >
                   {selected ? "Your choice ✓" : votingFor === recipe.id ? "Saving your vote…" : hasVoted ? "Voting complete" : "Vote for this recipe"}
                 </button>
@@ -488,7 +488,7 @@ export default function PublishedRecipes({
                   {recipe.location ? ` · ${recipe.location}` : ""}
                 </p>
                 <p className="mt-6 grow leading-7 text-stone-700">“{recipe.story}”</p>
-                <span className="mt-8 font-medium transition group-hover:text-amber-700">
+                <span className="mt-8 font-medium transition group-hover:text-[#0E5C3E]">
                   Open recipe →
                 </span>
               </div>
@@ -496,7 +496,7 @@ export default function PublishedRecipes({
           ))}
         </div>
       ) : (
-        <div className="mt-8 rounded-3xl border border-dashed border-[#D1AD75] bg-[#FFF3DF]/60 px-8 py-14 text-center">
+        <div className="mt-8 rounded-3xl border border-dashed border-[#4A2E45] bg-[#FFF3DF]/60 px-8 py-14 text-center">
           <h3 className="text-2xl font-bold">No recipes match that search.</h3>
           <button
             type="button"

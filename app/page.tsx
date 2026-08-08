@@ -129,7 +129,7 @@ export default async function Home() {
 
       <section className="bg-[#EED8B2] px-8 py-24 animate-rise-in-delayed">
           <div className="mx-auto max-w-6xl text-center">
-            <p className="mb-4 uppercase tracking-[0.35em] text-amber-700">
+            <p className="mb-4 uppercase tracking-[0.35em] text-[#0E5C3E]">
               EVERY RECIPE HAS A STORY
             </p>
 

@@ -102,7 +102,7 @@ export default function FamilyCookbook() {
 
       <section className="mx-auto max-w-6xl px-6 py-20 md:px-8">
         <div className="mb-14 max-w-2xl">
-          <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
+          <p className="text-sm uppercase tracking-[0.35em] text-[#0E5C3E]">
             Choose a recipe
           </p>
           <h2 className="font-display mt-4 text-4xl font-bold md:text-5xl">
@@ -118,7 +118,7 @@ export default function FamilyCookbook() {
       </section>
 
       <section className="bg-[#FFF3DF] px-6 py-24 text-center">
-        <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
+        <p className="text-sm uppercase tracking-[0.35em] text-[#0E5C3E]">
           Whet Our Appetite
         </p>
         <h2 className="font-display mx-auto mt-5 max-w-3xl text-4xl font-bold md:text-5xl">

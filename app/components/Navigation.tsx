@@ -17,7 +17,7 @@ export default function Navigation() {
   ];
 
   return (
-    <header className="absolute top-0 left-0 z-50 w-full border-b border-[#D1AD75]/70 bg-[#FFF3DF]/95 shadow-sm shadow-[#1C5A50]/10 backdrop-blur-sm">
+    <header className="absolute top-0 left-0 z-50 w-full border-b border-[#4A2E45]/70 bg-[#FFF3DF]/95 shadow-sm shadow-[#1C5A50]/10 backdrop-blur-sm">
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-8 py-5">
         <Link
           href="/"
@@ -51,7 +51,7 @@ export default function Navigation() {
       </nav>
 
       {menuOpen && (
-        <div className="border-t border-[#D1AD75]/70 bg-[#FFF3DF] px-8 py-5 md:hidden">
+        <div className="border-t border-[#4A2E45]/70 bg-[#FFF3DF] px-8 py-5 md:hidden">
           <ul className="space-y-4 text-base font-medium">
             {links.map((link) => (
               <li key={link.href}>

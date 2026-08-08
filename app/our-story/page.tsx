@@ -33,7 +33,7 @@ export default function OurStory() {
 
       <section className="mx-auto grid max-w-6xl gap-12 px-8 py-24 md:grid-cols-2 md:items-center">
         <div>
-          <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
+          <p className="text-sm uppercase tracking-[0.35em] text-[#0E5C3E]">
             Why we started
           </p>
           <h2 className="mt-5 text-4xl font-bold leading-tight md:text-5xl">
@@ -55,7 +55,7 @@ export default function OurStory() {
 
       <section className="bg-[#FFF3DF] px-8 py-24">
         <div className="mx-auto max-w-3xl text-center">
-          <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
+          <p className="text-sm uppercase tracking-[0.35em] text-[#0E5C3E]">
             The invitation
           </p>
           <h2 className="mt-5 text-4xl font-bold md:text-5xl">

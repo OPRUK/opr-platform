@@ -144,8 +144,8 @@ export default function RecipeActions({
 
   return (
     <section className="bg-[#EED8B2] px-6 py-16 text-center print:hidden">
-      <div className="mx-auto max-w-3xl rounded-3xl border border-[#D1AD75]/80 bg-[#FFF3DF] px-6 py-10 shadow-lg shadow-[#1C5A50]/10 md:px-10">
-        <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
+      <div className="mx-auto max-w-3xl rounded-3xl border border-[#4A2E45]/80 bg-[#FFF3DF] px-6 py-10 shadow-lg shadow-[#1C5A50]/10 md:px-10">
+        <p className="text-sm uppercase tracking-[0.35em] text-[#0E5C3E]">
           Pass it on
         </p>
         <h2 className="mt-4 text-3xl font-bold md:text-4xl">

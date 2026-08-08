@@ -65,7 +65,7 @@ export default function FilmsPage() {
       </section>
 
       <section className="bg-[#FFF3DF] px-6 py-24 text-center">
-        <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
+        <p className="text-sm uppercase tracking-[0.35em] text-[#0E5C3E]">
           The next chapter
         </p>
         <h2 className="mx-auto mt-5 max-w-3xl text-4xl font-bold md:text-5xl">

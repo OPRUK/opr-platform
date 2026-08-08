@@ -161,13 +161,13 @@ export default async function RecipePage({
 
       <section className="mx-auto grid max-w-6xl gap-14 px-6 py-20 md:grid-cols-[1.1fr_0.9fr] md:px-8">
         <article className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-12">
-          <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
+          <p className="text-sm uppercase tracking-[0.35em] text-[#0E5C3E]">
             The story
           </p>
           <p className="mt-7 text-2xl leading-relaxed text-[#123C39]">
             “{recipe.story}”
           </p>
-          <p className="mt-10 border-t border-[#D1AD75] pt-6 text-sm italic text-stone-600">
+          <p className="mt-10 border-t border-[#4A2E45] pt-6 text-sm italic text-stone-600">
             This recipe now belongs to every family who cooks it.
           </p>
         </article>
@@ -193,7 +193,7 @@ export default async function RecipePage({
 
       <section className="bg-[#FFF3DF] px-6 py-20">
         <div className="mx-auto max-w-4xl">
-          <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
+          <p className="text-sm uppercase tracking-[0.35em] text-[#0E5C3E]">
             The method
           </p>
           <ol className="mt-9 space-y-7">
@@ -211,7 +211,7 @@ export default async function RecipePage({
 
       {recipe.notes?.length ? (
         <section className="bg-[#EED8B2] px-6 py-20">
-          <div className="mx-auto max-w-5xl rounded-[2rem] border border-[#D1AD75] bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/10 md:p-12">
+          <div className="mx-auto max-w-5xl rounded-[2rem] border border-[#4A2E45] bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/10 md:p-12">
             <p className="text-sm font-bold uppercase tracking-[0.35em] text-[#9A622A]">
               Cook&apos;s notes &amp; swaps
             </p>
