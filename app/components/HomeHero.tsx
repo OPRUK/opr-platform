@@ -29,13 +29,13 @@ const introductionFilms = [
   },
 ];
 
-// How long the crossfade between clips takes, and (in seconds) how far from
-// the end of a clip we start blending into the next one, so the two
-// visibly overlap instead of hard-cutting. Kept short and late so the
-// final second of each clip — where the website address appears — stays
-// fully visible rather than dissolving under the incoming clip.
-const CROSSFADE_MS = 400;
-const CROSSFADE_LEAD_SECONDS = CROSSFADE_MS / 1000;
+// Each clip ends with the website address on screen, so the crossfade must
+// not start until the clip has essentially finished playing — otherwise the
+// address dissolves under the incoming clip before it's readable. The blend
+// itself (CROSSFADE_MS) can still be smooth; only the trigger point
+// (CROSSFADE_LEAD_SECONDS) needs to sit right at the very end.
+const CROSSFADE_MS = 350;
+const CROSSFADE_LEAD_SECONDS = 0.12;
 
 export default function HomeHero({ children }: HomeHeroProps) {
   const [introductionComplete, setIntroductionComplete] = useState(false);
