@@ -21,6 +21,11 @@ function film(title: string, file: string, hasPoster = true): Film {
 }
 
 export const films: Film[] = [
+  {
+    title: "Dave & Rubble | Cooking Together",
+    video: "/videos/opr-dave-and-rubble-kitchen-story.mp4",
+    poster: "/images/opr-dave-and-rubble-kitchen-story-poster.jpg",
+  },
   film("Three Recipes, Three Stories | The OPR Cookbook", "three-recipes-three-stories"),
   film("Ada’s Party Jollof Rice | A Recipe to Bring People Together", "adas-party-jollof-rice"),
   film("Sam & Nadine’s Shepherd’s Pie | A Recipe Worth Passing On", "sam-and-nadines-shepherds-pie"),
