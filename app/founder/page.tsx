@@ -93,11 +93,13 @@ export default function FounderPage() {
             </p>
           </div>
 
-          <p
-            className="font-founder-signature mt-10 text-5xl text-[#1C5A50] md:text-6xl"
-          >
-            Chaten
-          </p>
+          <Image
+            src="/images/chaten-signature.png"
+            alt="Chaten's signature"
+            width={1606}
+            height={671}
+            className="mt-10 h-auto w-56 md:w-64"
+          />
           <p className="mt-1 text-xs uppercase tracking-[0.25em] text-[#9A622A]">
             Founder, Other People&apos;s Recipes
           </p>
