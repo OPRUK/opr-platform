@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function OurStory() {
   return (
-    <main className="min-h-screen bg-[#EED8B2] text-[#123C39]">
+    <main className="min-h-screen bg-[#EED8B2] text-[#4A2E45]">
       <Navigation />
 
       <section className="relative isolate overflow-hidden bg-[#241221] px-6 pb-24 pt-40 text-center text-white">
@@ -33,7 +33,7 @@ export default function OurStory() {
 
       <section className="mx-auto grid max-w-6xl gap-12 px-8 py-24 md:grid-cols-2 md:items-center">
         <div>
-          <p className="text-sm uppercase tracking-[0.35em] text-[#0E5C3E]">
+          <p className="text-sm uppercase tracking-[0.35em] text-[#69465F]">
             Why we started
           </p>
           <h2 className="mt-5 text-4xl font-bold leading-tight md:text-5xl">
@@ -55,7 +55,7 @@ export default function OurStory() {
 
       <section className="bg-[#FFF3DF] px-8 py-24">
         <div className="mx-auto max-w-3xl text-center">
-          <p className="text-sm uppercase tracking-[0.35em] text-[#0E5C3E]">
+          <p className="text-sm uppercase tracking-[0.35em] text-[#69465F]">
             The invitation
           </p>
           <h2 className="mt-5 text-4xl font-bold md:text-5xl">
@@ -63,7 +63,7 @@ export default function OurStory() {
           </h2>
           <Link
             href="/share"
-            className="mt-10 inline-block rounded-full bg-[#123C39] px-8 py-4 text-lg font-medium text-white transition hover:scale-105"
+            className="mt-10 inline-block rounded-full bg-[#4A2E45] px-8 py-4 text-lg font-medium text-white transition hover:scale-105"
           >
             Share Your Story
           </Link>

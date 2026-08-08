@@ -11,7 +11,7 @@ import { supabase } from "../../../lib/supabase/client";
 const CONSENT_VERSION = "opr-submission-terms-2026-08-03-combined";
 
 const inputClassName =
-  "mt-1.5 w-full border border-[#D1AD75] bg-[#FFF3DF] px-3.5 py-3 text-[15px] outline-none transition placeholder:text-stone-500 focus:border-[#123C39]";
+  "mt-1.5 w-full border border-[#D1AD75] bg-[#FFF3DF] px-3.5 py-3 text-[15px] outline-none transition placeholder:text-stone-500 focus:border-[#4A2E45]";
 
 type AttachmentKey = "photo" | "audioStory" | "recipeVideo" | "originalRecipePhoto";
 
@@ -181,7 +181,7 @@ export default function MobileShareForm() {
             setFiles({});
             setSubmitted(false);
           }}
-          className="mt-6 border border-[#123C39] px-5 py-3 text-sm font-medium transition hover:bg-[#123C39] hover:text-[#EED8B2]"
+          className="mt-6 border border-[#4A2E45] px-5 py-3 text-sm font-medium transition hover:bg-[#4A2E45] hover:text-[#EED8B2]"
         >
           Share another recipe
         </button>
@@ -222,7 +222,7 @@ export default function MobileShareForm() {
           return (
             <label
               key={attachment.key}
-              className="flex w-full cursor-pointer items-center gap-2 border border-[#123C39] px-4 py-3 text-sm font-medium transition hover:bg-[#123C39] hover:text-[#EED8B2]"
+              className="flex w-full cursor-pointer items-center gap-2 border border-[#4A2E45] px-4 py-3 text-sm font-medium transition hover:bg-[#4A2E45] hover:text-[#EED8B2]"
             >
               {attachment.icon}
               <span className="flex-1 truncate">{file ? file.name : attachment.label}</span>
@@ -240,7 +240,7 @@ export default function MobileShareForm() {
           type="checkbox"
           checked={agreementAccepted}
           onChange={(e) => setAgreementAccepted(e.target.checked)}
-          className="mt-[3px] accent-[#123C39]"
+          className="mt-[3px] accent-[#4A2E45]"
         />
         <span>
           I confirm I&apos;m 18 or over, this recipe and story are mine to share, and I have permission to
@@ -251,14 +251,14 @@ export default function MobileShareForm() {
         </span>
       </label>
       <label className="mb-5 flex items-start gap-2.5 text-[13px] leading-[1.5]">
-        <input type="checkbox" checked={marketing} onChange={(e) => setMarketing(e.target.checked)} className="mt-[3px] accent-[#123C39]" />
+        <input type="checkbox" checked={marketing} onChange={(e) => setMarketing(e.target.checked)} className="mt-[3px] accent-[#4A2E45]" />
         <span>Keep me updated about OPR (optional).</span>
       </label>
 
       <button
         type="submit"
         disabled={!canSubmit || isSubmitting}
-        className="w-full bg-[#123C39] px-4 py-[14px] text-[16px] font-medium text-[#EED8B2] transition hover:bg-[#0d2b28] disabled:cursor-not-allowed disabled:opacity-50"
+        className="w-full bg-[#4A2E45] px-4 py-[14px] text-[16px] font-medium text-[#EED8B2] transition hover:bg-[#2C1328] disabled:cursor-not-allowed disabled:opacity-50"
       >
         {isSubmitting ? "Saving your recipe…" : "Submit your recipe"}
       </button>

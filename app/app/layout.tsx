@@ -35,14 +35,14 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#123C39",
+  themeColor: "#4A2E45",
 };
 
 export default function MobileAppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className={`${cormorant.variable} min-h-screen bg-[#EED8B2]`}>
       <div
-        className="mx-auto flex min-h-screen w-full max-w-[480px] flex-col bg-[#EED8B2] text-[#123C39]"
+        className="mx-auto flex min-h-screen w-full max-w-[480px] flex-col bg-[#EED8B2] text-[#4A2E45]"
         style={{ fontFamily: "var(--font-opr-app), Georgia, serif" }}
       >
         {children}

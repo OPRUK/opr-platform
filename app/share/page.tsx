@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function ShareYourStory() {
   return (
-    <main className="min-h-screen bg-[#EED8B2] text-[#123C39]">
+    <main className="min-h-screen bg-[#EED8B2] text-[#4A2E45]">
       <Navigation />
 
       <section className="bg-[#241221] px-6 pb-24 pt-40 text-center text-white">
@@ -33,7 +33,7 @@ export default function ShareYourStory() {
 
       <section className="border-t border-[#4A2E45]/70 bg-[#FFF3DF] px-6 py-20">
         <div className="mx-auto max-w-6xl">
-          <p className="text-center text-sm uppercase tracking-[0.35em] text-[#0E5C3E]">
+          <p className="text-center text-sm uppercase tracking-[0.35em] text-[#69465F]">
             What happens next
           </p>
           <div className="mt-10 grid gap-6 md:grid-cols-3">

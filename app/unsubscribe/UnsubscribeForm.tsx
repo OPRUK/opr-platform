@@ -28,7 +28,7 @@ export default function UnsubscribeForm({ email, token }: { email: string; token
   }
 
   if (status === "done") {
-    return <p className="rounded-2xl bg-[#E2F2E7] px-5 py-4 leading-7 text-[#123C39]">{message}</p>;
+    return <p className="rounded-2xl bg-[#F2E2EC] px-5 py-4 leading-7 text-[#4A2E45]">{message}</p>;
   }
 
   return (
@@ -37,7 +37,7 @@ export default function UnsubscribeForm({ email, token }: { email: string; token
         type="button"
         onClick={() => void unsubscribe()}
         disabled={status === "working"}
-        className="rounded-full bg-[#123C39] px-7 py-4 font-medium text-white transition hover:bg-[#08231F] disabled:cursor-not-allowed disabled:opacity-70"
+        className="rounded-full bg-[#4A2E45] px-7 py-4 font-medium text-white transition hover:bg-[#2A1025] disabled:cursor-not-allowed disabled:opacity-70"
       >
         {status === "working" ? "Updating your preferences…" : "Unsubscribe from OPR updates"}
       </button>

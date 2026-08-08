@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-const dividerClass = "h-[2px] w-full bg-[#123C39]/35";
+const dividerClass = "h-[2px] w-full bg-[#4A2E45]/35";
 
 export function Divider({ className = "" }: { className?: string }) {
   return <div className={`${dividerClass} ${className}`} />;
@@ -26,7 +26,7 @@ export function Eyebrow({
 
 export function Tag({ children }: { children: ReactNode }) {
   return (
-    <span className="bg-[#DCE7E1] px-2.5 py-1 text-xs font-medium uppercase tracking-[0.05em] text-[#123C39]">
+    <span className="bg-[#E9D9E4] px-2.5 py-1 text-xs font-medium uppercase tracking-[0.05em] text-[#4A2E45]">
       {children}
     </span>
   );
@@ -66,7 +66,7 @@ export function PrimaryButton({
   type?: "button" | "submit";
   inverted?: boolean;
 }) {
-  const colorClass = inverted ? "bg-[#EED8B2] text-[#123C39]" : "bg-[#123C39] text-[#EED8B2] hover:bg-[#0d2b28]";
+  const colorClass = inverted ? "bg-[#EED8B2] text-[#4A2E45]" : "bg-[#4A2E45] text-[#EED8B2] hover:bg-[#2C1328]";
   const content = (
     <>
       <span>{children}</span>
@@ -106,7 +106,7 @@ export function SecondaryButton({
   type?: "button" | "submit";
   block?: boolean;
 }) {
-  const className = `flex items-center gap-2 border border-[#123C39] px-4 py-3 text-sm font-medium text-[#123C39] transition hover:bg-[#123C39] hover:text-[#EED8B2] disabled:cursor-not-allowed disabled:opacity-50 ${block ? "w-full" : ""}`;
+  const className = `flex items-center gap-2 border border-[#4A2E45] px-4 py-3 text-sm font-medium text-[#4A2E45] transition hover:bg-[#4A2E45] hover:text-[#EED8B2] disabled:cursor-not-allowed disabled:opacity-50 ${block ? "w-full" : ""}`;
 
   if (href) {
     return (
@@ -128,7 +128,7 @@ export function BackButton({ href }: { href: string }) {
     <Link
       href={href}
       aria-label="Back"
-      className="flex h-11 w-11 items-center justify-center bg-[#FFF3DF] text-[#123C39] shadow-[0_2px_8px_rgba(0,0,0,0.25)]"
+      className="flex h-11 w-11 items-center justify-center bg-[#FFF3DF] text-[#4A2E45] shadow-[0_2px_8px_rgba(0,0,0,0.25)]"
     >
       <ChevronLeftIcon />
     </Link>
@@ -137,7 +137,7 @@ export function BackButton({ href }: { href: string }) {
 
 export function CheckIcon({ className = "" }: { className?: string }) {
   return (
-    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#123C39" strokeWidth="1.6" className={className}>
+    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#4A2E45" strokeWidth="1.6" className={className}>
       <circle cx="12" cy="12" r="10" />
       <path d="M8 12l3 3 5-6" />
     </svg>

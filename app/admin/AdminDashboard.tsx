@@ -56,8 +56,8 @@ const allowedEmail = "chaten@otherpeoplesrecipes.co.uk";
 
 const statusStyle: Record<SubmissionStatus, string> = {
   new: "bg-[#F4DDAE] text-[#6B431E]",
-  reviewed: "bg-[#E8E2CF] text-[#123C39]",
-  selected: "bg-[#CDE4CD] text-[#2E5A35]",
+  reviewed: "bg-[#E8E2CF] text-[#4A2E45]",
+  selected: "bg-[#E8D2E2] text-[#69465F]",
 };
 
 export default function AdminDashboard() {
@@ -405,10 +405,10 @@ export default function AdminDashboard() {
 
   if (!session) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#EED8B2] px-6 text-[#123C39]">
+      <main className="flex min-h-screen items-center justify-center bg-[#EED8B2] px-6 text-[#4A2E45]">
         <form
           onSubmit={sendMagicLink}
-          className="w-full max-w-md rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-10"
+          className="w-full max-w-md rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#69465F]/15 md:p-10"
         >
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
             Private OPR area
@@ -424,12 +424,12 @@ export default function AdminDashboard() {
               onChange={(event) => setEmail(event.target.value)}
               type="email"
               autoComplete="email"
-              className="mt-3 w-full rounded-xl border border-[#D1AD75] bg-[#F4DDAE] px-4 py-3 outline-none transition focus:border-[#123C39] focus:ring-2 focus:ring-[#D1AD75]/60"
+              className="mt-3 w-full rounded-xl border border-[#D1AD75] bg-[#F4DDAE] px-4 py-3 outline-none transition focus:border-[#4A2E45] focus:ring-2 focus:ring-[#D1AD75]/60"
             />
           </label>
           <button
             type="submit"
-            className="mt-8 rounded-full bg-[#123C39] px-7 py-3 font-medium text-white transition hover:bg-[#08231F]"
+            className="mt-8 rounded-full bg-[#4A2E45] px-7 py-3 font-medium text-white transition hover:bg-[#2A1025]"
           >
             Send secure sign-in link
           </button>
@@ -441,8 +441,8 @@ export default function AdminDashboard() {
 
   if (session.user.email !== allowedEmail) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#EED8B2] px-6 text-center text-[#123C39]">
-        <div className="max-w-lg rounded-3xl bg-[#FFF3DF] p-10 shadow-xl shadow-[#1C5A50]/15">
+      <main className="flex min-h-screen items-center justify-center bg-[#EED8B2] px-6 text-center text-[#4A2E45]">
+        <div className="max-w-lg rounded-3xl bg-[#FFF3DF] p-10 shadow-xl shadow-[#69465F]/15">
           <h1 className="text-3xl font-bold">This inbox is private.</h1>
           <p className="mt-5 leading-7 text-stone-700">
             Please sign in using the OPR team email address.
@@ -450,7 +450,7 @@ export default function AdminDashboard() {
           <button
             type="button"
             onClick={() => void supabase.auth.signOut()}
-            className="mt-8 rounded-full border border-[#123C39] px-6 py-3 font-medium"
+            className="mt-8 rounded-full border border-[#4A2E45] px-6 py-3 font-medium"
           >
             Sign out
           </button>
@@ -460,7 +460,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <main className="min-h-screen bg-[#EED8B2] px-6 py-10 text-[#123C39] md:px-10">
+    <main className="min-h-screen bg-[#EED8B2] px-6 py-10 text-[#4A2E45] md:px-10">
       <header className="mx-auto flex max-w-7xl flex-col justify-between gap-6 md:flex-row md:items-end">
         <div>
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">Private OPR area</p>
@@ -472,19 +472,19 @@ export default function AdminDashboard() {
         <button
           type="button"
           onClick={() => void supabase.auth.signOut()}
-          className="self-start rounded-full border border-[#123C39] px-5 py-2.5 text-sm font-medium transition hover:bg-[#123C39] hover:text-white md:self-auto"
+          className="self-start rounded-full border border-[#4A2E45] px-5 py-2.5 text-sm font-medium transition hover:bg-[#4A2E45] hover:text-white md:self-auto"
         >
           Sign out
         </button>
       </header>
 
       {message ? (
-        <p className={`mx-auto mt-8 max-w-7xl text-sm ${message.startsWith("Published:") || message.startsWith("Deleted:") || message.includes("removed from") ? "text-[#2E5A35]" : "text-red-800"}`}>
+        <p className={`mx-auto mt-8 max-w-7xl text-sm ${message.startsWith("Published:") || message.startsWith("Deleted:") || message.includes("removed from") ? "text-[#69465F]" : "text-red-800"}`}>
           {message}
         </p>
       ) : null}
 
-      <section className="mx-auto mt-10 max-w-7xl overflow-hidden rounded-3xl border border-[#D1AD75]/70 bg-[#123C39] px-6 py-7 text-[#FFF3DF] shadow-xl shadow-[#1C5A50]/15 md:px-8">
+      <section className="mx-auto mt-10 max-w-7xl overflow-hidden rounded-3xl border border-[#D1AD75]/70 bg-[#4A2E45] px-6 py-7 text-[#FFF3DF] shadow-xl shadow-[#69465F]/15 md:px-8">
         <p className="text-sm uppercase tracking-[0.3em] text-[#F0C45A]">Recipe of the Month</p>
         <div className="mt-3 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div>
@@ -513,7 +513,7 @@ export default function AdminDashboard() {
       </section>
 
       <section className="mx-auto mt-10 grid max-w-7xl gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-        <div className="overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-xl shadow-[#1C5A50]/10">
+        <div className="overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-xl shadow-[#69465F]/10">
           <div className="border-b border-[#D1AD75]/70 px-6 py-5">
             <h2 className="text-xl font-bold">All submissions</h2>
           </div>
@@ -545,7 +545,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <section className="rounded-3xl bg-[#FFF3DF] p-7 shadow-xl shadow-[#1C5A50]/10 md:p-10">
+        <section className="rounded-3xl bg-[#FFF3DF] p-7 shadow-xl shadow-[#69465F]/10 md:p-10">
           {selectedSubmission ? (
             <>
               <div className="flex flex-col justify-between gap-5 md:flex-row md:items-start">
@@ -584,7 +584,7 @@ export default function AdminDashboard() {
                 <button
                   type="button"
                   onClick={() => void togglePublished(selectedSubmission)}
-                  className="mt-4 rounded-full bg-[#123C39] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#08231F] md:mt-0"
+                  className="mt-4 rounded-full bg-[#4A2E45] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#2A1025] md:mt-0"
                 >
                   {selectedSubmission.is_published ? "Hide from cookbook" : "Approve & publish"}
                 </button>
@@ -594,7 +594,7 @@ export default function AdminDashboard() {
                   href={`/family-cookbook/community/${selectedSubmission.id}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="mt-4 inline-flex rounded-full border border-[#123C39] px-5 py-2.5 text-sm font-medium text-[#123C39] transition hover:bg-[#123C39] hover:text-white"
+                  className="mt-4 inline-flex rounded-full border border-[#4A2E45] px-5 py-2.5 text-sm font-medium text-[#4A2E45] transition hover:bg-[#4A2E45] hover:text-white"
                 >
                   View public recipe →
                 </a>
@@ -625,7 +625,7 @@ export default function AdminDashboard() {
                     onChange={(event) => updateRecipeOfWeekNote(event.target.value)}
                     rows={3}
                     placeholder="For example: A family favourite that deserves a place at the centre of the table."
-                    className="mt-3 w-full resize-y rounded-xl border border-[#D1AD75] bg-white px-4 py-3 leading-6 outline-none transition focus:border-[#123C39] focus:ring-2 focus:ring-[#D1AD75]/60"
+                    className="mt-3 w-full resize-y rounded-xl border border-[#D1AD75] bg-white px-4 py-3 leading-6 outline-none transition focus:border-[#4A2E45] focus:ring-2 focus:ring-[#D1AD75]/60"
                   />
                 </label>
               </div>
@@ -633,7 +633,7 @@ export default function AdminDashboard() {
               <div className="mt-10 space-y-8 text-stone-700">
                 {selectedPhotoUrl ? (
                   <article>
-                    <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#123C39]">Recipe photo</h3>
+                    <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#4A2E45]">Recipe photo</h3>
                     <img
                       src={selectedPhotoUrl}
                       alt={selectedSubmission.title}
@@ -643,20 +643,20 @@ export default function AdminDashboard() {
                 ) : null}
                 {selectedContributorPhotoUrl ? (
                   <article>
-                    <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#123C39]">Meet the cook</h3>
+                    <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#4A2E45]">Meet the cook</h3>
                     <div className="mt-4 flex items-center gap-4">
                       <img
                         src={selectedContributorPhotoUrl}
                         alt={`${selectedSubmission.name}, who shared ${selectedSubmission.title}`}
                         className="h-24 w-24 rounded-full object-cover shadow-lg"
                       />
-                      <p className="font-medium text-[#123C39]">{selectedSubmission.name}</p>
+                      <p className="font-medium text-[#4A2E45]">{selectedSubmission.name}</p>
                     </div>
                   </article>
                 ) : null}
                 {selectedOriginalRecipeUrl ? (
                   <article>
-                    <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#123C39]">The original recipe</h3>
+                    <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#4A2E45]">The original recipe</h3>
                     <img
                       src={selectedOriginalRecipeUrl}
                       alt={`The original recipe for ${selectedSubmission.title}`}
@@ -666,31 +666,31 @@ export default function AdminDashboard() {
                 ) : null}
                 {selectedAudioStoryUrl ? (
                   <article>
-                    <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#123C39]">Voice story</h3>
+                    <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#4A2E45]">Voice story</h3>
                     <audio controls preload="metadata" src={selectedAudioStoryUrl} className="mt-4 w-full" />
                   </article>
                 ) : null}
                 {selectedRecipeVideoUrl ? (
                   <article>
-                    <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#123C39]">Recipe video</h3>
+                    <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#4A2E45]">Recipe video</h3>
                     <video controls playsInline preload="metadata" src={selectedRecipeVideoUrl} className="mt-4 aspect-video w-full rounded-2xl bg-black" />
                   </article>
                 ) : null}
                 <article>
-                  <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#123C39]">The story</h3>
+                  <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#4A2E45]">The story</h3>
                   <p className="mt-3 whitespace-pre-wrap leading-8">{selectedSubmission.story}</p>
                 </article>
                 <article>
-                  <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#123C39]">Ingredients</h3>
+                  <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#4A2E45]">Ingredients</h3>
                   <p className="mt-3 whitespace-pre-wrap leading-8">{selectedSubmission.ingredients}</p>
                 </article>
                 <article>
-                  <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#123C39]">Method</h3>
+                  <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#4A2E45]">Method</h3>
                   <p className="mt-3 whitespace-pre-wrap leading-8">{selectedSubmission.method}</p>
                 </article>
                 {selectedSubmission.cook_notes ? (
                   <article>
-                    <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#123C39]">Cook&apos;s notes &amp; swaps</h3>
+                    <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#4A2E45]">Cook&apos;s notes &amp; swaps</h3>
                     <p className="mt-3 whitespace-pre-wrap leading-8">{selectedSubmission.cook_notes}</p>
                   </article>
                 ) : null}
@@ -723,7 +723,7 @@ export default function AdminDashboard() {
         </section>
       </section>
 
-      <section className="mx-auto mt-10 max-w-7xl overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-xl shadow-[#1C5A50]/10">
+      <section className="mx-auto mt-10 max-w-7xl overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-xl shadow-[#69465F]/10">
         <div className="border-b border-[#D1AD75]/70 px-6 py-5 md:px-8">
           <p className="text-sm uppercase tracking-[0.3em] text-amber-700">Cooked by our community</p>
           <h2 className="mt-2 text-2xl font-bold">Community posts awaiting your review</h2>
@@ -740,11 +740,11 @@ export default function AdminDashboard() {
                     <div>
                       <p className="font-bold">{cook.name} <span className="font-normal text-stone-500">cooked {cook.recipe_submissions?.title ?? cook.recipe_title ?? "an OPR recipe"}</span></p>
                       {cook.note ? <p className="mt-1 max-w-2xl text-sm leading-6 text-stone-700">“{cook.note}”</p> : <p className="mt-1 text-sm text-stone-500">No note supplied.</p>}
-                      <p className={`mt-2 text-xs font-bold uppercase tracking-[0.18em] ${cook.is_approved ? "text-[#2E5A35]" : "text-[#9A622A]"}`}>{cook.is_approved ? "Live on recipe page" : "Awaiting approval"}</p>
+                      <p className={`mt-2 text-xs font-bold uppercase tracking-[0.18em] ${cook.is_approved ? "text-[#69465F]" : "text-[#9A622A]"}`}>{cook.is_approved ? "Live on recipe page" : "Awaiting approval"}</p>
                     </div>
                   </div>
                   <div className="flex shrink-0 flex-wrap gap-3">
-                    <button type="button" onClick={() => void updateCommunityCook(cook, !cook.is_approved)} className="rounded-full bg-[#123C39] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#08231F]">
+                    <button type="button" onClick={() => void updateCommunityCook(cook, !cook.is_approved)} className="rounded-full bg-[#4A2E45] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#2A1025]">
                       {cook.is_approved ? "Hide post" : "Approve post"}
                     </button>
                     <button type="button" onClick={() => void deleteCommunityCook(cook)} className="rounded-full border border-red-700 px-4 py-2 text-sm font-medium text-red-800 transition hover:bg-red-50">Delete</button>

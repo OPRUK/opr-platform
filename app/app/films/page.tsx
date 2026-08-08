@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "Films" };
 export default function FilmsScreen() {
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
-      <div className="flex-shrink-0 border-b-2 border-[#123C39]/35 px-5 pb-4 pt-16">
+      <div className="flex-shrink-0 border-b-2 border-[#4A2E45]/35 px-5 pb-4 pt-16">
         <Eyebrow className="mb-2">The OPR film collection</Eyebrow>
         <h1 className="text-[30px]">Films</h1>
       </div>

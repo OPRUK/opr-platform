@@ -124,12 +124,12 @@ export default async function CommunityRecipePage({
 
   if (!recipe) {
     return (
-      <main className="min-h-screen bg-[#EED8B2] text-[#123C39]">
+      <main className="min-h-screen bg-[#EED8B2] text-[#4A2E45]">
         <Navigation />
         <section className="flex min-h-screen items-center justify-center px-6 text-center">
           <div>
             <h1 className="text-4xl font-bold">This page is not available.</h1>
-            <Link href="/family-cookbook" className="mt-8 inline-block rounded-full bg-[#123C39] px-6 py-3 text-white">Return to the Cookbook</Link>
+            <Link href="/family-cookbook" className="mt-8 inline-block rounded-full bg-[#4A2E45] px-6 py-3 text-white">Return to the Cookbook</Link>
           </div>
         </section>
       </main>
@@ -176,7 +176,7 @@ export default async function CommunityRecipePage({
   };
 
   return (
-    <main className="min-h-screen bg-[#EED8B2] text-[#123C39]">
+    <main className="min-h-screen bg-[#EED8B2] text-[#4A2E45]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -196,8 +196,8 @@ export default async function CommunityRecipePage({
         <p className="mt-6 text-sm uppercase tracking-[0.25em] text-stone-300">Shared by {recipe.name}{recipe.location ? ` · ${recipe.location}` : ""}</p>
       </section>
       <section className="mx-auto grid max-w-6xl gap-14 px-6 py-20 md:grid-cols-[1.1fr_0.9fr] md:px-8">
-        <article className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-12">
-          <p className="text-sm uppercase tracking-[0.35em] text-[#0E5C3E]">The story</p>
+        <article className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#69465F]/15 md:p-12">
+          <p className="text-sm uppercase tracking-[0.35em] text-[#69465F]">The story</p>
           <p className="mt-7 text-2xl leading-relaxed">“{recipe.story}”</p>
           {contributorPhotoUrl ? (
             <div className="mt-10 flex items-center gap-4 border-t border-[#4A2E45] pt-6">
@@ -207,17 +207,17 @@ export default async function CommunityRecipePage({
                 className="h-16 w-16 rounded-full object-cover shadow-md"
               />
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#0E5C3E]">Meet the cook</p>
-                <p className="mt-1 text-lg font-bold text-[#123C39]">{recipe.name}</p>
+                <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#69465F]">Meet the cook</p>
+                <p className="mt-1 text-lg font-bold text-[#4A2E45]">{recipe.name}</p>
                 {recipe.location ? <p className="text-sm text-stone-600">{recipe.location}</p> : null}
               </div>
             </div>
           ) : null}
           <p className="mt-10 border-t border-[#4A2E45] pt-6 text-sm italic text-stone-600">Shared with the Other People&apos;s Recipes community.</p>
         </article>
-        <aside className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-12">
+        <aside className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#69465F]/15 md:p-12">
           {imageUrl ? <img src={imageUrl} alt={recipe.title} className="mb-8 aspect-[4/3] w-full rounded-2xl object-cover" /> : null}
-          <p className="text-sm uppercase tracking-[0.25em] text-[#0E5C3E]">{recipe.category}</p>
+          <p className="text-sm uppercase tracking-[0.25em] text-[#69465F]">{recipe.category}</p>
           {recipe.servings ? <p className="mt-2 text-sm text-stone-600">Serves {recipe.servings}</p> : null}
           <h2 className="mt-6 text-3xl font-bold">What you&apos;ll need</h2>
           <ul className="mt-7 space-y-4 leading-7 text-stone-700">
@@ -240,23 +240,23 @@ export default async function CommunityRecipePage({
       {recipeVideoUrl ? (
         <section className="bg-[#F4DDAE]/60 px-6 py-20">
           <div className="mx-auto max-w-4xl text-center">
-            <p className="text-sm uppercase tracking-[0.35em] text-[#0E5C3E]">Watch it come to life</p>
+            <p className="text-sm uppercase tracking-[0.35em] text-[#69465F]">Watch it come to life</p>
             <h2 className="mt-5 text-4xl font-bold">Made in their kitchen.</h2>
             <p className="mx-auto mt-5 max-w-2xl leading-7 text-stone-700">A short film shared by the cook behind this recipe.</p>
-            <video controls playsInline preload="metadata" src={recipeVideoUrl} className="mx-auto mt-8 aspect-video w-full max-w-3xl rounded-3xl bg-black shadow-xl shadow-[#1C5A50]/15" />
+            <video controls playsInline preload="metadata" src={recipeVideoUrl} className="mx-auto mt-8 aspect-video w-full max-w-3xl rounded-3xl bg-black shadow-xl shadow-[#69465F]/15" />
           </div>
         </section>
       ) : null}
       {originalRecipeImageUrl ? (
         <section className="bg-[#F4DDAE]/60 px-6 py-20">
-          <div className="mx-auto grid max-w-5xl items-center gap-10 rounded-3xl bg-[#FFF3DF] p-7 shadow-xl shadow-[#1C5A50]/10 md:grid-cols-[0.85fr_1.15fr] md:p-10">
+          <div className="mx-auto grid max-w-5xl items-center gap-10 rounded-3xl bg-[#FFF3DF] p-7 shadow-xl shadow-[#69465F]/10 md:grid-cols-[0.85fr_1.15fr] md:p-10">
             <img
               src={originalRecipeImageUrl}
               alt={`The original handwritten recipe for ${recipe.title}`}
               className="max-h-[36rem] w-full rounded-2xl object-contain shadow-lg"
             />
             <div>
-              <p className="text-sm uppercase tracking-[0.35em] text-[#0E5C3E]">The original</p>
+              <p className="text-sm uppercase tracking-[0.35em] text-[#69465F]">The original</p>
               <h2 className="mt-5 text-4xl font-bold">The recipe as it was first written.</h2>
               <p className="mt-6 text-lg leading-8 text-stone-700">
                 The handwritten notes, stains and shortcuts are part of the story too.
@@ -267,17 +267,17 @@ export default async function CommunityRecipePage({
       ) : null}
       <section className="bg-[#FFF3DF] px-6 py-20">
         <div className="mx-auto max-w-4xl">
-          <p className="text-sm uppercase tracking-[0.35em] text-[#0E5C3E]">The method</p>
+          <p className="text-sm uppercase tracking-[0.35em] text-[#69465F]">The method</p>
           <ol className="mt-9 space-y-7">
-            {method.map((step, index) => <li key={step} className="flex gap-6 text-lg leading-8 text-stone-700"><span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#123C39] text-sm font-bold text-white">{index + 1}</span>{step}</li>)}
+            {method.map((step, index) => <li key={step} className="flex gap-6 text-lg leading-8 text-stone-700"><span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#4A2E45] text-sm font-bold text-white">{index + 1}</span>{step}</li>)}
           </ol>
         </div>
       </section>
       {recipe.cook_notes ? (
         <section className="bg-[#EED8B2] px-6 py-20">
-          <div className="mx-auto max-w-5xl rounded-[2rem] border border-[#4A2E45] bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/10 md:p-12">
+          <div className="mx-auto max-w-5xl rounded-[2rem] border border-[#4A2E45] bg-[#FFF3DF] p-8 shadow-xl shadow-[#69465F]/10 md:p-12">
             <p className="text-sm font-bold uppercase tracking-[0.35em] text-[#9A622A]">Cook&apos;s notes &amp; swaps</p>
-            <h2 className="mt-4 text-4xl font-bold text-[#123C39]">A little help from the OPR kitchen</h2>
+            <h2 className="mt-4 text-4xl font-bold text-[#4A2E45]">A little help from the OPR kitchen</h2>
             <p className="mt-6 whitespace-pre-wrap text-lg leading-8 text-stone-700">{recipe.cook_notes}</p>
           </div>
         </section>
@@ -288,7 +288,7 @@ export default async function CommunityRecipePage({
       <section className="px-6 py-20 text-center">
         <Link
           href="/family-cookbook"
-          className="inline-block rounded-full bg-[#123C39] px-8 py-4 text-lg font-medium text-white transition hover:scale-105"
+          className="inline-block rounded-full bg-[#4A2E45] px-8 py-4 text-lg font-medium text-white transition hover:scale-105"
         >
           Return to the Cookbook
         </Link>

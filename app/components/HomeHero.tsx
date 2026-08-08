@@ -121,7 +121,7 @@ export default function HomeHero({ children }: HomeHeroProps) {
   }
 
   return (
-    <section className="relative isolate flex min-h-screen items-center justify-center overflow-hidden bg-[#0D342F]">
+    <section className="relative isolate flex min-h-screen items-center justify-center overflow-hidden bg-[#35162F]">
       <div
         className={`absolute inset-0 transition-opacity duration-1000 ${
           introductionComplete ? "opacity-100" : "opacity-0"
@@ -163,12 +163,12 @@ export default function HomeHero({ children }: HomeHeroProps) {
         </>
       ) : null}
 
-      <div className="absolute inset-0 z-[1] bg-[#08231F]/35" />
+      <div className="absolute inset-0 z-[1] bg-[#2A1025]/35" />
       {!introductionComplete ? (
         <button
           type="button"
           onClick={toggleSound}
-          className="absolute bottom-7 right-7 z-20 rounded-full border border-white/70 bg-[#08231F]/75 px-4 py-2 text-sm font-medium text-white backdrop-blur transition hover:bg-[#123C39]"
+          className="absolute bottom-7 right-7 z-20 rounded-full border border-white/70 bg-[#2A1025]/75 px-4 py-2 text-sm font-medium text-white backdrop-blur transition hover:bg-[#4A2E45]"
           aria-label={isMuted ? "Turn sound on" : "Mute introduction film"}
         >
           {isMuted ? "Turn sound on" : "Mute sound"}

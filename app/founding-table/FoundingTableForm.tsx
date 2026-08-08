@@ -53,7 +53,7 @@ export default function FoundingTableForm() {
           value={name}
           onChange={(event) => setName(event.target.value)}
           autoComplete="given-name"
-          className="mt-2 w-full rounded-xl border border-[#DDB765]/60 bg-[#FFF3DF] px-4 py-3 text-[#123C39] outline-none transition focus:border-[#FFD58C] focus:ring-2 focus:ring-[#FFD58C]/50"
+          className="mt-2 w-full rounded-xl border border-[#DDB765]/60 bg-[#FFF3DF] px-4 py-3 text-[#4A2E45] outline-none transition focus:border-[#FFD58C] focus:ring-2 focus:ring-[#FFD58C]/50"
           placeholder="Your first name"
         />
       </label>
@@ -74,14 +74,14 @@ export default function FoundingTableForm() {
           onChange={(event) => setEmail(event.target.value)}
           type="email"
           autoComplete="email"
-          className="mt-2 w-full rounded-xl border border-[#DDB765]/60 bg-[#FFF3DF] px-4 py-3 text-[#123C39] outline-none transition focus:border-[#FFD58C] focus:ring-2 focus:ring-[#FFD58C]/50"
+          className="mt-2 w-full rounded-xl border border-[#DDB765]/60 bg-[#FFF3DF] px-4 py-3 text-[#4A2E45] outline-none transition focus:border-[#FFD58C] focus:ring-2 focus:ring-[#FFD58C]/50"
           placeholder="you@example.com"
         />
       </label>
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full rounded-full bg-[#DDB765] px-7 py-4 font-medium text-[#08231F] transition hover:scale-[1.02] hover:bg-[#FFD58C] disabled:cursor-not-allowed disabled:opacity-70"
+        className="w-full rounded-full bg-[#DDB765] px-7 py-4 font-medium text-[#2A1025] transition hover:scale-[1.02] hover:bg-[#FFD58C] disabled:cursor-not-allowed disabled:opacity-70"
       >
         {isSubmitting ? "Joining the table…" : "Join the Founding Table"}
       </button>

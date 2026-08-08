@@ -38,37 +38,37 @@ export default function CommunityCookForm({ recipeId, recipeSlug, recipeTitle }:
 
   return (
     <section className="bg-[#F4DDAE]/60 px-6 py-20">
-      <div className="mx-auto grid max-w-5xl gap-10 rounded-[2rem] bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/10 md:grid-cols-[0.85fr_1.15fr] md:p-12">
+      <div className="mx-auto grid max-w-5xl gap-10 rounded-[2rem] bg-[#FFF3DF] p-8 shadow-xl shadow-[#69465F]/10 md:grid-cols-[0.85fr_1.15fr] md:p-12">
         <div>
           <p className="text-sm font-bold uppercase tracking-[0.35em] text-[#9A622A]">Families who&apos;ve made this</p>
-          <h2 className="mt-4 text-4xl font-bold text-[#123C39]">Add your place at the table.</h2>
+          <h2 className="mt-4 text-4xl font-bold text-[#4A2E45]">Add your place at the table.</h2>
           <p className="mt-5 text-lg leading-8 text-stone-700">
             Cooked {recipeTitle}? Share a photo or a few words for the families who make it next.
             Every post is checked by OPR before it appears here.
           </p>
         </div>
         <form ref={formRef} onSubmit={handleSubmit} className="space-y-5">
-          <label className="block text-sm font-medium text-[#123C39]">
+          <label className="block text-sm font-medium text-[#4A2E45]">
             Your first name
-            <input name="name" required maxLength={80} className="mt-2 w-full rounded-xl border border-[#4A2E45] bg-white px-4 py-3 outline-none focus:border-[#123C39] focus:ring-2 focus:ring-[#4A2E45]/60" />
+            <input name="name" required maxLength={80} className="mt-2 w-full rounded-xl border border-[#4A2E45] bg-white px-4 py-3 outline-none focus:border-[#4A2E45] focus:ring-2 focus:ring-[#4A2E45]/60" />
           </label>
-          <label className="block text-sm font-medium text-[#123C39]">
-            Your note <span className="font-normal text-[#0E5C3E]">(optional)</span>
-            <textarea name="note" rows={4} maxLength={1000} placeholder="Tell us how it went, what you served it with, or the memory it created." className="mt-2 w-full resize-y rounded-xl border border-[#4A2E45] bg-white px-4 py-3 leading-6 outline-none focus:border-[#123C39] focus:ring-2 focus:ring-[#4A2E45]/60" />
+          <label className="block text-sm font-medium text-[#4A2E45]">
+            Your note <span className="font-normal text-[#69465F]">(optional)</span>
+            <textarea name="note" rows={4} maxLength={1000} placeholder="Tell us how it went, what you served it with, or the memory it created." className="mt-2 w-full resize-y rounded-xl border border-[#4A2E45] bg-white px-4 py-3 leading-6 outline-none focus:border-[#4A2E45] focus:ring-2 focus:ring-[#4A2E45]/60" />
           </label>
-          <label className="block text-sm font-medium text-[#123C39]">
-            A photo of your dish <span className="font-normal text-[#0E5C3E]">(optional)</span>
-            <input name="photo" type="file" accept="image/jpeg,image/png,image/webp" className="mt-2 block w-full text-sm text-stone-700 file:mr-4 file:rounded-full file:border-0 file:bg-[#123C39] file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-[#08231F]" />
-            <span className="mt-2 block text-xs text-[#0E5C3E]">JPG, PNG or WebP, up to 5MB.</span>
+          <label className="block text-sm font-medium text-[#4A2E45]">
+            A photo of your dish <span className="font-normal text-[#69465F]">(optional)</span>
+            <input name="photo" type="file" accept="image/jpeg,image/png,image/webp" className="mt-2 block w-full text-sm text-stone-700 file:mr-4 file:rounded-full file:border-0 file:bg-[#4A2E45] file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-[#2A1025]" />
+            <span className="mt-2 block text-xs text-[#69465F]">JPG, PNG or WebP, up to 5MB.</span>
           </label>
-          <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-[#4A2E45] bg-[#F4DDAE]/50 p-4 text-sm leading-6 text-[#123C39]">
-            <input name="agreementAccepted" value="true" type="checkbox" required className="mt-1 h-4 w-4 accent-[#123C39]" />
+          <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-[#4A2E45] bg-[#F4DDAE]/50 p-4 text-sm leading-6 text-[#4A2E45]">
+            <input name="agreementAccepted" value="true" type="checkbox" required className="mt-1 h-4 w-4 accent-[#4A2E45]" />
             <span>I confirm this photo and note are mine to share, and I am happy for Other People&apos;s Recipes to publish them with this recipe.</span>
           </label>
-          <button disabled={sending} className="rounded-full bg-[#123C39] px-7 py-3 font-medium text-white transition hover:bg-[#08231F] disabled:cursor-not-allowed disabled:opacity-60">
+          <button disabled={sending} className="rounded-full bg-[#4A2E45] px-7 py-3 font-medium text-white transition hover:bg-[#2A1025] disabled:cursor-not-allowed disabled:opacity-60">
             {sending ? "Sending…" : "Share your cook"}
           </button>
-          {message ? <p className={`text-sm leading-6 ${message.startsWith("Thank") ? "text-[#2E5A35]" : "text-red-800"}`}>{message}</p> : null}
+          {message ? <p className={`text-sm leading-6 ${message.startsWith("Thank") ? "text-[#69465F]" : "text-red-800"}`}>{message}</p> : null}
         </form>
       </div>
     </section>

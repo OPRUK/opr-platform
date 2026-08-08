@@ -23,7 +23,7 @@ export default function FamiliesWhoMadeThis({ cooks, recipeTitle }: { cooks: Com
                 {cook.photoUrl ? (
                   <img src={cook.photoUrl} alt={`${cook.name}'s version of ${recipeTitle}`} className="h-16 w-16 rounded-full object-cover" />
                 ) : (
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-amber-300 font-bold text-[#123C39]">{cook.name.charAt(0).toUpperCase()}</div>
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-amber-300 font-bold text-[#4A2E45]">{cook.name.charAt(0).toUpperCase()}</div>
                 )}
                 <p className="text-lg font-bold">{cook.name}</p>
               </div>

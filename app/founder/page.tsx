@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function FounderPage() {
   return (
-    <main className="min-h-screen bg-[#EED8B2] text-[#123C39]">
+    <main className="min-h-screen bg-[#EED8B2] text-[#4A2E45]">
       <Navigation />
 
       <section className="relative isolate overflow-hidden px-6 pb-24 pt-36 md:px-8 md:pt-44">
@@ -60,7 +60,7 @@ export default function FounderPage() {
               <p className="text-3xl italic text-[#8B5A2B]">2000</p>
             </div>
             <h2
-              className="font-founder-hand mt-8 text-4xl font-semibold leading-tight text-[#123C39] md:text-5xl"
+              className="font-founder-hand mt-8 text-4xl font-semibold leading-tight text-[#4A2E45] md:text-5xl"
             >
               OPR is as much about you and your family as it is about the recipes we hold dear to our hearts.
             </h2>
@@ -129,19 +129,19 @@ export default function FounderPage() {
         <div className="mx-auto mt-10 flex max-w-3xl flex-col justify-center gap-4 sm:flex-row sm:flex-wrap">
           <Link
             href="/share"
-            className="rounded-full bg-[#DDB765] px-7 py-4 font-medium text-[#08231F] transition hover:scale-105 hover:bg-[#FFD58C]"
+            className="rounded-full bg-[#DDB765] px-7 py-4 font-medium text-[#2A1025] transition hover:scale-105 hover:bg-[#FFD58C]"
           >
             Share your recipe
           </Link>
           <a
             href="mailto:info@otherpeoplesrecipes.co.uk?subject=OPR%20Partnership"
-            className="rounded-full border border-[#DDB765] px-7 py-4 font-medium text-[#FFF3DF] transition hover:bg-[#DDB765] hover:text-[#08231F]"
+            className="rounded-full border border-[#DDB765] px-7 py-4 font-medium text-[#FFF3DF] transition hover:bg-[#DDB765] hover:text-[#2A1025]"
           >
             Partner with us
           </a>
           <a
             href="mailto:info@otherpeoplesrecipes.co.uk?subject=OPR%20Enquiry"
-            className="rounded-full border border-[#FFF3DF]/70 px-7 py-4 font-medium text-[#FFF3DF] transition hover:bg-[#FFF3DF] hover:text-[#08231F]"
+            className="rounded-full border border-[#FFF3DF]/70 px-7 py-4 font-medium text-[#FFF3DF] transition hover:bg-[#FFF3DF] hover:text-[#2A1025]"
           >
             Get in touch
           </a>

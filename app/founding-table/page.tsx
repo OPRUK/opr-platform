@@ -20,7 +20,7 @@ const benefits = [
 
 export default function FoundingTablePage() {
   return (
-    <main className="min-h-screen bg-[#EED8B2] text-[#123C39]">
+    <main className="min-h-screen bg-[#EED8B2] text-[#4A2E45]">
       <Navigation />
 
       <section className="relative isolate overflow-hidden bg-[#241221] px-6 pb-24 pt-40 text-center text-[#FFF3DF]">
@@ -41,7 +41,7 @@ export default function FoundingTablePage() {
 
       <section className="mx-auto grid max-w-6xl gap-12 px-6 py-20 md:grid-cols-[1.05fr_0.95fr] md:px-8">
         <div>
-          <p className="text-sm uppercase tracking-[0.35em] text-[#0E5C3E]">
+          <p className="text-sm uppercase tracking-[0.35em] text-[#69465F]">
             Your seat is waiting
           </p>
           <h2 className="mt-5 text-4xl font-bold leading-tight md:text-5xl">
@@ -55,7 +55,7 @@ export default function FoundingTablePage() {
           <ul className="mt-10 space-y-5">
             {benefits.map((benefit) => (
               <li key={benefit} className="flex gap-4 text-lg leading-7 text-stone-700">
-                <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#1C5A50] text-sm text-[#FFD58C]">✓</span>
+                <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#69465F] text-sm text-[#FFD58C]">✓</span>
                 {benefit}
               </li>
             ))}
@@ -80,7 +80,7 @@ export default function FoundingTablePage() {
       </section>
 
       <section className="bg-[#FFF3DF] px-6 py-20 text-center">
-        <p className="text-sm uppercase tracking-[0.35em] text-[#0E5C3E]">From one family to another</p>
+        <p className="text-sm uppercase tracking-[0.35em] text-[#69465F]">From one family to another</p>
         <h2 className="mx-auto mt-5 max-w-3xl text-4xl font-bold leading-tight md:text-5xl">
           The recipes we save today become the stories we share tomorrow.
         </h2>
