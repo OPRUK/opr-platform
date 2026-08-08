@@ -457,18 +457,18 @@ export default function PublishedRecipes({
       </p>
 
       {visibleRecipes.length ? (
-        <div className="mt-5 grid gap-8 md:grid-cols-3">
-          {visibleRecipes.map((recipe) => (
+        <div className="mt-5 grid gap-px overflow-hidden border border-[#123C39]/25 bg-[#123C39]/25 md:grid-cols-3">
+          {visibleRecipes.map((recipe, index) => (
             <Link
               key={recipe.id}
               href={recipe.href}
-              className="group overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/15 transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
+              className="group flex flex-col overflow-hidden bg-[#FFF3DF] transition-colors duration-300 hover:bg-[#FBEBC8]"
             >
               {recipe.imageUrl ? (
                 <img
                   src={recipe.imageUrl}
                   alt={recipe.title}
-                  className="aspect-[4/3] w-full object-cover transition duration-500 group-hover:scale-105"
+                  className="aspect-[4/3] w-full object-cover grayscale-[15%] transition duration-500 group-hover:grayscale-0"
                 />
               ) : (
                 <div className="flex aspect-[4/3] items-center justify-center bg-[#DDBB82] px-8 text-center text-xl font-bold text-[#123C39]">
@@ -476,8 +476,11 @@ export default function PublishedRecipes({
                 </div>
               )}
               <div className="flex min-h-80 flex-col p-8">
-                <p className="text-sm uppercase tracking-[0.16em] text-stone-500">
-                  {recipe.category}
+                <p
+                  className="text-[11px] uppercase tracking-[0.14em] text-[#9A622A]"
+                  style={{ fontFamily: "'Courier New', ui-monospace, monospace" }}
+                >
+                  No. {String(index + 1).padStart(2, "0")} &middot; {recipe.category}
                 </p>
                 <h3 className="mt-5 text-3xl font-bold leading-tight">{recipe.title}</h3>
                 <p className="mt-3 text-sm uppercase tracking-[0.16em] text-stone-500">

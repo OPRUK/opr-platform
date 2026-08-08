@@ -76,6 +76,20 @@ export default function FamilyCookbook() {
         <div className="absolute inset-0 -z-10 bg-[#0D342F]/75" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#08231F]/65 via-[#123C39]/45 to-[#08231F]/80" />
 
+        <div
+          className="absolute right-6 top-24 hidden h-24 w-24 rotate-[8deg] items-center justify-center rounded-full border-2 border-[#F0C45A]/80 text-center text-[9px] font-bold uppercase leading-tight tracking-[0.06em] text-[#F0C45A]/90 sm:flex md:right-10 md:top-28"
+          style={{ fontFamily: "'Courier New', ui-monospace, monospace" }}
+          aria-hidden="true"
+        >
+          Every
+          <br />
+          Recipe
+          <br />
+          Has A
+          <br />
+          Story
+        </div>
+
         <div className="mx-auto max-w-4xl">
           <p className="mb-5 text-sm uppercase tracking-[0.4em] text-amber-200">
             The Family Cookbook
