@@ -29,18 +29,18 @@ const introductionFilms = [
   },
 ];
 
-// Each clip ends with the website address on screen, so the crossfade must
-// not start until the clip has essentially finished playing — otherwise the
-// address dissolves under the incoming clip before it's readable. The blend
-// itself (CROSSFADE_MS) can still be smooth; only the trigger point
-// (CROSSFADE_LEAD_SECONDS) needs to sit right at the very end.
-const CROSSFADE_MS = 350;
-const CROSSFADE_LEAD_SECONDS = 0.12;
+// Keep the transition deliberately short and stop each film a fraction early.
+// That removes abrupt last frames and leaves room for the OPR end card before
+// the following film begins.
+const CROSSFADE_MS = 500;
+const END_CARD_MS = 1900;
+const END_TRIM_SECONDS = 0.2;
 
 export default function HomeHero({ children }: HomeHeroProps) {
   const [introductionComplete, setIntroductionComplete] = useState(false);
   const [videosDone, setVideosDone] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
+  const [showEndCard, setShowEndCard] = useState(false);
   // Two alternating <video> elements so the incoming clip can start playing
   // underneath the outgoing one and we crossfade opacity between them,
   // rather than hard-swapping a single video's `src` (the previous jump cut).
@@ -49,6 +49,7 @@ export default function HomeHero({ children }: HomeHeroProps) {
   const videoRefs = [useRef<HTMLVideoElement | null>(null), useRef<HTMLVideoElement | null>(null)];
   const currentIndexRef = useRef(0);
   const transitioningRef = useRef(false);
+  const endCardTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     const el = videoRefs[activeSlot].current;
@@ -60,6 +61,14 @@ export default function HomeHero({ children }: HomeHeroProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    return () => {
+      if (endCardTimerRef.current !== null) {
+        window.clearTimeout(endCardTimerRef.current);
+      }
+    };
+  }, []);
+
   function toggleSound() {
     const current = videoRefs[activeSlot].current;
     if (!current) return;
@@ -68,16 +77,13 @@ export default function HomeHero({ children }: HomeHeroProps) {
   }
 
   function beginCrossfade() {
-    if (transitioningRef.current) return;
-    transitioningRef.current = true;
-
     const currentIndex = currentIndexRef.current;
     const isLastFilm = currentIndex >= introductionFilms.length - 1;
 
     if (isLastFilm) {
-      // Fade the final clip out while the photo carousel fades in underneath
-      // (see the wrapping div below), instead of unmounting the video the
-      // instant it ends.
+      setShowEndCard(false);
+      // Fade the final end card out while the photo carousel fades in
+      // underneath, rather than leaving a hard cut at the end of the films.
       setIntroductionComplete(true);
       window.setTimeout(() => setVideosDone(true), CROSSFADE_MS + 100);
       return;
@@ -97,11 +103,13 @@ export default function HomeHero({ children }: HomeHeroProps) {
         const el = videoRefs[nextSlot].current;
         if (el) {
           el.muted = isMuted;
+          el.currentTime = 0;
           el.load();
           void el.play().catch(() => {});
         }
         setActiveSlot(nextSlot);
         currentIndexRef.current = nextIndex;
+        setShowEndCard(false);
 
         window.setTimeout(() => {
           videoRefs[previousSlot].current?.pause();
@@ -111,12 +119,26 @@ export default function HomeHero({ children }: HomeHeroProps) {
     });
   }
 
+  function showFilmEndCard() {
+    if (transitioningRef.current) return;
+    transitioningRef.current = true;
+
+    // Finish slightly early, as requested, then hold the final visual behind
+    // a short, readable OPR sign-off before the next film crossfades in.
+    videoRefs[activeSlot].current?.pause();
+    setShowEndCard(true);
+    endCardTimerRef.current = window.setTimeout(() => {
+      endCardTimerRef.current = null;
+      beginCrossfade();
+    }, END_CARD_MS);
+  }
+
   function handleTimeUpdate(slot: 0 | 1) {
     if (slot !== activeSlot || transitioningRef.current) return;
     const el = videoRefs[slot].current;
     if (!el || !el.duration) return;
-    if (el.duration - el.currentTime <= CROSSFADE_LEAD_SECONDS) {
-      beginCrossfade();
+    if (el.duration - el.currentTime <= END_TRIM_SECONDS) {
+      showFilmEndCard();
     }
   }
 
@@ -144,6 +166,9 @@ export default function HomeHero({ children }: HomeHeroProps) {
                 preload="auto"
                 poster={film.poster}
                 onTimeUpdate={() => handleTimeUpdate(slot)}
+                onEnded={() => {
+                  if (slot === activeSlot) showFilmEndCard();
+                }}
                 onCanPlay={() => {
                   if (slot === activeSlot) {
                     void videoRefs[slot].current?.play().catch(() => {});
@@ -160,6 +185,19 @@ export default function HomeHero({ children }: HomeHeroProps) {
             );
           })}
           <VideoBrandMark className="z-30" />
+          <div
+            aria-hidden={!showEndCard}
+            className={`pointer-events-none absolute inset-x-4 bottom-20 z-40 mx-auto max-w-3xl rounded-2xl border border-[#DDB765]/75 bg-[#2A1025]/95 px-5 py-4 text-center text-[#FFF3DF] shadow-2xl shadow-black/40 backdrop-blur-sm transition-all duration-500 sm:bottom-12 sm:px-8 sm:py-5 ${
+              showEndCard ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
+            }`}
+          >
+            <p className="font-display text-xl font-semibold sm:text-2xl">Other People&apos;s Recipes</p>
+            <p className="mt-1 text-sm font-semibold tracking-wide text-[#FFD58C] sm:text-base">otherpeoplesrecipes.co.uk</p>
+            <p className="mt-2 text-sm text-[#FFF3DF]/90 sm:text-base">Every Recipe Has a Story.</p>
+            <p className="mt-3 text-[10px] uppercase leading-5 tracking-[0.12em] text-[#F0D4A0] sm:text-xs">
+              Instagram &amp; TikTok @opr_uk &nbsp;·&nbsp; Facebook @otherpeoplesrecipesuk &nbsp;·&nbsp; Pinterest @otherpeoplesrecipes &nbsp;·&nbsp; YouTube Other People&apos;s Recipes
+            </p>
+          </div>
         </>
       ) : null}
 
