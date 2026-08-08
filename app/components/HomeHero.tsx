@@ -33,7 +33,7 @@ const introductionFilms = [
 // That removes abrupt last frames and leaves room for the OPR end card before
 // the following film begins.
 const CROSSFADE_MS = 500;
-const END_CARD_MS = 1900;
+const END_CARD_MS = 1500;
 const END_TRIM_SECONDS = 0.2;
 
 export default function HomeHero({ children }: HomeHeroProps) {
