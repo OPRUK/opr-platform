@@ -93,16 +93,27 @@ export default function FounderPage() {
             </p>
           </div>
 
-          <Image
-            src="/images/chaten-signature.png"
-            alt="Chaten's signature"
-            width={1606}
-            height={671}
-            className="mt-10 h-auto w-56 md:w-64"
-          />
-          <p className="mt-1 text-xs uppercase tracking-[0.25em] text-[#9A622A]">
-            Founder, Other People&apos;s Recipes
-          </p>
+          <div className="mt-10 flex items-center gap-5">
+            <Image
+              src="/images/chaten-founder-photo.webp"
+              alt="Chaten, founder of Other People's Recipes"
+              width={500}
+              height={500}
+              className="h-16 w-16 flex-shrink-0 rounded-full object-cover shadow-md md:h-20 md:w-20"
+            />
+            <div>
+              <Image
+                src="/images/chaten-signature.png"
+                alt="Chaten's signature"
+                width={1606}
+                height={671}
+                className="h-auto w-48 md:w-56"
+              />
+              <p className="mt-1 text-xs uppercase tracking-[0.25em] text-[#9A622A]">
+                Founder, Other People&apos;s Recipes
+              </p>
+            </div>
+          </div>
           </div>
           </article>
         </div>
