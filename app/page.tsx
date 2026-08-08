@@ -237,7 +237,7 @@ export default async function Home() {
       </section>
 
       <section className="bg-[#FFF3DF] px-6 py-24">
-        <div className="mx-auto grid max-w-6xl overflow-hidden rounded-[2rem] bg-[#1C5A50] shadow-2xl md:grid-cols-2">
+        <div className="mx-auto grid max-w-6xl overflow-hidden rounded-[2rem] bg-[#241221] shadow-2xl md:grid-cols-2">
           <div className="relative min-h-[340px]">
             {recipeOfWeek ? (
               recipeOfWeekImage ? <img src={recipeOfWeekImage} alt={recipeOfWeek.title} className="h-full w-full object-cover" /> : <div className="flex h-full items-center justify-center bg-[#DDBB82] p-8 text-center text-2xl font-bold text-[#123C39]">A treasured family recipe</div>

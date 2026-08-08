@@ -23,7 +23,7 @@ export default function FoundingTablePage() {
     <main className="min-h-screen bg-[#EED8B2] text-[#123C39]">
       <Navigation />
 
-      <section className="relative isolate overflow-hidden bg-[#0D342F] px-6 pb-24 pt-40 text-center text-[#FFF3DF]">
+      <section className="relative isolate overflow-hidden bg-[#241221] px-6 pb-24 pt-40 text-center text-[#FFF3DF]">
         <HeroCarousel />
         <div className="relative z-10">
           <p className="mb-5 text-sm uppercase tracking-[0.4em] text-[#FFD58C]">
@@ -65,7 +65,7 @@ export default function FoundingTablePage() {
           </p>
         </div>
 
-        <div className="rounded-3xl bg-[#1C5A50] p-8 shadow-2xl md:p-10">
+        <div className="rounded-3xl bg-[#241221] p-8 shadow-2xl md:p-10">
           <p className="text-sm uppercase tracking-[0.35em] text-[#FFD58C]">
             Save your seat
           </p>

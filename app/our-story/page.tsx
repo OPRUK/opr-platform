@@ -15,7 +15,7 @@ export default function OurStory() {
     <main className="min-h-screen bg-[#EED8B2] text-[#123C39]">
       <Navigation />
 
-      <section className="relative isolate overflow-hidden bg-[#0D342F] px-6 pb-24 pt-40 text-center text-white">
+      <section className="relative isolate overflow-hidden bg-[#241221] px-6 pb-24 pt-40 text-center text-white">
         <HeroCarousel />
         <div className="relative z-10">
           <p className="mb-5 text-sm uppercase tracking-[0.4em] text-amber-300">

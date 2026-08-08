@@ -66,7 +66,7 @@ export default function HeroCarousel() {
       <div className="absolute inset-0 bg-[#0A2A27]/55" />
       <div className="absolute inset-0 bg-gradient-to-b from-[#08231F]/35 via-transparent to-[#08231F]/60" />
 
-      <div className="absolute bottom-9 left-1/2 z-10 flex -translate-x-1/2 items-center gap-3 text-xs font-medium tracking-wide text-[#FFF3DF] sm:bottom-11">
+      <div className="absolute bottom-6 right-6 z-10 flex items-center gap-3 text-xs font-medium tracking-wide text-[#FFF3DF] sm:bottom-8 sm:right-8">
         <span className="hidden sm:inline">{slides[activeSlide].label}</span>
         <div className="flex gap-2" aria-label="Featured recipe images">
           {slides.map((slide, index) => (

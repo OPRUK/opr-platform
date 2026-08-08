@@ -119,7 +119,7 @@ export default function FounderPage() {
         </div>
       </section>
 
-      <section className="bg-[#08231F] px-6 py-20 text-center text-[#FFF3DF]">
+      <section className="bg-[#241221] px-6 py-20 text-center text-[#FFF3DF]">
         <p className="text-sm uppercase tracking-[0.35em] text-[#FFD58C]">
           Join the story
         </p>
