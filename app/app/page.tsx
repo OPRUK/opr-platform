@@ -2,7 +2,7 @@ import { Eyebrow, PrimaryButton, Divider } from "./_components/primitives";
 
 export default function SplashScreen() {
   return (
-    <div className="flex flex-1 flex-col justify-center bg-[#4A2E45] px-7 pb-10 pt-[100px] text-[#EED8B2]">
+    <div className="flex flex-1 flex-col justify-center bg-[#123C39] px-7 pb-10 pt-[100px] text-[#EED8B2]">
       <div className="flex flex-1 flex-col justify-center">
         <Eyebrow tone="cream" className="mb-[18px]">
           Other People&apos;s Recipes

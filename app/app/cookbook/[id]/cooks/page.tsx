@@ -35,12 +35,12 @@ export default async function CommunityCooksScreen({ params }: { params: Promise
       {cooks.length > 0 ? (
         <div className="flex flex-col">
           {cooks.map((cook) => (
-            <div key={cook.id} className="flex gap-3 border-b-2 border-[#4A2E45]/35 py-4">
+            <div key={cook.id} className="flex gap-3 border-b-2 border-[#123C39]/35 py-4">
               {cook.photoUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element -- Supabase Storage URL, not a configured Image domain
                 <img src={cook.photoUrl} alt={cook.name} className="h-[52px] w-[52px] flex-shrink-0 object-cover" />
               ) : (
-                <div className="flex h-[52px] w-[52px] flex-shrink-0 items-center justify-center bg-[#F5E6C4] text-base font-bold text-[#4A2E45]">
+                <div className="flex h-[52px] w-[52px] flex-shrink-0 items-center justify-center bg-[#F5E6C4] text-base font-bold text-[#123C39]">
                   {cook.name.charAt(0).toUpperCase()}
                 </div>
               )}
@@ -52,7 +52,7 @@ export default async function CommunityCooksScreen({ params }: { params: Promise
           ))}
         </div>
       ) : (
-        <p className="border-b-2 border-[#4A2E45]/35 py-4 text-sm opacity-80">
+        <p className="border-b-2 border-[#123C39]/35 py-4 text-sm opacity-80">
           No families have shared a photo or note yet — be the first.
         </p>
       )}

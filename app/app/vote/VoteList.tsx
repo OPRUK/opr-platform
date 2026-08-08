@@ -64,7 +64,7 @@ export default function VoteList() {
         const votes = results?.totals[candidate.id] ?? 0;
 
         return (
-          <div key={candidate.id} className="flex items-center gap-3 border-b-2 border-[#4A2E45]/35 py-3.5">
+          <div key={candidate.id} className="flex items-center gap-3 border-b-2 border-[#123C39]/35 py-3.5">
             <div className="h-16 w-16 flex-shrink-0 bg-[#F5E6C4]">
               {candidate.image ? (
                 // eslint-disable-next-line @next/next/no-img-element -- may be a Supabase Storage URL, not a configured Image domain
@@ -82,7 +82,7 @@ export default function VoteList() {
               type="button"
               onClick={() => vote(candidate.id)}
               disabled={hasVoted || Boolean(votingFor)}
-              className="flex-shrink-0 border border-[#4A2E45] px-3.5 py-2 text-sm font-medium transition hover:bg-[#4A2E45] hover:text-[#EED8B2] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent disabled:hover:text-[#4A2E45]"
+              className="flex-shrink-0 border border-[#123C39] px-3.5 py-2 text-sm font-medium transition hover:bg-[#123C39] hover:text-[#EED8B2] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent disabled:hover:text-[#123C39]"
             >
               {isVoted ? "Voted ✓" : votingFor === candidate.id ? "Saving…" : "Vote"}
             </button>

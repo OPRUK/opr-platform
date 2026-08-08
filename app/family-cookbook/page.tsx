@@ -50,7 +50,7 @@ const cookbookJsonLd = {
 
 export default function FamilyCookbook() {
   return (
-    <main className="min-h-screen bg-[#EED8B2] text-[#4A2E45]">
+    <main className="min-h-screen bg-[#EED8B2] text-[#123C39]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -59,7 +59,7 @@ export default function FamilyCookbook() {
       />
       <Navigation />
 
-      <section className="relative isolate overflow-hidden bg-[#241221] px-6 pb-24 pt-40 text-center text-white">
+      <section className="relative isolate overflow-hidden bg-[#123C39] px-6 pb-24 pt-40 text-center text-white">
         <video
           className="absolute inset-0 -z-20 h-full w-full object-cover"
           autoPlay
@@ -73,11 +73,11 @@ export default function FamilyCookbook() {
           <source src="/videos/opr-recipe-stories-film-v2.mp4" type="video/mp4" />
         </video>
         <VideoBrandMark />
-        <div className="absolute inset-0 -z-10 bg-[#35162F]/75" />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#2A1025]/65 via-[#4A2E45]/45 to-[#2A1025]/80" />
+        <div className="absolute inset-0 -z-10 bg-[#0D342F]/75" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#08231F]/65 via-[#123C39]/45 to-[#08231F]/80" />
 
         <div
-          className="absolute right-6 top-24 hidden h-24 w-24 rotate-[8deg] items-center justify-center rounded-full border-2 border-[#69465F] text-center text-[9px] font-bold uppercase leading-tight tracking-[0.06em] text-[#B17DA7] sm:flex md:right-10 md:top-28"
+          className="absolute right-6 top-24 hidden h-24 w-24 rotate-[8deg] items-center justify-center rounded-full border-2 border-[#0E5C3E] text-center text-[9px] font-bold uppercase leading-tight tracking-[0.06em] text-[#4FAE85] sm:flex md:right-10 md:top-28"
           style={{ fontFamily: "'Courier New', ui-monospace, monospace" }}
           aria-hidden="true"
         >
@@ -102,7 +102,7 @@ export default function FamilyCookbook() {
 
       <section className="mx-auto max-w-6xl px-6 py-20 md:px-8">
         <div className="mb-14 max-w-2xl">
-          <p className="text-sm uppercase tracking-[0.35em] text-[#69465F]">
+          <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
             Choose a recipe
           </p>
           <h2 className="font-display mt-4 text-4xl font-bold md:text-5xl">
@@ -118,7 +118,7 @@ export default function FamilyCookbook() {
       </section>
 
       <section className="bg-[#FFF3DF] px-6 py-24 text-center">
-        <p className="text-sm uppercase tracking-[0.35em] text-[#69465F]">
+        <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
           Whet Our Appetite
         </p>
         <h2 className="font-display mx-auto mt-5 max-w-3xl text-4xl font-bold md:text-5xl">
@@ -126,7 +126,7 @@ export default function FamilyCookbook() {
         </h2>
         <Link
           href="/share"
-          className="mt-10 inline-block rounded-full bg-[#4A2E45] px-8 py-4 text-lg font-medium text-white transition hover:scale-105"
+          className="mt-10 inline-block rounded-full bg-[#123C39] px-8 py-4 text-lg font-medium text-white transition hover:scale-105"
         >
           Share Your Story
         </Link>

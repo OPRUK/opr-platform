@@ -4,7 +4,7 @@ const from = process.env.EMAIL_FROM || "Other People's Recipes <onboarding@resen
 function marketingFooter(unsubscribeUrl: string | null) {
   if (!unsubscribeUrl) return "";
 
-  return `<p style="border-top: 1px solid #D1AD75; padding-top: 18px; margin-top: 36px; font-size: 13px; color: #6B6254;">You are receiving OPR news because you asked us to keep you posted. <a href="${unsubscribeUrl}" style="color: #69465F;">Unsubscribe from OPR updates</a>.</p>`;
+  return `<p style="border-top: 1px solid #D1AD75; padding-top: 18px; margin-top: 36px; font-size: 13px; color: #6B6254;">You are receiving OPR news because you asked us to keep you posted. <a href="${unsubscribeUrl}" style="color: #1C5A50;">Unsubscribe from OPR updates</a>.</p>`;
 }
 
 function escapeHtml(value: string) {
@@ -122,7 +122,7 @@ export function foundingTableWelcomeEmail({
         <p>Thank you for joining the very first people shaping Other People's Recipes.</p>
         ${marketingOptIn ? "<p>You will be first to hear about new family recipes, future tasting events, Recipe of the Month voting and the next chapter of OPR.</p>" : "<p>We have saved your place at the Founding Table. You have not opted in to optional OPR news, so we will not send you marketing updates.</p>"}
         <p>While you wait, the first stories are already waiting for you in the Family Cookbook.</p>
-        <p><a href="${siteUrl}/family-cookbook" style="display: inline-block; background: #69465F; color: #FFF3DF; padding: 12px 18px; border-radius: 999px; text-decoration: none;">Explore the Family Cookbook</a></p>
+        <p><a href="${siteUrl}/family-cookbook" style="display: inline-block; background: #1C5A50; color: #FFF3DF; padding: 12px 18px; border-radius: 999px; text-decoration: none;">Explore the Family Cookbook</a></p>
         <p style="margin-top: 32px;">Warmly,<br /><strong>Chaten &amp; the OPR team</strong></p>
         ${marketingFooter(unsubscribeUrl)}
         <p style="font-size: 13px; color: #6B6254;">Every recipe has a story.</p>

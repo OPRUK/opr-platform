@@ -4,7 +4,7 @@ import { FormEvent, useState } from "react";
 import { CheckIcon, Eyebrow } from "../_components/primitives";
 
 const inputClassName =
-  "mt-1.5 w-full border border-[#D1AD75] bg-[#FFF3DF] px-3.5 py-3 text-[15px] outline-none transition placeholder:text-stone-500 focus:border-[#4A2E45]";
+  "mt-1.5 w-full border border-[#D1AD75] bg-[#FFF3DF] px-3.5 py-3 text-[15px] outline-none transition placeholder:text-stone-500 focus:border-[#123C39]";
 
 export default function MobileFoundingTableForm() {
   const [name, setName] = useState("");
@@ -78,14 +78,14 @@ export default function MobileFoundingTableForm() {
         />
       </label>
       <label className="mb-5 flex items-start gap-2.5 text-[13px] leading-[1.5]">
-        <input type="checkbox" checked={optIn} onChange={(e) => setOptIn(e.target.checked)} className="mt-[3px] accent-[#4A2E45]" />
+        <input type="checkbox" checked={optIn} onChange={(e) => setOptIn(e.target.checked)} className="mt-[3px] accent-[#123C39]" />
         <span>Send me occasional OPR updates.</span>
       </label>
 
       <button
         type="submit"
         disabled={!canSubmit || isSubmitting}
-        className="w-full bg-[#4A2E45] px-4 py-[14px] text-[16px] font-medium text-[#EED8B2] transition hover:bg-[#2C1328] disabled:cursor-not-allowed disabled:opacity-50"
+        className="w-full bg-[#123C39] px-4 py-[14px] text-[16px] font-medium text-[#EED8B2] transition hover:bg-[#0d2b28] disabled:cursor-not-allowed disabled:opacity-50"
       >
         {isSubmitting ? "Joining…" : "Join the waiting list"}
       </button>

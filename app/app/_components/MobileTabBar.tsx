@@ -58,14 +58,14 @@ export default function MobileTabBar() {
   const pathname = usePathname();
 
   return (
-    <div className="flex flex-shrink-0 justify-around border-t-2 border-[#4A2E45]/35 bg-[#EED8B2] px-2 pb-7 pt-3">
+    <div className="flex flex-shrink-0 justify-around border-t-2 border-[#123C39]/35 bg-[#EED8B2] px-2 pb-7 pt-3">
       {tabs.map((tab) => {
         const active = pathname === tab.href;
         return (
           <Link
             key={tab.href}
             href={tab.href}
-            className={`flex flex-col items-center gap-1 ${active ? "text-[#4A2E45]" : "text-[#4A2E45]/80"}`}
+            className={`flex flex-col items-center gap-1 ${active ? "text-[#123C39]" : "text-[#123C39]/80"}`}
           >
             {tab.icon}
             <span className={`text-[11px] ${active ? "font-semibold" : ""}`}>{tab.label}</span>

@@ -13,10 +13,10 @@ export const metadata: Metadata = {
 
 export default function FilmsPage() {
   return (
-    <main className="min-h-screen bg-[#EED8B2] text-[#4A2E45]">
+    <main className="min-h-screen bg-[#EED8B2] text-[#123C39]">
       <Navigation />
 
-      <section className="relative isolate overflow-hidden bg-[#241221] px-6 pb-24 pt-40 text-center text-white">
+      <section className="relative isolate overflow-hidden bg-[#123C39] px-6 pb-24 pt-40 text-center text-white">
         <video
           className="absolute inset-0 -z-20 h-full w-full object-cover"
           autoPlay
@@ -30,8 +30,8 @@ export default function FilmsPage() {
           <source src="/videos/opr-recipe-stories-film-v2.mp4" type="video/mp4" />
         </video>
         <VideoBrandMark />
-        <div className="absolute inset-0 -z-10 bg-[#35162F]/75" />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#2A1025]/65 via-[#4A2E45]/45 to-[#2A1025]/80" />
+        <div className="absolute inset-0 -z-10 bg-[#0D342F]/75" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#08231F]/65 via-[#123C39]/45 to-[#08231F]/80" />
 
         <div className="mx-auto max-w-4xl">
           <p className="mb-5 text-sm uppercase tracking-[0.4em] text-amber-200">
@@ -53,7 +53,7 @@ export default function FilmsPage() {
           {films.map((film) => (
             <article
               key={film.video}
-              className="overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-lg shadow-[#69465F]/15"
+              className="overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/15"
             >
               <FilmEmbed video={film.video} poster={film.poster} title={film.title} className="aspect-video w-full" />
               <div className="p-6">
@@ -65,7 +65,7 @@ export default function FilmsPage() {
       </section>
 
       <section className="bg-[#FFF3DF] px-6 py-24 text-center">
-        <p className="text-sm uppercase tracking-[0.35em] text-[#69465F]">
+        <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
           The next chapter
         </p>
         <h2 className="mx-auto mt-5 max-w-3xl text-4xl font-bold md:text-5xl">

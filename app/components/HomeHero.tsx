@@ -143,7 +143,7 @@ export default function HomeHero({ children }: HomeHeroProps) {
   }
 
   return (
-    <section className="relative isolate flex min-h-screen items-center justify-center overflow-hidden bg-[#35162F]">
+    <section className="relative isolate flex min-h-screen items-center justify-center overflow-hidden bg-[#0D342F]">
       <div
         className={`absolute inset-0 transition-opacity duration-1000 ${
           introductionComplete ? "opacity-100" : "opacity-0"
@@ -187,26 +187,26 @@ export default function HomeHero({ children }: HomeHeroProps) {
           <VideoBrandMark className="z-30" />
           <div
             aria-hidden={!showEndCard}
-            className={`pointer-events-none absolute inset-x-4 bottom-20 z-40 mx-auto max-w-3xl rounded-2xl border border-[#DDB765]/75 bg-[#2A1025]/95 px-5 py-4 text-center text-[#FFF3DF] shadow-2xl shadow-black/40 backdrop-blur-sm transition-all duration-500 sm:bottom-12 sm:px-8 sm:py-5 ${
+            className={`pointer-events-none absolute inset-x-4 bottom-20 z-40 mx-auto max-w-3xl rounded-2xl border border-[#DDB765]/75 bg-[#0D342F]/95 px-5 py-4 text-center text-[#FFF3DF] shadow-2xl shadow-black/40 backdrop-blur-sm transition-all duration-500 sm:bottom-12 sm:px-8 sm:py-5 ${
               showEndCard ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
             }`}
           >
             <p className="font-display text-xl font-semibold sm:text-2xl">Other People&apos;s Recipes</p>
-            <p className="mt-1 text-sm font-semibold tracking-wide text-[#FFD58C] sm:text-base">otherpeoplesrecipes.co.uk</p>
+            <p className="mt-1 text-sm font-semibold tracking-wide text-[#DDB765] sm:text-base">otherpeoplesrecipes.co.uk</p>
             <p className="mt-2 text-sm text-[#FFF3DF]/90 sm:text-base">Every Recipe Has a Story.</p>
-            <p className="mt-3 text-[10px] uppercase leading-5 tracking-[0.12em] text-[#F0D4A0] sm:text-xs">
+            <p className="mt-3 text-[10px] uppercase leading-5 tracking-[0.12em] text-[#E7CEA2] sm:text-xs">
               Instagram &amp; TikTok @opr_uk &nbsp;·&nbsp; Facebook @otherpeoplesrecipesuk &nbsp;·&nbsp; Pinterest @otherpeoplesrecipes &nbsp;·&nbsp; YouTube Other People&apos;s Recipes
             </p>
           </div>
         </>
       ) : null}
 
-      <div className="absolute inset-0 z-[1] bg-[#2A1025]/35" />
+      <div className="absolute inset-0 z-[1] bg-[#08231F]/35" />
       {!introductionComplete ? (
         <button
           type="button"
           onClick={toggleSound}
-          className="absolute bottom-7 right-7 z-20 rounded-full border border-white/70 bg-[#2A1025]/75 px-4 py-2 text-sm font-medium text-white backdrop-blur transition hover:bg-[#4A2E45]"
+          className="absolute bottom-7 right-7 z-20 rounded-full border border-white/70 bg-[#08231F]/75 px-4 py-2 text-sm font-medium text-white backdrop-blur transition hover:bg-[#123C39]"
           aria-label={isMuted ? "Turn sound on" : "Mute introduction film"}
         >
           {isMuted ? "Turn sound on" : "Mute sound"}

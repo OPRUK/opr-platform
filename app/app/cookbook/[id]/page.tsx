@@ -5,7 +5,7 @@ import { getMobileRecipe } from "../../../../lib/mobile-recipes";
 
 function CheckmarkIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4A2E45" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" className="mt-[3px] flex-shrink-0">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#123C39" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" className="mt-[3px] flex-shrink-0">
       <path d="M20 6L9 17l-5-5" />
     </svg>
   );
@@ -40,7 +40,7 @@ export default async function RecipeDetailScreen({ params }: { params: Promise<{
       <div className="px-5 pt-5">
         <div className="mb-2.5 flex items-center gap-2">
           <Tag>{recipe.category}</Tag>
-          <span className="text-xs uppercase tracking-[0.1em] text-[#4A2E45]/80">{recipe.place}</span>
+          <span className="text-xs uppercase tracking-[0.1em] text-[#123C39]/80">{recipe.place}</span>
         </div>
         <h1 className="mb-4 text-[30px]">{recipe.title}</h1>
         <Divider />
@@ -54,7 +54,7 @@ export default async function RecipeDetailScreen({ params }: { params: Promise<{
             <Eyebrow className="mb-2.5 mt-5">What you&apos;ll need</Eyebrow>
             <div className="flex flex-col">
               {recipe.ingredients.map((ingredient) => (
-                <div key={ingredient} className="flex gap-2.5 border-b border-[#4A2E45]/35 py-2.5 text-[15px]">
+                <div key={ingredient} className="flex gap-2.5 border-b border-[#123C39]/35 py-2.5 text-[15px]">
                   <CheckmarkIcon />
                   {ingredient}
                 </div>
@@ -69,7 +69,7 @@ export default async function RecipeDetailScreen({ params }: { params: Promise<{
             <div className="flex flex-col gap-3.5">
               {recipe.method.map((step, index) => (
                 <div key={step} className="flex gap-3 text-[15px] leading-[1.6]">
-                  <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center bg-[#4A2E45] text-xs font-bold text-[#EED8B2]">
+                  <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center bg-[#123C39] text-xs font-bold text-[#EED8B2]">
                     {index + 1}
                   </span>
                   {step}

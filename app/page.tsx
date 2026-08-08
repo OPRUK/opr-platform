@@ -49,7 +49,7 @@ export default async function Home() {
     ? supabase.storage.from("recipe-photos").getPublicUrl(recipeOfWeek.photo_path).data.publicUrl
     : null;
   return (
-    <main className="min-h-screen bg-[#EED8B2] text-[#4A2E45]">
+    <main className="min-h-screen bg-[#EED8B2] text-[#123C39]">
       <Navigation />
 
       {/* Hero */}
@@ -72,7 +72,7 @@ export default async function Home() {
           <div className="mt-12 flex flex-col justify-center gap-5 sm:flex-row">
             <Link
               href="/family-cookbook"
-              className="rounded-full bg-[#4A2E45] px-10 py-4 text-lg font-medium transition hover:scale-105"
+              className="rounded-full bg-[#123C39] px-10 py-4 text-lg font-medium transition hover:scale-105"
             >
               Open the Cookbook
             </Link>
@@ -88,9 +88,9 @@ export default async function Home() {
       </HomeHero>
 
       <section className="bg-[#EED8B2] px-6 py-10 md:py-14">
-        <div className="mx-auto max-w-6xl overflow-hidden rounded-[2rem] border-2 border-[#DDB765] bg-[#241221] shadow-2xl shadow-black/30">
+        <div className="mx-auto max-w-6xl overflow-hidden rounded-[2rem] border-2 border-[#DDB765] bg-[#123C39] shadow-2xl shadow-[#08231F]/25">
           <div className="grid items-stretch md:grid-cols-[0.7fr_1.7fr]">
-            <div className="flex min-h-[200px] flex-col justify-between bg-[#DDB765] p-8 text-[#4A2E45] md:min-h-full md:p-10">
+            <div className="flex min-h-[200px] flex-col justify-between bg-[#DDB765] p-8 text-[#123C39] md:min-h-full md:p-10">
               <p className="text-xs font-bold uppercase tracking-[0.3em]">OPR invitation</p>
               <div>
                 <p className="font-brand text-7xl font-semibold leading-none md:text-8xl">August</p>
@@ -116,7 +116,7 @@ export default async function Home() {
               <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
                 <Link
                   href="/share"
-                  className="inline-flex w-fit rounded-full bg-[#DDB765] px-8 py-4 text-base font-bold text-[#2A1025] transition hover:scale-105 hover:bg-[#FFD58C]"
+                  className="inline-flex w-fit rounded-full bg-[#DDB765] px-8 py-4 text-base font-bold text-[#08231F] transition hover:scale-105 hover:bg-[#FFD58C]"
                 >
                   Share your recipe →
                 </Link>
@@ -129,11 +129,11 @@ export default async function Home() {
 
       <section className="bg-[#EED8B2] px-8 py-24 animate-rise-in-delayed">
           <div className="mx-auto max-w-6xl text-center">
-            <p className="mb-4 uppercase tracking-[0.35em] text-[#69465F]">
+            <p className="mb-4 uppercase tracking-[0.35em] text-amber-700">
               EVERY RECIPE HAS A STORY
             </p>
 
-            <h2 className="text-5xl font-bold text-[#4A2E45]">
+            <h2 className="text-5xl font-bold text-[#123C39]">
               More Than Just Recipes
             </h2>
 
@@ -147,9 +147,9 @@ export default async function Home() {
             <div className="mt-16 grid gap-8 md:grid-cols-3">
               <Link
                 href="/our-story"
-                className="group rounded-3xl bg-[#FFF3DF] p-10 text-left shadow-lg shadow-[#69465F]/15 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
+                className="group rounded-3xl bg-[#FFF3DF] p-10 text-left shadow-lg shadow-[#1C5A50]/15 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
               >
-                <h3 className="mb-4 text-2xl font-bold text-[#4A2E45]">
+                <h3 className="mb-4 text-2xl font-bold text-[#123C39]">
                   Family Stories
                 </h3>
 
@@ -163,9 +163,9 @@ export default async function Home() {
 
               <Link
                 href="/family-cookbook"
-                className="group rounded-3xl bg-[#FFF3DF] p-10 text-left shadow-lg shadow-[#69465F]/15 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
+                className="group rounded-3xl bg-[#FFF3DF] p-10 text-left shadow-lg shadow-[#1C5A50]/15 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
               >
-                <h3 className="mb-4 text-2xl font-bold text-[#4A2E45]">
+                <h3 className="mb-4 text-2xl font-bold text-[#123C39]">
                   Kitchen Keepsakes
                 </h3>
 
@@ -179,9 +179,9 @@ export default async function Home() {
 
               <Link
                 href="/share"
-                className="group rounded-3xl bg-[#FFF3DF] p-10 text-left shadow-lg shadow-[#69465F]/15 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
+                className="group rounded-3xl bg-[#FFF3DF] p-10 text-left shadow-lg shadow-[#1C5A50]/15 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
               >
-                <h3 className="mb-4 text-2xl font-bold text-[#4A2E45]">
+                <h3 className="mb-4 text-2xl font-bold text-[#123C39]">
                   Shared Around the Table
                 </h3>
 
@@ -196,7 +196,7 @@ export default async function Home() {
           </div>
       </section>
 
-      <section className="bg-[#241221] px-6 py-24 md:px-8">
+      <section className="bg-[#123C39] px-6 py-24 md:px-8">
         <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2">
           <div className="overflow-hidden rounded-[2rem] shadow-2xl">
             <img
@@ -225,7 +225,7 @@ export default async function Home() {
             </p>
             <Link
               href="/family-cookbook/krishna-anands-baingan-ka-bharta"
-              className="mt-10 inline-flex w-fit items-center rounded-full bg-[#DDB765] px-8 py-4 text-lg font-bold text-[#4A2E45] shadow-lg transition hover:scale-105 hover:bg-[#F0CC7A]"
+              className="mt-10 inline-flex w-fit items-center rounded-full bg-[#DDB765] px-8 py-4 text-lg font-bold text-[#123C39] shadow-lg transition hover:scale-105 hover:bg-[#F0CC7A]"
             >
               Cook Krishna&apos;s recipe →
             </Link>
@@ -237,10 +237,10 @@ export default async function Home() {
       </section>
 
       <section className="bg-[#FFF3DF] px-6 py-24">
-        <div className="mx-auto grid max-w-6xl overflow-hidden rounded-[2rem] bg-[#241221] shadow-2xl md:grid-cols-2">
+        <div className="mx-auto grid max-w-6xl overflow-hidden rounded-[2rem] bg-[#1C5A50] shadow-2xl md:grid-cols-2">
           <div className="relative min-h-[340px]">
             {recipeOfWeek ? (
-              recipeOfWeekImage ? <img src={recipeOfWeekImage} alt={recipeOfWeek.title} className="h-full w-full object-cover" /> : <div className="flex h-full items-center justify-center bg-[#DDBB82] p-8 text-center text-2xl font-bold text-[#4A2E45]">A treasured family recipe</div>
+              recipeOfWeekImage ? <img src={recipeOfWeekImage} alt={recipeOfWeek.title} className="h-full w-full object-cover" /> : <div className="flex h-full items-center justify-center bg-[#DDBB82] p-8 text-center text-2xl font-bold text-[#123C39]">A treasured family recipe</div>
             ) : (
               <Image
                 src="/images/recipes/daves-butter-chicken-feature.webp"
@@ -267,7 +267,7 @@ export default async function Home() {
             </p>
             <Link
               href={recipeOfWeek ? `/family-cookbook/community/${recipeOfWeek.id}` : "/family-cookbook/daves-butter-chicken"}
-              className="mt-9 inline-flex w-fit items-center rounded-full bg-[#DDB765] px-7 py-4 font-medium text-[#2A1025] transition hover:scale-105 hover:bg-[#FFD58C]"
+              className="mt-9 inline-flex w-fit items-center rounded-full bg-[#DDB765] px-7 py-4 font-medium text-[#08231F] transition hover:scale-105 hover:bg-[#FFD58C]"
             >
               Read {recipeOfWeek ? `${recipeOfWeek.name}'s` : "Dave's"} story →
             </Link>
@@ -277,7 +277,7 @@ export default async function Home() {
 
       <section
         id="cookbook"
-        className="bg-[#241221] px-6 py-24 animate-rise-in-delayed"
+        className="bg-[#123C39] px-6 py-24 animate-rise-in-delayed"
       >
           <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2">
             <Image

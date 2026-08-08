@@ -11,7 +11,7 @@ export default async function CookbookScreen() {
 
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
-      <div className="flex-shrink-0 border-b-2 border-[#4A2E45]/35 px-5 pb-4 pt-16">
+      <div className="flex-shrink-0 border-b-2 border-[#123C39]/35 px-5 pb-4 pt-16">
         <Eyebrow className="mb-2">A living cookbook</Eyebrow>
         <h1 className="text-[30px]">The Family Cookbook</h1>
       </div>
@@ -27,7 +27,7 @@ export default async function CookbookScreen() {
               <Link
                 key={recipe.id}
                 href={`/app/cookbook/${recipe.id}`}
-                className="flex gap-3.5 border-b-2 border-[#4A2E45]/35 pb-4"
+                className="flex gap-3.5 border-b-2 border-[#123C39]/35 pb-4"
               >
                 <div className="h-24 w-24 flex-shrink-0 bg-[#F5E6C4]">
                   {recipe.image ? (
@@ -42,7 +42,7 @@ export default async function CookbookScreen() {
                 <div className="flex min-w-0 flex-col gap-1.5">
                   <div className="flex items-center gap-2">
                     <Tag>{recipe.category}</Tag>
-                    <span className="text-xs text-[#4A2E45]/80">{recipe.place}</span>
+                    <span className="text-xs text-[#123C39]/80">{recipe.place}</span>
                   </div>
                   <div className="text-[19px] font-bold leading-tight">{recipe.title}</div>
                   <div className="line-clamp-2 text-sm opacity-80">{recipe.story}</div>
