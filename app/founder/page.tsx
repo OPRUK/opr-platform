@@ -82,7 +82,7 @@ export default function FounderPage() {
             </p>
             <p>
               Take Dave&apos;s Butter Chicken. He learnt it from my mum and made it
-              his own, changing the recipe as it travelled into his family. That
+              his own, changing the recipe as it travelled into our family. That
               is what OPR means to me: food is never only food. It is memory,
               generosity, pride and the people who taught us along the way.
             </p>
