@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     default: SITE_NAME,
     template: `%s | ${SITE_NAME}`,
   },
-  description: "Every recipe has a story.",
+  description: "Every Recipe has a Story.",
   metadataBase: new URL(SITE_URL),
   verification: {
     other: {
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: SITE_NAME,
-    description: "Every recipe has a story.",
+    description: "Every Recipe has a Story.",
     url: "/",
     siteName: SITE_NAME,
     locale: "en_GB",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "Other People's Recipes — Every recipe has a story.",
+        alt: "Other People's Recipes — Every Recipe has a Story.",
       },
     ],
   },

@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Other People's Recipes — Every recipe has a story.";
+export const alt = "Other People's Recipes — Every Recipe has a Story.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -53,7 +53,7 @@ export default function OpenGraphImage() {
               color: "#f6e9cf",
             }}
           >
-            Every recipe has a story.
+            Every Recipe has a Story.
           </div>
         </div>
 

@@ -7,7 +7,7 @@ const slides = [
   {
     image: "/images/hero-kitchen-wide.webp",
     alt: "The Other People's Recipes kitchen table",
-    label: "Other People's Recipes · Every recipe has a story",
+    label: "Other People's Recipes · Every Recipe has a Story",
   },
   {
     image: "/images/recipes/nana-serbs-rice-pudding-wide.webp",

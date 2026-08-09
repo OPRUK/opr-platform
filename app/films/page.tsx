@@ -69,7 +69,7 @@ export default function FilmsPage() {
           The next chapter
         </p>
         <h2 className="mx-auto mt-5 max-w-3xl text-4xl font-bold md:text-5xl">
-          Every recipe has a story. Perhaps yours is the one we tell next.
+          Every Recipe has a Story. Perhaps yours is the one we tell next.
         </h2>
       </section>
     </main>

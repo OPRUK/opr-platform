@@ -59,14 +59,12 @@ export default async function Home() {
             A Living Cookbook
           </p>
 
-          <h1 className="mx-auto max-w-3xl font-display text-5xl font-semibold leading-[0.92] tracking-[-0.02em] drop-shadow-2xl sm:text-6xl md:text-7xl lg:text-8xl">
+          <h1 className="font-brand mx-auto max-w-3xl text-5xl font-semibold leading-[0.92] tracking-[-0.02em] drop-shadow-2xl sm:text-6xl md:text-7xl lg:text-8xl">
             Other People&apos;s <span className="block">Recipes</span>
           </h1>
 
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-stone-200 sm:text-xl sm:leading-9">
-            Every Recipe Has a Story.
-            <br />
-            Every Story Deserves a Table.
+            Every Recipe has a Story.
           </p>
 
           <div className="mt-9 flex flex-col justify-center gap-4 sm:flex-row sm:gap-5">

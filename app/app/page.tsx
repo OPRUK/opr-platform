@@ -7,7 +7,7 @@ export default function SplashScreen() {
         <Eyebrow tone="cream" className="mb-[18px]">
           Other People&apos;s Recipes
         </Eyebrow>
-        <h1 className="font-display text-[56px] leading-[0.98] text-[#EED8B2]">Every recipe has a story.</h1>
+        <h1 className="font-display text-[56px] leading-[0.98] text-[#EED8B2]">Every Recipe has a Story.</h1>
         <Divider className="my-7 bg-[#EED8B2]/60" />
         <p className="max-w-[26ch] text-[17px] leading-[1.5]">
           A living cookbook of family recipes from across the world, preserved with the stories behind them.

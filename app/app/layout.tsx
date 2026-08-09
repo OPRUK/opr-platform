@@ -5,7 +5,7 @@ export const metadata: Metadata = {
     default: "OPR",
     template: "%s — OPR",
   },
-  description: "Every recipe has a story.",
+  description: "Every Recipe has a Story.",
   // These screens largely mirror content already indexed under
   // /family-cookbook — keep them out of search results to avoid competing
   // with (and diluting) the canonical pages for the same recipes.

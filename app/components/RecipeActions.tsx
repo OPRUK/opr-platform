@@ -123,7 +123,7 @@ export default function RecipeActions({
     drawWrappedText(context, title, 76, 820, 928, 76);
     context.fillStyle = "#766B5C";
     context.font = "italic 28px Georgia, serif";
-    context.fillText("Every recipe has a story.", 76, 1010);
+    context.fillText("Every Recipe has a Story.", 76, 1010);
 
     canvas.toBlob((blob) => {
       if (!blob) {

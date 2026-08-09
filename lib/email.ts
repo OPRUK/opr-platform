@@ -64,7 +64,7 @@ export function recipeReceivedEmail({ name, title }: { name: string; title: stri
         <p>We&apos;ve received <strong>${escapeHtml(title)}</strong> and the story behind it. Thank you for trusting Other People&apos;s Recipes with a page from your family kitchen.</p>
         <p>Our team will read every recipe carefully. If it is selected for the Family Cookbook, the restaurant or a future film, we&apos;ll be in touch.</p>
         <p style="margin-top: 32px;">Warmly,<br /><strong>The OPR team</strong></p>
-        <p style="border-top: 1px solid #D1AD75; padding-top: 18px; margin-top: 36px; font-size: 13px; color: #6B6254;">Every recipe has a story.</p>
+        <p style="border-top: 1px solid #D1AD75; padding-top: 18px; margin-top: 36px; font-size: 13px; color: #6B6254;">Every Recipe has a Story.</p>
       </div>
     `,
   };
@@ -125,7 +125,7 @@ export function foundingTableWelcomeEmail({
         <p><a href="${siteUrl}/family-cookbook" style="display: inline-block; background: #1C5A50; color: #FFF3DF; padding: 12px 18px; border-radius: 999px; text-decoration: none;">Explore the Family Cookbook</a></p>
         <p style="margin-top: 32px;">Warmly,<br /><strong>Chaten &amp; the OPR team</strong></p>
         ${marketingFooter(unsubscribeUrl)}
-        <p style="font-size: 13px; color: #6B6254;">Every recipe has a story.</p>
+        <p style="font-size: 13px; color: #6B6254;">Every Recipe has a Story.</p>
       </div>
     `,
   };
