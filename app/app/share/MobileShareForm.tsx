@@ -165,7 +165,7 @@ export default function MobileShareForm() {
     return (
       <div className="flex flex-col items-center pt-14 text-center">
         <CheckIcon />
-        <h2 className="mb-2.5 mt-5 text-[26px]">Thank you.</h2>
+        <h2 className="font-display mb-2.5 mt-5 text-[26px]">Thank you.</h2>
         <p className="max-w-[26ch] text-[15px] opacity-80">
           Your family&apos;s story is now with the OPR kitchen — we&apos;ll be in touch before it&apos;s published.
         </p>

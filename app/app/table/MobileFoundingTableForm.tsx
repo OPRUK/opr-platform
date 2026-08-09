@@ -46,7 +46,7 @@ export default function MobileFoundingTableForm() {
     return (
       <div className="flex h-full flex-col items-center justify-center px-5 text-center">
         <CheckIcon />
-        <h1 className="mb-2.5 mt-5 text-[26px]">You&apos;re on the list.</h1>
+        <h1 className="font-display mb-2.5 mt-5 text-[26px]">You&apos;re on the list.</h1>
         <p className="max-w-[26ch] text-[15px] opacity-80">
           We&apos;ll invite you to the Founding Table as OPR grows.
         </p>
@@ -57,7 +57,7 @@ export default function MobileFoundingTableForm() {
   return (
     <form onSubmit={submit} className="px-5 pb-6 pt-16">
       <Eyebrow className="mb-2.5">OPR invitation</Eyebrow>
-      <h1 className="mb-3 text-[28px]">Join the Founding Table</h1>
+      <h1 className="font-display mb-3 text-[28px]">Join the Founding Table</h1>
       <p className="mb-6 text-[15px] leading-[1.6] opacity-80">
         A small circle of early members shaping OPR from the start. We&apos;ll invite you in as we grow.
       </p>

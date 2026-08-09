@@ -1,13 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond } from "next/font/google";
-
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
-  style: ["normal", "italic"],
-  variable: "--font-opr-app",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: {
@@ -40,11 +31,8 @@ export const viewport: Viewport = {
 
 export default function MobileAppLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className={`${cormorant.variable} min-h-screen bg-[#EED8B2]`}>
-      <div
-        className="mx-auto flex min-h-screen w-full max-w-[480px] flex-col bg-[#EED8B2] text-[#123C39]"
-        style={{ fontFamily: "var(--font-opr-app), Georgia, serif" }}
-      >
+    <div className="min-h-screen bg-[#EED8B2]">
+      <div className="font-brand mx-auto flex min-h-screen w-full max-w-[480px] flex-col bg-[#EED8B2] text-[#123C39]">
         {children}
       </div>
     </div>

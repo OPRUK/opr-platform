@@ -42,7 +42,7 @@ export default async function RecipeDetailScreen({ params }: { params: Promise<{
           <Tag>{recipe.category}</Tag>
           <span className="text-xs uppercase tracking-[0.1em] text-[#123C39]/80">{recipe.place}</span>
         </div>
-        <h1 className="mb-4 text-[30px]">{recipe.title}</h1>
+        <h1 className="font-display mb-4 text-[30px]">{recipe.title}</h1>
         <Divider />
 
         <Eyebrow className="mb-2.5 mt-5">The story</Eyebrow>

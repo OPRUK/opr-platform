@@ -72,7 +72,7 @@ export default function VoteList() {
               ) : null}
             </div>
             <div className="min-w-0 flex-1">
-              <div className="text-base font-bold">{candidate.title}</div>
+              <div className="font-display text-base font-bold">{candidate.title}</div>
               <div className="text-xs opacity-80">
                 {candidate.place}
                 {results ? ` · ${votes} ${votes === 1 ? "vote" : "votes"}` : ""}

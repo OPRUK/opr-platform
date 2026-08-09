@@ -13,7 +13,7 @@ export default async function CookbookScreen() {
     <div className="flex flex-1 flex-col overflow-hidden">
       <div className="flex-shrink-0 border-b-2 border-[#123C39]/35 px-5 pb-4 pt-16">
         <Eyebrow className="mb-2">A living cookbook</Eyebrow>
-        <h1 className="text-[30px]">The Family Cookbook</h1>
+        <h1 className="font-display text-[30px]">The Family Cookbook</h1>
       </div>
 
       <div className="flex-1 overflow-y-auto px-5 py-4">
@@ -44,7 +44,7 @@ export default async function CookbookScreen() {
                     <Tag>{recipe.category}</Tag>
                     <span className="text-xs text-[#123C39]/80">{recipe.place}</span>
                   </div>
-                  <div className="text-[19px] font-bold leading-tight">{recipe.title}</div>
+                  <div className="font-display text-[19px] font-bold leading-tight">{recipe.title}</div>
                   <div className="line-clamp-2 text-sm opacity-80">{recipe.story}</div>
                 </div>
               </Link>

@@ -30,7 +30,7 @@ export default async function CommunityCooksScreen({ params }: { params: Promise
       </div>
 
       <Eyebrow className="mb-2">{recipe.title}</Eyebrow>
-      <h1 className="mb-5 text-[27px]">Families who made this</h1>
+      <h1 className="font-display mb-5 text-[27px]">Families who made this</h1>
 
       {cooks.length > 0 ? (
         <div className="flex flex-col">
