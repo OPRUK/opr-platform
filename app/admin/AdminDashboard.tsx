@@ -413,7 +413,7 @@ export default function AdminDashboard() {
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
             Private OPR area
           </p>
-          <h1 className="mt-4 text-4xl font-bold">Recipe inbox</h1>
+          <h1 className="font-display mt-4 text-4xl font-bold">Recipe inbox</h1>
           <p className="mt-5 leading-7 text-stone-700">
             We&apos;ll send a secure sign-in link to your OPR email address.
           </p>
@@ -443,7 +443,7 @@ export default function AdminDashboard() {
     return (
       <main className="flex min-h-screen items-center justify-center bg-[#EED8B2] px-6 text-center text-[#123C39]">
         <div className="max-w-lg rounded-3xl bg-[#FFF3DF] p-10 shadow-xl shadow-[#1C5A50]/15">
-          <h1 className="text-3xl font-bold">This inbox is private.</h1>
+          <h1 className="font-display text-3xl font-bold">This inbox is private.</h1>
           <p className="mt-5 leading-7 text-stone-700">
             Please sign in using the OPR team email address.
           </p>
@@ -464,7 +464,7 @@ export default function AdminDashboard() {
       <header className="mx-auto flex max-w-7xl flex-col justify-between gap-6 md:flex-row md:items-end">
         <div>
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">Private OPR area</p>
-          <h1 className="mt-4 text-4xl font-bold md:text-5xl">Recipe inbox</h1>
+          <h1 className="font-display mt-4 text-4xl font-bold md:text-5xl">Recipe inbox</h1>
           <p className="mt-4 text-lg text-stone-700">
             {submissions.length} {submissions.length === 1 ? "recipe" : "recipes"} shared with OPR.
           </p>
