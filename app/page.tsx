@@ -54,32 +54,32 @@ export default async function Home() {
 
       {/* Hero */}
       <HomeHero>
-        <div className="relative z-10 mx-auto max-w-4xl px-8 text-center text-white animate-rise-in">
-          <p className="mb-6 text-sm font-semibold uppercase tracking-[0.4em] text-[#FFD58C] drop-shadow-md">
+        <div className="relative z-10 mx-auto max-w-4xl px-6 pb-24 text-center text-white animate-rise-in sm:px-8 sm:pb-28">
+          <p className="mb-5 text-xs font-semibold uppercase tracking-[0.35em] text-[#FFD58C] drop-shadow-md sm:text-sm sm:tracking-[0.4em]">
             A Living Cookbook
           </p>
 
-          <h1 className="font-display text-7xl font-semibold leading-[0.9] tracking-[-0.02em] drop-shadow-2xl md:text-9xl">
-            Other People&apos;s Recipes
+          <h1 className="mx-auto max-w-3xl font-display text-5xl font-semibold leading-[0.92] tracking-[-0.02em] drop-shadow-2xl sm:text-6xl md:text-7xl lg:text-8xl">
+            Other People&apos;s <span className="block">Recipes</span>
           </h1>
 
-          <p className="mx-auto mt-8 max-w-2xl text-xl leading-9 text-stone-200">
+          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-stone-200 sm:text-xl sm:leading-9">
             Every Recipe Has a Story.
             <br />
             Every Story Deserves a Table.
           </p>
 
-          <div className="mt-12 flex flex-col justify-center gap-5 sm:flex-row">
+          <div className="mt-9 flex flex-col justify-center gap-4 sm:flex-row sm:gap-5">
             <Link
               href="/family-cookbook"
-              className="rounded-full bg-[#123C39] px-10 py-4 text-lg font-medium transition hover:scale-105"
+              className="rounded-full bg-[#123C39] px-8 py-3.5 text-base font-medium transition hover:scale-105 sm:px-10 sm:py-4 sm:text-lg"
             >
               Open the Cookbook
             </Link>
 
             <Link
               href="/our-story"
-              className="rounded-full border border-white px-10 py-4 text-lg transition hover:bg-white hover:text-black"
+              className="rounded-full border border-white px-8 py-3.5 text-base transition hover:bg-white hover:text-black sm:px-10 sm:py-4 sm:text-lg"
             >
               Your Story
             </Link>
