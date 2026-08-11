@@ -1,13 +1,12 @@
 // Featured recipes from the original OPR collection.
 //
-// prepTime / serves / datePublished are intentionally left undefined where
-// the real value is not known. Per the OPR build brief, these must never be
-// guessed to satisfy schema validation — wrong structured data is worse than
-// none. cookTime values were computed by summing each recipe's own stated
-// step durations (not sourced from unrelated recipes online); cuisine was
-// set from the dish's unambiguous origin. Krishna's bharta cookTime (30 min)
-// was confirmed directly by Chaten, since its method doesn't state step
-// durations. prepTime is still needed from Chaten for all recipes.
+// serves / datePublished are intentionally left undefined where the real
+// value is not known. Per the OPR build brief, these must never be guessed
+// to satisfy schema validation — wrong structured data is worse than none.
+// cookTime values were computed by summing each recipe's own stated step
+// durations (not sourced from unrelated recipes online); cuisine was set
+// from the dish's unambiguous origin. Krishna's bharta cookTime (30 min)
+// and every recipe's prepTime were confirmed directly by Chaten.
 
 export type FeaturedRecipe = {
   slug: string;
@@ -58,6 +57,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
     image: "/images/recipes/nana-serbs-rice-pudding-wide.webp",
     category: "Dessert",
     number: "01",
+    prepTime: "PT15M",
     cookTime: "PT1H50M",
     cuisine: "British",
     notes: [
@@ -102,6 +102,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
     image: "/images/recipes/daves-butter-chicken-wide.webp",
     category: "Main",
     number: "02",
+    prepTime: "PT40M",
     cookTime: "PT43M",
     cuisine: "Indian",
     notes: [
@@ -144,6 +145,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
     image: "/images/recipes/barbaras-beef-casserole-wide.webp",
     category: "Main",
     number: "03",
+    prepTime: "PT33M",
     cookTime: "PT2H",
     cuisine: "British",
     notes: [
@@ -184,6 +186,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
     image: "/images/recipes/krishna-vantis-baingan-ka-bharta-wide.webp",
     category: "Main",
     number: "04",
+    prepTime: "PT45M",
     cookTime: "PT30M",
     cuisine: "Indian",
     notes: [
@@ -231,6 +234,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
     image: "/images/recipes/sudeshs-bhindi-wide.webp",
     category: "Main",
     number: "05",
+    prepTime: "PT28M",
     cookTime: "PT28M",
     cuisine: "Indian",
     contributorName: "Sudesh",
@@ -285,6 +289,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
     image: "/images/recipes/adas-jollof-rice-wide.webp",
     category: "Main",
     number: "06",
+    prepTime: "PT35M",
     cookTime: "PT1H11M",
     cuisine: "Nigerian",
     contributorName: "Ada",
@@ -339,6 +344,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
     image: "/images/recipes/sams-shepherds-pie-wide.webp",
     category: "Main",
     number: "07",
+    prepTime: "PT20M",
     cookTime: "PT1H16M",
     cuisine: "British",
     contributorName: "Sam",
@@ -386,6 +392,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
     image: "/images/recipes/phils-and-serbs-three-cheese-souffle-wide.png",
     category: "Starter",
     number: "08",
+    prepTime: "PT30M",
     cookTime: "PT39M",
     cuisine: "French",
     contributorName: "Phil & Serb",
