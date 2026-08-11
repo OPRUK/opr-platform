@@ -35,6 +35,11 @@ const CROSSFADE_MS = 500;
 const END_TRIM_SECONDS = 0.2;
 const FINAL_FRAME_HOLD_MS = 250;
 
+// On mobile, waiting for all three intro films to finish before the CTAs
+// appear (~10s+) costs conversions from visitors landing via a social link.
+// Cut the intro short on small screens only; desktop keeps the full sequence.
+const MOBILE_INTRO_MS = 4000;
+
 export default function HomeHero({ children }: HomeHeroProps) {
   const [introductionComplete, setIntroductionComplete] = useState(false);
   const [videosDone, setVideosDone] = useState(false);
@@ -65,6 +70,17 @@ export default function HomeHero({ children }: HomeHeroProps) {
         window.clearTimeout(transitionTimerRef.current);
       }
     };
+  }, []);
+
+  useEffect(() => {
+    if (!window.matchMedia("(max-width: 640px)").matches) return;
+    const timer = window.setTimeout(() => {
+      setIntroductionComplete(true);
+      videoRefs[0].current?.pause();
+      videoRefs[1].current?.pause();
+    }, MOBILE_INTRO_MS);
+    return () => window.clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function toggleSound() {
