@@ -99,6 +99,7 @@ export default async function RecipePage({
     recipeInstructions: recipe.method.map((step, index) => ({
       "@type": "HowToStep",
       position: index + 1,
+      name: truncate(step, 60),
       text: step,
     })),
     ...(recipe.datePublished ? { datePublished: recipe.datePublished } : {}),

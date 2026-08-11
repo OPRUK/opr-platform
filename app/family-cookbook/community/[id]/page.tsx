@@ -153,6 +153,7 @@ export default async function CommunityRecipePage({
     recipeInstructions: method.map((step, index) => ({
       "@type": "HowToStep",
       position: index + 1,
+      name: truncate(step, 60),
       text: step,
     })),
   };
