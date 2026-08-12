@@ -108,8 +108,8 @@ export default async function Home() {
               </h2>
               <p className="mt-6 max-w-3xl text-lg leading-8 text-[#FFF1D8] md:text-xl">
                 Throughout August, we&apos;re looking for the recipes your family
-                asks for again and again. Share the recipe — and the story
-                behind it — for a chance to be featured in the OPR Cookbook and
+                asks for again and again. Share the recipe and the story behind
+                it for a chance to be featured in the OPR Cookbook and
                 shared with our growing community.
               </p>
               <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
