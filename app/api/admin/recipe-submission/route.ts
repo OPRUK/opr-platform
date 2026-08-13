@@ -1,4 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
+import { getSupabaseAdmin } from "../../../../lib/supabase/admin";
+import { copyToPublished } from "../../../../lib/publish-assets";
+import { resolveAssetUrlMap } from "../../../../lib/resolve-asset-urls";
 
 const adminEmail = "chaten@otherpeoplesrecipes.co.uk";
 
@@ -10,10 +13,9 @@ async function getAdminClient(request: Request) {
   const token = request.headers.get("authorization")?.replace("Bearer ", "");
   const publicUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-  const secretKey = process.env.SUPABASE_SECRET_KEY;
 
   if (!token) return { client: null, error: "Your secure sign-in has expired. Please sign out and use a new sign-in link." };
-  if (!publicUrl || !publishableKey || !secretKey) {
+  if (!publicUrl || !publishableKey) {
     return { client: null, error: "The private inbox connection is not fully configured." };
   }
 
@@ -25,12 +27,12 @@ async function getAdminClient(request: Request) {
     return { client: null, error: "This secure sign-in is not authorised for the OPR inbox. Please sign out and use the OPR team email." };
   }
 
-  return {
-    client: createClient(publicUrl, secretKey, {
-      auth: { persistSession: false, autoRefreshToken: false },
-    }),
-    error: null,
-  };
+  const client = getSupabaseAdmin();
+  if (!client) {
+    return { client: null, error: "The private inbox connection is not fully configured." };
+  }
+
+  return { client, error: null };
 }
 
 export async function GET(request: Request) {
@@ -46,7 +48,25 @@ export async function GET(request: Request) {
     console.error("OPR recipe inbox load failed", error);
     return Response.json({ error: `Could not load recipes: ${error.message}` }, { status: 400 });
   }
-  return Response.json({ submissions: data ?? [] });
+
+  const rows = data ?? [];
+  const urlMap = await resolveAssetUrlMap(
+    adminClient,
+    rows.map((row) => ({
+      paths: [row.photo_path, row.contributor_photo_path, row.original_recipe_path, row.audio_story_path, row.recipe_video_path],
+      published: Boolean(row.is_published),
+    })),
+  );
+  const submissions = rows.map((row) => ({
+    ...row,
+    photo_url: row.photo_path ? (urlMap.get(row.photo_path) ?? null) : null,
+    contributor_photo_url: row.contributor_photo_path ? (urlMap.get(row.contributor_photo_path) ?? null) : null,
+    original_recipe_url: row.original_recipe_path ? (urlMap.get(row.original_recipe_path) ?? null) : null,
+    audio_story_url: row.audio_story_path ? (urlMap.get(row.audio_story_path) ?? null) : null,
+    recipe_video_url: row.recipe_video_path ? (urlMap.get(row.recipe_video_path) ?? null) : null,
+  }));
+
+  return Response.json({ submissions });
 }
 
 export async function PATCH(request: Request) {
@@ -98,6 +118,25 @@ export async function PATCH(request: Request) {
       .update(safeChanges)
       .eq("id", body.id);
     if (error) throw error;
+
+    if (safeChanges.is_published === true) {
+      const { data: recipe, error: readError } = await adminClient
+        .from("recipe_submissions")
+        .select("photo_path, contributor_photo_path, original_recipe_path, audio_story_path, recipe_video_path")
+        .eq("id", body.id)
+        .maybeSingle();
+      if (readError) throw readError;
+      if (recipe) {
+        await copyToPublished(adminClient, [
+          recipe.photo_path,
+          recipe.contributor_photo_path,
+          recipe.original_recipe_path,
+          recipe.audio_story_path,
+          recipe.recipe_video_path,
+        ]);
+      }
+    }
+
     return Response.json({ ok: true });
   } catch (error) {
     console.error("OPR recipe update failed", error);
@@ -142,8 +181,13 @@ export async function DELETE(request: Request) {
       (path): path is string => typeof path === "string" && path.length > 0,
     );
     if (files.length) {
-      const { error: storageError } = await adminClient.storage.from("recipe-photos").remove(files);
+      // A published recipe's assets exist in both the private originals
+      // bucket and the public copy — remove from both. Deleting from
+      // recipe-published is a no-op if the recipe was never published.
+      const { error: storageError } = await adminClient.storage.from("recipe-uploads").remove(files);
       if (storageError) throw storageError;
+      const { error: publishedStorageError } = await adminClient.storage.from("recipe-published").remove(files);
+      if (publishedStorageError) throw publishedStorageError;
     }
 
     const { error: deleteError } = await adminClient

@@ -16,6 +16,8 @@ type Submission = {
   title: string;
   category: string;
   servings: string | null;
+  prep_time_minutes: number | null;
+  cook_time_minutes: number | null;
   story: string;
   ingredients: string;
   method: string;
@@ -27,6 +29,11 @@ type Submission = {
   original_recipe_path: string | null;
   audio_story_path: string | null;
   recipe_video_path: string | null;
+  photo_url: string | null;
+  contributor_photo_url: string | null;
+  original_recipe_url: string | null;
+  audio_story_url: string | null;
+  recipe_video_url: string | null;
   is_published: boolean;
   published_at: string | null;
   is_recipe_of_week: boolean;
@@ -41,6 +48,7 @@ type CommunityCook = {
   name: string;
   note: string | null;
   photo_path: string | null;
+  photo_url: string | null;
   is_approved: boolean;
   created_at: string;
   recipe_submissions: { title: string } | null;
@@ -368,26 +376,17 @@ export default function AdminDashboard() {
     );
   }
 
-  const selectedPhotoUrl = selectedSubmission?.photo_path
-    ? supabase.storage.from("recipe-photos").getPublicUrl(selectedSubmission.photo_path).data.publicUrl
-    : null;
-  const selectedOriginalRecipeUrl = selectedSubmission?.original_recipe_path
-    ? supabase.storage.from("recipe-photos").getPublicUrl(selectedSubmission.original_recipe_path).data.publicUrl
-    : null;
-  const selectedContributorPhotoUrl = selectedSubmission?.contributor_photo_path
-    ? supabase.storage.from("recipe-photos").getPublicUrl(selectedSubmission.contributor_photo_path).data.publicUrl
-    : null;
-  const selectedAudioStoryUrl = selectedSubmission?.audio_story_path
-    ? supabase.storage.from("recipe-photos").getPublicUrl(selectedSubmission.audio_story_path).data.publicUrl
-    : null;
-  const selectedRecipeVideoUrl = selectedSubmission?.recipe_video_path
-    ? supabase.storage.from("recipe-photos").getPublicUrl(selectedSubmission.recipe_video_path).data.publicUrl
-    : null;
+  // Server-computed: signed URLs for unpublished (private) assets, plain
+  // public URLs for published ones — see /api/admin/recipe-submission's GET
+  // handler. The browser's anon client can't sign against a private bucket.
+  const selectedPhotoUrl = selectedSubmission?.photo_url ?? null;
+  const selectedOriginalRecipeUrl = selectedSubmission?.original_recipe_url ?? null;
+  const selectedContributorPhotoUrl = selectedSubmission?.contributor_photo_url ?? null;
+  const selectedAudioStoryUrl = selectedSubmission?.audio_story_url ?? null;
+  const selectedRecipeVideoUrl = selectedSubmission?.recipe_video_url ?? null;
 
   function communityCookPhotoUrl(cook: CommunityCook) {
-    return cook.photo_path
-      ? supabase.storage.from("recipe-photos").getPublicUrl(cook.photo_path).data.publicUrl
-      : null;
+    return cook.photo_url ?? null;
   }
 
   const recipeVoteLabels = new Map<string, string>(
@@ -697,6 +696,8 @@ export default function AdminDashboard() {
                 <p className="border-t border-[#D1AD75]/70 pt-6 text-sm">
                   Contact: <a className="underline" href={`mailto:${selectedSubmission.email}`}>{selectedSubmission.email}</a>
                   {selectedSubmission.servings ? ` · Serves ${selectedSubmission.servings}` : ""}
+                  {selectedSubmission.prep_time_minutes ? ` · Prep ${selectedSubmission.prep_time_minutes} min` : ""}
+                  {selectedSubmission.cook_time_minutes ? ` · Cook ${selectedSubmission.cook_time_minutes} min` : ""}
                   {selectedSubmission.permission_to_feature ? " · Happy to be contacted about featuring" : " · No feature contact permission"}
                 </p>
                 <div className="rounded-2xl border border-red-300 bg-red-50 p-5">

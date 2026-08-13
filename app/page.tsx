@@ -46,7 +46,7 @@ async function getRecipeOfWeek(): Promise<RecipeOfWeek | null> {
 export default async function Home() {
   const recipeOfWeek = await getRecipeOfWeek();
   const recipeOfWeekImage = recipeOfWeek?.photo_path
-    ? supabase.storage.from("recipe-photos").getPublicUrl(recipeOfWeek.photo_path).data.publicUrl
+    ? supabase.storage.from("recipe-published").getPublicUrl(recipeOfWeek.photo_path).data.publicUrl
     : null;
   return (
     <main className="min-h-screen bg-[#EED8B2] text-[#123C39]">
@@ -104,12 +104,13 @@ export default async function Home() {
                 The Recipe That Feels Like Home
               </p>
               <h2 className="mt-5 max-w-3xl text-4xl font-bold leading-tight md:text-6xl">
-                Tell us the story your family always asks for.
+                Every family has that one recipe. What&apos;s yours?
               </h2>
               <p className="mt-6 max-w-3xl text-lg leading-8 text-[#FFF1D8] md:text-xl">
-                Throughout August, we&apos;re looking for recipes that bring
-                people back to the table — to feature in the OPR Cookbook and
-                share with our growing community.
+                Throughout August, we&apos;re looking for the recipes your family
+                asks for again and again. Share the recipe and the story behind
+                it for a chance to be featured in the OPR Cookbook and
+                shared with our growing community.
               </p>
               <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
                 <Link

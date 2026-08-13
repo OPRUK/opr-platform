@@ -1,75 +1,9 @@
-import { createClient } from "@supabase/supabase-js";
 import { newSubmissionEmail, recipeReceivedEmail, sendEmail } from "../../../lib/email";
+import { getSupabaseAdmin } from "../../../lib/supabase/admin";
+import { checkRateLimit } from "../../../lib/rate-limit";
+import { attachmentLimits, extensionFor } from "../../../lib/media-attachments";
 
 const adminEmail = "chaten@otherpeoplesrecipes.co.uk";
-const maximumPhotoSize = 5 * 1024 * 1024;
-const maximumOriginalRecipeSize = 10 * 1024 * 1024;
-const maximumAudioStorySize = 10 * 1024 * 1024;
-const maximumRecipeVideoSize = 20 * 1024 * 1024;
-const acceptedPhotoTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
-const acceptedOriginalRecipeTypes = new Set([
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-  "image/heic",
-  "image/heif",
-]);
-const acceptedAudioStoryTypes = new Set([
-  "audio/aac",
-  "audio/m4a",
-  "audio/mp4",
-  "audio/mpeg",
-  "audio/ogg",
-  "audio/wav",
-  "audio/webm",
-  "audio/x-m4a",
-]);
-const acceptedRecipeVideoTypes = new Set([
-  "video/mp4",
-  "video/quicktime",
-  "video/webm",
-]);
-
-function normaliseMimeType(type: string) {
-  return type.split(";", 1)[0].toLowerCase();
-}
-
-function extensionForImage(type: string) {
-  const extensions: Record<string, string> = {
-    "image/jpeg": "jpg",
-    "image/png": "png",
-    "image/webp": "webp",
-    "image/heic": "heic",
-    "image/heif": "heif",
-  };
-
-  return extensions[type] ?? "jpg";
-}
-
-function extensionForAudio(type: string) {
-  const extensions: Record<string, string> = {
-    "audio/aac": "aac",
-    "audio/m4a": "m4a",
-    "audio/mp4": "m4a",
-    "audio/mpeg": "mp3",
-    "audio/ogg": "ogg",
-    "audio/wav": "wav",
-    "audio/webm": "webm",
-    "audio/x-m4a": "m4a",
-  };
-
-  return extensions[normaliseMimeType(type)] ?? "webm";
-}
-
-function extensionForVideo(type: string) {
-  const extensions: Record<string, string> = {
-    "video/mp4": "mp4",
-    "video/quicktime": "mov",
-    "video/webm": "webm",
-  };
-
-  return extensions[normaliseMimeType(type)] ?? "mp4";
-}
 
 function readText(formData: FormData, field: string, required = false) {
   const value = formData.get(field);
@@ -79,18 +13,25 @@ function readText(formData: FormData, field: string, required = false) {
   return text;
 }
 
+// Contributor-stated only, never inferred from method text — capped at 24h
+// to reject garbage input rather than trusting an unbounded number.
+function readMinutes(formData: FormData, field: string): number | null {
+  const text = readText(formData, field);
+  if (!text) return null;
+  const value = Number(text);
+  return Number.isInteger(value) && value >= 0 && value <= 1440 ? value : null;
+}
+
 export async function POST(request: Request) {
   try {
-    const secretKey = process.env.SUPABASE_SECRET_KEY;
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-
-    if (!secretKey || !supabaseUrl) {
-      console.error("OPR recipe submission service is not configured", {
-        hasSupabaseSecretKey: Boolean(secretKey),
-        hasSupabaseUrl: Boolean(supabaseUrl),
-      });
+    const supabase = getSupabaseAdmin();
+    if (!supabase) {
+      console.error("OPR recipe submission service is not configured");
       return Response.json({ error: "Submission service is not configured" }, { status: 503 });
     }
+
+    const rateLimitError = await checkRateLimit(supabase, request, "recipe-submission");
+    if (rateLimitError) return rateLimitError;
 
     const formData = await request.formData();
     const name = readText(formData, "name", true);
@@ -110,47 +51,42 @@ export async function POST(request: Request) {
     const originalRecipe = formData.get("originalRecipe");
     const audioStory = formData.get("audioStory");
     const recipeVideo = formData.get("recipeVideo");
-    if (photo instanceof File && photo.size > maximumPhotoSize) {
+    if (photo instanceof File && photo.size > attachmentLimits.dish.maxSize) {
       return Response.json({ error: "Photo is too large" }, { status: 400 });
     }
-    if (photo instanceof File && !acceptedPhotoTypes.has(photo.type)) {
+    if (photo instanceof File && !extensionFor("dish", photo.type)) {
       return Response.json({ error: "Unsupported photo type" }, { status: 400 });
     }
-    if (contributorPhoto instanceof File && contributorPhoto.size > maximumPhotoSize) {
+    if (contributorPhoto instanceof File && contributorPhoto.size > attachmentLimits.portrait.maxSize) {
       return Response.json({ error: "Cook photo is too large" }, { status: 400 });
     }
-    if (contributorPhoto instanceof File && contributorPhoto.size > 0 && !acceptedPhotoTypes.has(contributorPhoto.type)) {
+    if (contributorPhoto instanceof File && contributorPhoto.size > 0 && !extensionFor("portrait", contributorPhoto.type)) {
       return Response.json({ error: "Unsupported cook photo type" }, { status: 400 });
     }
-    if (originalRecipe instanceof File && originalRecipe.size > maximumOriginalRecipeSize) {
+    if (originalRecipe instanceof File && originalRecipe.size > attachmentLimits.original.maxSize) {
       return Response.json({ error: "Original recipe image is too large" }, { status: 400 });
     }
-    if (originalRecipe instanceof File && originalRecipe.size > 0 && !acceptedOriginalRecipeTypes.has(originalRecipe.type)) {
+    if (originalRecipe instanceof File && originalRecipe.size > 0 && !extensionFor("original", originalRecipe.type)) {
       return Response.json({ error: "Unsupported original recipe image type" }, { status: 400 });
     }
-    if (audioStory instanceof File && audioStory.size > maximumAudioStorySize) {
+    if (audioStory instanceof File && audioStory.size > attachmentLimits.audio.maxSize) {
       return Response.json({ error: "Voice story is too large" }, { status: 400 });
     }
-    if (audioStory instanceof File && audioStory.size > 0 && !acceptedAudioStoryTypes.has(normaliseMimeType(audioStory.type))) {
+    if (audioStory instanceof File && audioStory.size > 0 && !extensionFor("audio", audioStory.type)) {
       return Response.json({ error: "Unsupported voice story type" }, { status: 400 });
     }
-    if (recipeVideo instanceof File && recipeVideo.size > maximumRecipeVideoSize) {
+    if (recipeVideo instanceof File && recipeVideo.size > attachmentLimits.video.maxSize) {
       return Response.json({ error: "Recipe video is too large" }, { status: 400 });
     }
-    if (recipeVideo instanceof File && recipeVideo.size > 0 && !acceptedRecipeVideoTypes.has(normaliseMimeType(recipeVideo.type))) {
+    if (recipeVideo instanceof File && recipeVideo.size > 0 && !extensionFor("video", recipeVideo.type)) {
       return Response.json({ error: "Unsupported recipe video type" }, { status: 400 });
     }
 
-    const supabase = createClient(supabaseUrl, secretKey, {
-      auth: { persistSession: false, autoRefreshToken: false },
-    });
-
     let photoPath: string | null = null;
     if (photo instanceof File && photo.size > 0) {
-      const extension = extensionForImage(photo.type);
-      photoPath = `${crypto.randomUUID()}.${extension}`;
+      photoPath = `dish/${crypto.randomUUID()}.${extensionFor("dish", photo.type)}`;
       const { error: uploadError } = await supabase.storage
-        .from("recipe-photos")
+        .from("recipe-uploads")
         .upload(photoPath, photo, { contentType: photo.type, upsert: false });
 
       if (uploadError) throw uploadError;
@@ -158,9 +94,9 @@ export async function POST(request: Request) {
 
     let originalRecipePath: string | null = null;
     if (originalRecipe instanceof File && originalRecipe.size > 0) {
-      originalRecipePath = `originals/${crypto.randomUUID()}.${extensionForImage(originalRecipe.type)}`;
+      originalRecipePath = `original/${crypto.randomUUID()}.${extensionFor("original", originalRecipe.type)}`;
       const { error: uploadError } = await supabase.storage
-        .from("recipe-photos")
+        .from("recipe-uploads")
         .upload(originalRecipePath, originalRecipe, {
           contentType: originalRecipe.type,
           upsert: false,
@@ -171,9 +107,9 @@ export async function POST(request: Request) {
 
     let contributorPhotoPath: string | null = null;
     if (contributorPhoto instanceof File && contributorPhoto.size > 0) {
-      contributorPhotoPath = `contributors/${crypto.randomUUID()}.${extensionForImage(contributorPhoto.type)}`;
+      contributorPhotoPath = `portrait/${crypto.randomUUID()}.${extensionFor("portrait", contributorPhoto.type)}`;
       const { error: uploadError } = await supabase.storage
-        .from("recipe-photos")
+        .from("recipe-uploads")
         .upload(contributorPhotoPath, contributorPhoto, {
           contentType: contributorPhoto.type,
           upsert: false,
@@ -184,9 +120,9 @@ export async function POST(request: Request) {
 
     let audioStoryPath: string | null = null;
     if (audioStory instanceof File && audioStory.size > 0) {
-      audioStoryPath = `audio/${crypto.randomUUID()}.${extensionForAudio(audioStory.type)}`;
+      audioStoryPath = `audio/${crypto.randomUUID()}.${extensionFor("audio", audioStory.type)}`;
       const { error: uploadError } = await supabase.storage
-        .from("recipe-photos")
+        .from("recipe-uploads")
         .upload(audioStoryPath, audioStory, {
           contentType: audioStory.type,
           upsert: false,
@@ -197,9 +133,9 @@ export async function POST(request: Request) {
 
     let recipeVideoPath: string | null = null;
     if (recipeVideo instanceof File && recipeVideo.size > 0) {
-      recipeVideoPath = `videos/${crypto.randomUUID()}.${extensionForVideo(recipeVideo.type)}`;
+      recipeVideoPath = `video/${crypto.randomUUID()}.${extensionFor("video", recipeVideo.type)}`;
       const { error: uploadError } = await supabase.storage
-        .from("recipe-photos")
+        .from("recipe-uploads")
         .upload(recipeVideoPath, recipeVideo, {
           contentType: recipeVideo.type,
           upsert: false,
@@ -215,6 +151,8 @@ export async function POST(request: Request) {
       title,
       category,
       servings: readText(formData, "servings") || null,
+      prep_time_minutes: readMinutes(formData, "prepTimeMinutes"),
+      cook_time_minutes: readMinutes(formData, "cookTimeMinutes"),
       story,
       ingredients,
       method,

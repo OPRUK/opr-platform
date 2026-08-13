@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { getSupabaseAdmin } from "../../../../lib/supabase/admin";
 
 const adminEmail = "chaten@otherpeoplesrecipes.co.uk";
 
@@ -16,9 +17,8 @@ async function getAdminClient(request: Request) {
   const token = request.headers.get("authorization")?.replace("Bearer ", "");
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-  const secretKey = process.env.SUPABASE_SECRET_KEY;
 
-  if (!token || !url || !publishableKey || !secretKey) return null;
+  if (!token || !url || !publishableKey) return null;
 
   const authClient = createClient(url, publishableKey, {
     auth: { persistSession: false, autoRefreshToken: false },
@@ -26,9 +26,7 @@ async function getAdminClient(request: Request) {
   const { data, error } = await authClient.auth.getUser(token);
   if (error || data.user?.email?.toLowerCase() !== adminEmail) return null;
 
-  return createClient(url, secretKey, {
-    auth: { persistSession: false, autoRefreshToken: false },
-  });
+  return getSupabaseAdmin();
 }
 
 export async function GET(request: Request) {

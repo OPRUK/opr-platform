@@ -18,6 +18,8 @@ type CommunityRecipe = {
   location: string | null;
   category: string;
   servings: string | null;
+  prep_time_minutes: number | null;
+  cook_time_minutes: number | null;
   story: string;
   ingredients: string | null;
   method: string | null;
@@ -39,7 +41,7 @@ function truncate(text: string, maxLength: number): string {
 async function getCommunityRecipe(id: string): Promise<CommunityRecipe | null> {
   const { data } = await supabase
     .from("recipe_submissions")
-    .select("id, title, name, location, category, servings, story, ingredients, method, cook_notes, photo_path, contributor_photo_path, original_recipe_path, audio_story_path, recipe_video_path")
+    .select("id, title, name, location, category, servings, prep_time_minutes, cook_time_minutes, story, ingredients, method, cook_notes, photo_path, contributor_photo_path, original_recipe_path, audio_story_path, recipe_video_path")
     .eq("id", id)
     .eq("is_published", true)
     .maybeSingle();
@@ -49,7 +51,7 @@ async function getCommunityRecipe(id: string): Promise<CommunityRecipe | null> {
 
 function imageUrlFor(recipe: CommunityRecipe): string | null {
   if (recipe.photo_path) {
-    return supabase.storage.from("recipe-photos").getPublicUrl(recipe.photo_path).data.publicUrl;
+    return supabase.storage.from("recipe-published").getPublicUrl(recipe.photo_path).data.publicUrl;
   }
   if (recipe.title.toLowerCase().includes("sudesh") && recipe.title.toLowerCase().includes("bhindi")) {
     return "/images/recipes/sudeshs-bhindi-wide.webp";
@@ -59,25 +61,25 @@ function imageUrlFor(recipe: CommunityRecipe): string | null {
 
 function originalRecipeImageUrlFor(recipe: CommunityRecipe): string | null {
   return recipe.original_recipe_path
-    ? supabase.storage.from("recipe-photos").getPublicUrl(recipe.original_recipe_path).data.publicUrl
+    ? supabase.storage.from("recipe-published").getPublicUrl(recipe.original_recipe_path).data.publicUrl
     : null;
 }
 
 function contributorPhotoUrlFor(recipe: CommunityRecipe): string | null {
   return recipe.contributor_photo_path
-    ? supabase.storage.from("recipe-photos").getPublicUrl(recipe.contributor_photo_path).data.publicUrl
+    ? supabase.storage.from("recipe-published").getPublicUrl(recipe.contributor_photo_path).data.publicUrl
     : null;
 }
 
 function audioStoryUrlFor(recipe: CommunityRecipe): string | null {
   return recipe.audio_story_path
-    ? supabase.storage.from("recipe-photos").getPublicUrl(recipe.audio_story_path).data.publicUrl
+    ? supabase.storage.from("recipe-published").getPublicUrl(recipe.audio_story_path).data.publicUrl
     : null;
 }
 
 function recipeVideoUrlFor(recipe: CommunityRecipe): string | null {
   return recipe.recipe_video_path
-    ? supabase.storage.from("recipe-photos").getPublicUrl(recipe.recipe_video_path).data.publicUrl
+    ? supabase.storage.from("recipe-published").getPublicUrl(recipe.recipe_video_path).data.publicUrl
     : null;
 }
 
@@ -149,6 +151,8 @@ export default async function CommunityRecipePage({
     author: { "@type": "Person", name: recipe.name || SITE_NAME },
     ...(recipe.category ? { recipeCategory: recipe.category } : {}),
     ...(recipe.servings ? { recipeYield: recipe.servings } : {}),
+    ...(recipe.prep_time_minutes ? { prepTime: `PT${recipe.prep_time_minutes}M` } : {}),
+    ...(recipe.cook_time_minutes ? { cookTime: `PT${recipe.cook_time_minutes}M` } : {}),
     recipeIngredient: ingredients,
     recipeInstructions: method.map((step, index) => ({
       "@type": "HowToStep",
@@ -211,6 +215,13 @@ export default async function CommunityRecipePage({
           {imageUrl ? <img src={imageUrl} alt={recipe.title} className="mb-8 aspect-[4/3] w-full rounded-2xl object-cover" /> : null}
           <p className="text-sm uppercase tracking-[0.25em] text-amber-700">{recipe.category}</p>
           {recipe.servings ? <p className="mt-2 text-sm text-stone-600">Serves {recipe.servings}</p> : null}
+          {recipe.prep_time_minutes || recipe.cook_time_minutes ? (
+            <p className="mt-2 text-sm text-stone-600">
+              {recipe.prep_time_minutes ? `Prep ${recipe.prep_time_minutes} min` : null}
+              {recipe.prep_time_minutes && recipe.cook_time_minutes ? " · " : null}
+              {recipe.cook_time_minutes ? `Cook ${recipe.cook_time_minutes} min` : null}
+            </p>
+          ) : null}
           <h2 className="mt-6 text-3xl font-bold">What you&apos;ll need</h2>
           <ul className="mt-7 space-y-4 leading-7 text-stone-700">
             {ingredients.map((ingredient) => <li key={ingredient} className="border-b border-[#E7CEA2] pb-4">{ingredient}</li>)}
