@@ -39,8 +39,18 @@ export async function generateMetadata({
   const recipe = getFeaturedRecipe(slug);
   if (!recipe) return {};
 
-  const title = `${recipe.title} — ${recipe.place}`;
-  const description = truncate(recipe.story, 155);
+  const seo = {
+    "sudeshs-bhindi": {
+      title: "Sudesh’s Family Bhindi Recipe | Indian Okra",
+      description: "Cook Sudesh’s family bhindi recipe: a simple Indian okra dish, preserved with the personal story behind it.",
+    },
+    "adas-jollof-rice": {
+      title: "Ada’s Family Jollof Rice Recipe",
+      description: "Cook Ada’s family jollof rice recipe, a celebratory dish made to bring people together, with the story behind it.",
+    },
+  }[recipe.slug];
+  const title = seo?.title ?? `${recipe.title} — ${recipe.place}`;
+  const description = seo?.description ?? truncate(recipe.story, 155);
   const url = `/family-cookbook/${recipe.slug}`;
 
   return {
@@ -78,6 +88,11 @@ export default async function RecipePage({
   }
 
   const communityCooks = await getApprovedCommunityCooks({ recipeSlug: recipe.slug });
+  const relatedFilm = {
+    "adas-jollof-rice": "Ada’s Party Jollof Rice | A Recipe to Bring People Together",
+    "krishna-anands-baingan-ka-bharta": "Krishna Anand’s Baingan ka Bharta | A Family Recipe",
+    "sams-shepherds-pie": "Sam & Nadine’s Shepherd’s Pie | A Recipe Worth Passing On",
+  }[recipe.slug];
 
   const recipeJsonLd = {
     "@context": "https://schema.org",
@@ -232,6 +247,19 @@ export default async function RecipePage({
               ))}
             </div>
           </div>
+        </section>
+      ) : null}
+
+      {relatedFilm ? (
+        <section className="bg-[#123C39] px-6 py-16 text-center text-white">
+          <p className="text-sm uppercase tracking-[0.35em] text-amber-300">Watch the story</p>
+          <h2 className="mx-auto mt-4 max-w-3xl text-3xl font-bold">{relatedFilm}</h2>
+          <Link
+            href={"/films#" + encodeURIComponent(relatedFilm)}
+            className="mt-8 inline-block rounded-full bg-[#FFF3DF] px-8 py-4 font-medium text-[#123C39] transition hover:scale-105"
+          >
+            Watch this family recipe film
+          </Link>
         </section>
       ) : null}
 
