@@ -17,9 +17,6 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: SITE_NAME,
-    description: "Every Recipe has a Story.",
-    url: "/",
     siteName: SITE_NAME,
     locale: "en_GB",
     type: "website",
