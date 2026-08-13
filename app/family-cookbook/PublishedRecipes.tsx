@@ -142,7 +142,7 @@ export default function PublishedRecipes({
       story: recipe.story,
       category: recipe.category,
       imageUrl: recipe.photo_path
-        ? supabase.storage.from("recipe-photos").getPublicUrl(recipe.photo_path).data.publicUrl
+        ? supabase.storage.from("recipe-published").getPublicUrl(recipe.photo_path).data.publicUrl
         : null,
       href: `/family-cookbook/community/${recipe.id}`,
     })),

@@ -1,6 +1,6 @@
-import { createClient } from "@supabase/supabase-js";
 import { foundingTableWelcomeEmail, newFoundingTableEmail, sendEmail } from "../../../lib/email";
 import { createUnsubscribeLink } from "../../../lib/unsubscribe";
+import { getSupabaseAdmin } from "../../../lib/supabase/admin";
 
 const adminEmail = "chaten@otherpeoplesrecipes.co.uk";
 
@@ -14,22 +14,11 @@ export async function POST(request: Request) {
       return Response.json({ error: "Please enter your name and a valid email address." }, { status: 400 });
     }
 
-    const secretKey = process.env.SUPABASE_SECRET_KEY;
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-
-    if (!secretKey || !supabaseUrl) {
-      console.error("OPR Founding Table service is not configured", {
-        hasSupabaseSecretKey: Boolean(secretKey),
-        hasSupabaseUrl: Boolean(supabaseUrl),
-      });
+    const supabase = getSupabaseAdmin();
+    if (!supabase) {
+      console.error("OPR Founding Table service is not configured");
       return Response.json({ error: "The Founding Table is not available just now. Please try again shortly." }, { status: 503 });
     }
-
-    // The secret key is used only on this server route. The browser never sees it,
-    // and the database table has no public read or write permissions.
-    const supabase = createClient(supabaseUrl, secretKey, {
-      auth: { persistSession: false, autoRefreshToken: false },
-    });
 
     const wantsMarketing = marketingOptIn === true;
     const { error: saveError } = await supabase.from("founding_table_members").insert({

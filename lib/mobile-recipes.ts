@@ -66,7 +66,7 @@ function featuredToSummary(recipe: FeaturedRecipe): MobileRecipeSummary {
 
 function communityImageUrl(row: CommunityRow): string | null {
   if (!row.photo_path) return null;
-  return supabase.storage.from("recipe-photos").getPublicUrl(row.photo_path).data.publicUrl;
+  return supabase.storage.from("recipe-published").getPublicUrl(row.photo_path).data.publicUrl;
 }
 
 function communityToSummary(row: CommunityRow): MobileRecipeSummary {

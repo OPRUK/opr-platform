@@ -20,7 +20,7 @@ function toPublicCook(cook: StoredCommunityCook): PublicCommunityCook {
     name: cook.name,
     note: cook.note,
     photoUrl: cook.photo_path
-      ? supabase.storage.from("recipe-photos").getPublicUrl(cook.photo_path).data.publicUrl
+      ? supabase.storage.from("recipe-published").getPublicUrl(cook.photo_path).data.publicUrl
       : null,
   };
 }

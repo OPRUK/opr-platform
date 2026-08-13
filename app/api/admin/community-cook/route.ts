@@ -1,4 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
+import { getSupabaseAdmin } from "../../../../lib/supabase/admin";
+import { copyToPublished } from "../../../../lib/publish-assets";
+import { resolveAssetUrlMap } from "../../../../lib/resolve-asset-urls";
 
 const adminEmail = "chaten@otherpeoplesrecipes.co.uk";
 
@@ -6,18 +9,15 @@ async function getAdminClient(request: Request) {
   const token = request.headers.get("authorization")?.replace("Bearer ", "");
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-  const secretKey = process.env.SUPABASE_SECRET_KEY;
 
-  if (!token || !supabaseUrl || !publishableKey || !secretKey) return null;
+  if (!token || !supabaseUrl || !publishableKey) return null;
   const authClient = createClient(supabaseUrl, publishableKey, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
   const { data } = await authClient.auth.getUser(token);
   if (data.user?.email?.toLowerCase() !== adminEmail) return null;
 
-  return createClient(supabaseUrl, secretKey, {
-    auth: { persistSession: false, autoRefreshToken: false },
-  });
+  return getSupabaseAdmin();
 }
 
 export async function GET(request: Request) {
@@ -29,7 +29,18 @@ export async function GET(request: Request) {
     .select("id, recipe_submission_id, recipe_slug, recipe_title, name, note, photo_path, is_approved, created_at, recipe_submissions(title)")
     .order("created_at", { ascending: false });
   if (error) return Response.json({ error: error.message }, { status: 400 });
-  return Response.json({ communityCooks: data ?? [] });
+
+  const rows = data ?? [];
+  const urlMap = await resolveAssetUrlMap(
+    adminClient,
+    rows.map((row) => ({ paths: [row.photo_path], published: Boolean(row.is_approved) })),
+  );
+  const communityCooks = rows.map((row) => ({
+    ...row,
+    photo_url: row.photo_path ? (urlMap.get(row.photo_path) ?? null) : null,
+  }));
+
+  return Response.json({ communityCooks });
 }
 
 export async function PATCH(request: Request) {
@@ -45,6 +56,17 @@ export async function PATCH(request: Request) {
       .update({ is_approved: isApproved, approved_at: isApproved ? new Date().toISOString() : null })
       .eq("id", id);
     if (error) throw error;
+
+    if (isApproved) {
+      const { data: post, error: readError } = await adminClient
+        .from("recipe_community_cooks")
+        .select("photo_path")
+        .eq("id", id)
+        .maybeSingle();
+      if (readError) throw readError;
+      if (post?.photo_path) await copyToPublished(adminClient, [post.photo_path]);
+    }
+
     return Response.json({ ok: true });
   } catch (error) {
     console.error("OPR community cook update failed", error);
@@ -66,8 +88,10 @@ export async function DELETE(request: Request) {
       .maybeSingle();
     if (readError || !post) return Response.json({ error: "Community post not found" }, { status: 404 });
     if (post.photo_path) {
-      const { error: storageError } = await adminClient.storage.from("recipe-photos").remove([post.photo_path]);
+      const { error: storageError } = await adminClient.storage.from("recipe-uploads").remove([post.photo_path]);
       if (storageError) throw storageError;
+      const { error: publishedStorageError } = await adminClient.storage.from("recipe-published").remove([post.photo_path]);
+      if (publishedStorageError) throw publishedStorageError;
     }
     const { error: deleteError } = await adminClient.from("recipe_community_cooks").delete().eq("id", id);
     if (deleteError) throw deleteError;

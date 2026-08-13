@@ -1,5 +1,5 @@
-import { createClient } from "@supabase/supabase-js";
 import { NextRequest, NextResponse } from "next/server";
+import { getSupabaseAdmin } from "../../../lib/supabase/admin";
 
 const voteCookieName = "opr_recipe_of_month_voter";
 const voteCookieAge = 60 * 60 * 24 * 370;
@@ -16,19 +16,8 @@ function currentMonthKey() {
   return `${year}-${month}`;
 }
 
-function getSupabase() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const secretKey = process.env.SUPABASE_SECRET_KEY;
-
-  if (!url || !secretKey) return null;
-
-  return createClient(url, secretKey, {
-    auth: { persistSession: false, autoRefreshToken: false },
-  });
-}
-
 async function getResults(monthKey: string, voterToken?: string) {
-  const supabase = getSupabase();
+  const supabase = getSupabaseAdmin();
   if (!supabase) throw new Error("Voting is not configured");
 
   const { data, error } = await supabase
@@ -73,7 +62,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Choose a recipe from the OPR cookbook." }, { status: 400 });
     }
 
-    const supabase = getSupabase();
+    const supabase = getSupabaseAdmin();
     if (!supabase) throw new Error("Voting is not configured");
 
     const monthKey = currentMonthKey();

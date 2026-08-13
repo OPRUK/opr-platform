@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { CheckIcon, Divider } from "../_components/primitives";
 import { supabase } from "../../../lib/supabase/client";
+import { AttachmentKind } from "../../../lib/media-attachments";
 
 // Matches the desktop form's combined agreement (see app/share/RecipeForm.tsx):
 // age 18+, licence to publish, and permission to share identifiable people
@@ -15,12 +16,12 @@ const inputClassName =
 
 type AttachmentKey = "photo" | "audioStory" | "recipeVideo" | "originalRecipePhoto";
 
-const attachments: { key: AttachmentKey; label: string; accept: string; folder: string; icon: React.ReactNode }[] = [
+const attachments: { key: AttachmentKey; label: string; accept: string; kind: AttachmentKind; icon: React.ReactNode }[] = [
   {
     key: "photo",
     label: "Photo of the dish",
     accept: "image/jpeg,image/png,image/webp",
-    folder: "",
+    kind: "dish",
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <rect x="3" y="6" width="18" height="14" />
@@ -33,7 +34,7 @@ const attachments: { key: AttachmentKey; label: string; accept: string; folder: 
     key: "audioStory",
     label: "Record an audio story",
     accept: "audio/aac,audio/m4a,audio/mp4,audio/mpeg,audio/ogg,audio/wav,audio/webm,audio/x-m4a",
-    folder: "audio",
+    kind: "audio",
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <rect x="9" y="2" width="6" height="12" rx="3" />
@@ -45,7 +46,7 @@ const attachments: { key: AttachmentKey; label: string; accept: string; folder: 
     key: "recipeVideo",
     label: "Upload a short video",
     accept: "video/mp4,video/quicktime,video/webm",
-    folder: "videos",
+    kind: "video",
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <rect x="2" y="5" width="15" height="14" />
@@ -57,7 +58,7 @@ const attachments: { key: AttachmentKey; label: string; accept: string; folder: 
     key: "originalRecipePhoto",
     label: "Photo of the handwritten recipe",
     accept: "image/jpeg,image/png,image/webp",
-    folder: "originals",
+    kind: "original",
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
@@ -67,14 +68,8 @@ const attachments: { key: AttachmentKey; label: string; accept: string; folder: 
   },
 ];
 
-function extensionFor(file: File) {
-  const fromType = file.type.split("/")[1]?.replace("quicktime", "mov");
-  if (fromType) return fromType;
-  const fromName = file.name.split(".").pop();
-  return fromName || "bin";
-}
-
 export default function MobileShareForm() {
+  const [submissionToken] = useState(() => crypto.randomUUID());
   const [title, setTitle] = useState("");
   const [name, setName] = useState("");
   const [place, setPlace] = useState("");
@@ -107,18 +102,33 @@ export default function MobileShareForm() {
       // serverless function request-size limit (~4.5MB) once more than one
       // attachment is combined — uploading client-side avoids that entirely,
       // since the route only ever receives short storage paths, not bytes.
+      // The `recipe-uploads` bucket is private, so each file is uploaded via
+      // a short-lived signed URL minted server-side, rather than a direct
+      // anon-key write against the bucket.
       const paths: Partial<Record<AttachmentKey, string>> = {};
       for (const attachment of attachments) {
         const file = files[attachment.key];
         if (!file) continue;
 
-        const path = attachment.folder
-          ? `${attachment.folder}/${crypto.randomUUID()}.${extensionFor(file)}`
-          : `${crypto.randomUUID()}.${extensionFor(file)}`;
+        const urlResponse = await fetch("/api/submissions/upload-url", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            kind: attachment.kind,
+            size: file.size,
+            type: file.type,
+            submissionToken,
+          }),
+        });
+        if (!urlResponse.ok) {
+          const payload = await urlResponse.json().catch(() => null);
+          throw new Error(`We couldn't upload "${attachment.label.toLowerCase()}" — ${payload?.error || "please try again"}`);
+        }
+        const { path, token } = await urlResponse.json();
 
         const { error: uploadError } = await supabase.storage
-          .from("recipe-photos")
-          .upload(path, file, { contentType: file.type, upsert: false });
+          .from("recipe-uploads")
+          .uploadToSignedUrl(path, token, file, { contentType: file.type });
 
         if (uploadError) {
           throw new Error(`We couldn't upload "${attachment.label.toLowerCase()}" — ${uploadError.message}`);

@@ -14,6 +14,8 @@ type RecipeFormValues = {
   title: string;
   category: string;
   servings: string;
+  prepTime: string;
+  cookTime: string;
   story: string;
   ingredients: string;
   method: string;
@@ -29,6 +31,8 @@ const initialValues: RecipeFormValues = {
   title: "",
   category: "",
   servings: "",
+  prepTime: "",
+  cookTime: "",
   story: "",
   ingredients: "",
   method: "",
@@ -320,6 +324,8 @@ export default function RecipeForm() {
     formData.set("title", values.title);
     formData.set("category", values.category);
     formData.set("servings", values.servings);
+    formData.set("prepTimeMinutes", values.prepTime);
+    formData.set("cookTimeMinutes", values.cookTime);
     formData.set("story", values.story);
     formData.set("ingredients", values.ingredients);
     formData.set("method", values.method);
@@ -553,6 +559,34 @@ export default function RecipeForm() {
               type="text"
               name="servings"
               placeholder="For example: 4 people"
+              className={inputClassName}
+            />
+          </label>
+        </div>
+
+        <div className="mt-7 grid gap-7 md:grid-cols-2">
+          <label className="block text-sm font-medium">
+            Prep time (minutes) <span className="font-normal text-stone-500">(optional)</span>
+            <input
+              value={values.prepTime}
+              onChange={(event) => updateValue("prepTime", event.target.value)}
+              type="number"
+              min="0"
+              name="prepTimeMinutes"
+              placeholder="For example: 20"
+              className={inputClassName}
+            />
+          </label>
+
+          <label className="block text-sm font-medium">
+            Cook time (minutes) <span className="font-normal text-stone-500">(optional)</span>
+            <input
+              value={values.cookTime}
+              onChange={(event) => updateValue("cookTime", event.target.value)}
+              type="number"
+              min="0"
+              name="cookTimeMinutes"
+              placeholder="For example: 45"
               className={inputClassName}
             />
           </label>

@@ -1,7 +1,6 @@
-import { createClient } from "@supabase/supabase-js";
-
-const maximumPhotoSize = 5 * 1024 * 1024;
-const acceptedPhotoTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
+import { getSupabaseAdmin } from "../../../lib/supabase/admin";
+import { checkRateLimit } from "../../../lib/rate-limit";
+import { attachmentLimits, extensionFor } from "../../../lib/media-attachments";
 
 function readText(formData: FormData, field: string, required = false) {
   const value = formData.get(field);
@@ -10,17 +9,15 @@ function readText(formData: FormData, field: string, required = false) {
   return text;
 }
 
-function extensionForImage(type: string) {
-  return ({ "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp" } as Record<string, string>)[type] ?? "jpg";
-}
-
 export async function POST(request: Request) {
   try {
-    const secretKey = process.env.SUPABASE_SECRET_KEY;
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    if (!secretKey || !supabaseUrl) {
+    const supabase = getSupabaseAdmin();
+    if (!supabase) {
       return Response.json({ error: "Community sharing is not configured" }, { status: 503 });
     }
+
+    const rateLimitError = await checkRateLimit(supabase, request, "recipe-community-cook");
+    if (rateLimitError) return rateLimitError;
 
     const formData = await request.formData();
     const recipeIdText = readText(formData, "recipeId");
@@ -49,16 +46,13 @@ export async function POST(request: Request) {
     if (!agreementAccepted) {
       return Response.json({ error: "Permission to share is required" }, { status: 400 });
     }
-    if (photo instanceof File && photo.size > maximumPhotoSize) {
+    if (photo instanceof File && photo.size > attachmentLimits.portrait.maxSize) {
       return Response.json({ error: "Photo is too large" }, { status: 400 });
     }
-    if (photo instanceof File && photo.size > 0 && !acceptedPhotoTypes.has(photo.type)) {
+    if (photo instanceof File && photo.size > 0 && !extensionFor("portrait", photo.type)) {
       return Response.json({ error: "Please use a JPG, PNG or WebP photo" }, { status: 400 });
     }
 
-    const supabase = createClient(supabaseUrl, secretKey, {
-      auth: { persistSession: false, autoRefreshToken: false },
-    });
     if (isCommunityRecipe) {
       const { data: recipe, error: recipeError } = await supabase
         .from("recipe_submissions")
@@ -73,9 +67,9 @@ export async function POST(request: Request) {
 
     let photoPath: string | null = null;
     if (photo instanceof File && photo.size > 0) {
-      photoPath = `community-cooks/${crypto.randomUUID()}.${extensionForImage(photo.type)}`;
+      photoPath = `community-cooks/${crypto.randomUUID()}.${extensionFor("portrait", photo.type)}`;
       const { error: uploadError } = await supabase.storage
-        .from("recipe-photos")
+        .from("recipe-uploads")
         .upload(photoPath, photo, { contentType: photo.type, upsert: false });
       if (uploadError) throw uploadError;
     }

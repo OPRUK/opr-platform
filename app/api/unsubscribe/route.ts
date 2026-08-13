@@ -1,5 +1,5 @@
-import { createClient } from "@supabase/supabase-js";
 import { hasValidUnsubscribeToken } from "../../../lib/unsubscribe";
+import { getSupabaseAdmin } from "../../../lib/supabase/admin";
 
 export const runtime = "nodejs";
 
@@ -13,15 +13,11 @@ export async function POST(request: Request) {
       return Response.json({ error: "This unsubscribe link is not valid." }, { status: 400 });
     }
 
-    const secretKey = process.env.SUPABASE_SECRET_KEY;
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    if (!secretKey || !supabaseUrl) {
+    const supabase = getSupabaseAdmin();
+    if (!supabase) {
       return Response.json({ error: "This service is not available just now." }, { status: 503 });
     }
 
-    const supabase = createClient(supabaseUrl, secretKey, {
-      auth: { persistSession: false, autoRefreshToken: false },
-    });
     const changes = {
       marketing_opt_in: false,
       marketing_unsubscribed_at: new Date().toISOString(),

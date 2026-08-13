@@ -46,7 +46,7 @@ async function getRecipeOfWeek(): Promise<RecipeOfWeek | null> {
 export default async function Home() {
   const recipeOfWeek = await getRecipeOfWeek();
   const recipeOfWeekImage = recipeOfWeek?.photo_path
-    ? supabase.storage.from("recipe-photos").getPublicUrl(recipeOfWeek.photo_path).data.publicUrl
+    ? supabase.storage.from("recipe-published").getPublicUrl(recipeOfWeek.photo_path).data.publicUrl
     : null;
   return (
     <main className="min-h-screen bg-[#EED8B2] text-[#123C39]">
