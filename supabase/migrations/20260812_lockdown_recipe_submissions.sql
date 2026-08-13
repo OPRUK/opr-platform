@@ -1,15 +1,14 @@
--- Part 3 of the secure submission pipeline. NOT APPLIED YET — this migration
--- file is prepared and reviewed but deliberately not run against the live
--- project. It removes the browser's only current write path to
--- recipe_submissions, so it must only run after the server routes in this
--- branch (recipe-submission, recipe-submission-mobile, recipe-community-cook,
--- submissions/upload-url) are deployed and verified working end-to-end.
+-- Part 3 of the secure submission pipeline. APPLIED 2026-08-13 to production
+-- directly (not via this file/the migration history — see chat/audit) once
+-- the server routes in this branch (recipe-submission, recipe-submission-mobile,
+-- recipe-community-cook, submissions/upload-url) were deployed and verified
+-- working end-to-end. This file documents exactly what was run.
 --
--- Confirmed live before writing this (see chat/audit): recipe_submissions
--- currently has policy "Anyone can submit a recipe" — INSERT for anon,
--- with_check true — meaning anyone with the public anon key can insert a row
--- with is_published: true right now, bypassing the app entirely. This
--- migration closes that.
+-- Confirmed live before applying: recipe_submissions had policy "Anyone can
+-- submit a recipe" — INSERT for anon, with_check true — meaning anyone with
+-- the public anon key could insert a row with is_published: true, bypassing
+-- the app entirely. Verified closed post-apply: a raw anon-key insert now
+-- returns 401, and published content still reads fine via the anon key.
 
 -- Remove the browser's write path
 drop policy if exists "Anyone can submit a recipe" on public.recipe_submissions;
