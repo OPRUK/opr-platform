@@ -22,6 +22,14 @@ function film(title: string, file: string, hasPoster = true): Film {
 
 export const films: Film[] = [
   {
+    title: "Dave & Rubble | Finding an Old Family Recipe",
+    video: "/videos/opr-dave-and-rubble-old-family-recipe.mov",
+  },
+  {
+    title: "Mummy Morris & Rubble | Dave’s Mum’s Beef Casserole",
+    video: "/videos/opr-mummy-morris-and-rubble-beef-casserole.mov",
+  },
+  {
     title: "Dave & Rubble | A Recipe Worth Passing On",
     video: "/videos/opr-dave-and-rubble-recipe-worth-passing-on.mp4",
     poster: "/images/opr-dave-and-rubble-recipe-worth-passing-on-poster.jpg",
