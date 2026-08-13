@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Navigation from "../components/Navigation";
+import { buildMetadata } from "../../lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: "Privacy Notice",
   description: "How Other People's Recipes collects, uses and protects the information you share with us.",
-  alternates: { canonical: "/privacy" },
-};
+  path: "/privacy",
+});
 
 const effectiveDate = "5 August 2026";
 

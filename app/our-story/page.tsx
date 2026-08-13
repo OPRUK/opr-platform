@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Navigation from "../components/Navigation";
 import HeroCarousel from "../components/HeroCarousel";
+import { buildMetadata } from "../../lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: "Your Story",
   description:
     "Why family recipes deserve preserving, and how yours can join the living cookbook.",
-  alternates: { canonical: "/our-story" },
-};
+  path: "/our-story",
+});
 
 export default function OurStory() {
   return (

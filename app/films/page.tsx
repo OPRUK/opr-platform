@@ -4,13 +4,14 @@ import FilmEmbed from "../components/FilmEmbed";
 import VideoBrandMark from "../components/VideoBrandMark";
 import { films } from "../../lib/films";
 import { absoluteUrl } from "../../lib/site";
+import { buildMetadata } from "../../lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: "The OPR Film Collection",
   description:
     "Short films about food, family and the recipes we choose to pass on.",
-  alternates: { canonical: "/films" },
-};
+  path: "/films",
+});
 
 export default function FilmsPage() {
   const videoJsonLd = {

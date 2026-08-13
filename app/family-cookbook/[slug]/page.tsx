@@ -52,6 +52,7 @@ export async function generateMetadata({
   const title = seo?.title ?? `${recipe.title} — ${recipe.place}`;
   const description = seo?.description ?? truncate(recipe.story, 155);
   const url = `/family-cookbook/${recipe.slug}`;
+  const ogImage = `${url}/opengraph-image`;
 
   return {
     title,
@@ -62,15 +63,13 @@ export async function generateMetadata({
       description,
       type: "article",
       url,
-      images: [
-        { url: absoluteUrl(recipe.image), width: 1200, height: 900, alt: recipe.title },
-      ],
+      images: [{ url: ogImage, width: 1200, height: 630, alt: recipe.title }],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [absoluteUrl(recipe.image)],
+      images: [ogImage],
     },
   };
 }

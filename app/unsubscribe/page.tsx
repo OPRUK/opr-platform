@@ -3,12 +3,14 @@ import Link from "next/link";
 import Navigation from "../components/Navigation";
 import UnsubscribeForm from "./UnsubscribeForm";
 import { hasValidUnsubscribeToken } from "../../lib/unsubscribe";
+import { buildMetadata } from "../../lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: "Email preferences",
   description: "Manage your Other People's Recipes email preferences.",
-  robots: { index: false, follow: false },
-};
+  path: "/unsubscribe",
+  index: false,
+});
 
 export default async function UnsubscribePage({
   searchParams,
