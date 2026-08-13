@@ -3,9 +3,9 @@ import Navigation from "../components/Navigation";
 import RecipeForm from "./RecipeForm";
 
 export const metadata: Metadata = {
-  title: "Share Your Family's Recipe",
+  title: "Share Your Family Recipe and Story",
   description:
-    "Send us the recipe and the story behind it. It doesn't need to be perfect.",
+    "Preserve the recipe your family asks for again and again. Share the dish and the story behind it with Other People's Recipes.",
   alternates: { canonical: "/share" },
 };
 
