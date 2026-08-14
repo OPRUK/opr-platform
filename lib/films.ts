@@ -22,6 +22,10 @@ function film(title: string, file: string, hasPoster = true): Film {
 
 export const films: Film[] = [
   {
+    title: "Dave & Rubble | Sam's Soufflé",
+    video: "/videos/opr-dave-and-rubble-sams-souffle.mp4",
+  },
+  {
     title: "Dave & Rubble | Some Recipes Never Leave You",
     video: "/videos/opr-dave-and-rubble-some-recipes-never-leave-you.mp4",
   },
