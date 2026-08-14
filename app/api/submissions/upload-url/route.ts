@@ -1,5 +1,5 @@
 import { getSupabaseAdmin } from "../../../../lib/supabase/admin";
-import { attachmentLimits, normaliseMimeType, AttachmentKind } from "../../../../lib/media-attachments";
+import { attachmentLimits, attachmentMetadata, AttachmentKind } from "../../../../lib/media-attachments";
 import { checkRateLimit } from "../../../../lib/rate-limit";
 
 // Mints a private path grouped by submission session, so a single mobile
@@ -23,7 +23,8 @@ export async function POST(request: Request) {
     const body = await request.json();
     const kind = typeof body.kind === "string" ? body.kind : "";
     const size = typeof body.size === "number" ? body.size : NaN;
-    const type = typeof body.type === "string" ? normaliseMimeType(body.type) : "";
+    const type = typeof body.type === "string" ? body.type : "";
+    const name = typeof body.name === "string" ? body.name : "";
     const submissionToken = typeof body.submissionToken === "string" ? body.submissionToken : "";
 
     if (!submissionTokenPattern.test(submissionToken)) {
@@ -37,12 +38,12 @@ export async function POST(request: Request) {
     if (!Number.isFinite(size) || size <= 0 || size > limits.maxSize) {
       return Response.json({ error: "File is too large" }, { status: 400 });
     }
-    const extension = limits.types[type];
-    if (!extension) {
+    const metadata = attachmentMetadata(kind as AttachmentKind, type, name);
+    if (!metadata) {
       return Response.json({ error: "Unsupported file type" }, { status: 400 });
     }
 
-    const path = `${submissionToken}/${kind}/${crypto.randomUUID()}.${extension}`;
+    const path = `${submissionToken}/${kind}/${crypto.randomUUID()}.${metadata.extension}`;
     const { data, error } = await supabase.storage.from("recipe-uploads").createSignedUploadUrl(path);
 
     if (error || !data) {
@@ -50,7 +51,7 @@ export async function POST(request: Request) {
       return Response.json({ error: "Upload could not be prepared" }, { status: 500 });
     }
 
-    return Response.json({ path: data.path, token: data.token });
+    return Response.json({ path: data.path, token: data.token, contentType: metadata.contentType });
   } catch (error) {
     console.error("OPR upload URL request failed", error);
     return Response.json({ error: "Upload could not be prepared" }, { status: 400 });
