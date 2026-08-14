@@ -67,6 +67,12 @@ export default async function Home() {
             Every Recipe has a Story.
           </p>
 
+          <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-stone-100 sm:text-lg sm:leading-8">
+            Other People&apos;s Recipes is a living cookbook preserving the
+            recipes families return to, and the people, memories and traditions
+            behind them.
+          </p>
+
           <div className="mt-9 flex flex-col justify-center gap-4 sm:flex-row sm:gap-5">
             <Link
               href="/family-cookbook"
