@@ -7,6 +7,45 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 // always know exactly which version of the terms a contributor agreed to.
 const CONSENT_VERSION = "opr-submission-terms-2026-08-03-combined";
 
+// iOS Safari sometimes hands back a file whose reported type (or even
+// extension) is "image/jpeg" while the underlying bytes are still
+// HEIC-encoded — a platform quirk, not something this app's validation can
+// see. Sent as-is, OpenAI's vision model can't decode the real bytes and
+// correctly (per its own "don't invent content" instructions) returns every
+// field as null rather than an error, which looks like a silent failure
+// rather than a rejection. Re-encoding through a canvas first guarantees the
+// server always receives genuine JPEG bytes regardless of the source
+// format or any mislabelling.
+async function reencodeAsJpeg(file: File): Promise<File> {
+  const objectUrl = URL.createObjectURL(file);
+  try {
+    const image = await new Promise<HTMLImageElement>((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = () => reject(new Error("Could not read that image"));
+      img.src = objectUrl;
+    });
+
+    const canvas = document.createElement("canvas");
+    canvas.width = image.naturalWidth;
+    canvas.height = image.naturalHeight;
+    const context = canvas.getContext("2d");
+    if (!context) return file;
+    context.drawImage(image, 0, 0);
+
+    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.92));
+    if (!blob) return file;
+
+    return new File([blob], "recipe-card.jpg", { type: "image/jpeg" });
+  } catch {
+    // If the browser genuinely can't decode it, fall back to the original
+    // file and let the existing server-side error handling take over.
+    return file;
+  } finally {
+    URL.revokeObjectURL(objectUrl);
+  }
+}
+
 type RecipeFormValues = {
   name: string;
   email: string;
@@ -198,7 +237,7 @@ export default function RecipeForm() {
 
     try {
       const formData = new FormData();
-      formData.set("recipeImage", originalRecipe);
+      formData.set("recipeImage", await reencodeAsJpeg(originalRecipe));
       const response = await fetch("/api/recipe-scan", { method: "POST", body: formData });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "We could not read that recipe.");
