@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { CheckIcon, Divider } from "../_components/primitives";
 import { supabase } from "../../../lib/supabase/client";
-import { AttachmentKind } from "../../../lib/media-attachments";
+import { attachmentMetadata, AttachmentKind } from "../../../lib/media-attachments";
 
 // Matches the desktop form's combined agreement (see app/share/RecipeForm.tsx):
 // age 18+, licence to publish, and permission to share identifiable people
@@ -33,7 +33,7 @@ const attachments: { key: AttachmentKey; label: string; accept: string; kind: At
   {
     key: "audioStory",
     label: "Record an audio story",
-    accept: "audio/aac,audio/m4a,audio/mp4,audio/mpeg,audio/ogg,audio/wav,audio/webm,audio/x-m4a",
+    accept: ".m4a,.mp3,.wav,.webm,audio/aac,audio/m4a,audio/mp4,audio/mpeg,audio/ogg,audio/wav,audio/webm,audio/x-m4a",
     kind: "audio",
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -80,10 +80,20 @@ export default function MobileShareForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
+  const [uploadWarnings, setUploadWarnings] = useState<string[]>([]);
 
-  function chooseFile(key: AttachmentKey, event: ChangeEvent<HTMLInputElement>) {
+  function chooseFile(attachment: (typeof attachments)[number], event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
-    setFiles((current) => (file ? { ...current, [key]: file } : current));
+    if (!file) return;
+
+    if (!attachmentMetadata(attachment.kind, file.type, file.name)) {
+      setError(`“${file.name}” is not a supported ${attachment.kind} file.`);
+      event.target.value = "";
+      return;
+    }
+
+    setError("");
+    setFiles((current) => ({ ...current, [attachment.key]: file }));
   }
 
   // The design's minimum disable rule is title+story+agreement; name is also
@@ -95,6 +105,7 @@ export default function MobileShareForm() {
     if (!canSubmit) return;
     setIsSubmitting(true);
     setError("");
+    setUploadWarnings([]);
 
     try {
       // Upload attachments straight from the browser to Supabase Storage.
@@ -106,6 +117,7 @@ export default function MobileShareForm() {
       // a short-lived signed URL minted server-side, rather than a direct
       // anon-key write against the bucket.
       const paths: Partial<Record<AttachmentKey, string>> = {};
+      const warnings: string[] = [];
       for (const attachment of attachments) {
         const file = files[attachment.key];
         if (!file) continue;
@@ -117,21 +129,24 @@ export default function MobileShareForm() {
             kind: attachment.kind,
             size: file.size,
             type: file.type,
+            name: file.name,
             submissionToken,
           }),
         });
         if (!urlResponse.ok) {
           const payload = await urlResponse.json().catch(() => null);
-          throw new Error(`We couldn't upload "${attachment.label.toLowerCase()}" — ${payload?.error || "please try again"}`);
+          warnings.push(`We couldn't upload “${file.name}” (${payload?.error || "please try again"}).`);
+          continue;
         }
-        const { path, token } = await urlResponse.json();
+        const { path, token, contentType } = await urlResponse.json();
 
         const { error: uploadError } = await supabase.storage
           .from("recipe-uploads")
-          .uploadToSignedUrl(path, token, file, { contentType: file.type });
+          .uploadToSignedUrl(path, token, file, { contentType });
 
         if (uploadError) {
-          throw new Error(`We couldn't upload "${attachment.label.toLowerCase()}" — ${uploadError.message}`);
+          warnings.push(`We couldn't upload “${file.name}” (${uploadError.message}).`);
+          continue;
         }
         paths[attachment.key] = path;
       }
@@ -159,6 +174,7 @@ export default function MobileShareForm() {
         throw new Error(payload?.error || "failed");
       }
 
+      setUploadWarnings(warnings);
       setSubmitted(true);
     } catch (submitError) {
       setError(
@@ -179,6 +195,12 @@ export default function MobileShareForm() {
         <p className="max-w-[26ch] text-[15px] opacity-80">
           Your family&apos;s story is now with the OPR kitchen — we&apos;ll be in touch before it&apos;s published.
         </p>
+        {uploadWarnings.length ? (
+          <div className="mt-5 border border-amber-700/50 bg-[#FFF3DF] p-4 text-left text-sm text-amber-900">
+            <p className="font-semibold">Your recipe was saved, but:</p>
+            {uploadWarnings.map((warning) => <p key={warning} className="mt-1">{warning}</p>)}
+          </div>
+        ) : null}
         <button
           type="button"
           onClick={() => {
@@ -189,6 +211,7 @@ export default function MobileShareForm() {
             setAgreementAccepted(false);
             setMarketing(false);
             setFiles({});
+            setUploadWarnings([]);
             setSubmitted(false);
           }}
           className="mt-6 border border-[#123C39] px-5 py-3 text-sm font-medium transition hover:bg-[#123C39] hover:text-[#EED8B2]"
@@ -236,7 +259,7 @@ export default function MobileShareForm() {
             >
               {attachment.icon}
               <span className="flex-1 truncate">{file ? file.name : attachment.label}</span>
-              <input type="file" accept={attachment.accept} onChange={(e) => chooseFile(attachment.key, e)} className="hidden" />
+              <input type="file" accept={attachment.accept} onChange={(e) => chooseFile(attachment, e)} className="hidden" />
             </label>
           );
         })}
