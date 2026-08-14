@@ -42,9 +42,49 @@ export const attachmentLimits: Record<AttachmentKind, { maxSize: number; types: 
 };
 
 export function normaliseMimeType(type: string) {
-  return type.split(";", 1)[0].toLowerCase();
+  return type.split(";", 1)[0].trim().toLowerCase();
 }
 
-export function extensionFor(kind: AttachmentKind, type: string): string | null {
-  return attachmentLimits[kind].types[normaliseMimeType(type)] ?? null;
+const canonicalMimeTypes: Record<AttachmentKind, Record<string, string>> = {
+  dish: { jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", webp: "image/webp" },
+  portrait: { jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", webp: "image/webp" },
+  original: {
+    jpg: "image/jpeg",
+    jpeg: "image/jpeg",
+    png: "image/png",
+    webp: "image/webp",
+    heic: "image/heic",
+    heif: "image/heif",
+  },
+  audio: {
+    aac: "audio/aac",
+    m4a: "audio/mp4",
+    mp3: "audio/mpeg",
+    ogg: "audio/ogg",
+    wav: "audio/wav",
+    webm: "audio/webm",
+  },
+  video: { mp4: "video/mp4", mov: "video/quicktime", webm: "video/webm" },
+};
+
+export function attachmentMetadata(kind: AttachmentKind, type: string, fileName = "") {
+  const normalisedType = normaliseMimeType(type);
+  const typeExtension = attachmentLimits[kind].types[normalisedType];
+  if (typeExtension) {
+    return { extension: typeExtension, contentType: normalisedType };
+  }
+
+  // iOS Safari sometimes supplies an empty type (or application/octet-stream)
+  // for recordings selected from Files/Voice Memos. The filename remains
+  // reliable, so fall back to the allowlisted extension rather than rejecting
+  // a valid recording solely because WebKit omitted its MIME metadata.
+  const nameExtension = fileName.toLowerCase().match(/\.([a-z0-9]+)$/)?.[1] ?? "";
+  const inferredType = canonicalMimeTypes[kind][nameExtension];
+  if (!inferredType) return null;
+
+  return { extension: attachmentLimits[kind].types[inferredType], contentType: inferredType };
+}
+
+export function extensionFor(kind: AttachmentKind, type: string, fileName = ""): string | null {
+  return attachmentMetadata(kind, type, fileName)?.extension ?? null;
 }
