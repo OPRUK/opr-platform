@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Navigation from "../components/Navigation";
+import { buildMetadata } from "../../lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: "Terms of Use",
   description: "Terms covering use of Other People's Recipes and recipe submissions.",
-  alternates: { canonical: "/terms" },
-};
+  path: "/terms",
+});
 
 const effectiveDate = "5 August 2026";
 

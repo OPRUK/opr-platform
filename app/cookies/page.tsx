@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Navigation from "../components/Navigation";
+import { buildMetadata } from "../../lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: "Cookie Notice",
   description: "How Other People's Recipes uses cookies and privacy-focused analytics.",
-  alternates: { canonical: "/cookies" },
-};
+  path: "/cookies",
+});
 
 export default function CookieNoticePage() {
   return (

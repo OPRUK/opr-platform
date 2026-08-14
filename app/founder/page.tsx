@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import Navigation from "../components/Navigation";
+import { buildMetadata } from "../../lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: "The Founder's Letter",
   description:
     "An idea written down in 2000, finally built: why OPR exists, in Chaten's own words.",
-  alternates: { canonical: "/founder" },
-};
+  path: "/founder",
+});
 
 export default function FounderPage() {
   return (
