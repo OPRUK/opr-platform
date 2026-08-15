@@ -174,8 +174,8 @@ export default async function RecipePage({
         ) : null}
       </section>
 
-      <section className="mx-auto grid max-w-6xl gap-14 px-6 py-20 md:grid-cols-[1.1fr_0.9fr] md:px-8">
-        <article className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-12">
+      <section className="mx-auto max-w-4xl space-y-8 px-6 py-12 md:px-8 md:py-16">
+        <article className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-10">
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
             The story
           </p>
@@ -187,7 +187,7 @@ export default async function RecipePage({
           </p>
         </article>
 
-        <aside className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-12">
+        <aside className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-10">
           <div className="mb-8 flex items-start gap-3">
             <Image
               src={recipe.image}

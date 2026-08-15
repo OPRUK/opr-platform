@@ -192,8 +192,8 @@ export default async function CommunityRecipePage({
         <h1 className="font-display mx-auto mt-5 max-w-4xl text-5xl font-bold leading-tight md:text-7xl">{recipe.title}</h1>
         <p className="mt-6 text-sm uppercase tracking-[0.25em] text-stone-300">Shared by {recipe.name}{recipe.location ? ` · ${recipe.location}` : ""}</p>
       </section>
-      <section className="mx-auto grid max-w-6xl gap-14 px-6 py-20 md:grid-cols-[1.1fr_0.9fr] md:px-8">
-        <article className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-12">
+      <section className="mx-auto max-w-4xl space-y-8 px-6 py-12 md:px-8 md:py-16">
+        <article className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-10">
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">The story</p>
           <p className="mt-7 text-2xl leading-relaxed">“{recipe.story}”</p>
           {contributorPhotoUrl ? (
@@ -215,7 +215,7 @@ export default async function CommunityRecipePage({
           ) : null}
           <p className="mt-10 border-t border-[#D1AD75] pt-6 text-sm italic text-stone-600">Shared with the Other People&apos;s Recipes community.</p>
         </article>
-        <aside className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-12">
+        <aside className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-10">
           <div className="mb-8 flex items-start gap-3">
             {imageUrl ? <Image src={imageUrl} alt={recipe.title} width={800} height={600} unoptimized className="min-w-0 flex-1 aspect-[4/3] rounded-2xl object-cover" /> : <div className="flex aspect-[4/3] min-w-0 flex-1 items-center justify-center rounded-2xl bg-[#DDBB82] px-6 text-center font-bold">A treasured family recipe</div>}
             <RecipeActions title={recipe.title} imageUrl={imageUrl} />
