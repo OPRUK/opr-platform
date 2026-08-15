@@ -216,7 +216,10 @@ export default async function CommunityRecipePage({
           <p className="mt-10 border-t border-[#D1AD75] pt-6 text-sm italic text-stone-600">Shared with the Other People&apos;s Recipes community.</p>
         </article>
         <aside className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-12">
-          {imageUrl ? <Image src={imageUrl} alt={recipe.title} width={800} height={600} unoptimized className="mb-8 aspect-[4/3] w-full rounded-2xl object-cover" /> : null}
+          <div className="mb-8 flex items-start gap-3">
+            {imageUrl ? <Image src={imageUrl} alt={recipe.title} width={800} height={600} unoptimized className="min-w-0 flex-1 aspect-[4/3] rounded-2xl object-cover" /> : <div className="flex aspect-[4/3] min-w-0 flex-1 items-center justify-center rounded-2xl bg-[#DDBB82] px-6 text-center font-bold">A treasured family recipe</div>}
+            <RecipeActions title={recipe.title} imageUrl={imageUrl} />
+          </div>
           <p className="text-sm uppercase tracking-[0.25em] text-amber-700">{recipe.category}</p>
           {recipe.servings ? <p className="mt-2 text-sm text-stone-600">Serves {recipe.servings}</p> : null}
           {recipe.prep_time_minutes || recipe.cook_time_minutes ? (
@@ -294,7 +297,6 @@ export default async function CommunityRecipePage({
       ) : null}
       <FamiliesWhoMadeThis cooks={communityCooks} recipeTitle={recipe.title} />
       <CommunityCookForm recipeId={recipe.id} recipeTitle={recipe.title} />
-      <RecipeActions title={recipe.title} imageUrl={imageUrl} />
       <section className="px-6 py-20 text-center">
         <Link
           href="/family-cookbook"

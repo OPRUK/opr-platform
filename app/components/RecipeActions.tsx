@@ -142,54 +142,56 @@ export default function RecipeActions({
     }, "image/png");
   }
 
+  const iconButtonClass =
+    "flex h-11 w-11 items-center justify-center rounded-full border border-[#D1AD75] bg-[#FFF9EC] text-[#123C39] shadow-sm transition hover:-translate-y-0.5 hover:border-[#123C39] hover:bg-[#123C39] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#123C39]";
+
   return (
-    <section className="bg-[#EED8B2] px-6 py-16 text-center print:hidden">
-      <div className="mx-auto max-w-3xl rounded-3xl border border-[#D1AD75]/80 bg-[#FFF3DF] px-6 py-10 shadow-lg shadow-[#1C5A50]/10 md:px-10">
-        <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
-          Pass it on
-        </p>
-        <h2 className="mt-4 text-3xl font-bold md:text-4xl">
-          A good recipe is better when it&apos;s shared.
-        </h2>
-        <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <button
-            type="button"
-            onClick={shareOnWhatsApp}
-            className="rounded-full bg-[#2E7D4F] px-5 py-3 text-sm font-medium text-white transition hover:scale-105"
-          >
-            WhatsApp
-          </button>
-          <button
-            type="button"
-            onClick={shareOnFacebook}
-            className="rounded-full bg-[#4267B2] px-5 py-3 text-sm font-medium text-white transition hover:scale-105"
-          >
-            Facebook
-          </button>
-          <button
-            type="button"
-            onClick={() => void copyLink()}
-            className="rounded-full border border-[#123C39] px-5 py-3 text-sm font-medium transition hover:bg-[#123C39] hover:text-white"
-          >
-            {copied ? "Link copied" : "Copy link"}
-          </button>
-          <button
-            type="button"
-            onClick={() => window.print()}
-            className="rounded-full border border-[#123C39] px-5 py-3 text-sm font-medium transition hover:bg-[#123C39] hover:text-white"
-          >
-            Print recipe
-          </button>
-          <button
-            type="button"
-            onClick={() => void downloadInstagramCard()}
-            className="rounded-full bg-[#9A622A] px-5 py-3 text-sm font-medium text-white transition hover:scale-105 hover:bg-[#7A481B]"
-          >
-            Instagram card
-          </button>
-        </div>
-        {instagramMessage ? <p className="mt-5 text-sm text-stone-600">{instagramMessage}</p> : null}
+    <div className="shrink-0 print:hidden" aria-label="Share and save this recipe">
+      <p className="mb-2 text-center text-[10px] font-bold uppercase tracking-[0.18em] text-amber-700">
+        Share
+      </p>
+      <div className="flex flex-col gap-2">
+        <button type="button" onClick={shareOnWhatsApp} className={iconButtonClass} aria-label="Share on WhatsApp" title="Share on WhatsApp">
+          <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 11.5a8.4 8.4 0 0 1-9 8.5 9.5 9.5 0 0 1-4-.9L3 21l1.8-4.8A8.5 8.5 0 1 1 21 11.5Z" />
+            <path d="M8.6 8.3c.4 3.1 2 4.8 5.2 5.4" />
+          </svg>
+        </button>
+        <button type="button" onClick={shareOnFacebook} className={iconButtonClass} aria-label="Share on Facebook" title="Share on Facebook">
+          <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="18" cy="5" r="2.5" />
+            <circle cx="6" cy="12" r="2.5" />
+            <circle cx="18" cy="19" r="2.5" />
+            <path d="m8.2 10.8 7.6-4.5M8.2 13.2l7.6 4.5" />
+          </svg>
+        </button>
+        <button type="button" onClick={() => void copyLink()} className={iconButtonClass} aria-label={copied ? "Link copied" : "Copy recipe link"} title={copied ? "Link copied" : "Copy recipe link"}>
+          {copied ? (
+            <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="m5 12 4 4L19 6" />
+            </svg>
+          ) : (
+            <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M10 13a5 5 0 0 0 7.1.1l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1" />
+              <path d="M14 11a5 5 0 0 0-7.1-.1l-2 2A5 5 0 0 0 12 20l1.1-1.1" />
+            </svg>
+          )}
+        </button>
+        <button type="button" onClick={() => window.print()} className={iconButtonClass} aria-label="Print recipe" title="Print recipe">
+          <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+            <path d="M6 14h12v7H6z" />
+          </svg>
+        </button>
+        <button type="button" onClick={() => void downloadInstagramCard()} className={iconButtonClass} aria-label="Download social media card" title="Download social media card">
+          <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <path d="m21 15-5-5L5 21M12 17v4m-2-2 2 2 2-2" />
+          </svg>
+        </button>
       </div>
-    </section>
+      <p className="sr-only" aria-live="polite">{instagramMessage}</p>
+    </div>
   );
 }

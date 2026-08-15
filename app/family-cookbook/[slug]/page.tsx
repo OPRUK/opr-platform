@@ -188,13 +188,16 @@ export default async function RecipePage({
         </article>
 
         <aside className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-12">
-          <Image
-            src={recipe.image}
-            alt={recipe.title}
-            width={1200}
-            height={900}
-            className="mb-8 aspect-[4/3] w-full rounded-2xl object-cover"
-          />
+          <div className="mb-8 flex items-start gap-3">
+            <Image
+              src={recipe.image}
+              alt={recipe.title}
+              width={1200}
+              height={900}
+              className="min-w-0 flex-1 aspect-[4/3] rounded-2xl object-cover"
+            />
+            <RecipeActions title={recipe.title} imageUrl={recipe.image} />
+          </div>
           <h2 className="text-3xl font-bold">What you&apos;ll need</h2>
           <ul className="mt-7 space-y-4 leading-7 text-stone-700">
             {recipe.ingredients.map((ingredient) => (
@@ -265,7 +268,6 @@ export default async function RecipePage({
       <FamiliesWhoMadeThis cooks={communityCooks} recipeTitle={recipe.title} />
       <CommunityCookForm recipeSlug={recipe.slug} recipeTitle={recipe.title} />
 
-      <RecipeActions title={recipe.title} imageUrl={recipe.image} />
 
       <section className="px-6 py-20 text-center">
         <Link
