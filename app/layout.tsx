@@ -1,8 +1,35 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
+import { Allura, Cabin, Caveat, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import { SITE_NAME, SITE_URL, absoluteUrl } from "../lib/site";
 import SiteFooter from "./components/SiteFooter";
+
+const cabin = Cabin({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-cabin",
+});
+
+const cormorantGaramond = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-cormorant-garamond",
+});
+
+const caveat = Caveat({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-caveat",
+});
+
+const allura = Allura({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-allura",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -59,15 +86,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full antialiased">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Allura&family=Cabin:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Caveat:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html
+      lang="en"
+      className={`${cabin.variable} ${cormorantGaramond.variable} ${caveat.variable} ${allura.variable} h-full antialiased`}
+    >
       <body className="min-h-full flex flex-col">
         {children}
         <SiteFooter />

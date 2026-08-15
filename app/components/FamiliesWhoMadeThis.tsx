@@ -21,7 +21,7 @@ export default function FamiliesWhoMadeThis({ cooks, recipeTitle }: { cooks: Com
             <article key={cook.id} className="rounded-3xl bg-white/10 p-6">
               <div className="flex items-center gap-4">
                 {cook.photoUrl ? (
-                  <img src={cook.photoUrl} alt={`${cook.name}'s version of ${recipeTitle}`} className="h-16 w-16 rounded-full object-cover" />
+                  <Image src={cook.photoUrl} alt={`${cook.name}'s version of ${recipeTitle}`} width={64} height={64} unoptimized className="h-16 w-16 rounded-full object-cover" />
                 ) : (
                   <div className="flex h-16 w-16 items-center justify-center rounded-full bg-amber-300 font-bold text-[#123C39]">{cook.name.charAt(0).toUpperCase()}</div>
                 )}
@@ -35,3 +35,4 @@ export default function FamiliesWhoMadeThis({ cooks, recipeTitle }: { cooks: Com
     </section>
   );
 }
+import Image from "next/image";

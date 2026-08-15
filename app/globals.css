@@ -3,10 +3,10 @@
 :root {
   --background: #eed8b2;
   --foreground: #4a4232;
-  --font-brand: "Cabin", "Gill Sans MT", "Gill Sans", Avenir, Corbel, Arial, sans-serif;
-  --font-display: "Cormorant Garamond", Didot, "Bodoni MT", Georgia, "Times New Roman", serif;
-  --font-founder-hand: "Caveat";
-  --font-founder-signature: "Allura";
+  --font-brand: var(--font-cabin), "Gill Sans MT", "Gill Sans", Avenir, Corbel, Arial, sans-serif;
+  --font-display: var(--font-cormorant-garamond), Didot, "Bodoni MT", Georgia, "Times New Roman", serif;
+  --font-founder-hand: var(--font-caveat);
+  --font-founder-signature: var(--font-allura);
 }
 
 @theme inline {

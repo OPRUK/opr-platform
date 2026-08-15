@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import Navigation from "../../../components/Navigation";
 import RecipeActions from "../../../components/RecipeActions";
 import CommunityCookForm from "../../../components/CommunityCookForm";
@@ -197,9 +198,12 @@ export default async function CommunityRecipePage({
           <p className="mt-7 text-2xl leading-relaxed">“{recipe.story}”</p>
           {contributorPhotoUrl ? (
             <div className="mt-10 flex items-center gap-4 border-t border-[#D1AD75] pt-6">
-              <img
+              <Image
                 src={contributorPhotoUrl}
                 alt={`${recipe.name}, who shared ${recipe.title}`}
+                width={64}
+                height={64}
+                unoptimized
                 className="h-16 w-16 rounded-full object-cover shadow-md"
               />
               <div>
@@ -212,7 +216,7 @@ export default async function CommunityRecipePage({
           <p className="mt-10 border-t border-[#D1AD75] pt-6 text-sm italic text-stone-600">Shared with the Other People&apos;s Recipes community.</p>
         </article>
         <aside className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-12">
-          {imageUrl ? <img src={imageUrl} alt={recipe.title} className="mb-8 aspect-[4/3] w-full rounded-2xl object-cover" /> : null}
+          {imageUrl ? <Image src={imageUrl} alt={recipe.title} width={800} height={600} unoptimized className="mb-8 aspect-[4/3] w-full rounded-2xl object-cover" /> : null}
           <p className="text-sm uppercase tracking-[0.25em] text-amber-700">{recipe.category}</p>
           {recipe.servings ? <p className="mt-2 text-sm text-stone-600">Serves {recipe.servings}</p> : null}
           {recipe.prep_time_minutes || recipe.cook_time_minutes ? (
@@ -253,9 +257,12 @@ export default async function CommunityRecipePage({
       {originalRecipeImageUrl ? (
         <section className="bg-[#F4DDAE]/60 px-6 py-20">
           <div className="mx-auto grid max-w-5xl items-center gap-10 rounded-3xl bg-[#FFF3DF] p-7 shadow-xl shadow-[#1C5A50]/10 md:grid-cols-[0.85fr_1.15fr] md:p-10">
-            <img
+            <Image
               src={originalRecipeImageUrl}
               alt={`The original handwritten recipe for ${recipe.title}`}
+              width={1200}
+              height={1600}
+              unoptimized
               className="max-h-[36rem] w-full rounded-2xl object-contain shadow-lg"
             />
             <div>

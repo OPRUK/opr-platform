@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import NextImage from "next/image";
 import { FormEvent, useEffect, useRef, useState } from "react";
 
 // Bump this whenever the submission licence wording on /terms changes, so we
@@ -701,9 +702,12 @@ export default function RecipeForm() {
           </p>
           {photoPreview ? (
             <div className="mt-5 flex items-start gap-4">
-              <img
+              <NextImage
                 src={photoPreview}
                 alt="Recipe photo preview"
+                width={112}
+                height={112}
+                unoptimized
                 className="h-28 w-28 rounded-xl object-cover shadow-md"
               />
               <button
@@ -734,9 +738,12 @@ export default function RecipeForm() {
           </p>
           {contributorPhotoPreview ? (
             <div className="mt-5 flex items-center gap-4">
-              <img
+              <NextImage
                 src={contributorPhotoPreview}
                 alt="Cook photo preview"
+                width={96}
+                height={96}
+                unoptimized
                 className="h-24 w-24 rounded-full object-cover shadow-md"
               />
               <button
@@ -774,9 +781,12 @@ export default function RecipeForm() {
           {originalRecipe ? (
             <div className="mt-5 flex items-start gap-4">
               {originalRecipePreview ? (
-                <img
+                <NextImage
                   src={originalRecipePreview}
                   alt="Original recipe preview"
+                  width={112}
+                  height={112}
+                  unoptimized
                   className="h-28 w-28 rounded-xl object-cover shadow-md"
                 />
               ) : null}

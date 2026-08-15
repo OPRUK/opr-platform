@@ -1,6 +1,7 @@
 "use client";
 
 import type { Session } from "@supabase/supabase-js";
+import Image from "next/image";
 import { FormEvent, useEffect, useState } from "react";
 import { featuredRecipes } from "../../lib/recipes";
 import { supabase } from "../../lib/supabase/client";
@@ -633,9 +634,12 @@ export default function AdminDashboard() {
                 {selectedPhotoUrl ? (
                   <article>
                     <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#123C39]">Recipe photo</h3>
-                    <img
+                    <Image
                       src={selectedPhotoUrl}
                       alt={selectedSubmission.title}
+                      width={1200}
+                      height={900}
+                      unoptimized
                       className="mt-4 max-h-[28rem] w-full rounded-2xl object-cover shadow-lg"
                     />
                   </article>
@@ -644,9 +648,12 @@ export default function AdminDashboard() {
                   <article>
                     <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#123C39]">Meet the cook</h3>
                     <div className="mt-4 flex items-center gap-4">
-                      <img
+                      <Image
                         src={selectedContributorPhotoUrl}
                         alt={`${selectedSubmission.name}, who shared ${selectedSubmission.title}`}
+                        width={96}
+                        height={96}
+                        unoptimized
                         className="h-24 w-24 rounded-full object-cover shadow-lg"
                       />
                       <p className="font-medium text-[#123C39]">{selectedSubmission.name}</p>
@@ -656,9 +663,12 @@ export default function AdminDashboard() {
                 {selectedOriginalRecipeUrl ? (
                   <article>
                     <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#123C39]">The original recipe</h3>
-                    <img
+                    <Image
                       src={selectedOriginalRecipeUrl}
                       alt={`The original recipe for ${selectedSubmission.title}`}
+                      width={1200}
+                      height={1600}
+                      unoptimized
                       className="mt-4 max-h-[36rem] w-full rounded-2xl object-contain shadow-lg"
                     />
                   </article>
@@ -737,7 +747,7 @@ export default function AdminDashboard() {
               return (
                 <article key={cook.id} className="flex flex-col gap-5 px-6 py-6 md:flex-row md:items-center md:justify-between md:px-8">
                   <div className="flex min-w-0 items-center gap-4">
-                    {photoUrl ? <img src={photoUrl} alt="" className="h-16 w-16 shrink-0 rounded-full object-cover" /> : <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#F4DDAE] font-bold">{cook.name.charAt(0).toUpperCase()}</div>}
+                    {photoUrl ? <Image src={photoUrl} alt="" width={64} height={64} unoptimized className="h-16 w-16 shrink-0 rounded-full object-cover" /> : <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#F4DDAE] font-bold">{cook.name.charAt(0).toUpperCase()}</div>}
                     <div>
                       <p className="font-bold">{cook.name} <span className="font-normal text-stone-500">cooked {cook.recipe_submissions?.title ?? cook.recipe_title ?? "an OPR recipe"}</span></p>
                       {cook.note ? <p className="mt-1 max-w-2xl text-sm leading-6 text-stone-700">“{cook.note}”</p> : <p className="mt-1 text-sm text-stone-500">No note supplied.</p>}

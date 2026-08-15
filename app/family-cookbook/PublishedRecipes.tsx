@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabase/client";
 import { WORLD_LAND_PATH } from "./world-map-path";
@@ -465,9 +466,12 @@ export default function PublishedRecipes({
               className="group flex flex-col overflow-hidden bg-[#FFF3DF] transition-colors duration-300 hover:bg-[#FBEBC8]"
             >
               {recipe.imageUrl ? (
-                <img
+                <Image
                   src={recipe.imageUrl}
                   alt={recipe.title}
+                  width={800}
+                  height={600}
+                  unoptimized
                   className="aspect-[4/3] w-full object-cover grayscale-[15%] transition duration-500 group-hover:grayscale-0"
                 />
               ) : (
