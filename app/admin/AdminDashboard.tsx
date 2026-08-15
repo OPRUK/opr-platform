@@ -79,6 +79,7 @@ export default function AdminDashboard() {
   const [selectedSubmission, setSelectedSubmission] = useState<Submission | null>(null);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [exportingFoundingTable, setExportingFoundingTable] = useState(false);
 
   useEffect(() => {
     async function checkSession() {
@@ -179,6 +180,36 @@ export default function AdminDashboard() {
         ? "We could not send the sign-in email. Please try again."
         : "Check your inbox for your secure OPR sign-in link.",
     );
+  }
+
+  async function downloadFoundingTable() {
+    setMessage("");
+    setExportingFoundingTable(true);
+
+    try {
+      const response = await adminRequest("/api/admin/founding-table");
+      if (!response.ok) {
+        const payload = await response.json().catch(() => null);
+        setMessage(payload?.error ?? "The Founding Table spreadsheet could not be downloaded.");
+        return;
+      }
+
+      const blob = await response.blob();
+      const objectUrl = URL.createObjectURL(blob);
+      const disposition = response.headers.get("content-disposition") ?? "";
+      const filename = disposition.match(/filename="([^"]+)"/)?.[1] ?? "opr-founding-table.xlsx";
+      const link = document.createElement("a");
+      link.href = objectUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(objectUrl), 1_000);
+    } catch {
+      setMessage("The Founding Table spreadsheet could not be downloaded.");
+    } finally {
+      setExportingFoundingTable(false);
+    }
   }
 
   async function updateStatus(id: number, status: SubmissionStatus) {
@@ -469,13 +500,23 @@ export default function AdminDashboard() {
             {submissions.length} {submissions.length === 1 ? "recipe" : "recipes"} shared with OPR.
           </p>
         </div>
-        <button
-          type="button"
-          onClick={() => void supabase.auth.signOut()}
-          className="self-start rounded-full border border-[#123C39] px-5 py-2.5 text-sm font-medium transition hover:bg-[#123C39] hover:text-white md:self-auto"
-        >
-          Sign out
-        </button>
+        <div className="flex flex-wrap gap-3 self-start md:self-auto">
+          <button
+            type="button"
+            onClick={() => void downloadFoundingTable()}
+            disabled={exportingFoundingTable}
+            className="rounded-full bg-[#123C39] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#08231F] disabled:cursor-wait disabled:opacity-60"
+          >
+            {exportingFoundingTable ? "Preparing spreadsheet…" : "Download Founding Table (.xlsx)"}
+          </button>
+          <button
+            type="button"
+            onClick={() => void supabase.auth.signOut()}
+            className="rounded-full border border-[#123C39] px-5 py-2.5 text-sm font-medium transition hover:bg-[#123C39] hover:text-white"
+          >
+            Sign out
+          </button>
+        </div>
       </header>
 
       {message ? (
