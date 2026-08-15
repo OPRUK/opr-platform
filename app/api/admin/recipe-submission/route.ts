@@ -1,42 +1,13 @@
-import { createClient } from "@supabase/supabase-js";
-import { getSupabaseAdmin } from "../../../../lib/supabase/admin";
+import { requireAdmin } from "../../../../lib/admin-auth";
 import { copyToPublished } from "../../../../lib/publish-assets";
 import { resolveAssetUrlMap } from "../../../../lib/resolve-asset-urls";
-
-const adminEmail = "chaten@otherpeoplesrecipes.co.uk";
 
 // Use every field that exists on the table. This keeps the private inbox working
 // while optional recipe features are added over time.
 const submissionFields = "*";
 
-async function getAdminClient(request: Request) {
-  const token = request.headers.get("authorization")?.replace("Bearer ", "");
-  const publicUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-
-  if (!token) return { client: null, error: "Your secure sign-in has expired. Please sign out and use a new sign-in link." };
-  if (!publicUrl || !publishableKey) {
-    return { client: null, error: "The private inbox connection is not fully configured." };
-  }
-
-  const authClient = createClient(publicUrl, publishableKey, {
-    auth: { persistSession: false, autoRefreshToken: false },
-  });
-  const { data: authData, error: authError } = await authClient.auth.getUser(token);
-  if (authError || authData.user?.email?.toLowerCase() !== adminEmail) {
-    return { client: null, error: "This secure sign-in is not authorised for the OPR inbox. Please sign out and use the OPR team email." };
-  }
-
-  const client = getSupabaseAdmin();
-  if (!client) {
-    return { client: null, error: "The private inbox connection is not fully configured." };
-  }
-
-  return { client, error: null };
-}
-
 export async function GET(request: Request) {
-  const { client: adminClient, error: accessError } = await getAdminClient(request);
+  const { client: adminClient, error: accessError } = await requireAdmin(request);
   if (!adminClient) return Response.json({ error: accessError }, { status: 401 });
 
   const { data, error } = await adminClient
@@ -70,7 +41,7 @@ export async function GET(request: Request) {
 }
 
 export async function PATCH(request: Request) {
-  const { client: adminClient, error: accessError } = await getAdminClient(request);
+  const { client: adminClient, error: accessError } = await requireAdmin(request);
   if (!adminClient) return Response.json({ error: accessError }, { status: 401 });
 
   try {
@@ -145,7 +116,7 @@ export async function PATCH(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const { client: adminClient, error: accessError } = await getAdminClient(request);
+  const { client: adminClient, error: accessError } = await requireAdmin(request);
   if (!adminClient) return Response.json({ error: accessError }, { status: 401 });
 
   try {

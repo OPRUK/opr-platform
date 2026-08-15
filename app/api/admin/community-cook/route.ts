@@ -1,28 +1,10 @@
-import { createClient } from "@supabase/supabase-js";
-import { getSupabaseAdmin } from "../../../../lib/supabase/admin";
+import { requireAdmin } from "../../../../lib/admin-auth";
 import { copyToPublished } from "../../../../lib/publish-assets";
 import { resolveAssetUrlMap } from "../../../../lib/resolve-asset-urls";
 
-const adminEmail = "chaten@otherpeoplesrecipes.co.uk";
-
-async function getAdminClient(request: Request) {
-  const token = request.headers.get("authorization")?.replace("Bearer ", "");
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-
-  if (!token || !supabaseUrl || !publishableKey) return null;
-  const authClient = createClient(supabaseUrl, publishableKey, {
-    auth: { persistSession: false, autoRefreshToken: false },
-  });
-  const { data } = await authClient.auth.getUser(token);
-  if (data.user?.email?.toLowerCase() !== adminEmail) return null;
-
-  return getSupabaseAdmin();
-}
-
 export async function GET(request: Request) {
-  const adminClient = await getAdminClient(request);
-  if (!adminClient) return Response.json({ error: "Unauthorised" }, { status: 401 });
+  const { client: adminClient, error: accessError } = await requireAdmin(request);
+  if (!adminClient) return Response.json({ error: accessError }, { status: 401 });
 
   const { data, error } = await adminClient
     .from("recipe_community_cooks")
@@ -44,8 +26,8 @@ export async function GET(request: Request) {
 }
 
 export async function PATCH(request: Request) {
-  const adminClient = await getAdminClient(request);
-  if (!adminClient) return Response.json({ error: "Unauthorised" }, { status: 401 });
+  const { client: adminClient, error: accessError } = await requireAdmin(request);
+  if (!adminClient) return Response.json({ error: accessError }, { status: 401 });
   try {
     const { id, isApproved } = await request.json();
     if (!Number.isInteger(id) || typeof isApproved !== "boolean") {
@@ -75,8 +57,8 @@ export async function PATCH(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const adminClient = await getAdminClient(request);
-  if (!adminClient) return Response.json({ error: "Unauthorised" }, { status: 401 });
+  const { client: adminClient, error: accessError } = await requireAdmin(request);
+  if (!adminClient) return Response.json({ error: accessError }, { status: 401 });
   try {
     const { id } = await request.json();
     if (!Number.isInteger(id)) return Response.json({ error: "Invalid community post" }, { status: 400 });
