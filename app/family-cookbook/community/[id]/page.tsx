@@ -187,12 +187,12 @@ export default async function CommunityRecipePage({
         }}
       />
       <Navigation />
-      <section className="bg-[#123C39] px-6 pb-20 pt-40 text-center text-white">
+      <section className="bg-[#123C39] px-6 pb-12 pt-32 text-center text-white">
         <p className="text-sm uppercase tracking-[0.4em] text-amber-300">A page from the community cookbook</p>
-        <h1 className="font-display mx-auto mt-5 max-w-4xl text-5xl font-bold leading-tight md:text-7xl">{recipe.title}</h1>
-        <p className="mt-6 text-sm uppercase tracking-[0.25em] text-stone-300">Shared by {recipe.name}{recipe.location ? ` · ${recipe.location}` : ""}</p>
+        <h1 className="font-display mx-auto mt-3 max-w-4xl text-5xl font-bold leading-tight md:text-7xl">{recipe.title}</h1>
+        <p className="mt-4 text-sm uppercase tracking-[0.25em] text-stone-300">Shared by {recipe.name}{recipe.location ? ` · ${recipe.location}` : ""}</p>
       </section>
-      <section className="mx-auto max-w-4xl space-y-8 px-6 py-12 md:px-8 md:py-16">
+      <section className="mx-auto max-w-7xl space-y-8 px-6 py-12 md:px-8 md:py-16">
         <article className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-10">
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">The story</p>
           <p className="mt-7 text-2xl leading-relaxed">“{recipe.story}”</p>
@@ -215,12 +215,12 @@ export default async function CommunityRecipePage({
           ) : null}
           <p className="mt-10 border-t border-[#D1AD75] pt-6 text-sm italic text-stone-600">Shared with the Other People&apos;s Recipes community.</p>
         </article>
-        <aside className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-10">
+        <aside className="recipe-card-paper w-full p-8 md:p-10">
           <div className="mb-8 flex items-start gap-3">
             {imageUrl ? <Image src={imageUrl} alt={recipe.title} width={800} height={600} unoptimized className="min-w-0 flex-1 aspect-[4/3] rounded-2xl object-cover" /> : <div className="flex aspect-[4/3] min-w-0 flex-1 items-center justify-center rounded-2xl bg-[#DDBB82] px-6 text-center font-bold">A treasured family recipe</div>}
             <RecipeActions title={recipe.title} imageUrl={imageUrl} />
           </div>
-          <p className="text-sm uppercase tracking-[0.25em] text-amber-700">{recipe.category}</p>
+          <p className="text-sm uppercase tracking-[0.25em] text-[#805126]">{recipe.category}</p>
           {recipe.servings ? <p className="mt-2 text-sm text-stone-600">Serves {recipe.servings}</p> : null}
           {recipe.prep_time_minutes || recipe.cook_time_minutes ? (
             <p className="mt-2 text-sm text-stone-600">
@@ -229,9 +229,9 @@ export default async function CommunityRecipePage({
               {recipe.cook_time_minutes ? `Cook ${recipe.cook_time_minutes} min` : null}
             </p>
           ) : null}
-          <h2 className="mt-6 text-3xl font-bold">What you&apos;ll need</h2>
-          <ul className="mt-7 space-y-4 leading-7 text-stone-700">
-            {ingredients.map((ingredient) => <li key={ingredient} className="border-b border-[#E7CEA2] pb-4">{ingredient}</li>)}
+          <h2 className="recipe-card-ingredients mt-6 text-center text-4xl font-semibold text-[#344F50] md:text-5xl">What you&apos;ll need</h2>
+          <ul className="recipe-card-ingredients mt-6 space-y-1.5 text-center text-2xl leading-8 text-[#4B3524] md:text-3xl md:leading-9">
+            {ingredients.map((ingredient) => <li key={ingredient} className="pb-1.5">{ingredient}</li>)}
           </ul>
         </aside>
       </section>
@@ -287,11 +287,11 @@ export default async function CommunityRecipePage({
         </div>
       </section>
       {recipe.cook_notes ? (
-        <section className="bg-[#EED8B2] px-6 py-20">
-          <div className="mx-auto max-w-5xl rounded-[2rem] border border-[#D1AD75] bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/10 md:p-12">
+        <section className="bg-[#EED8B2] px-6 py-10 md:py-12">
+          <div className="mx-auto max-w-5xl rounded-[2rem] border border-[#D1AD75] bg-[#FFF3DF] p-6 shadow-xl shadow-[#1C5A50]/10 md:p-8">
             <p className="text-sm font-bold uppercase tracking-[0.35em] text-[#9A622A]">Cook&apos;s notes &amp; swaps</p>
-            <h2 className="mt-4 text-4xl font-bold text-[#123C39]">A little help from the OPR kitchen</h2>
-            <p className="mt-6 whitespace-pre-wrap text-lg leading-8 text-stone-700">{recipe.cook_notes}</p>
+            <h2 className="mt-3 text-4xl font-bold text-[#123C39]">A little help from the OPR kitchen</h2>
+            <p className="mt-4 whitespace-pre-wrap text-lg leading-8 text-stone-700">{recipe.cook_notes}</p>
           </div>
         </section>
       ) : null}

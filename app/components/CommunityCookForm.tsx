@@ -37,7 +37,7 @@ export default function CommunityCookForm({ recipeId, recipeSlug, recipeTitle }:
   }
 
   return (
-    <section className="bg-[#F4DDAE]/60 px-6 py-20">
+    <section className="bg-[#F4DDAE]/60 px-6 pb-5 pt-4 md:pb-6 md:pt-5">
       <div className="mx-auto grid max-w-5xl gap-10 rounded-[2rem] bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/10 md:grid-cols-[0.85fr_1.15fr] md:p-12">
         <div>
           <p className="text-sm font-bold uppercase tracking-[0.35em] text-[#9A622A]">Families who&apos;ve made this</p>

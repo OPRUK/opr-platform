@@ -157,24 +157,24 @@ export default async function RecipePage({
       />
       <Navigation />
 
-      <section className="bg-[#123C39] px-6 pb-20 pt-40 text-center text-white">
-        <p className="mb-5 text-sm uppercase tracking-[0.4em] text-amber-300">
+      <section className="bg-[#123C39] px-6 pb-12 pt-32 text-center text-white">
+        <p className="mb-3 text-sm uppercase tracking-[0.4em] text-amber-300">
           A page from the family cookbook
         </p>
         <h1 className="font-display mx-auto max-w-4xl text-5xl font-bold leading-tight md:text-7xl">
           {recipe.title}
         </h1>
-        <p className="mt-6 text-sm uppercase tracking-[0.25em] text-stone-300">
+        <p className="mt-4 text-sm uppercase tracking-[0.25em] text-stone-300">
           {recipe.place}
         </p>
         {metaStripItems.length > 0 ? (
-          <p className="mt-4 text-sm uppercase tracking-[0.2em] text-amber-200">
+          <p className="mt-3 text-sm uppercase tracking-[0.2em] text-amber-200">
             {metaStripItems.join(" · ")}
           </p>
         ) : null}
       </section>
 
-      <section className="mx-auto max-w-4xl space-y-8 px-6 py-12 md:px-8 md:py-16">
+      <section className="mx-auto max-w-7xl space-y-8 px-6 py-12 md:px-8 md:py-16">
         <article className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-10">
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
             The story
@@ -187,7 +187,7 @@ export default async function RecipePage({
           </p>
         </article>
 
-        <aside className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-10">
+        <aside className="recipe-card-paper w-full p-8 md:p-10">
           <div className="mb-8 flex items-start gap-3">
             <Image
               src={recipe.image}
@@ -198,10 +198,10 @@ export default async function RecipePage({
             />
             <RecipeActions title={recipe.title} imageUrl={recipe.image} />
           </div>
-          <h2 className="text-3xl font-bold">What you&apos;ll need</h2>
-          <ul className="mt-7 space-y-4 leading-7 text-stone-700">
+          <h2 className="recipe-card-ingredients text-center text-4xl font-semibold text-[#344F50] md:text-5xl">What you&apos;ll need</h2>
+          <ul className="recipe-card-ingredients mt-6 space-y-1.5 text-center text-2xl leading-8 text-[#4B3524] md:text-3xl md:leading-9">
             {recipe.ingredients.map((ingredient) => (
-              <li key={ingredient} className="border-b border-[#E7CEA2] pb-4">
+              <li key={ingredient} className="pb-1.5">
                 {ingredient}
               </li>
             ))}
@@ -228,21 +228,21 @@ export default async function RecipePage({
       </section>
 
       {recipe.notes?.length ? (
-        <section className="bg-[#EED8B2] px-6 py-20">
-          <div className="mx-auto max-w-5xl rounded-[2rem] border border-[#D1AD75] bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/10 md:p-12">
+        <section className="bg-[#EED8B2] px-6 pb-4 pt-10 md:pb-5 md:pt-12">
+          <div className="mx-auto max-w-5xl rounded-[2rem] border border-[#D1AD75] bg-[#FFF3DF] p-6 shadow-xl shadow-[#1C5A50]/10 md:p-8">
             <p className="text-sm font-bold uppercase tracking-[0.35em] text-[#9A622A]">
               Cook&apos;s notes &amp; swaps
             </p>
-            <h2 className="mt-4 text-4xl font-bold text-[#123C39]">
+            <h2 className="mt-3 text-4xl font-bold text-[#123C39]">
               A little help from the OPR kitchen
             </h2>
-            <p className="mt-4 max-w-3xl text-lg leading-8 text-stone-700">
+            <p className="mt-3 max-w-3xl text-lg leading-8 text-stone-700">
               These are optional pointers for making the recipe your own while
               keeping the spirit of the original.
             </p>
-            <div className="mt-9 grid gap-5 md:grid-cols-2">
+            <div className="mt-6 grid gap-4 md:grid-cols-2">
               {recipe.notes.map((note) => (
-                <article key={note.title} className="rounded-2xl border border-[#E7CEA2] bg-[#FFF9EC] p-6">
+                <article key={note.title} className="rounded-2xl border border-[#E7CEA2] bg-[#FFF9EC] p-5">
                   <h3 className="text-xl font-bold text-[#123C39]">{note.title}</h3>
                   <p className="mt-3 leading-7 text-stone-700">{note.text}</p>
                 </article>
@@ -269,7 +269,7 @@ export default async function RecipePage({
       <CommunityCookForm recipeSlug={recipe.slug} recipeTitle={recipe.title} />
 
 
-      <section className="px-6 py-20 text-center">
+      <section className="px-6 py-8 text-center md:py-10">
         <Link
           href="/family-cookbook"
           className="inline-block rounded-full bg-[#123C39] px-8 py-4 text-lg font-medium text-white transition hover:scale-105"
