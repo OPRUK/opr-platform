@@ -44,6 +44,51 @@ body {
   background-size: 9px 9px;
 }
 
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: 1rem;
+  z-index: 1000;
+  transform: translateY(-200%);
+  border-radius: 0.75rem;
+  background: #fff9ec;
+  color: #123c39;
+  padding: 0.8rem 1rem;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(8, 35, 31, 0.3);
+  transition: transform 150ms ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+:where(a, button, input, textarea, select, summary):focus-visible {
+  outline: 3px solid #7a461f;
+  outline-offset: 3px;
+}
+
+:where(input, textarea, select)::placeholder {
+  color: #57534e;
+  opacity: 1;
+}
+
+.text-amber-700 {
+  color: #75451f;
+}
+
+main:focus {
+  outline: none;
+}
+
+main {
+  scroll-margin-top: 6rem;
+}
+
+a[href^="mailto:"] {
+  overflow-wrap: anywhere;
+}
+
 .font-brand {
   font-family: var(--font-brand);
 }

@@ -146,7 +146,7 @@ export default function RecipeActions({
     "flex h-11 w-11 items-center justify-center rounded-full border border-[#D1AD75] bg-[#FFF9EC] text-[#123C39] shadow-sm transition hover:-translate-y-0.5 hover:border-[#123C39] hover:bg-[#123C39] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#123C39]";
 
   return (
-    <div className="shrink-0 print:hidden" aria-label="Share and save this recipe">
+    <div className="shrink-0 print:hidden" role="group" aria-label="Share and save this recipe">
       <p className="mb-2 text-center text-[10px] font-bold uppercase tracking-[0.18em] text-amber-700">
         Share
       </p>

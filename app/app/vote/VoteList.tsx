@@ -89,7 +89,7 @@ export default function VoteList() {
           </div>
         );
       })}
-      {error ? <p className="mt-4 text-sm text-red-800">{error}</p> : null}
+      {error ? <p role="alert" className="mt-4 text-sm text-red-800">{error}</p> : null}
     </div>
   );
 }

@@ -89,7 +89,7 @@ export default function FoundingTableForm() {
         Your details are kept securely for the Founding Table. You can unsubscribe from optional news at any time. Read our{" "}
         <Link href="/privacy" className="underline underline-offset-2">Privacy Notice</Link>.
       </p>
-      {message ? <p className="text-center text-sm text-[#FFE4A3]">{message}</p> : null}
+      {message ? <p role="status" aria-live="polite" className="text-center text-sm text-[#FFE4A3]">{message}</p> : null}
     </form>
   );
 }

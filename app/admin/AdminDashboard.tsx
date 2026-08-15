@@ -431,12 +431,12 @@ export default function AdminDashboard() {
     .sort(([, firstVotes], [, secondVotes]) => secondVotes - firstVotes);
 
   if (loading && !session) {
-    return <main className="min-h-screen bg-[#EED8B2]" />;
+    return <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2]" />;
   }
 
   if (!session) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#EED8B2] px-6 text-[#123C39]">
+      <main id="main-content" tabIndex={-1} className="flex min-h-screen items-center justify-center bg-[#EED8B2] px-6 text-[#123C39]">
         <form
           onSubmit={sendMagicLink}
           className="w-full max-w-md rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-10"
@@ -464,7 +464,7 @@ export default function AdminDashboard() {
           >
             Send secure sign-in link
           </button>
-          {message ? <p className="mt-5 text-sm leading-6 text-stone-700">{message}</p> : null}
+          {message ? <p role="status" aria-live="polite" className="mt-5 text-sm leading-6 text-stone-700">{message}</p> : null}
         </form>
       </main>
     );
@@ -472,7 +472,7 @@ export default function AdminDashboard() {
 
   if (session.user.email !== allowedEmail) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#EED8B2] px-6 text-center text-[#123C39]">
+      <main id="main-content" tabIndex={-1} className="flex min-h-screen items-center justify-center bg-[#EED8B2] px-6 text-center text-[#123C39]">
         <div className="max-w-lg rounded-3xl bg-[#FFF3DF] p-10 shadow-xl shadow-[#1C5A50]/15">
           <h1 className="font-display text-3xl font-bold">This inbox is private.</h1>
           <p className="mt-5 leading-7 text-stone-700">
@@ -491,7 +491,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <main className="min-h-screen bg-[#EED8B2] px-6 py-10 text-[#123C39] md:px-10">
+    <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] px-6 py-10 text-[#123C39] md:px-10">
       <header className="mx-auto flex max-w-7xl flex-col justify-between gap-6 md:flex-row md:items-end">
         <div>
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">Private OPR area</p>
@@ -520,7 +520,7 @@ export default function AdminDashboard() {
       </header>
 
       {message ? (
-        <p className={`mx-auto mt-8 max-w-7xl text-sm ${message.startsWith("Published:") || message.startsWith("Deleted:") || message.includes("removed from") ? "text-[#2E5A35]" : "text-red-800"}`}>
+        <p role="status" aria-live="polite" className={`mx-auto mt-8 max-w-7xl text-sm ${message.startsWith("Published:") || message.startsWith("Deleted:") || message.includes("removed from") ? "text-[#2E5A35]" : "text-red-800"}`}>
           {message}
         </p>
       ) : null}

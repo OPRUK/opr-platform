@@ -68,7 +68,7 @@ export default function CommunityCookForm({ recipeId, recipeSlug, recipeTitle }:
           <button disabled={sending} className="rounded-full bg-[#123C39] px-7 py-3 font-medium text-white transition hover:bg-[#08231F] disabled:cursor-not-allowed disabled:opacity-60">
             {sending ? "Sending…" : "Share your cook"}
           </button>
-          {message ? <p className={`text-sm leading-6 ${message.startsWith("Thank") ? "text-[#2E5A35]" : "text-red-800"}`}>{message}</p> : null}
+          {message ? <p role={message.startsWith("Thank") ? "status" : "alert"} aria-live="polite" className={`text-sm leading-6 ${message.startsWith("Thank") ? "text-[#2E5A35]" : "text-red-800"}`}>{message}</p> : null}
         </form>
       </div>
     </section>

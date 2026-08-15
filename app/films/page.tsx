@@ -28,7 +28,7 @@ export default function FilmsPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#EED8B2] text-[#123C39]">
+    <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] text-[#123C39]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

@@ -65,7 +65,7 @@ export default function AddCookForm({
 
   if (submitted) {
     return (
-      <p className="mt-4 border border-[#123C39]/35 bg-[#FFF3DF] p-4 text-center text-sm leading-6">
+      <p role="status" aria-live="polite" className="mt-4 border border-[#123C39]/35 bg-[#FFF3DF] p-4 text-center text-sm leading-6">
         Thank you — your photo and note are with the OPR team and will appear here once reviewed.
       </p>
     );
@@ -122,7 +122,7 @@ export default function AddCookForm({
         >
           {isSubmitting ? "Posting…" : "Post it"}
         </button>
-        {error ? <p className="mt-3 text-sm text-red-800">{error}</p> : null}
+        {error ? <p role="alert" className="mt-3 text-sm text-red-800">{error}</p> : null}
       </form>
     );
   }

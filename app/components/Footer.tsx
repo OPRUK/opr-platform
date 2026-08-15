@@ -35,7 +35,7 @@ export default function Footer() {
             <li><Link href="/share" className="transition hover:text-[#DDB765]">Share your recipe</Link></li>
             <li><Link href="/founding-table" className="transition hover:text-[#DDB765]">Join the Founding Table</Link></li>
             <li><a href="mailto:info@otherpeoplesrecipes.co.uk" className="transition hover:text-[#DDB765]">Contact OPR</a></li>
-            <li className="flex items-center gap-4 pt-2">
+            <li className="flex flex-wrap items-center gap-4 pt-2">
               <a
                 href="https://www.instagram.com/opr_uk/"
                 target="_blank"

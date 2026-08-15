@@ -19,15 +19,17 @@ export default function Navigation() {
 
   return (
     <header className="absolute top-0 left-0 z-50 w-full border-b border-[#D1AD75]/70 bg-[#FFF3DF]/95 shadow-sm shadow-[#1C5A50]/10 backdrop-blur-sm">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-8 py-5">
+      <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-5 sm:px-8">
         <Link
           href="/"
-          className="font-brand text-3xl font-semibold leading-none tracking-[0.01em] text-[#123C39] transition hover:text-[#9A622A]"
+          aria-label="Other People's Recipes home"
+          className="font-brand shrink-0 text-2xl font-semibold leading-none tracking-[0.01em] text-[#123C39] transition hover:text-[#75451F] sm:text-3xl"
         >
-          Other People&apos;s Recipes<sup aria-hidden="true" className="ml-0.5 align-super text-[0.35em]">™</sup>
+          <span className="sm:hidden" aria-hidden="true">OPR</span>
+          <span className="hidden sm:inline">Other People&apos;s Recipes<sup aria-hidden="true" className="ml-0.5 align-super text-[0.35em]">™</sup></span>
         </Link>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <ul className="hidden gap-6 text-sm font-medium lg:flex">
             {links.map((link) => (
               <li key={link.href}>

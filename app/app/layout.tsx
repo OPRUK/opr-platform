@@ -32,9 +32,9 @@ export const viewport: Viewport = {
 export default function MobileAppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-[#EED8B2]">
-      <div className="font-brand mx-auto flex min-h-screen w-full max-w-[480px] flex-col bg-[#EED8B2] text-[#123C39]">
+      <main id="main-content" tabIndex={-1} className="font-brand mx-auto flex min-h-screen w-full max-w-[480px] flex-col bg-[#EED8B2] text-[#123C39]">
         {children}
-      </div>
+      </main>
     </div>
   );
 }

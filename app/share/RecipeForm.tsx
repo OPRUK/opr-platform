@@ -411,7 +411,7 @@ export default function RecipeForm() {
 
   if (submissionComplete) {
     return (
-      <section className="rounded-3xl bg-[#FFF3DF] p-8 text-center shadow-xl shadow-[#1C5A50]/15 md:p-12">
+      <section role="status" aria-live="polite" className="rounded-3xl bg-[#FFF3DF] p-8 text-center shadow-xl shadow-[#1C5A50]/15 md:p-12">
         <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
           Your recipe has been received
         </p>
@@ -457,7 +457,7 @@ export default function RecipeForm() {
             </button>
           </div>
           {instagramCopied ? (
-            <p className="mt-4 text-sm text-[#1C5A50]">
+            <p role="status" aria-live="polite" className="mt-4 text-sm text-[#1C5A50]">
               Your caption is copied. Paste it into your Instagram post or Story.
             </p>
           ) : null}
@@ -945,7 +945,7 @@ export default function RecipeForm() {
       </button>
 
       {submissionError ? (
-        <p className="mt-5 rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-sm leading-6 text-red-800">
+        <p role="alert" className="mt-5 rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-sm leading-6 text-red-800">
           {submissionError}
         </p>
       ) : null}

@@ -189,7 +189,7 @@ export default function MobileShareForm() {
 
   if (submitted) {
     return (
-      <div className="flex flex-col items-center pt-14 text-center">
+      <div role="status" aria-live="polite" className="flex flex-col items-center pt-14 text-center">
         <CheckIcon />
         <h2 className="font-display mb-2.5 mt-5 text-[26px]">Thank you.</h2>
         <p className="max-w-[26ch] text-[15px] opacity-80">
@@ -295,7 +295,7 @@ export default function MobileShareForm() {
       >
         {isSubmitting ? "Saving your recipe…" : "Submit your recipe"}
       </button>
-      {error ? <p className="mt-3 text-sm text-red-800">{error}</p> : null}
+      {error ? <p role="alert" className="mt-3 text-sm text-red-800">{error}</p> : null}
     </form>
   );
 }

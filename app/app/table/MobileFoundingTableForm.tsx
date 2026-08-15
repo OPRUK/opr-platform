@@ -44,7 +44,7 @@ export default function MobileFoundingTableForm() {
 
   if (joined) {
     return (
-      <div className="flex h-full flex-col items-center justify-center px-5 text-center">
+      <div role="status" aria-live="polite" className="flex h-full flex-col items-center justify-center px-5 text-center">
         <CheckIcon />
         <h1 className="font-display mb-2.5 mt-5 text-[26px]">You&apos;re on the list.</h1>
         <p className="max-w-[26ch] text-[15px] opacity-80">
@@ -89,7 +89,7 @@ export default function MobileFoundingTableForm() {
       >
         {isSubmitting ? "Joining…" : "Join the waiting list"}
       </button>
-      {error ? <p className="mt-3 text-sm text-red-800">{error}</p> : null}
+      {error ? <p role="alert" className="mt-3 text-sm text-red-800">{error}</p> : null}
     </form>
   );
 }

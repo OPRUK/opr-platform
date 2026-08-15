@@ -25,6 +25,7 @@ export default function FilmEmbed({
     return (
       <div className={`relative ${className}`}>
         <video
+          aria-label={title}
           className="h-full w-full"
           src={video}
           controls
