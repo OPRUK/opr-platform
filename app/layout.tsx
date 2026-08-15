@@ -88,8 +88,18 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-text-size="default"
+      data-readable-font="false"
+      suppressHydrationWarning
       className={`${cabin.variable} ${cormorantGaramond.variable} ${caveat.variable} ${allura.variable} h-full antialiased`}
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var s=localStorage.getItem("opr-text-size");if(["small","default","large","largest"].indexOf(s)>-1)document.documentElement.dataset.textSize=s;document.documentElement.dataset.readableFont=localStorage.getItem("opr-readable-font")==="true"?"true":"false"}catch(e){}})()`,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col">
         {children}
         <SiteFooter />

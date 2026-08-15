@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import AccessibilityControls from "./AccessibilityControls";
 
 export default function Navigation() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -26,32 +27,36 @@ export default function Navigation() {
           Other People&apos;s Recipes<sup aria-hidden="true" className="ml-0.5 align-super text-[0.35em]">™</sup>
         </Link>
 
-        <ul className="hidden gap-8 text-sm font-medium md:flex">
-          {links.map((link) => (
-            <li key={link.href}>
-              <Link
-                href={link.href}
-                className="text-[#123C39] transition hover:text-[#9A622A]"
-              >
-                {link.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <div className="flex items-center gap-3">
+          <ul className="hidden gap-6 text-sm font-medium lg:flex">
+            {links.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className="text-[#123C39] transition hover:text-[#9A622A] focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-[#9A622A]"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
 
-        <button
-          type="button"
-          onClick={() => setMenuOpen((open) => !open)}
-          className="rounded-lg px-3 py-2 text-2xl leading-none text-[#123C39] transition hover:bg-[#F4DDAE] md:hidden"
-          aria-label="Toggle navigation menu"
-          aria-expanded={menuOpen}
-        >
-          {menuOpen ? "×" : "☰"}
-        </button>
+          <AccessibilityControls />
+
+          <button
+            type="button"
+            onClick={() => setMenuOpen((open) => !open)}
+            className="min-h-11 min-w-11 rounded-lg px-3 py-2 text-2xl leading-none text-[#123C39] transition hover:bg-[#F4DDAE] focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#9A622A] lg:hidden"
+            aria-label="Toggle navigation menu"
+            aria-expanded={menuOpen}
+          >
+            {menuOpen ? "×" : "☰"}
+          </button>
+        </div>
       </nav>
 
       {menuOpen && (
-        <div className="border-t border-[#D1AD75]/70 bg-[#FFF3DF] px-8 py-5 md:hidden">
+        <div className="border-t border-[#D1AD75]/70 bg-[#FFF3DF] px-8 py-5 lg:hidden">
           <ul className="space-y-4 text-base font-medium">
             {links.map((link) => (
               <li key={link.href}>
