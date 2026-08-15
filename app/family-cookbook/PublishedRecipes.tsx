@@ -287,7 +287,7 @@ export default function PublishedRecipes({
         </div>
       </div>
 
-      <div className="mt-8 rounded-3xl border border-[#D1AD75]/70 bg-[#F4DDAE]/55 px-6 py-6 md:flex md:items-center md:justify-between md:gap-8">
+      <div className="mt-6 rounded-3xl border border-[#D1AD75]/70 bg-[#F4DDAE]/55 px-6 py-6 md:flex md:items-center md:justify-between md:gap-8">
         <div>
           <p className="text-sm uppercase tracking-[0.22em] text-[#9A622A]">
             The cookbook is growing
@@ -306,7 +306,7 @@ export default function PublishedRecipes({
         </Link>
       </div>
 
-      <section className="mt-10 overflow-hidden rounded-3xl border border-[#D1AD75]/70 bg-[#123C39] p-6 text-[#FFF3DF] shadow-xl shadow-[#1C5A50]/20 md:p-10">
+      <section className="mt-7 overflow-hidden rounded-3xl border border-[#D1AD75]/70 bg-[#123C39] p-6 text-[#FFF3DF] shadow-xl shadow-[#1C5A50]/20 md:p-10">
         <div className="max-w-3xl">
           <p className="text-sm uppercase tracking-[0.28em] text-[#F0C45A]">From kitchen to kitchen</p>
           <h2 className="font-display mt-3 text-4xl font-bold leading-tight md:text-5xl">The OPR recipe map</h2>
@@ -414,7 +414,7 @@ export default function PublishedRecipes({
         ) : null}
       </section>
 
-      <section id="recipe-of-the-month" className="mt-10 scroll-mt-24 overflow-hidden rounded-3xl border border-[#D1AD75]/80 bg-[#123C39] px-6 py-9 text-[#FFF3DF] shadow-xl shadow-[#1C5A50]/20 md:px-10">
+      <section id="recipe-of-the-month" className="mt-7 scroll-mt-24 overflow-hidden rounded-3xl border border-[#D1AD75]/80 bg-[#123C39] px-6 py-9 text-[#FFF3DF] shadow-xl shadow-[#1C5A50]/20 md:px-10">
         <div className="max-w-3xl">
           <p className="text-sm uppercase tracking-[0.28em] text-[#F0C45A]">OPR Recipe of the Month</p>
           <h2 className="font-display mt-3 text-4xl font-bold leading-tight md:text-5xl">Which recipe should take the table this {monthName}?</h2>
@@ -453,12 +453,12 @@ export default function PublishedRecipes({
         {voteError ? <p className="mt-5 rounded-xl border border-red-300/70 bg-red-950/30 px-4 py-3 text-sm text-red-100">{voteError}</p> : null}
       </section>
 
-      <p className="mt-8 text-sm text-stone-600">
+      <p className="mt-6 text-sm text-stone-600">
         {visibleRecipes.length} {visibleRecipes.length === 1 ? "recipe" : "recipes"} to discover
       </p>
 
       {visibleRecipes.length ? (
-        <div className="mt-5 grid gap-px overflow-hidden border border-[#123C39]/30 bg-[#123C39]/30 md:grid-cols-3">
+        <div className="mt-4 grid gap-px overflow-hidden border border-[#123C39]/30 bg-[#123C39]/30 md:grid-cols-3">
           {visibleRecipes.map((recipe, index) => (
             <Link
               key={recipe.id}
