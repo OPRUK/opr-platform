@@ -103,7 +103,8 @@ export default function Footer() {
           <p>© {new Date().getFullYear()} Other People&apos;s Recipes. Every Recipe has a Story.</p>
           <p className="mt-1 text-xs uppercase text-[#BFA77B]">Other Peoples Recipes Ltd · Company no. 17370145</p>
         </div>
-        <p className="flex gap-4">
+        <p className="flex flex-wrap gap-4">
+          <Link href="/accessibility" className="transition hover:text-[#DDB765]">Accessibility</Link>
           <Link href="/privacy" className="transition hover:text-[#DDB765]">Privacy Policy</Link>
           <Link href="/cookies" className="transition hover:text-[#DDB765]">Cookies</Link>
           <Link href="/terms" className="transition hover:text-[#DDB765]">Terms of Use</Link>

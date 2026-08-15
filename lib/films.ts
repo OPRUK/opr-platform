@@ -10,6 +10,8 @@ export type Film = {
   title: string;
   video: string;
   poster?: string;
+  captions?: string;
+  transcript?: string;
 };
 
 function film(title: string, file: string, hasPoster = true): Film {

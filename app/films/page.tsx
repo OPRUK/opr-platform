@@ -77,9 +77,15 @@ export default function FilmsPage() {
               key={film.video}
               className="overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/15"
             >
-              <FilmEmbed video={film.video} poster={film.poster} title={film.title} className="aspect-video w-full" />
+              <FilmEmbed video={film.video} poster={film.poster} captions={film.captions} title={film.title} className="aspect-video w-full" />
               <div className="p-6">
                 <h2 className="text-xl font-bold leading-snug">{film.title}</h2>
+                {film.transcript ? (
+                  <details className="mt-4 border-t border-[#D1AD75] pt-4">
+                    <summary className="cursor-pointer font-semibold text-[#123C39]">Read transcript</summary>
+                    <div className="mt-3 whitespace-pre-wrap leading-7 text-stone-700">{film.transcript}</div>
+                  </details>
+                ) : null}
               </div>
             </article>
           ))}
