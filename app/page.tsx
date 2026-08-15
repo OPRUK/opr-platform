@@ -60,7 +60,7 @@ export default async function Home() {
           </p>
 
           <h1 className="font-brand mx-auto max-w-3xl text-5xl font-semibold leading-[0.92] tracking-[-0.02em] drop-shadow-2xl sm:text-6xl md:text-7xl lg:text-8xl">
-            Other People&apos;s <span className="block">Recipes<sup className="ml-1 align-super text-[0.3em] font-sans font-semibold">™</sup></span>
+            Other People&apos;s <span className="block">Recipes</span>
           </h1>
 
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-stone-200 sm:text-xl sm:leading-9">

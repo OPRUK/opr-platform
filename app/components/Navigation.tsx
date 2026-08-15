@@ -23,7 +23,7 @@ export default function Navigation() {
           href="/"
           className="font-brand text-3xl font-semibold leading-none tracking-[0.01em] text-[#123C39] transition hover:text-[#9A622A]"
         >
-          Other People&apos;s Recipes<sup className="ml-0.5 align-super text-[0.38em] font-sans font-semibold">™</sup>
+          Other People&apos;s Recipes<sup aria-hidden="true" className="ml-0.5 align-super text-[0.35em]">™</sup>
         </Link>
 
         <ul className="hidden gap-8 text-sm font-medium md:flex">
