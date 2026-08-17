@@ -1,31 +1,12 @@
 import ExcelJS from "exceljs";
-import { createClient } from "@supabase/supabase-js";
-import { getSupabaseAdmin } from "../../../../lib/supabase/admin";
+import { requireAdmin } from "../../../../lib/admin-auth";
 
 export const runtime = "nodejs";
 
-const adminEmail = "chaten@otherpeoplesrecipes.co.uk";
-
-async function getAdminClient(request: Request) {
-  const token = request.headers.get("authorization")?.replace("Bearer ", "");
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-
-  if (!token || !supabaseUrl || !publishableKey) return null;
-
-  const authClient = createClient(supabaseUrl, publishableKey, {
-    auth: { persistSession: false, autoRefreshToken: false },
-  });
-  const { data, error } = await authClient.auth.getUser(token);
-  if (error || data.user?.email?.toLowerCase() !== adminEmail) return null;
-
-  return getSupabaseAdmin();
-}
-
 export async function GET(request: Request) {
-  const adminClient = await getAdminClient(request);
+  const { client: adminClient, error: accessError } = await requireAdmin(request);
   if (!adminClient) {
-    return Response.json({ error: "Your secure sign-in is not authorised." }, { status: 401 });
+    return Response.json({ error: accessError }, { status: 401 });
   }
 
   const { data, error } = await adminClient

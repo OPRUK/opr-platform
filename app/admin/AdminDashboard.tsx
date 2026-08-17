@@ -5,6 +5,8 @@ import Image from "next/image";
 import { FormEvent, useEffect, useState } from "react";
 import { featuredRecipes } from "../../lib/recipes";
 import { supabase } from "../../lib/supabase/client";
+import MfaChallenge from "./mfa/MfaChallenge";
+import MfaSecurityPanel from "./mfa/MfaSecurityPanel";
 
 type SubmissionStatus = "new" | "reviewed" | "selected";
 
@@ -79,6 +81,10 @@ export default function AdminDashboard() {
   const [selectedSubmission, setSelectedSubmission] = useState<Submission | null>(null);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [aal, setAal] = useState<{ current: string | null; next: string | null } | null>(null);
+  const [totpFactorId, setTotpFactorId] = useState<string | null>(null);
+  const [checkingAal, setCheckingAal] = useState(true);
+  const [showSecurityPanel, setShowSecurityPanel] = useState(false);
   const [exportingFoundingTable, setExportingFoundingTable] = useState(false);
 
   useEffect(() => {
@@ -93,14 +99,59 @@ export default function AdminDashboard() {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      setCheckingAal(true);
       setSession(nextSession);
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
+  async function refreshAal() {
+    setCheckingAal(true);
+    const [{ data: aalData }, { data: factorData }] = await Promise.all([
+      supabase.auth.mfa.getAuthenticatorAssuranceLevel(),
+      supabase.auth.mfa.listFactors(),
+    ]);
+    setAal(aalData ? { current: aalData.currentLevel, next: aalData.nextLevel } : null);
+    setTotpFactorId(
+      factorData?.totp.find((factor) => factor.status === "verified")?.id ?? null,
+    );
+    setCheckingAal(false);
+  }
+
   useEffect(() => {
     if (!session || session.user.email !== allowedEmail) {
+      return;
+    }
+
+    let cancelled = false;
+    void Promise.all([
+      supabase.auth.mfa.getAuthenticatorAssuranceLevel(),
+      supabase.auth.mfa.listFactors(),
+    ]).then(([{ data: aalData }, { data: factorData }]) => {
+      if (cancelled) return;
+      setAal(aalData ? { current: aalData.currentLevel, next: aalData.nextLevel } : null);
+      setTotpFactorId(
+        factorData?.totp.find((factor) => factor.status === "verified")?.id ?? null,
+      );
+      setCheckingAal(false);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [session]);
+
+  const mfaPending = Boolean(aal && aal.next === "aal2" && aal.current !== "aal2");
+
+  useEffect(() => {
+    if (!session || session.user.email !== allowedEmail) {
+      return;
+    }
+    if (checkingAal || mfaPending || !totpFactorId) {
+      // Wait until a factor is enrolled and this session has cleared the MFA
+      // challenge — the admin API routes require aal2 and would otherwise
+      // 401 on every request.
       return;
     }
 
@@ -135,7 +186,7 @@ export default function AdminDashboard() {
     }
 
     void loadSubmissions();
-  }, [session]);
+  }, [session, checkingAal, mfaPending, totpFactorId]);
 
   async function adminRequest(path: string, options: RequestInit = {}) {
     const { data } = await supabase.auth.getSession();
@@ -490,17 +541,65 @@ export default function AdminDashboard() {
     );
   }
 
+  if (checkingAal) {
+    return <main className="min-h-screen bg-[#EED8B2]" />;
+  }
+
+  if (mfaPending && totpFactorId) {
+    return (
+      <MfaChallenge
+        factorId={totpFactorId}
+        onVerified={() => void refreshAal()}
+        onSignOut={() => void supabase.auth.signOut()}
+      />
+    );
+  }
+
+  if (showSecurityPanel) {
+    return (
+      <main className="min-h-screen bg-[#EED8B2] px-6 py-10 text-[#123C39] md:px-10">
+        <div className="mx-auto max-w-2xl rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-10">
+          <MfaSecurityPanel onFactorsChanged={() => void refreshAal()} />
+          <button
+            type="button"
+            onClick={() => setShowSecurityPanel(false)}
+            className="mt-8 text-sm font-medium underline"
+          >
+            Back to recipe inbox
+          </button>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] px-6 py-10 text-[#123C39] md:px-10">
       <header className="mx-auto flex max-w-7xl flex-col justify-between gap-6 md:flex-row md:items-end">
         <div>
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">Private OPR area</p>
           <h1 className="font-display mt-4 text-4xl font-bold md:text-5xl">Recipe inbox</h1>
-          <p className="mt-4 text-lg text-stone-700">
-            {submissions.length} {submissions.length === 1 ? "recipe" : "recipes"} shared with OPR.
-          </p>
+          {totpFactorId ? (
+            <p className="mt-4 text-lg text-stone-700">
+              {submissions.length} {submissions.length === 1 ? "recipe" : "recipes"} shared with OPR.
+            </p>
+          ) : (
+            <p className="mt-4 text-lg font-medium text-[#9A622A]">
+              Set up two-factor authentication to view the recipe inbox.{" "}
+              <button type="button" onClick={() => setShowSecurityPanel(true)} className="underline">
+                Set it up now
+              </button>
+              .
+            </p>
+          )}
         </div>
-        <div className="flex flex-wrap gap-3 self-start md:self-auto">
+        <div className="flex flex-wrap items-center gap-4 self-start md:self-auto">
+          <button
+            type="button"
+            onClick={() => setShowSecurityPanel(true)}
+            className="text-sm font-medium underline"
+          >
+            Security
+          </button>
           <button
             type="button"
             onClick={() => void downloadFoundingTable()}
