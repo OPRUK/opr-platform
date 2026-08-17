@@ -174,7 +174,15 @@ export default function HomeHero({ children }: HomeHeroProps) {
                 }}
                 muted={isMuted}
                 playsInline
-                preload="auto"
+                // Only the film currently on screen should eagerly download —
+                // both slots defaulting to "auto" meant the browser fetched
+                // every intro film's full video in parallel from first paint,
+                // which is exactly what PageSpeed's "enormous network
+                // payloads" and mobile LCP warnings were flagging. The slot
+                // not yet visible waits for its explicit load()/play() call
+                // in beginCrossfade(), which already fires ahead of the
+                // crossfade with a 250ms hold + 500ms fade as buffer time.
+                preload={slot === activeSlot ? "auto" : "none"}
                 poster={film.poster}
                 onTimeUpdate={() => handleTimeUpdate(slot)}
                 onEnded={() => {
