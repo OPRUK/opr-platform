@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import Navigation from "../components/Navigation";
+import TrackedLink from "../components/TrackedLink";
 import VideoBrandMark from "../components/VideoBrandMark";
 import PublishedRecipes from "./PublishedRecipes";
 import { featuredRecipes } from "../../lib/recipes";
@@ -154,12 +154,13 @@ export default async function FamilyCookbook() {
         <h2 className="mx-auto mt-5 max-w-3xl text-4xl font-bold md:text-5xl">
           Could your family&apos;s recipe be next?
         </h2>
-        <Link
+        <TrackedLink
           href="/share"
+          eventKey="cookbook_share"
           className="mt-6 inline-block rounded-full bg-[#123C39] px-8 py-4 text-lg font-medium text-white transition hover:scale-105"
         >
           Share your recipe
-        </Link>
+        </TrackedLink>
       </section>
     </main>
   );

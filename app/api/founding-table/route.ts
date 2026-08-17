@@ -1,4 +1,6 @@
 import { foundingTableWelcomeEmail, newFoundingTableEmail, sendEmail } from "../../../lib/email";
+import { normaliseAttribution } from "../../../lib/attribution";
+import { recordAnalyticsEvent } from "../../../lib/analytics-server";
 import { createUnsubscribeLink } from "../../../lib/unsubscribe";
 import { getSupabaseAdmin } from "../../../lib/supabase/admin";
 
@@ -6,9 +8,15 @@ const adminEmail = "chaten@otherpeoplesrecipes.co.uk";
 
 export async function POST(request: Request) {
   try {
-    const { name: submittedName, email: submittedEmail, marketingOptIn = false } = await request.json();
+    const {
+      name: submittedName,
+      email: submittedEmail,
+      marketingOptIn = false,
+      attribution: submittedAttribution,
+    } = await request.json();
     const name = typeof submittedName === "string" ? submittedName.trim() : "";
     const email = typeof submittedEmail === "string" ? submittedEmail.trim().toLowerCase() : "";
+    const attribution = normaliseAttribution(submittedAttribution);
 
     if (!name || !email || !/^\S+@\S+\.\S+$/.test(email)) {
       return Response.json({ error: "Please enter your name and a valid email address." }, { status: 400 });
@@ -25,7 +33,7 @@ export async function POST(request: Request) {
       name,
       email,
       marketing_opt_in: wantsMarketing,
-      source: "website",
+      source: attribution.source ?? "website",
     });
 
     if (saveError) {
@@ -43,6 +51,13 @@ export async function POST(request: Request) {
 
       throw saveError;
     }
+
+    await recordAnalyticsEvent(supabase, {
+      eventKey: "join_table_success",
+      pagePath: "/join-our-table",
+      destination: null,
+      attribution,
+    });
 
     await Promise.all([
       sendEmail({

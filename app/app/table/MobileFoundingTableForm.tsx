@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { getStoredAttribution } from "../../../lib/attribution-client";
 import { CheckIcon, Eyebrow } from "../_components/primitives";
 
 const inputClassName =
@@ -26,7 +27,12 @@ export default function MobileFoundingTableForm() {
       const response = await fetch("/api/founding-table", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, marketingOptIn: optIn }),
+        body: JSON.stringify({
+          name,
+          email,
+          marketingOptIn: optIn,
+          attribution: getStoredAttribution(),
+        }),
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "failed");

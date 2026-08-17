@@ -3,6 +3,7 @@
 import Link from "next/link";
 import NextImage from "next/image";
 import { FormEvent, useEffect, useRef, useState } from "react";
+import { addAttributionToFormData } from "../../lib/attribution-client";
 
 // Bump this whenever the submission licence wording on /terms changes, so we
 // always know exactly which version of the terms a contributor agreed to.
@@ -373,6 +374,7 @@ export default function RecipeForm() {
     formData.set("submissionAgreementAccepted", String(values.submissionAgreementAccepted));
     formData.set("marketingOptIn", String(values.marketingOptIn));
     formData.set("consentVersion", CONSENT_VERSION);
+    addAttributionToFormData(formData);
     if (photo) formData.set("photo", photo);
     if (contributorPhoto) formData.set("contributorPhoto", contributorPhoto);
     if (originalRecipe) formData.set("originalRecipe", originalRecipe);

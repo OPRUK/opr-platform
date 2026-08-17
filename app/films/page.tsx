@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import Navigation from "../components/Navigation";
 import FilmEmbed from "../components/FilmEmbed";
 import VideoBrandMark from "../components/VideoBrandMark";
+import TrackedLink from "../components/TrackedLink";
 import { films } from "../../lib/films";
+import { getFeaturedRecipe } from "../../lib/recipes";
 import { absoluteUrl } from "../../lib/site";
 import { buildMetadata } from "../../lib/metadata";
 
@@ -72,24 +74,38 @@ export default function FilmsPage() {
 
       <section className="mx-auto max-w-6xl px-6 py-20 md:px-8">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {films.map((film) => (
-            <article
-              id={encodeURIComponent(film.title)}
-              key={film.video}
-              className="overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/15"
-            >
-              <FilmEmbed video={film.video} poster={film.poster} captions={film.captions} title={film.title} className="aspect-video w-full" />
-              <div className="p-6">
-                <h2 className="text-xl font-bold leading-snug">{film.title}</h2>
-                {film.transcript ? (
-                  <details className="mt-4 border-t border-[#DDB765] pt-4">
-                    <summary className="cursor-pointer font-semibold text-[#123C39]">Read transcript</summary>
-                    <div className="mt-3 whitespace-pre-wrap leading-7 text-stone-700">{film.transcript}</div>
-                  </details>
-                ) : null}
-              </div>
-            </article>
-          ))}
+          {films.map((film) => {
+            const recipe = film.recipeSlug ? getFeaturedRecipe(film.recipeSlug) : null;
+            const recipeHref = recipe ? `/family-cookbook/${recipe.slug}` : null;
+
+            return (
+              <article
+                id={encodeURIComponent(film.title)}
+                key={film.video}
+                className="overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/15"
+              >
+                <FilmEmbed video={film.video} poster={film.poster} captions={film.captions} title={film.title} className="aspect-video w-full" />
+                <div className="p-6">
+                  <h2 className="text-xl font-bold leading-snug">{film.title}</h2>
+                  {film.transcript ? (
+                    <details className="mt-4 border-t border-[#DDB765] pt-4">
+                      <summary className="cursor-pointer font-semibold text-[#123C39]">Read transcript</summary>
+                      <div className="mt-3 whitespace-pre-wrap leading-7 text-stone-700">{film.transcript}</div>
+                    </details>
+                  ) : null}
+                  {recipe && recipeHref ? (
+                    <TrackedLink
+                      href={recipeHref}
+                      eventKey="film_recipe"
+                      className="mt-5 inline-flex rounded-full bg-[#123C39] px-5 py-3 font-medium text-white transition hover:scale-105 hover:bg-[#08231F]"
+                    >
+                      Cook {recipe.title} →
+                    </TrackedLink>
+                  ) : null}
+                </div>
+              </article>
+            );
+          })}
         </div>
       </section>
 

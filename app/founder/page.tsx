@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import Navigation from "../components/Navigation";
+import TrackedLink from "../components/TrackedLink";
 import { buildMetadata } from "../../lib/metadata";
 
 export const metadata: Metadata = buildMetadata({
@@ -128,9 +129,16 @@ export default function FounderPage() {
           There is a place for your recipe at our table.
         </h2>
         <div className="mx-auto mt-10 flex max-w-3xl flex-col justify-center gap-4 sm:flex-row sm:flex-wrap">
+          <TrackedLink
+            href="/join-our-table"
+            eventKey="founder_join"
+            className="rounded-full bg-[#DDB765] px-7 py-4 font-medium text-[#08231F] transition hover:scale-105 hover:bg-[#DDB765]"
+          >
+            Join Our Table
+          </TrackedLink>
           <Link
             href="/share"
-            className="rounded-full bg-[#DDB765] px-7 py-4 font-medium text-[#08231F] transition hover:scale-105 hover:bg-[#DDB765]"
+            className="rounded-full border border-[#DDB765] px-7 py-4 font-medium text-[#FFF3DF] transition hover:bg-[#DDB765] hover:text-[#08231F]"
           >
             Share your recipe
           </Link>

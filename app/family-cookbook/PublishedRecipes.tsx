@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { fallbackImageForCommunityRecipe } from "../../lib/community-recipe-image";
 import { supabase } from "../../lib/supabase/client";
 import { WORLD_LAND_PATH } from "./world-map-path";
 import { WORLD_MAP_VIEWBOX, coordinatesForLocation, percentPosition } from "./world-map-geocode";
@@ -146,7 +147,7 @@ export default function PublishedRecipes({
       category: recipe.category,
       imageUrl: recipe.photo_path
         ? supabase.storage.from("recipe-published").getPublicUrl(recipe.photo_path).data.publicUrl
-        : null,
+        : fallbackImageForCommunityRecipe(recipe.title),
       href: `/family-cookbook/community/${recipe.id}`,
     })),
   ];

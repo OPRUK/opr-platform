@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { normaliseAttribution } from "../../lib/attribution";
 import { buildMetadata } from "../../lib/metadata";
 import OprBadge from "../components/OprBadge";
 import LinkButtons from "./LinkButtons";
@@ -11,7 +12,13 @@ export const metadata: Metadata = buildMetadata({
   index: false,
 });
 
-export default function LinksPage() {
+export default async function LinksPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const attribution = normaliseAttribution(await searchParams);
+
   return (
     <main id="main-content" tabIndex={-1} className="flex min-h-screen flex-col items-center bg-[#EED8B2] px-6 py-14 text-[#123C39]">
       <Link href="/" className="flex flex-col items-center text-center">
@@ -26,7 +33,7 @@ export default function LinksPage() {
       </p>
 
       <div className="mt-10">
-        <LinkButtons />
+        <LinkButtons attribution={attribution} />
       </div>
 
       <p className="mt-12 text-center text-xs text-[#6B431E]">

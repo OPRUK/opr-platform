@@ -30,6 +30,10 @@ export type FeaturedRecipe = {
   contributorName?: string;
   /** Optional practical tips and ingredient alternatives from the contributor. */
   notes?: { title: string; text: string }[];
+  /** Answers derived only from the recipe's own method and contributor notes. */
+  faqs?: { question: string; answer: string }[];
+  /** Canonical recipe slugs used for contextual internal links. */
+  relatedRecipeSlugs?: string[];
 };
 
 export const featuredRecipes: FeaturedRecipe[] = [
@@ -248,6 +252,25 @@ export const featuredRecipes: FeaturedRecipe[] = [
         text: "Frying the okra in a little oil before it joins the masala helps the sliminess disappear. Give it around 15 minutes over a medium-low heat and avoid a high flame: bhindi can brown before the stickiness has had time to cook away.",
       },
     ],
+    faqs: [
+      {
+        question: "How do you stop bhindi becoming slimy?",
+        answer: "Wash the whole okra before cutting it, dry it completely, then cook it uncovered in a little oil before adding it to the masala. Sudesh's method gives it about 15 minutes over a medium to medium-low heat so the stickiness has time to cook away.",
+      },
+      {
+        question: "Should bhindi be washed before cutting?",
+        answer: "Yes. Wash each whole bhindi first, pat it thoroughly dry and only then remove the ends and slice it. Cutting wet okra encourages more stickiness.",
+      },
+      {
+        question: "How long does bhindi take to cook?",
+        answer: "In this recipe, the okra cooks on its own for about 15 minutes, then for another 5 minutes with the masala. Keep the heat moderate so it softens without browning too quickly.",
+      },
+      {
+        question: "What can you serve with bhindi?",
+        answer: "Sudesh serves this bhindi with warm roti and dal. It also works well with paratha or rice.",
+      },
+    ],
+    relatedRecipeSlugs: ["krishna-anands-baingan-ka-bharta", "daves-butter-chicken"],
   },
   {
     slug: "adas-jollof-rice",
@@ -303,6 +326,29 @@ export const featuredRecipes: FeaturedRecipe[] = [
         text: "Scotch bonnet peppers bring the characteristic heat and fruitiness. Use fewer peppers for a milder rice, but keep the rich stock and thoroughly reduced pepper base for the fullest flavour.",
       },
     ],
+    faqs: [
+      {
+        question: "How do you give Jollof rice a smoky party flavour?",
+        answer: "Reduce the pepper blend well, steam the rice in a tightly covered heavy pot and raise the heat briefly for the final three minutes. This creates a lightly scorched bottom layer and the characteristic smoky aroma without burning the rice.",
+      },
+      {
+        question: "Which rice does Ada use for Jollof rice?",
+        answer: "Ada's recipe uses long-grain parboiled rice or Golden Sella basmati. Wash it thoroughly until the water runs clear before stirring it into the sauce.",
+      },
+      {
+        question: "How spicy is this Jollof rice?",
+        answer: "The recipe uses two Scotch bonnet peppers, but the amount can be adjusted to taste. Using fewer peppers makes it milder while keeping the rich stock and reduced pepper base for flavour.",
+      },
+      {
+        question: "Why should the pepper mixture be reduced first?",
+        answer: "Boiling the blended peppers, tomatoes, onion, garlic and ginger removes excess water and concentrates their flavour before the rice and stock are added.",
+      },
+      {
+        question: "How do you create the scorched bottom without burning the rice?",
+        answer: "Keep the pot tightly covered while the rice steams, then use medium-high heat only for the final three minutes and watch it closely. The bottom should be lightly scorched, not burnt.",
+      },
+    ],
+    relatedRecipeSlugs: ["daves-butter-chicken", "sams-shepherds-pie"],
   },
   {
     slug: "sams-shepherds-pie",

@@ -63,6 +63,19 @@ type RecipeOfMonthResults = {
   totalVotes: number;
 };
 
+type AttributionSummary = {
+  windowDays: number;
+  linkClicks: number;
+  ctaClicks: number;
+  conversions: number;
+  sources: Array<{
+    source: string;
+    linkClicks: number;
+    ctaClicks: number;
+    conversions: number;
+  }>;
+};
+
 const allowedEmail = "chaten@otherpeoplesrecipes.co.uk";
 
 const statusStyle: Record<SubmissionStatus, string> = {
@@ -78,6 +91,7 @@ export default function AdminDashboard() {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [communityCooks, setCommunityCooks] = useState<CommunityCook[]>([]);
   const [recipeOfMonthResults, setRecipeOfMonthResults] = useState<RecipeOfMonthResults | null>(null);
+  const [attributionSummary, setAttributionSummary] = useState<AttributionSummary | null>(null);
   const [selectedSubmission, setSelectedSubmission] = useState<Submission | null>(null);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<number | null>(null);
@@ -157,10 +171,11 @@ export default function AdminDashboard() {
 
     async function loadSubmissions() {
       setLoading(true);
-      const [recipeResponse, communityResponse, votingResponse] = await Promise.all([
+      const [recipeResponse, communityResponse, votingResponse, analyticsResponse] = await Promise.all([
         adminRequest("/api/admin/recipe-submission"),
         adminRequest("/api/admin/community-cook"),
         adminRequest("/api/admin/recipe-of-month"),
+        adminRequest("/api/admin/analytics"),
       ]);
       if (!recipeResponse.ok) {
         const payload = await recipeResponse.json().catch(() => null);
@@ -181,6 +196,11 @@ export default function AdminDashboard() {
       }
       if (votingResponse.ok) {
         setRecipeOfMonthResults((await votingResponse.json()) as RecipeOfMonthResults);
+      }
+      if (analyticsResponse.ok) {
+        setAttributionSummary((await analyticsResponse.json()) as AttributionSummary);
+      } else if (recipeResponse.ok && communityResponse.ok && votingResponse.ok) {
+        setMessage("The recipe inbox loaded, but traffic-source reporting could not be loaded just now.");
       }
       setLoading(false);
     }
@@ -622,6 +642,54 @@ export default function AdminDashboard() {
         <p role="status" aria-live="polite" className={`mx-auto mt-8 max-w-7xl text-sm ${message.startsWith("Published:") || message.startsWith("Deleted:") || message.includes("removed from") ? "text-[#1C5A50]" : "text-red-800"}`}>
           {message}
         </p>
+      ) : null}
+
+      {attributionSummary ? (
+        <section className="mx-auto mt-10 max-w-7xl rounded-3xl border border-[#DDB765]/70 bg-[#FFF3DF] px-6 py-7 shadow-xl shadow-[#1C5A50]/10 md:px-8">
+          <p className="text-sm uppercase tracking-[0.3em] text-amber-700">Traffic and participation sources</p>
+          <div className="mt-3 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+            <div>
+              <h2 className="text-2xl font-bold">Last {attributionSummary.windowDays} days</h2>
+              <p className="mt-2 text-sm leading-6 text-stone-700">
+                Privacy-safe counts only. No names, email addresses or visitor identifiers are stored here.
+              </p>
+            </div>
+            <div className="grid grid-cols-3 gap-3 text-center">
+              {[
+                ["Link clicks", attributionSummary.linkClicks],
+                ["Site actions", attributionSummary.ctaClicks],
+                ["Conversions", attributionSummary.conversions],
+              ].map(([label, value]) => (
+                <div key={label} className="rounded-2xl bg-[#EED8B2]/70 px-4 py-3">
+                  <p className="text-2xl font-bold text-[#123C39]">{value}</p>
+                  <p className="mt-1 text-xs uppercase tracking-[0.12em] text-[#6B431E]">{label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="mt-6 overflow-x-auto">
+            <table className="w-full min-w-[560px] border-collapse text-left text-sm">
+              <thead>
+                <tr className="border-b border-[#DDB765] text-[#6B431E]">
+                  <th className="px-3 py-3 font-semibold">Source</th>
+                  <th className="px-3 py-3 font-semibold">Link clicks</th>
+                  <th className="px-3 py-3 font-semibold">Site actions</th>
+                  <th className="px-3 py-3 font-semibold">Sign-ups/submissions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {attributionSummary.sources.map((source) => (
+                  <tr key={source.source} className="border-b border-[#DDB765]/40 last:border-0">
+                    <th scope="row" className="px-3 py-3 font-semibold capitalize">{source.source}</th>
+                    <td className="px-3 py-3">{source.linkClicks}</td>
+                    <td className="px-3 py-3">{source.ctaClicks}</td>
+                    <td className="px-3 py-3">{source.conversions}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
       ) : null}
 
       <section className="mx-auto mt-10 max-w-7xl overflow-hidden rounded-3xl border border-[#DDB765]/70 bg-[#123C39] px-6 py-7 text-[#FFF3DF] shadow-xl shadow-[#1C5A50]/15 md:px-8">

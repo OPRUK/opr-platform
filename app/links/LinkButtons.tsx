@@ -1,11 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect } from "react";
+import { appendAttributionToHref, type Attribution } from "../../lib/attribution";
+import { storeAttribution } from "../../lib/attribution-client";
 
 type LinkKey =
   | "share"
   | "family-cookbook"
-  | "founding-table"
+  | "join-our-table"
   | "recipe-of-month"
   | "films"
   | "contact"
@@ -15,9 +18,12 @@ type LinkKey =
   | "youtube"
   | "tiktok";
 
-function logClick(key: LinkKey) {
+function logClick(key: LinkKey, attribution: Attribution) {
   try {
-    const body = new Blob([JSON.stringify({ key })], { type: "application/json" });
+    const body = new Blob(
+      [JSON.stringify({ key, attribution })],
+      { type: "application/json" },
+    );
     navigator.sendBeacon("/api/links/click", body);
   } catch {
     // A missed click log should never stop someone getting where they're going.
@@ -27,7 +33,7 @@ function logClick(key: LinkKey) {
 const primaryLinks: Array<{ key: LinkKey; label: string; href: string; external?: boolean }> = [
   { key: "share", label: "Share your family recipe", href: "/share" },
   { key: "family-cookbook", label: "Explore the Living Cookbook", href: "/family-cookbook" },
-  { key: "founding-table", label: "Join Our Table", href: "/join-our-table" },
+  { key: "join-our-table", label: "Join Our Table", href: "/join-our-table" },
   { key: "recipe-of-month", label: "Recipe of the Month", href: "/app/vote" },
   { key: "films", label: "Watch OPR films", href: "/films" },
   { key: "contact", label: "Contact OPR", href: "mailto:info@otherpeoplesrecipes.co.uk", external: true },
@@ -94,7 +100,11 @@ const socialLinks: Array<{ key: LinkKey; label: string; href: string; icon: Reac
   },
 ];
 
-export default function LinkButtons() {
+export default function LinkButtons({ attribution }: { attribution: Attribution }) {
+  useEffect(() => {
+    storeAttribution(attribution);
+  }, [attribution]);
+
   return (
     <div className="w-full max-w-md">
       <div className="flex flex-col gap-3">
@@ -103,7 +113,7 @@ export default function LinkButtons() {
             <a
               key={link.key}
               href={link.href}
-              onClick={() => logClick(link.key)}
+              onClick={() => logClick(link.key, attribution)}
               className="min-h-14 rounded-2xl border border-[#DDB765] bg-[#FFF3DF] px-6 py-4 text-center text-lg font-medium text-[#123C39] shadow-sm transition hover:-translate-y-0.5 hover:border-[#123C39] hover:bg-white focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#9A622A]"
             >
               {link.label}
@@ -111,8 +121,8 @@ export default function LinkButtons() {
           ) : (
             <Link
               key={link.key}
-              href={link.href}
-              onClick={() => logClick(link.key)}
+              href={appendAttributionToHref(link.href, attribution)}
+              onClick={() => logClick(link.key, attribution)}
               className="min-h-14 rounded-2xl border border-[#DDB765] bg-[#FFF3DF] px-6 py-4 text-center text-lg font-medium text-[#123C39] shadow-sm transition hover:-translate-y-0.5 hover:border-[#123C39] hover:bg-white focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#9A622A]"
             >
               {link.label}
@@ -128,7 +138,7 @@ export default function LinkButtons() {
             href={social.href}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => logClick(social.key)}
+            onClick={() => logClick(social.key, attribution)}
             aria-label={social.label}
             title={social.label}
             className="flex h-12 w-12 items-center justify-center rounded-full border border-[#DDB765] bg-[#FFF3DF] text-[#123C39] shadow-sm transition hover:-translate-y-0.5 hover:border-[#123C39] hover:bg-[#123C39] hover:text-white focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#9A622A]"

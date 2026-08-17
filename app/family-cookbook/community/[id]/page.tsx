@@ -6,6 +6,7 @@ import Navigation from "../../../components/Navigation";
 import RecipeActions from "../../../components/RecipeActions";
 import CommunityCookForm from "../../../components/CommunityCookForm";
 import FamiliesWhoMadeThis from "../../../components/FamiliesWhoMadeThis";
+import { fallbackImageForCommunityRecipe } from "../../../../lib/community-recipe-image";
 import { supabase } from "../../../../lib/supabase/client";
 import { getApprovedCommunityCooks } from "../../../../lib/community-cooks";
 import { SITE_NAME, absoluteUrl } from "../../../../lib/site";
@@ -63,14 +64,7 @@ function imageUrlFor(recipe: CommunityRecipe): string | null {
   if (recipe.photo_path) {
     return supabase.storage.from("recipe-published").getPublicUrl(recipe.photo_path).data.publicUrl;
   }
-  const title = recipe.title.toLowerCase();
-  if (title.includes("grandad") && title.includes("steak") && title.includes("ale") && title.includes("pie")) {
-    return "/images/recipes/grandads-steak-ale-pie.png";
-  }
-  if (title.includes("sudesh") && title.includes("bhindi")) {
-    return "/images/recipes/sudeshs-bhindi-wide.webp";
-  }
-  return null;
+  return fallbackImageForCommunityRecipe(recipe.title);
 }
 
 function originalRecipeImageUrlFor(recipe: CommunityRecipe): string | null {

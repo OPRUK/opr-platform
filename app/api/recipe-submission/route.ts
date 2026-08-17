@@ -1,4 +1,6 @@
 import { newSubmissionEmail, recipeReceivedEmail, sendEmail } from "../../../lib/email";
+import { normaliseAttribution } from "../../../lib/attribution";
+import { recordAnalyticsEvent } from "../../../lib/analytics-server";
 import { getSupabaseAdmin } from "../../../lib/supabase/admin";
 import { checkRateLimit } from "../../../lib/rate-limit";
 import { attachmentLimits, extensionFor } from "../../../lib/media-attachments";
@@ -41,6 +43,12 @@ export async function POST(request: Request) {
     const story = readText(formData, "story", true);
     const ingredients = readText(formData, "ingredients", true);
     const method = readText(formData, "method", true);
+    const attribution = normaliseAttribution({
+      source: readText(formData, "attributionSource"),
+      utmSource: readText(formData, "utmSource"),
+      utmMedium: readText(formData, "utmMedium"),
+      utmCampaign: readText(formData, "utmCampaign"),
+    });
 
     if (readText(formData, "submissionAgreementAccepted") !== "true") {
       return Response.json({ error: "Submission agreement is required" }, { status: 400 });
@@ -186,6 +194,12 @@ export async function POST(request: Request) {
     await Promise.allSettled([
       sendEmail({ to: email, ...contributorEmail }),
       sendEmail({ to: adminEmail, ...teamEmail }),
+      recordAnalyticsEvent(supabase, {
+        eventKey: "recipe_submission_success",
+        pagePath: "/share",
+        destination: null,
+        attribution,
+      }),
     ]);
 
     return Response.json({ ok: true });

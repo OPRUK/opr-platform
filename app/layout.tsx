@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import localFont from "next/font/local";
+import { Suspense } from "react";
 import "./globals.css";
 import { SITE_NAME, SITE_URL, absoluteUrl } from "../lib/site";
+import AttributionCapture from "./components/AttributionCapture";
 import SiteFooter from "./components/SiteFooter";
 
 const caveat = localFont({
@@ -91,6 +93,9 @@ export default function RootLayout({
         <a href="#main-content" className="skip-link">
           Skip to main content
         </a>
+        <Suspense fallback={null}>
+          <AttributionCapture />
+        </Suspense>
         {children}
         <SiteFooter />
         <script
