@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import Navigation from "../../../components/Navigation";
+import IngredientMeasurements from "../../../components/IngredientMeasurements";
 import RecipeActions from "../../../components/RecipeActions";
 import CommunityCookForm from "../../../components/CommunityCookForm";
 import FamiliesWhoMadeThis from "../../../components/FamiliesWhoMadeThis";
@@ -252,10 +253,9 @@ export default async function CommunityRecipePage({
               </span>
             ) : null}
           </div>
-          <h2 className="recipe-card-ingredients mt-7 text-center text-4xl font-semibold text-[#344F50] md:text-5xl">What you&apos;ll need</h2>
-          <ul className="recipe-card-ingredients mx-auto mt-5 max-w-4xl space-y-1 text-center text-xl leading-8 text-[#4B3524] md:text-2xl md:leading-9">
-            {ingredients.map((ingredient, index) => <li key={`${index}-${ingredient}`} className="pb-1">{ingredient}</li>)}
-          </ul>
+          <div className="mt-7">
+            <IngredientMeasurements ingredients={ingredients} size="regular" />
+          </div>
         </aside>
       </section>
       {audioStoryUrl ? (
