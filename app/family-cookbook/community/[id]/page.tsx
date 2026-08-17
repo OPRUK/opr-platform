@@ -39,6 +39,15 @@ function truncate(text: string, maxLength: number): string {
   return `${clipped.slice(0, lastSpace > 0 ? lastSpace : clipped.length)}…`;
 }
 
+function splitRecipeLines(value: string | null): string[] {
+  return value
+    ? value
+        .split(/\r?\n/)
+        .map((line) => line.trim())
+        .filter(Boolean)
+    : [];
+}
+
 async function getCommunityRecipe(id: string): Promise<CommunityRecipe | null> {
   const { data } = await supabase
     .from("recipe_submissions")
@@ -54,7 +63,11 @@ function imageUrlFor(recipe: CommunityRecipe): string | null {
   if (recipe.photo_path) {
     return supabase.storage.from("recipe-published").getPublicUrl(recipe.photo_path).data.publicUrl;
   }
-  if (recipe.title.toLowerCase().includes("sudesh") && recipe.title.toLowerCase().includes("bhindi")) {
+  const title = recipe.title.toLowerCase();
+  if (title.includes("grandad") && title.includes("steak") && title.includes("ale") && title.includes("pie")) {
+    return "/images/recipes/grandads-steak-ale-pie.png";
+  }
+  if (title.includes("sudesh") && title.includes("bhindi")) {
     return "/images/recipes/sudeshs-bhindi-wide.webp";
   }
   return null;
@@ -136,8 +149,8 @@ export default async function CommunityRecipePage({
   const originalRecipeImageUrl = originalRecipeImageUrlFor(recipe);
   const audioStoryUrl = audioStoryUrlFor(recipe);
   const recipeVideoUrl = recipeVideoUrlFor(recipe);
-  const ingredients = recipe.ingredients ? recipe.ingredients.split("\n").filter(Boolean) : [];
-  const method = recipe.method ? recipe.method.split("\n").filter(Boolean) : [];
+  const ingredients = splitRecipeLines(recipe.ingredients);
+  const method = splitRecipeLines(recipe.method);
 
   const recipeJsonLd = {
     "@context": "https://schema.org",
@@ -192,10 +205,10 @@ export default async function CommunityRecipePage({
         <h1 className="font-display mx-auto mt-3 max-w-4xl text-5xl font-bold leading-tight md:text-7xl">{recipe.title}</h1>
         <p className="mt-4 text-sm uppercase tracking-[0.25em] text-stone-300">Shared by {recipe.name}{recipe.location ? ` · ${recipe.location}` : ""}</p>
       </section>
-      <section className="mx-auto max-w-7xl space-y-8 px-6 py-12 md:px-8 md:py-16">
-        <article className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-10">
+      <section className="mx-auto max-w-6xl space-y-6 px-4 py-8 sm:px-6 md:px-8 md:py-10">
+        <article className="rounded-3xl bg-[#FFF3DF] p-6 shadow-xl shadow-[#1C5A50]/15 md:p-8">
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">The story</p>
-          <p className="mt-7 text-2xl leading-relaxed">“{recipe.story}”</p>
+          <p className="mt-5 max-w-5xl text-xl leading-9 md:text-2xl md:leading-relaxed">“{recipe.story}”</p>
           {contributorPhotoUrl ? (
             <div className="mt-10 flex items-center gap-4 border-t border-[#D1AD75] pt-6">
               <Image
@@ -213,25 +226,41 @@ export default async function CommunityRecipePage({
               </div>
             </div>
           ) : null}
-          <p className="mt-10 border-t border-[#D1AD75] pt-6 text-sm italic text-stone-600">Shared with the Other People&apos;s Recipes community.</p>
+          <p className="mt-7 border-t border-[#D1AD75] pt-5 text-sm italic text-stone-600">Shared with the Other People&apos;s Recipes community.</p>
         </article>
-        <aside className="recipe-card-paper w-full p-8 md:p-10">
-          <div className="mb-8 flex items-start gap-3">
-            {imageUrl ? <Image src={imageUrl} alt={recipe.title} width={800} height={600} unoptimized className="min-w-0 flex-1 aspect-[4/3] rounded-2xl object-cover" /> : <div className="flex aspect-[4/3] min-w-0 flex-1 items-center justify-center rounded-2xl bg-[#DDBB82] px-6 text-center font-bold">A treasured family recipe</div>}
-            <RecipeActions title={recipe.title} imageUrl={imageUrl} />
+        <aside className="recipe-card-paper w-full p-5 sm:p-7 md:p-9">
+          <div className="mb-6 flex flex-col gap-4 md:mb-8 md:flex-row md:items-start md:gap-3">
+            {imageUrl ? (
+              <Image
+                src={imageUrl}
+                alt={recipe.title}
+                width={1200}
+                height={675}
+                unoptimized
+                className="aspect-video min-w-0 flex-1 rounded-2xl object-cover shadow-md"
+              />
+            ) : (
+              <div className="min-w-0 flex-1 rounded-2xl border border-[#9A622A]/30 bg-[#FFF3DF]/45 px-5 py-6 text-center">
+                <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#805126]">From the family table</p>
+                <p className="mt-2 text-lg font-bold text-[#123C39]">A treasured family recipe</p>
+              </div>
+            )}
+            <RecipeActions title={recipe.title} imageUrl={imageUrl} layout="responsive" />
           </div>
-          <p className="text-sm uppercase tracking-[0.25em] text-[#805126]">{recipe.category}</p>
-          {recipe.servings ? <p className="mt-2 text-sm text-stone-600">Serves {recipe.servings}</p> : null}
-          {recipe.prep_time_minutes || recipe.cook_time_minutes ? (
-            <p className="mt-2 text-sm text-stone-600">
-              {recipe.prep_time_minutes ? `Prep ${recipe.prep_time_minutes} min` : null}
-              {recipe.prep_time_minutes && recipe.cook_time_minutes ? " · " : null}
-              {recipe.cook_time_minutes ? `Cook ${recipe.cook_time_minutes} min` : null}
-            </p>
-          ) : null}
-          <h2 className="recipe-card-ingredients mt-6 text-center text-4xl font-semibold text-[#344F50] md:text-5xl">What you&apos;ll need</h2>
-          <ul className="recipe-card-ingredients mt-6 space-y-1.5 text-center text-2xl leading-8 text-[#4B3524] md:text-3xl md:leading-9">
-            {ingredients.map((ingredient) => <li key={ingredient} className="pb-1.5">{ingredient}</li>)}
+          <div className="flex flex-wrap justify-center gap-2 text-sm text-[#5F4B38]">
+            <span className="rounded-full border border-[#9A622A]/30 bg-[#FFF3DF]/45 px-4 py-2 font-bold uppercase tracking-[0.18em] text-[#805126]">{recipe.category}</span>
+            {recipe.servings ? <span className="rounded-full border border-[#9A622A]/25 bg-[#FFF3DF]/35 px-4 py-2">Serves {recipe.servings}</span> : null}
+            {recipe.prep_time_minutes || recipe.cook_time_minutes ? (
+              <span className="rounded-full border border-[#9A622A]/25 bg-[#FFF3DF]/35 px-4 py-2">
+                {recipe.prep_time_minutes ? `Prep ${recipe.prep_time_minutes} min` : null}
+                {recipe.prep_time_minutes && recipe.cook_time_minutes ? " · " : null}
+                {recipe.cook_time_minutes ? `Cook ${recipe.cook_time_minutes} min` : null}
+              </span>
+            ) : null}
+          </div>
+          <h2 className="recipe-card-ingredients mt-7 text-center text-4xl font-semibold text-[#344F50] md:text-5xl">What you&apos;ll need</h2>
+          <ul className="recipe-card-ingredients mx-auto mt-5 max-w-4xl space-y-1 text-center text-xl leading-8 text-[#4B3524] md:text-2xl md:leading-9">
+            {ingredients.map((ingredient, index) => <li key={`${index}-${ingredient}`} className="pb-1">{ingredient}</li>)}
           </ul>
         </aside>
       </section>
@@ -278,11 +307,16 @@ export default async function CommunityRecipePage({
           </div>
         </section>
       ) : null}
-      <section className="bg-[#FFF3DF] px-6 py-20">
+      <section className="bg-[#FFF3DF] px-4 py-12 sm:px-6 md:py-16">
         <div className="mx-auto max-w-4xl">
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">The method</p>
-          <ol className="mt-9 space-y-7">
-            {method.map((step, index) => <li key={step} className="flex gap-6 text-lg leading-8 text-stone-700"><span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#123C39] text-sm font-bold text-white">{index + 1}</span>{step}</li>)}
+          <ol className="mt-7 space-y-4">
+            {method.map((step, index) => (
+              <li key={`${index}-${step}`} className="grid grid-cols-[2.25rem_1fr] gap-4 rounded-2xl border border-[#E7CEA2] bg-white/55 p-4 text-base leading-7 text-stone-700 md:p-5 md:text-lg md:leading-8">
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#123C39] text-sm font-bold text-white">{index + 1}</span>
+                <span>{step}</span>
+              </li>
+            ))}
           </ol>
         </div>
       </section>
@@ -297,7 +331,7 @@ export default async function CommunityRecipePage({
       ) : null}
       <FamiliesWhoMadeThis cooks={communityCooks} recipeTitle={recipe.title} />
       <CommunityCookForm recipeId={recipe.id} recipeTitle={recipe.title} />
-      <section className="px-6 py-20 text-center">
+      <section className="px-6 py-10 text-center md:py-12">
         <Link
           href="/family-cookbook"
           className="inline-block rounded-full bg-[#123C39] px-8 py-4 text-lg font-medium text-white transition hover:scale-105"

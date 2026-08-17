@@ -5,9 +5,11 @@ import { useState } from "react";
 export default function RecipeActions({
   title,
   imageUrl,
+  layout = "vertical",
 }: {
   title: string;
   imageUrl?: string | null;
+  layout?: "vertical" | "horizontal" | "responsive";
 }) {
   const [copied, setCopied] = useState(false);
   const [instagramMessage, setInstagramMessage] = useState("");
@@ -145,12 +147,23 @@ export default function RecipeActions({
   const iconButtonClass =
     "flex h-11 w-11 items-center justify-center rounded-full border border-[#D1AD75] bg-[#FFF9EC] text-[#123C39] shadow-sm transition hover:-translate-y-0.5 hover:border-[#123C39] hover:bg-[#123C39] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#123C39]";
 
+  const wrapperClass = layout === "responsive"
+    ? "w-full md:w-auto md:shrink-0"
+    : layout === "horizontal"
+      ? "w-full"
+      : "shrink-0";
+  const buttonsClass = layout === "responsive"
+    ? "flex flex-row flex-wrap justify-center gap-2 md:flex-col"
+    : layout === "horizontal"
+      ? "flex flex-row flex-wrap justify-center gap-2"
+      : "flex flex-col gap-2";
+
   return (
-    <div className="shrink-0 print:hidden" role="group" aria-label="Share and save this recipe">
+    <div className={`${wrapperClass} print:hidden`} role="group" aria-label="Share and save this recipe">
       <p className="mb-2 text-center text-[10px] font-bold uppercase tracking-[0.18em] text-amber-700">
         Share
       </p>
-      <div className="flex flex-col gap-2">
+      <div className={buttonsClass}>
         <button type="button" onClick={shareOnWhatsApp} className={iconButtonClass} aria-label="Share on WhatsApp" title="Share on WhatsApp">
           <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
             <path d="M21 11.5a8.4 8.4 0 0 1-9 8.5 9.5 9.5 0 0 1-4-.9L3 21l1.8-4.8A8.5 8.5 0 1 1 21 11.5Z" />
