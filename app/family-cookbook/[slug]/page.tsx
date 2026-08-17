@@ -41,12 +41,12 @@ export async function generateMetadata({
 
   const seo = {
     "sudeshs-bhindi": {
-      title: "Sudesh’s Family Bhindi Recipe | Indian Okra",
-      description: "Cook Sudesh’s family bhindi recipe: a simple Indian okra dish, preserved with the personal story behind it.",
+      title: "Sudesh’s Bhindi Recipe | Indian Okra Masala",
+      description: "Cook Sudesh’s Indian bhindi masala: tender okra without the slime, gently fried before it is folded through a tomato and spice masala.",
     },
     "adas-jollof-rice": {
-      title: "Ada’s Family Jollof Rice Recipe",
-      description: "Cook Ada’s family jollof rice recipe, a celebratory dish made to bring people together, with the story behind it.",
+      title: "Ada’s Nigerian Party Jollof Rice Recipe",
+      description: "Cook Ada’s smoky Nigerian party Jollof rice with a deeply reduced pepper base, rich stock and a lightly scorched finish.",
     },
   }[recipe.slug];
   const title = seo?.title ?? `${recipe.title} — ${recipe.place}`;
@@ -92,6 +92,10 @@ export default async function RecipePage({
     "krishna-anands-baingan-ka-bharta": "Krishna Anand’s Baingan ka Bharta | A Family Recipe",
     "sams-shepherds-pie": "Sam & Nadine’s Shepherd’s Pie | A Recipe Worth Passing On",
   }[recipe.slug];
+  const relatedRecipes = (recipe.relatedRecipeSlugs ?? []).flatMap((relatedSlug) => {
+    const relatedRecipe = getFeaturedRecipe(relatedSlug);
+    return relatedRecipe ? [relatedRecipe] : [];
+  });
 
   const recipeJsonLd = {
     "@context": "https://schema.org",
@@ -128,6 +132,21 @@ export default async function RecipePage({
     ],
   };
 
+  const faqJsonLd = recipe.faqs?.length
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: recipe.faqs.map((faq) => ({
+          "@type": "Question",
+          name: faq.question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: faq.answer,
+          },
+        })),
+      }
+    : null;
+
   const timeLabel = [
     recipe.prepTime ? `${formatDuration(recipe.prepTime)} prep` : null,
     recipe.cookTime ? `${formatDuration(recipe.cookTime)} cook` : null,
@@ -155,6 +174,14 @@ export default async function RecipePage({
           __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, "\\u003c"),
         }}
       />
+      {faqJsonLd ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(faqJsonLd).replace(/</g, "\\u003c"),
+          }}
+        />
+      ) : null}
       <Navigation />
 
       <section className="bg-[#123C39] px-6 pb-12 pt-32 text-center text-white">
@@ -246,6 +273,64 @@ export default async function RecipePage({
                   <h3 className="text-xl font-bold text-[#123C39]">{note.title}</h3>
                   <p className="mt-3 leading-7 text-stone-700">{note.text}</p>
                 </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      {recipe.faqs?.length ? (
+        <section className="bg-[#EED8B2] px-6 py-12 md:py-16">
+          <div className="mx-auto max-w-5xl">
+            <p className="text-center text-sm font-bold uppercase tracking-[0.35em] text-[#9A622A]">
+              Helpful answers
+            </p>
+            <h2 className="mt-3 text-center text-4xl font-bold text-[#123C39]">
+              Questions about {recipe.title}
+            </h2>
+            <div className="mt-8 grid gap-4 md:grid-cols-2">
+              {recipe.faqs.map((faq) => (
+                <article key={faq.question} className="rounded-2xl bg-[#FFF3DF] p-6 shadow-sm">
+                  <h3 className="text-xl font-bold text-[#123C39]">{faq.question}</h3>
+                  <p className="mt-3 leading-7 text-stone-700">{faq.answer}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      {relatedRecipes.length ? (
+        <section className="bg-[#FFF3DF] px-6 py-12 md:py-16">
+          <div className="mx-auto max-w-5xl">
+            <p className="text-center text-sm font-bold uppercase tracking-[0.35em] text-[#9A622A]">
+              Keep cooking
+            </p>
+            <h2 className="mt-3 text-center text-4xl font-bold text-[#123C39]">
+              More family recipes for your table
+            </h2>
+            <div className="mt-8 grid gap-6 md:grid-cols-2">
+              {relatedRecipes.map((relatedRecipe) => (
+                <Link
+                  key={relatedRecipe.slug}
+                  href={`/family-cookbook/${relatedRecipe.slug}`}
+                  className="group overflow-hidden rounded-3xl bg-white shadow-md transition hover:-translate-y-1 hover:shadow-xl"
+                >
+                  <Image
+                    src={relatedRecipe.image}
+                    alt=""
+                    width={720}
+                    height={480}
+                    className="aspect-[3/2] w-full object-cover"
+                  />
+                  <div className="p-6">
+                    <h3 className="text-2xl font-bold text-[#123C39]">{relatedRecipe.title}</h3>
+                    <p className="mt-2 text-stone-600">{relatedRecipe.place}</p>
+                    <p className="mt-4 font-semibold text-[#9A622A] group-hover:underline">
+                      Open this recipe →
+                    </p>
+                  </div>
+                </Link>
               ))}
             </div>
           </div>

@@ -1,4 +1,6 @@
 import { newSubmissionEmail, recipeReceivedEmail, sendEmail } from "../../../lib/email";
+import { normaliseAttribution } from "../../../lib/attribution";
+import { recordAnalyticsEvent } from "../../../lib/analytics-server";
 import { getSupabaseAdmin } from "../../../lib/supabase/admin";
 import { checkRateLimit } from "../../../lib/rate-limit";
 
@@ -46,6 +48,7 @@ export async function POST(request: Request) {
     const title = readText(body.title);
     const story = readText(body.story);
     const location = readText(body.location) || null;
+    const attribution = normaliseAttribution(body.attribution);
 
     if (!name || !title || !story) {
       return Response.json({ error: "Missing recipe details" }, { status: 400 });
@@ -78,7 +81,15 @@ export async function POST(request: Request) {
     const teamEmail = newSubmissionEmail({ name, email: email || "no email given", title, location });
     const emailTasks = [sendEmail({ to: adminEmail, ...teamEmail })];
     if (email) emailTasks.push(sendEmail({ to: email, ...recipeReceivedEmail({ name, title }) }));
-    await Promise.allSettled(emailTasks);
+    await Promise.allSettled([
+      ...emailTasks,
+      recordAnalyticsEvent(supabase, {
+        eventKey: "recipe_submission_success",
+        pagePath: "/app/share",
+        destination: null,
+        attribution,
+      }),
+    ]);
 
     return Response.json({ ok: true });
   } catch (error) {

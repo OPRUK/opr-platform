@@ -19,6 +19,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/family-cookbook/community/1",
+        destination: "/family-cookbook/sudeshs-bhindi",
+        permanent: true,
+      },
+      {
         source: "/family-cookbook/phil-and-serbs-three-cheese-souffle",
         destination: "/family-cookbook/phils-and-serbs-three-cheese-souffle",
         permanent: true,

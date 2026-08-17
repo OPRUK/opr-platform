@@ -8,7 +8,7 @@ export const metadata: Metadata = buildMetadata({
   path: "/privacy",
 });
 
-const effectiveDate = "5 August 2026";
+const effectiveDate = "17 August 2026";
 
 export default function PrivacyPolicyPage() {
   return (
@@ -42,7 +42,7 @@ export default function PrivacyPolicyPage() {
                 <li>photos of a finished dish, a contributor, or an original handwritten recipe card, plus any optional audio you provide;</li>
                 <li>comments, photos or notes you share after cooking another family&apos;s recipe;</li>
                 <li>your table-signup details and marketing choices; and</li>
-                <li>limited, aggregated information about how people use the website.</li>
+                <li>privacy-safe counts showing which OPR social link or campaign brought a visit and which site action was selected. These attribution records do not contain names, email addresses or a visitor identifier.</li>
               </ul>
               <p className="mt-3">Please do not include someone else&apos;s private information unless you have their permission to share it. Recipe submissions are currently for adults aged 18 and over. We do not knowingly collect recipe submissions from children.</p>
             </div>
@@ -54,6 +54,7 @@ export default function PrivacyPolicyPage() {
                 <li><strong>To publish and celebrate a recipe, story, image or audio:</strong> we do this where you have submitted it and granted the contributor licence shown on the submission form.</li>
                 <li><strong>To send OPR news, events and invitations:</strong> we rely on your consent. You can withdraw it at any time by using the unsubscribe link in an email or contacting us.</li>
                 <li><strong>To keep the site secure, working and useful:</strong> we rely on our legitimate interests in running, protecting and improving OPR.</li>
+                <li><strong>To understand which OPR links lead to participation:</strong> we use privacy-safe source, campaign and action counts to improve our recipes and invitations. We do not use these records to identify individual visitors.</li>
               </ul>
               <p className="mt-3">You are not required by law to provide personal information. However, we need the contact and recipe details marked as required on a form in order to process that submission or request.</p>
             </div>
@@ -99,7 +100,7 @@ export default function PrivacyPolicyPage() {
 
             <div>
               <h2 className="text-2xl font-bold text-[#123C39]">9. Cookies and changes to this notice</h2>
-              <p className="mt-3">OPR uses Vercel Web Analytics to understand aggregated page visits. It does not use advertising, marketing or cross-site tracking cookies. Read our <a className="underline underline-offset-4" href="/cookies">Cookie Notice</a> for more information.</p>
+              <p className="mt-3">OPR uses Vercel Web Analytics to understand aggregated page visits. We also count visits from OPR&apos;s own social links and selected actions on the site without assigning a visitor identifier. We do not use advertising, marketing or cross-site tracking cookies. Read our <a className="underline underline-offset-4" href="/cookies">Cookie Notice</a> for more information.</p>
               <p className="mt-3">We may update this notice when our services or legal obligations change. The effective date at the top tells you when it was last updated.</p>
             </div>
           </div>

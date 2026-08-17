@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ChangeEvent, FormEvent, useState } from "react";
+import { getStoredAttribution } from "../../../lib/attribution-client";
 import { CheckIcon, Divider } from "../_components/primitives";
 import { supabase } from "../../../lib/supabase/client";
 import { attachmentMetadata, AttachmentKind } from "../../../lib/media-attachments";
@@ -166,6 +167,7 @@ export default function MobileShareForm() {
           audioStoryPath: paths.audioStory,
           recipeVideoPath: paths.recipeVideo,
           originalRecipePath: paths.originalRecipePhoto,
+          attribution: getStoredAttribution(),
         }),
       });
 

@@ -10,6 +10,7 @@ export type Film = {
   poster?: string;
   captions?: string;
   transcript?: string;
+  recipeSlug?: string;
 };
 
 function film(
@@ -19,10 +20,12 @@ function film(
     hasPoster = true,
     videoFile = `opr-${file}`,
     transcript,
+    recipeSlug,
   }: {
     hasPoster?: boolean;
     videoFile?: string;
     transcript: string;
+    recipeSlug?: string;
   },
 ): Film {
   return {
@@ -30,6 +33,7 @@ function film(
     video: `/videos/${videoFile}.mp4`,
     poster: hasPoster ? `${storageBase}/posters/${file}.jpg` : undefined,
     transcript,
+    recipeSlug,
   };
 }
 
@@ -40,6 +44,7 @@ export const films: Film[] = [
     poster: "/images/opr-dave-and-rubble-secret-ingredient-poster.jpg",
     transcript:
       "Dave: “It just needs one secret ingredient.”\nRubble: “Chicken?”\nDave: “Apparently.”",
+    recipeSlug: "daves-butter-chicken",
   },
   {
     title: "Dave & Rubble | Quality Control",
@@ -47,12 +52,14 @@ export const films: Film[] = [
     poster: "/images/opr-dave-and-rubble-quality-control-poster.jpg",
     transcript:
       "Dave: “Family recipe. Four generations. Really?”\nRubble: “Quality control.”",
+    recipeSlug: "daves-butter-chicken",
   },
   {
     title: "Dave & Rubble | Dave's Butter Chicken",
     video: "/videos/opr-dave-and-rubble-daves-butter-chicken.mp4",
     transcript:
       "Dave: “You’ve been watching this pan for ages.”\nRubble: “I’m supervising the butter chicken.”\nDave: “Family recipe. No shortcuts.”",
+    recipeSlug: "daves-butter-chicken",
   },
   {
     title: "Dave & Rubble | Sam's Soufflé",
@@ -65,6 +72,7 @@ export const films: Film[] = [
     video: "/videos/opr-dave-and-rubble-some-recipes-never-leave-you.mp4",
     transcript:
       "Dave: “You remember this one, Rubble?”\nRubble: “Of course. Your mum’s beef casserole.”\nDave: “Some recipes never leave you.”",
+    recipeSlug: "barbaras-beef-casserole",
   },
   {
     title: "Dave & Rubble | Finding an Old Family Recipe",
@@ -77,6 +85,7 @@ export const films: Film[] = [
     video: "/videos/opr-mummy-morris-and-rubble-beef-casserole.mp4",
     transcript:
       "Mummy Morris: “This is my generation’s special beef casserole.”\nRubble: “Can I have some?”\nMummy Morris: “No, but I will make you some dental sticks that I found on Other People’s Recipes.”",
+    recipeSlug: "barbaras-beef-casserole",
   },
   {
     title: "Dave & Rubble | A Recipe Worth Passing On",
@@ -103,6 +112,7 @@ export const films: Film[] = [
   film("Ada’s Party Jollof Rice | A Recipe to Bring People Together", "adas-party-jollof-rice", {
     transcript:
       "Ada: “I’m recording this to upload onto OPR, so the dish becomes a part of everyone’s family.”",
+    recipeSlug: "adas-jollof-rice",
   }),
   film(
     "Sam & Nadine’s Shepherd’s Pie | A Recipe Worth Passing On",
@@ -111,6 +121,7 @@ export const films: Film[] = [
       videoFile: "opr-sam-and-nadines-shepherds-pie-film",
       transcript:
         "Sam: “Now, Nadine, here is the secret. Aunty Sharon used Marmite and anchovies to enhance the lamb.”\nNadine: “Wow.”\nSam: “I’m uploading this video to OPR. So when you want to make it, just go there.”",
+      recipeSlug: "sams-shepherds-pie",
     },
   ),
   film(
@@ -119,6 +130,7 @@ export const films: Film[] = [
     {
       transcript:
         "Grandma Krishna: “Chaten, it’s completely charred.”\nChaten: “Like this, Grandma Krishna?”\nGrandma Krishna: “Perfect. The onion’s soft and pink. This degi mirch gives that beautiful colour.”\nChaten: “Wow!”\nGrandma Krishna: “Taste your favourite baingan ka bharta.”",
+      recipeSlug: "krishna-anands-baingan-ka-bharta",
     },
   ),
   film(
@@ -127,6 +139,7 @@ export const films: Film[] = [
     {
       transcript:
         "Chaten: “This is my Nani’s famous baingan recipe. I am recording it so it never dies. It is going straight onto OPR, so everyone can enjoy her cooking.”",
+      recipeSlug: "krishna-anands-baingan-ka-bharta",
     },
   ),
   film("The OPR Idea | A Menu Written by the People", "the-opr-idea", {

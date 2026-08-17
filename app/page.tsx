@@ -4,6 +4,7 @@ import Navigation from "./components/Navigation";
 import Image from "next/image";
 import Link from "next/link";
 import HomeHero from "./components/HomeHero";
+import TrackedLink from "./components/TrackedLink";
 import { optimizedPoster } from "../lib/optimized-poster";
 import { supabase } from "../lib/supabase/client";
 
@@ -84,12 +85,13 @@ export default async function Home() {
           </p>
 
           <div className="mt-9 flex justify-center">
-            <Link
+            <TrackedLink
               href="/family-cookbook"
+              eventKey="home_cookbook"
               className="rounded-full bg-[#123C39] px-8 py-3.5 text-base font-medium transition hover:scale-105 sm:px-10 sm:py-4 sm:text-lg"
             >
               Open the Living Cookbook
-            </Link>
+            </TrackedLink>
           </div>
         </div>
       </HomeHero>

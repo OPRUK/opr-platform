@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { FormEvent, useState } from "react";
+import { getStoredAttribution } from "../../lib/attribution-client";
 
 export default function FoundingTableForm() {
   const [name, setName] = useState("");
@@ -19,7 +20,12 @@ export default function FoundingTableForm() {
       const response = await fetch("/api/founding-table", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, marketingOptIn }),
+        body: JSON.stringify({
+          name,
+          email,
+          marketingOptIn,
+          attribution: getStoredAttribution(),
+        }),
       });
       const result = await response.json();
 
