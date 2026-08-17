@@ -26,7 +26,7 @@ export default async function RecipeDetailScreen({ params }: { params: Promise<{
   return (
     <div className="flex flex-1 flex-col overflow-y-auto pb-6">
       <div className="relative">
-        <div className="h-[260px] w-full bg-[#EAD8AE]">
+        <div className="h-[260px] w-full bg-[#EED8B2]">
           {recipe.image ? (
             // eslint-disable-next-line @next/next/no-img-element -- may be a Supabase Storage URL, not a configured Image domain
             <img src={recipe.image} alt={recipe.title} className="h-[260px] w-full object-cover" />
@@ -54,7 +54,7 @@ export default async function RecipeDetailScreen({ params }: { params: Promise<{
             <Eyebrow className="mb-2.5 mt-5">What you&apos;ll need</Eyebrow>
             <div className="flex flex-col">
               {recipe.ingredients.map((ingredient) => (
-                <div key={ingredient} className="flex gap-2.5 border-b border-[#123C39]/35 py-2.5 text-[15px]">
+                <div key={ingredient} className="flex gap-2.5 border-b border-[#123C39]/35 py-2.5 text-base">
                   <CheckmarkIcon />
                   {ingredient}
                 </div>
@@ -68,7 +68,7 @@ export default async function RecipeDetailScreen({ params }: { params: Promise<{
             <Eyebrow className="mb-2.5 mt-5">The method</Eyebrow>
             <div className="flex flex-col gap-3.5">
               {recipe.method.map((step, index) => (
-                <div key={step} className="flex gap-3 text-[15px] leading-[1.6]">
+                <div key={step} className="flex gap-3 text-base leading-[1.6]">
                   <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center bg-[#123C39] text-xs font-bold text-[#EED8B2]">
                     {index + 1}
                   </span>

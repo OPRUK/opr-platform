@@ -28,7 +28,7 @@ export default function ShareYourStory() {
         <p className="mb-5 text-sm uppercase tracking-[0.4em] text-amber-300">
           Share your recipe to the Living Cookbook
         </p>
-        <h1 className="font-display mx-auto max-w-4xl text-5xl font-bold leading-tight md:text-7xl">
+        <h1 className="mx-auto max-w-4xl text-5xl font-bold leading-tight md:text-7xl">
           Share your family&apos;s recipe.
         </h1>
         <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-stone-200">
@@ -41,7 +41,7 @@ export default function ShareYourStory() {
         <RecipeForm />
       </section>
 
-      <section className="border-t border-[#D1AD75]/70 bg-[#FFF3DF] px-6 py-20">
+      <section className="border-t border-[#DDB765]/70 bg-[#FFF3DF] px-6 py-20">
         <div className="mx-auto max-w-6xl">
           <p className="text-center text-sm uppercase tracking-[0.35em] text-amber-700">
             What happens next
@@ -52,7 +52,7 @@ export default function ShareYourStory() {
               ["02", "We read the story", "We look for the people and memories behind every dish."],
               ["03", "A recipe lives on", "Selected stories can appear in the living cookbook and beyond."],
             ].map(([number, title, copy]) => (
-              <article key={number} className="rounded-3xl border border-[#D1AD75]/70 bg-[#F4DDAE]/60 p-7">
+              <article key={number} className="rounded-3xl border border-[#DDB765]/70 bg-[#EED8B2]/60 p-7">
                 <p className="text-sm font-bold tracking-[0.25em] text-amber-800">{number}</p>
                 <h2 className="mt-5 text-2xl font-bold">{title}</h2>
                 <p className="mt-3 leading-7 text-stone-700">{copy}</p>

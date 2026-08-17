@@ -16,7 +16,8 @@ export default function Icon() {
           width: "100%",
           height: "100%",
           borderRadius: "50%",
-          background: "#123c39",
+          background: "#123C39",
+          fontFamily: '"Gill Sans MT", "Gill Sans", Avenir, Corbel, Arial, sans-serif',
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -27,7 +28,7 @@ export default function Icon() {
             width: 440,
             height: 440,
             borderRadius: "50%",
-            border: "12px solid #e2ad42",
+            border: "12px solid #DDB765",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -38,25 +39,25 @@ export default function Icon() {
               width: 386,
               height: 386,
               borderRadius: "50%",
-              border: "5px solid #4f665f",
+              border: "5px solid #1C5A50",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
             }}
           >
-            <div style={{ display: "flex", fontFamily: "Georgia, serif", fontSize: 133, fontWeight: 700, color: "#fff3dc" }}>
+            <div style={{ display: "flex", fontFamily: 'Didot, "Bodoni MT", Georgia, "Times New Roman", serif', fontSize: 133, fontWeight: 700, color: "#FFF3DF" }}>
               OPR
             </div>
             <div
               style={{
                 display: "flex",
                 marginTop: 14,
-                fontFamily: "Arial, sans-serif",
+                fontFamily: '"Gill Sans MT", "Gill Sans", Avenir, Corbel, Arial, sans-serif',
                 fontSize: 19,
                 fontWeight: 700,
                 letterSpacing: 3,
-                color: "#e2ad42",
+                color: "#DDB765",
               }}
             >
               OTHER PEOPLE&apos;S RECIPES

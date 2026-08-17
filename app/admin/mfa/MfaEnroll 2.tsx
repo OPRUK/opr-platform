@@ -98,11 +98,11 @@ export default function MfaEnroll({
           width={192}
           height={192}
           unoptimized
-          className="mt-5 h-48 w-48 rounded-xl border border-[#D1AD75]/70 bg-white p-3"
+          className="mt-5 h-48 w-48 rounded-xl border border-[#DDB765]/70 bg-white p-3"
         />
       ) : null}
       {secret ? (
-        <p className="mt-4 break-all rounded-xl bg-[#F4DDAE] px-4 py-3 font-mono text-sm text-[#123C39]">{secret}</p>
+        <p className="mt-4 break-all rounded-xl bg-[#EED8B2] px-4 py-3 font-mono text-sm text-[#123C39]">{secret}</p>
       ) : null}
       <label className="mt-6 block text-sm font-medium text-[#123C39]">
         Code from your authenticator app
@@ -112,7 +112,7 @@ export default function MfaEnroll({
           inputMode="numeric"
           autoComplete="one-time-code"
           placeholder="123456"
-          className="mt-3 w-full rounded-xl border border-[#D1AD75] bg-white px-4 py-3 outline-none transition focus:border-[#123C39] focus:ring-2 focus:ring-[#D1AD75]/60"
+          className="mt-3 w-full rounded-xl border border-[#DDB765] bg-white px-4 py-3 outline-none transition focus:border-[#123C39] focus:ring-2 focus:ring-[#DDB765]/60"
         />
       </label>
       <div className="mt-6 flex gap-3">

@@ -79,7 +79,7 @@ export default function MfaSecurityPanel({ onFactorsChanged }: { onFactorsChange
   return (
     <div>
       <h2 className="text-2xl font-bold text-[#123C39]">Two-factor authentication</h2>
-      {message ? <p role="status" aria-live="polite" className="mt-3 text-sm text-[#2E5A35]">{message}</p> : null}
+      {message ? <p role="status" aria-live="polite" className="mt-3 text-sm text-[#1C5A50]">{message}</p> : null}
       {loading ? (
         <p className="mt-4 text-stone-600">Loading...</p>
       ) : factors.length ? (
@@ -87,7 +87,7 @@ export default function MfaSecurityPanel({ onFactorsChanged }: { onFactorsChange
           {factors.map((factor) => (
             <li
               key={factor.id}
-              className="flex items-center justify-between rounded-2xl border border-[#D1AD75]/70 bg-[#F4DDAE]/45 px-5 py-4"
+              className="flex items-center justify-between rounded-2xl border border-[#DDB765]/70 bg-[#EED8B2]/45 px-5 py-4"
             >
               <div>
                 <p className="font-medium text-[#123C39]">{factor.friendly_name || "Authenticator app"}</p>

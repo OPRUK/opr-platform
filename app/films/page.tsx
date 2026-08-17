@@ -52,7 +52,7 @@ export default function FilmsPage() {
           <source src="/videos/opr-recipe-stories-film-v2.mp4" type="video/mp4" />
         </video>
         <VideoBrandMark />
-        <div className="absolute inset-0 -z-10 bg-[#0D342F]/75" />
+        <div className="absolute inset-0 -z-10 bg-[#123C39]/75" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#08231F]/65 via-[#123C39]/45 to-[#08231F]/80" />
 
         <div className="mx-auto max-w-4xl">
@@ -62,7 +62,7 @@ export default function FilmsPage() {
           <h1 className="font-display text-5xl font-bold leading-tight drop-shadow-lg md:text-7xl">
             Some stories are best told around a table. Others deserve a screen.
           </h1>
-          <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-[#FFF1D8]">
+          <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-[#FFF3DF]">
             Some films show OPR as it is today. Others capture the ideas we are
             building towards: a growing collection about food, family and the
             memories we choose to pass on.
@@ -82,7 +82,7 @@ export default function FilmsPage() {
               <div className="p-6">
                 <h2 className="text-xl font-bold leading-snug">{film.title}</h2>
                 {film.transcript ? (
-                  <details className="mt-4 border-t border-[#D1AD75] pt-4">
+                  <details className="mt-4 border-t border-[#DDB765] pt-4">
                     <summary className="cursor-pointer font-semibold text-[#123C39]">Read transcript</summary>
                     <div className="mt-3 whitespace-pre-wrap leading-7 text-stone-700">{film.transcript}</div>
                   </details>

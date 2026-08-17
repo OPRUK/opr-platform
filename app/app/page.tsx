@@ -1,11 +1,20 @@
+import Image from "next/image";
 import { Eyebrow, PrimaryButton, Divider } from "./_components/primitives";
 
 export default function SplashScreen() {
   return (
     <div className="flex flex-1 flex-col justify-center bg-[#123C39] px-7 pb-10 pt-[100px] text-[#EED8B2]">
       <div className="flex flex-1 flex-col justify-center">
+        <Image
+          src="/images/social/opr-pinterest-profile.png"
+          alt=""
+          width={64}
+          height={64}
+          className="mb-5 h-16 w-16 shrink-0"
+          priority
+        />
         <Eyebrow tone="cream" className="mb-[18px]">
-          Other People&apos;s Recipes
+          Other People&apos;s Recipes™
         </Eyebrow>
         <h1 className="font-display text-[56px] leading-[0.98] text-[#EED8B2]">Every Recipe has a Story.</h1>
         <Divider className="my-7 bg-[#EED8B2]/60" />
@@ -14,7 +23,7 @@ export default function SplashScreen() {
         </p>
       </div>
       <PrimaryButton href="/app/cookbook" inverted>
-        Open the cookbook
+        Open the Living Cookbook
       </PrimaryButton>
     </div>
   );

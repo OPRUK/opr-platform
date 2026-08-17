@@ -48,7 +48,7 @@ export default function MfaChallenge({
     <main className="flex min-h-screen items-center justify-center bg-[#EED8B2] px-6 text-[#123C39]">
       <div className="w-full max-w-md rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-10">
         <p className="text-sm uppercase tracking-[0.35em] text-amber-700">Private OPR area</p>
-        <h1 className="font-display mt-4 text-3xl font-bold">Enter your code</h1>
+        <h1 className="mt-4 text-3xl font-bold">Enter your code</h1>
         <p className="mt-5 leading-7 text-stone-700">
           Enter the 6-digit code from your authenticator app to finish signing in.
         </p>
@@ -65,7 +65,7 @@ export default function MfaChallenge({
             autoComplete="one-time-code"
             autoFocus
             placeholder="123456"
-            className="mt-3 w-full rounded-xl border border-[#D1AD75] bg-[#F4DDAE] px-4 py-3 outline-none transition focus:border-[#123C39] focus:ring-2 focus:ring-[#D1AD75]/60"
+            className="mt-3 w-full rounded-xl border border-[#DDB765] bg-[#EED8B2] px-4 py-3 outline-none transition focus:border-[#123C39] focus:ring-2 focus:ring-[#DDB765]/60"
           />
         </label>
         <div className="mt-8 flex items-center gap-4">

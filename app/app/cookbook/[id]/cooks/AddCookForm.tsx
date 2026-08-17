@@ -3,7 +3,7 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 
 const inputClassName =
-  "mt-1.5 w-full border border-[#D1AD75] bg-[#F4DDAE] px-3.5 py-2.5 text-[15px] outline-none transition placeholder:text-stone-500 focus:border-[#123C39]";
+  "mt-1.5 w-full border border-[#DDB765] bg-[#EED8B2] px-3.5 py-2.5 text-base outline-none transition placeholder:text-stone-500 focus:border-[#123C39]";
 
 export default function AddCookForm({
   recipeSlug,
@@ -65,7 +65,7 @@ export default function AddCookForm({
 
   if (submitted) {
     return (
-      <p role="status" aria-live="polite" className="mt-4 border border-[#123C39]/35 bg-[#FFF3DF] p-4 text-center text-sm leading-6">
+      <p role="status" aria-live="polite" className="mt-4 border border-[#123C39]/35 bg-[#FFF3DF] p-4 text-center text-base leading-7">
         Thank you — your photo and note are with the OPR team and will appear here once reviewed.
       </p>
     );
@@ -74,7 +74,7 @@ export default function AddCookForm({
   if (open) {
     return (
       <form onSubmit={submit} className="mt-4 border border-[#123C39]/35 bg-[#FFF3DF] p-4">
-        <label className="block text-sm font-medium">
+        <label className="block text-base font-medium">
           Your name
           <input
             required
@@ -85,7 +85,7 @@ export default function AddCookForm({
             className={inputClassName}
           />
         </label>
-        <label className="mt-3.5 block text-sm font-medium">
+        <label className="mt-3.5 block text-base font-medium">
           How did it go? <span className="font-normal text-stone-500">(optional)</span>
           <textarea
             value={note}
@@ -96,16 +96,16 @@ export default function AddCookForm({
             className={inputClassName}
           />
         </label>
-        <label className="mt-3.5 block text-sm font-medium">
+        <label className="mt-3.5 block text-base font-medium">
           A photo of your dish <span className="font-normal text-stone-500">(optional)</span>
           <input
             type="file"
             accept="image/jpeg,image/png,image/webp"
             onChange={choosePhoto}
-            className="mt-1.5 block w-full text-sm file:mr-3 file:border-0 file:bg-[#123C39] file:px-3.5 file:py-2 file:text-sm file:font-medium file:text-[#EED8B2]"
+            className="mt-1.5 block w-full text-base file:mr-3 file:border-0 file:bg-[#123C39] file:px-3.5 file:py-2 file:text-sm file:font-medium file:text-[#EED8B2]"
           />
         </label>
-        <label className="mt-3.5 flex items-start gap-2.5 text-[13px] leading-[1.5]">
+        <label className="mt-3.5 flex items-start gap-2.5 text-base leading-[1.5]">
           <input
             required
             type="checkbox"
@@ -118,11 +118,11 @@ export default function AddCookForm({
         <button
           type="submit"
           disabled={!name || !agreementAccepted || isSubmitting}
-          className="mt-4 w-full bg-[#123C39] px-[18px] py-3.5 text-[15px] font-medium text-[#EED8B2] transition hover:bg-[#0d2b28] disabled:cursor-not-allowed disabled:opacity-50"
+          className="mt-4 w-full bg-[#123C39] px-[18px] py-3.5 text-base font-medium text-[#EED8B2] transition hover:bg-[#08231F] disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isSubmitting ? "Posting…" : "Post it"}
         </button>
-        {error ? <p role="alert" className="mt-3 text-sm text-red-800">{error}</p> : null}
+        {error ? <p role="alert" className="mt-3 text-base text-red-800">{error}</p> : null}
       </form>
     );
   }
@@ -132,7 +132,7 @@ export default function AddCookForm({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="mt-4 flex w-full items-center gap-2 bg-[#123C39] px-[18px] py-4 text-[17px] font-medium text-[#EED8B2] transition hover:bg-[#0d2b28]"
+        className="mt-4 flex w-full items-center gap-2 bg-[#123C39] px-[18px] py-4 text-[17px] font-medium text-[#EED8B2] transition hover:bg-[#08231F]"
       >
         <span>Add your own photo &amp; note</span>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" className="ml-auto flex-shrink-0">

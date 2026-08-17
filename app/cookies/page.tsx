@@ -14,7 +14,7 @@ export default function CookieNoticePage() {
       <Navigation />
       <section className="bg-[#123C39] px-6 pb-20 pt-40 text-center text-white">
         <p className="mb-5 text-sm uppercase tracking-[0.4em] text-amber-300">Legal</p>
-        <h1 className="font-display mx-auto max-w-3xl text-5xl font-bold leading-tight md:text-6xl">Cookie Notice</h1>
+        <h1 className="mx-auto max-w-3xl text-5xl font-bold leading-tight md:text-6xl">Cookie Notice</h1>
         <p className="mt-6 text-sm uppercase tracking-[0.25em] text-stone-300">Last updated: 3 August 2026</p>
       </section>
       <section className="px-6 py-20">
@@ -27,7 +27,7 @@ export default function CookieNoticePage() {
             </div>
             <div>
               <h2 className="text-2xl font-bold text-[#123C39]">Your browser storage</h2>
-              <p className="mt-3">The Share Your Recipe form may temporarily save a draft in your browser&apos;s session storage so that you do not lose work while completing the form. It stays on your device and is not used to track you.</p>
+              <p className="mt-3">The Share your recipe form may temporarily save a draft in your browser&apos;s session storage so that you do not lose work while completing the form. It stays on your device and is not used to track you.</p>
             </div>
             <div>
               <h2 className="text-2xl font-bold text-[#123C39]">If this changes</h2>

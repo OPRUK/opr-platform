@@ -28,7 +28,7 @@ export default function UnsubscribeForm({ email, token }: { email: string; token
   }
 
   if (status === "done") {
-    return <p role="status" aria-live="polite" className="rounded-2xl bg-[#E2F2E7] px-5 py-4 leading-7 text-[#123C39]">{message}</p>;
+    return <p role="status" aria-live="polite" className="rounded-2xl bg-[#EED8B2] px-5 py-4 leading-7 text-[#123C39]">{message}</p>;
   }
 
   return (

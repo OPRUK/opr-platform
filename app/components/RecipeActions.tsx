@@ -116,15 +116,15 @@ export default function RecipeActions({
     }
 
     context.fillStyle = "#9A622A";
-    context.font = "600 28px Arial, sans-serif";
+    context.font = '600 28px "Gill Sans MT", "Gill Sans", Avenir, Corbel, Arial, sans-serif';
     context.letterSpacing = "4px";
     context.fillText("OTHER PEOPLE'S RECIPES", 76, 740);
     context.letterSpacing = "0px";
     context.fillStyle = "#123C39";
-    context.font = "bold 62px Georgia, serif";
+    context.font = '700 62px Didot, "Bodoni MT", Georgia, "Times New Roman", serif';
     drawWrappedText(context, title, 76, 820, 928, 76);
-    context.fillStyle = "#766B5C";
-    context.font = "italic 28px Georgia, serif";
+    context.fillStyle = "#9A622A";
+    context.font = 'italic 28px Didot, "Bodoni MT", Georgia, "Times New Roman", serif';
     context.fillText("Every Recipe has a Story.", 76, 1010);
 
     canvas.toBlob((blob) => {
@@ -145,7 +145,7 @@ export default function RecipeActions({
   }
 
   const iconButtonClass =
-    "flex h-11 w-11 items-center justify-center rounded-full border border-[#D1AD75] bg-[#FFF9EC] text-[#123C39] shadow-sm transition hover:-translate-y-0.5 hover:border-[#123C39] hover:bg-[#123C39] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#123C39]";
+    "flex h-11 w-11 items-center justify-center rounded-full border border-[#DDB765] bg-[#FFF3DF] text-[#123C39] shadow-sm transition hover:-translate-y-0.5 hover:border-[#123C39] hover:bg-[#123C39] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#123C39]";
 
   const wrapperClass = layout === "responsive"
     ? "w-full md:w-auto md:shrink-0"

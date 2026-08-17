@@ -9,7 +9,7 @@ one-time codes to this file, GitHub, support tickets, analytics, or logs.
 2. Choose **Set it up now** or **Security**.
 3. Add the QR code to an authenticator app and verify a six-digit code.
 4. Sign out, sign in again, complete the MFA challenge, and confirm the recipe
-   inbox and Founding Table export load.
+   inbox and Join Our Table export load.
 5. Add a second authenticator from **Security** as a backup when practical.
 
 Only verified TOTP factors unlock admin data. The Supabase project allows a

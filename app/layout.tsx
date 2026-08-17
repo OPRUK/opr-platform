@@ -5,38 +5,6 @@ import "./globals.css";
 import { SITE_NAME, SITE_URL, absoluteUrl } from "../lib/site";
 import SiteFooter from "./components/SiteFooter";
 
-const cabin = localFont({
-  src: [
-    {
-      path: "./fonts/Cabin-Variable.ttf",
-      weight: "400 700",
-      style: "normal",
-    },
-    {
-      path: "./fonts/Cabin-Italic-Variable.ttf",
-      weight: "400 700",
-      style: "italic",
-    },
-  ],
-  variable: "--font-cabin",
-});
-
-const cormorantGaramond = localFont({
-  src: [
-    {
-      path: "./fonts/CormorantGaramond-Variable.ttf",
-      weight: "300 700",
-      style: "normal",
-    },
-    {
-      path: "./fonts/CormorantGaramond-Italic-Variable.ttf",
-      weight: "300 700",
-      style: "italic",
-    },
-  ],
-  variable: "--font-cormorant-garamond",
-});
-
 const caveat = localFont({
   src: "./fonts/Caveat-Variable.ttf",
   weight: "400 700",
@@ -110,7 +78,7 @@ export default function RootLayout({
       data-text-size="default"
       data-readable-font="false"
       suppressHydrationWarning
-      className={`${cabin.variable} ${cormorantGaramond.variable} ${caveat.variable} ${allura.variable} h-full antialiased`}
+      className={`${caveat.variable} ${allura.variable} h-full antialiased`}
     >
       <head>
         <script

@@ -4,7 +4,7 @@ const from = process.env.EMAIL_FROM || "Other People's Recipes <onboarding@resen
 function marketingFooter(unsubscribeUrl: string | null) {
   if (!unsubscribeUrl) return "";
 
-  return `<p style="border-top: 1px solid #D1AD75; padding-top: 18px; margin-top: 36px; font-size: 13px; color: #6B6254;">You are receiving OPR news because you asked us to keep you posted. <a href="${unsubscribeUrl}" style="color: #1C5A50;">Unsubscribe from OPR updates</a>.</p>`;
+  return `<p style="border-top: 1px solid #DDB765; padding-top: 18px; margin-top: 36px; font-size: 13px; color: #6B6254;">You are receiving OPR news because you asked us to keep you posted. <a href="${unsubscribeUrl}" style="color: #1C5A50;">Unsubscribe from OPR updates</a>.</p>`;
 }
 
 function escapeHtml(value: string) {
@@ -57,14 +57,14 @@ export function recipeReceivedEmail({ name, title }: { name: string; title: stri
   return {
     subject: `We received “${title}” — Other People's Recipes`,
     html: `
-      <div style="font-family: Georgia, serif; max-width: 620px; margin: 0 auto; color: #4A4232; line-height: 1.65;">
+      <div style="font-family: 'Gill Sans MT', 'Gill Sans', Avenir, Corbel, Arial, sans-serif; max-width: 620px; margin: 0 auto; color: #4A4232; line-height: 1.65;">
         <p style="color: #9A622A; letter-spacing: 2px; font-size: 12px; text-transform: uppercase;">Other People's Recipes</p>
-        <h1 style="font-size: 34px; line-height: 1.2;">Thank you for sharing your recipe.</h1>
+        <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 34px; line-height: 1.2;">Thank you for sharing your recipe.</h1>
         <p>Dear ${escapeHtml(name)},</p>
         <p>We&apos;ve received <strong>${escapeHtml(title)}</strong> and the story behind it. Thank you for trusting Other People&apos;s Recipes with a page from your family kitchen.</p>
-        <p>Our team will read every recipe carefully. If it is selected for the Family Cookbook, the restaurant or a future film, we&apos;ll be in touch.</p>
+        <p>Our team will read every recipe carefully. If it is selected for the Living Cookbook, the restaurant or a future film, we&apos;ll be in touch.</p>
         <p style="margin-top: 32px;">Warmly,<br /><strong>The OPR team</strong></p>
-        <p style="border-top: 1px solid #D1AD75; padding-top: 18px; margin-top: 36px; font-size: 13px; color: #6B6254;">Every Recipe has a Story.</p>
+        <p style="border-top: 1px solid #DDB765; padding-top: 18px; margin-top: 36px; font-size: 13px; color: #6B6254;">Every Recipe has a Story.</p>
       </div>
     `,
   };
@@ -74,13 +74,13 @@ export function newSubmissionEmail({ name, email, title, location }: { name: str
   return {
     subject: `New OPR recipe: ${title}`,
     html: `
-      <div style="font-family: Arial, sans-serif; max-width: 620px; margin: 0 auto; color: #4A4232; line-height: 1.65;">
+      <div style="font-family: 'Gill Sans MT', 'Gill Sans', Avenir, Corbel, Arial, sans-serif; max-width: 620px; margin: 0 auto; color: #4A4232; line-height: 1.65;">
         <p style="color: #9A622A; font-size: 12px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase;">Private OPR alert</p>
-        <h1 style="font-family: Georgia, serif; font-size: 30px;">A new recipe has arrived.</h1>
+        <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 30px;">A new recipe has arrived.</h1>
         <p><strong>${escapeHtml(title)}</strong></p>
         <p>Shared by ${escapeHtml(name)}${location ? ` from ${escapeHtml(location)}` : ""}.</p>
         <p>Contact: <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></p>
-        <p><a href="${siteUrl}/admin" style="display: inline-block; background: #4A4232; color: white; padding: 12px 18px; border-radius: 999px; text-decoration: none;">Open recipe inbox</a></p>
+        <p><a href="${siteUrl}/admin" style="display: inline-block; background: #123C39; color: #FFF3DF; padding: 12px 18px; border-radius: 999px; text-decoration: none;">Open recipe inbox</a></p>
       </div>
     `,
   };
@@ -88,14 +88,14 @@ export function newSubmissionEmail({ name, email, title, location }: { name: str
 
 export function publishedRecipeEmail({ name, title, recipeUrl }: { name: string; title: string; recipeUrl: string }) {
   return {
-    subject: `Your recipe is now in the OPR Family Cookbook`,
+    subject: `Your recipe is now in the OPR Living Cookbook`,
     html: `
-      <div style="font-family: Georgia, serif; max-width: 620px; margin: 0 auto; color: #4A4232; line-height: 1.65;">
+      <div style="font-family: 'Gill Sans MT', 'Gill Sans', Avenir, Corbel, Arial, sans-serif; max-width: 620px; margin: 0 auto; color: #4A4232; line-height: 1.65;">
         <p style="color: #9A622A; letter-spacing: 2px; font-size: 12px; text-transform: uppercase;">Other People's Recipes</p>
-        <h1 style="font-size: 34px; line-height: 1.2;">Your recipe is now part of the book.</h1>
+        <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 34px; line-height: 1.2;">Your recipe is now part of the book.</h1>
         <p>Dear ${escapeHtml(name)},</p>
-        <p>We&apos;re delighted to let you know that <strong>${escapeHtml(title)}</strong> is now live in the Other People&apos;s Recipes Family Cookbook.</p>
-        <p><a href="${recipeUrl}" style="display: inline-block; background: #4A4232; color: white; padding: 12px 18px; border-radius: 999px; text-decoration: none;">See your recipe</a></p>
+        <p>We&apos;re delighted to let you know that <strong>${escapeHtml(title)}</strong> is now live in the Other People&apos;s Recipes Living Cookbook.</p>
+        <p><a href="${recipeUrl}" style="display: inline-block; background: #123C39; color: #FFF3DF; padding: 12px 18px; border-radius: 999px; text-decoration: none;">See your recipe</a></p>
         <p>Thank you for helping us preserve the food and stories that matter.</p>
         <p style="margin-top: 32px;">Warmly,<br /><strong>The OPR team</strong></p>
       </div>
@@ -115,14 +115,14 @@ export function foundingTableWelcomeEmail({
   return {
     subject: "Welcome to the OPR table",
     html: `
-      <div style="font-family: Georgia, serif; max-width: 620px; margin: 0 auto; color: #4A4232; line-height: 1.65;">
+      <div style="font-family: 'Gill Sans MT', 'Gill Sans', Avenir, Corbel, Arial, sans-serif; max-width: 620px; margin: 0 auto; color: #4A4232; line-height: 1.65;">
         <p style="color: #9A622A; letter-spacing: 2px; font-size: 12px; text-transform: uppercase;">Other People's Recipes</p>
-        <h1 style="font-size: 34px; line-height: 1.2;">You have a place at our table.</h1>
+        <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 34px; line-height: 1.2;">You have a place at our table.</h1>
         <p>Dear ${escapeHtml(name)},</p>
         <p>Thank you for joining the very first people shaping Other People's Recipes.</p>
         ${marketingOptIn ? "<p>You will be first to hear about new family recipes, future tasting events, Recipe of the Month voting and the next chapter of OPR.</p>" : "<p>We have saved your place at our table. You have not opted in to optional OPR news, so we will not send you marketing updates.</p>"}
-        <p>While you wait, the first stories are already waiting for you in the Family Cookbook.</p>
-        <p><a href="${siteUrl}/family-cookbook" style="display: inline-block; background: #1C5A50; color: #FFF3DF; padding: 12px 18px; border-radius: 999px; text-decoration: none;">Explore the Family Cookbook</a></p>
+        <p>While you wait, the first stories are already waiting for you in the Living Cookbook.</p>
+        <p><a href="${siteUrl}/family-cookbook" style="display: inline-block; background: #1C5A50; color: #FFF3DF; padding: 12px 18px; border-radius: 999px; text-decoration: none;">Explore the Living Cookbook</a></p>
         <p style="margin-top: 32px;">Warmly,<br /><strong>Chaten &amp; the OPR team</strong></p>
         ${marketingFooter(unsubscribeUrl)}
         <p style="font-size: 13px; color: #6B6254;">Every Recipe has a Story.</p>
@@ -135,9 +135,9 @@ export function newFoundingTableEmail({ name, email }: { name: string; email: st
   return {
     subject: `New table signup: ${name}`,
     html: `
-      <div style="font-family: Arial, sans-serif; max-width: 620px; margin: 0 auto; color: #4A4232; line-height: 1.65;">
+      <div style="font-family: 'Gill Sans MT', 'Gill Sans', Avenir, Corbel, Arial, sans-serif; max-width: 620px; margin: 0 auto; color: #4A4232; line-height: 1.65;">
         <p style="color: #9A622A; font-size: 12px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase;">Private OPR alert</p>
-        <h1 style="font-family: Georgia, serif; font-size: 30px;">A new person has joined our table.</h1>
+        <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 30px;">A new person has joined our table.</h1>
         <p><strong>${escapeHtml(name)}</strong> has joined the waitlist.</p>
         <p>Contact: <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></p>
       </div>

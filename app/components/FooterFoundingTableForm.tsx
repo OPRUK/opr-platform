@@ -57,7 +57,7 @@ export default function FooterFoundingTableForm() {
           onChange={(event) => setName(event.target.value)}
           autoComplete="given-name"
           placeholder="First name"
-          className="min-w-0 rounded-xl border border-[#8B6B42] bg-[#FFF3DF] px-3.5 py-3 text-sm text-[#123C39] outline-none transition placeholder:text-stone-500 focus:border-[#FFD58C] focus:ring-2 focus:ring-[#FFD58C]/50"
+          className="min-w-0 rounded-xl border border-[#9A622A] bg-[#FFF3DF] px-3.5 py-3 text-base text-[#123C39] outline-none transition placeholder:text-stone-500 focus:border-[#DDB765] focus:ring-2 focus:ring-[#DDB765]/50"
         />
         <label className="sr-only" htmlFor="footer-founding-email">Email address</label>
         <input
@@ -69,21 +69,21 @@ export default function FooterFoundingTableForm() {
           type="email"
           autoComplete="email"
           placeholder="Email address"
-          className="min-w-0 rounded-xl border border-[#8B6B42] bg-[#FFF3DF] px-3.5 py-3 text-sm text-[#123C39] outline-none transition placeholder:text-stone-500 focus:border-[#FFD58C] focus:ring-2 focus:ring-[#FFD58C]/50"
+          className="min-w-0 rounded-xl border border-[#9A622A] bg-[#FFF3DF] px-3.5 py-3 text-base text-[#123C39] outline-none transition placeholder:text-stone-500 focus:border-[#DDB765] focus:ring-2 focus:ring-[#DDB765]/50"
         />
         <button
           type="submit"
           disabled={isSubmitting}
-          className="rounded-xl bg-[#DDB765] px-4 py-3 text-sm font-bold text-[#08231F] transition hover:bg-[#FFD58C] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FFD58C] disabled:cursor-not-allowed disabled:opacity-70 sm:col-span-2"
+          className="rounded-xl bg-[#DDB765] px-4 py-3 text-base font-bold text-[#08231F] transition hover:bg-[#DDB765] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#DDB765] disabled:cursor-not-allowed disabled:opacity-70 sm:col-span-2"
         >
           {isSubmitting ? "Saving your seat…" : "Save my seat"}
         </button>
       </form>
-      <p className="mt-3 text-xs leading-5 text-[#DABF8D]">
+      <p className="mt-3 text-xs leading-5 text-[#DDB765]">
         By saving your seat, you agree to receive OPR news and invitations. Unsubscribe at any time. Read our{" "}
         <Link href="/privacy" className="underline underline-offset-2 transition hover:text-[#FFF3DF]">Privacy Notice</Link>.
       </p>
-      <p role="status" aria-live="polite" className="mt-2 min-h-5 text-sm text-[#FFE4A3]">{message}</p>
+      <p role="status" aria-live="polite" className="mt-2 min-h-5 text-sm text-[#DDB765]">{message}</p>
     </div>
   );
 }

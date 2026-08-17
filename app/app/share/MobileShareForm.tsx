@@ -12,7 +12,7 @@ import { attachmentMetadata, AttachmentKind } from "../../../lib/media-attachmen
 const CONSENT_VERSION = "opr-submission-terms-2026-08-03-combined";
 
 const inputClassName =
-  "mt-1.5 w-full border border-[#D1AD75] bg-[#FFF3DF] px-3.5 py-3 text-[15px] outline-none transition placeholder:text-stone-500 focus:border-[#123C39]";
+  "mt-1.5 w-full border border-[#DDB765] bg-[#FFF3DF] px-3.5 py-3 text-base outline-none transition placeholder:text-stone-500 focus:border-[#123C39]";
 
 type AttachmentKey = "photo" | "audioStory" | "recipeVideo" | "originalRecipePhoto";
 
@@ -191,12 +191,12 @@ export default function MobileShareForm() {
     return (
       <div role="status" aria-live="polite" className="flex flex-col items-center pt-14 text-center">
         <CheckIcon />
-        <h2 className="font-display mb-2.5 mt-5 text-[26px]">Thank you.</h2>
-        <p className="max-w-[26ch] text-[15px] opacity-80">
+        <h2 className="mb-2.5 mt-5 text-[26px] font-bold">Thank you.</h2>
+        <p className="max-w-[26ch] text-base opacity-80">
           Your family&apos;s story is now with the OPR kitchen — we&apos;ll be in touch before it&apos;s published.
         </p>
         {uploadWarnings.length ? (
-          <div className="mt-5 border border-amber-700/50 bg-[#FFF3DF] p-4 text-left text-sm text-amber-900">
+          <div className="mt-5 border border-amber-700/50 bg-[#FFF3DF] p-4 text-left text-base text-amber-900">
             <p className="font-semibold">Your recipe was saved, but:</p>
             {uploadWarnings.map((warning) => <p key={warning} className="mt-1">{warning}</p>)}
           </div>
@@ -214,7 +214,7 @@ export default function MobileShareForm() {
             setUploadWarnings([]);
             setSubmitted(false);
           }}
-          className="mt-6 border border-[#123C39] px-5 py-3 text-sm font-medium transition hover:bg-[#123C39] hover:text-[#EED8B2]"
+          className="mt-6 border border-[#123C39] px-5 py-3 text-base font-medium transition hover:bg-[#123C39] hover:text-[#EED8B2]"
         >
           Share another recipe
         </button>
@@ -224,19 +224,19 @@ export default function MobileShareForm() {
 
   return (
     <form onSubmit={submit}>
-      <label className="mb-3.5 block text-sm font-medium">
+      <label className="mb-3.5 block text-base font-medium">
         Recipe title
         <input required value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Grandad's Sunday Roast" className={inputClassName} />
       </label>
-      <label className="mb-3.5 block text-sm font-medium">
+      <label className="mb-3.5 block text-base font-medium">
         Your name
         <input required value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" className={inputClassName} />
       </label>
-      <label className="mb-3.5 block text-sm font-medium">
+      <label className="mb-3.5 block text-base font-medium">
         Where it&apos;s from
         <input value={place} onChange={(e) => setPlace(e.target.value)} placeholder="Town, country" className={inputClassName} />
       </label>
-      <label className="mb-5 block text-sm font-medium">
+      <label className="mb-5 block text-base font-medium">
         The story behind it
         <textarea
           required
@@ -255,7 +255,7 @@ export default function MobileShareForm() {
           return (
             <label
               key={attachment.key}
-              className="flex w-full cursor-pointer items-center gap-2 border border-[#123C39] px-4 py-3 text-sm font-medium transition hover:bg-[#123C39] hover:text-[#EED8B2]"
+              className="flex w-full cursor-pointer items-center gap-2 border border-[#123C39] px-4 py-3 text-base font-medium transition hover:bg-[#123C39] hover:text-[#EED8B2]"
             >
               {attachment.icon}
               <span className="flex-1 truncate">{file ? file.name : attachment.label}</span>
@@ -267,7 +267,7 @@ export default function MobileShareForm() {
 
       <Divider className="my-5" />
 
-      <label className="mb-3 flex items-start gap-2.5 text-[13px] leading-[1.5]">
+      <label className="mb-3 flex items-start gap-2.5 text-base leading-[1.5]">
         <input
           required
           type="checkbox"
@@ -282,7 +282,7 @@ export default function MobileShareForm() {
           </Link>
         </span>
       </label>
-      <label className="mb-5 flex items-start gap-2.5 text-[13px] leading-[1.5]">
+      <label className="mb-5 flex items-start gap-2.5 text-base leading-[1.5]">
         <input type="checkbox" checked={marketing} onChange={(e) => setMarketing(e.target.checked)} className="mt-[3px] accent-[#123C39]" />
         <span>Keep me updated about OPR (optional).</span>
       </label>
@@ -290,11 +290,11 @@ export default function MobileShareForm() {
       <button
         type="submit"
         disabled={!canSubmit || isSubmitting}
-        className="w-full bg-[#123C39] px-4 py-[14px] text-[16px] font-medium text-[#EED8B2] transition hover:bg-[#0d2b28] disabled:cursor-not-allowed disabled:opacity-50"
+        className="w-full bg-[#123C39] px-4 py-[14px] text-[16px] font-medium text-[#EED8B2] transition hover:bg-[#08231F] disabled:cursor-not-allowed disabled:opacity-50"
       >
         {isSubmitting ? "Saving your recipe…" : "Submit your recipe"}
       </button>
-      {error ? <p role="alert" className="mt-3 text-sm text-red-800">{error}</p> : null}
+      {error ? <p role="alert" className="mt-3 text-base text-red-800">{error}</p> : null}
     </form>
   );
 }
