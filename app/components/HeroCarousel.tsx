@@ -55,7 +55,11 @@ export default function HeroCarousel() {
           src={slide.image}
           alt={index === activeSlide ? slide.alt : ""}
           fill
-          priority={index === 0}
+          // This carousel sits behind the intro video (HomeHero renders it
+          // at opacity-0 until the video sequence finishes, several+
+          // seconds in) — eagerly preloading its first slide competed with
+          // the actual LCP-critical video poster for the same bandwidth
+          // during the crucial first paint, for content nobody sees yet.
           sizes="100vw"
           className={`object-cover transition-opacity duration-[1800ms] ease-in-out ${
             index === activeSlide ? "opacity-100" : "opacity-0"

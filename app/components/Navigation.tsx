@@ -25,7 +25,10 @@ export default function Navigation() {
           aria-label="Other People's Recipes home"
           className="font-brand flex shrink-0 items-center gap-2.5 text-2xl font-semibold leading-none tracking-[0.01em] text-[#123C39] transition hover:text-[#9A622A] sm:gap-3 sm:text-3xl"
         >
-          <OprBadge preload className="h-9 w-9 sm:h-11 sm:w-11" />
+          {/* Not preloaded — a 36-44px header logo isn't the LCP element on
+              any page, and on the homepage it was competing with the hero
+              video's poster (the actual LCP candidate) for bandwidth. */}
+          <OprBadge className="h-9 w-9 sm:h-11 sm:w-11" />
           <span className="sm:hidden" aria-hidden="true">OPR</span>
           <span className="hidden sm:inline">Other People&apos;s Recipes<sup aria-hidden="true" className="ml-0.5 align-super text-[0.35em]">™</sup></span>
         </Link>
