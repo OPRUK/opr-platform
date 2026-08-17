@@ -21,7 +21,7 @@ const benefits = [
 
 export default function FoundingTablePage() {
   return (
-    <main className="min-h-screen bg-[#EED8B2] text-[#123C39]">
+    <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] text-[#123C39]">
       <Navigation />
 
       <section className="relative isolate overflow-hidden bg-[#0D342F] px-6 pb-24 pt-40 text-center text-[#FFF3DF]">

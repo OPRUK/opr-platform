@@ -11,11 +11,13 @@ import VideoBrandMark from "./VideoBrandMark";
 export default function FilmEmbed({
   video,
   poster,
+  captions,
   title,
   className = "",
 }: {
   video: string;
   poster?: string;
+  captions?: string;
   title: string;
   className?: string;
 }) {
@@ -25,6 +27,7 @@ export default function FilmEmbed({
     return (
       <div className={`relative ${className}`}>
         <video
+          aria-label={title}
           className="h-full w-full"
           src={video}
           controls
@@ -33,6 +36,7 @@ export default function FilmEmbed({
           preload="metadata"
           poster={poster}
         >
+          {captions ? <track kind="captions" src={captions} srcLang="en" label="English captions" default /> : null}
           Your browser does not support video playback.
         </video>
         <VideoBrandMark />

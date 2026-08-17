@@ -5,7 +5,9 @@ export default function Footer() {
     <footer className="bg-[#08231F] px-6 py-16 text-[#FFF3DF]">
       <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
-          <p className="font-brand text-4xl font-semibold leading-none tracking-[0.01em]">Other People&apos;s Recipes</p>
+          <p className="font-brand text-4xl font-semibold leading-none tracking-[0.01em]">
+            Other People&apos;s Recipes<sup aria-hidden="true" className="ml-0.5 align-super text-[0.3em]">™</sup>
+          </p>
           <p className="mt-5 max-w-sm leading-7 text-[#E7CEA2]">
             Preserving recipes. Celebrating people. Sharing stories around the
             table.
@@ -33,7 +35,7 @@ export default function Footer() {
             <li><Link href="/share" className="transition hover:text-[#DDB765]">Share your recipe</Link></li>
             <li><Link href="/founding-table" className="transition hover:text-[#DDB765]">Join the Founding Table</Link></li>
             <li><a href="mailto:info@otherpeoplesrecipes.co.uk" className="transition hover:text-[#DDB765]">Contact OPR</a></li>
-            <li className="flex items-center gap-4 pt-2">
+            <li className="flex flex-wrap items-center gap-4 pt-2">
               <a
                 href="https://www.instagram.com/opr_uk/"
                 target="_blank"
@@ -100,8 +102,13 @@ export default function Footer() {
         <div>
           <p>© {new Date().getFullYear()} Other People&apos;s Recipes. Every Recipe has a Story.</p>
           <p className="mt-1 text-xs uppercase text-[#BFA77B]">Other Peoples Recipes Ltd · Company no. 17370145</p>
+          <p className="mt-2 max-w-xl text-xs leading-5 text-[#BFA77B]">
+            Other People&apos;s Recipes™ and OPR™ are trade marks of OTHER PEOPLES
+            RECIPES LTD. UK trade mark applications pending.
+          </p>
         </div>
-        <p className="flex gap-4">
+        <p className="flex flex-wrap gap-4">
+          <Link href="/accessibility" className="transition hover:text-[#DDB765]">Accessibility</Link>
           <Link href="/privacy" className="transition hover:text-[#DDB765]">Privacy Policy</Link>
           <Link href="/cookies" className="transition hover:text-[#DDB765]">Cookies</Link>
           <Link href="/terms" className="transition hover:text-[#DDB765]">Terms of Use</Link>

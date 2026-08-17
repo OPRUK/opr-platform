@@ -1,6 +1,7 @@
 "use client";
 
 import type { Session } from "@supabase/supabase-js";
+import Image from "next/image";
 import { FormEvent, useEffect, useState } from "react";
 import { featuredRecipes } from "../../lib/recipes";
 import { supabase } from "../../lib/supabase/client";
@@ -84,6 +85,7 @@ export default function AdminDashboard() {
   const [totpFactorId, setTotpFactorId] = useState<string | null>(null);
   const [checkingAal, setCheckingAal] = useState(true);
   const [showSecurityPanel, setShowSecurityPanel] = useState(false);
+  const [exportingFoundingTable, setExportingFoundingTable] = useState(false);
 
   useEffect(() => {
     async function checkSession() {
@@ -97,6 +99,7 @@ export default function AdminDashboard() {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      setCheckingAal(true);
       setSession(nextSession);
     });
 
@@ -110,16 +113,33 @@ export default function AdminDashboard() {
       supabase.auth.mfa.listFactors(),
     ]);
     setAal(aalData ? { current: aalData.currentLevel, next: aalData.nextLevel } : null);
-    setTotpFactorId(factorData?.totp[0]?.id ?? null);
+    setTotpFactorId(
+      factorData?.totp.find((factor) => factor.status === "verified")?.id ?? null,
+    );
     setCheckingAal(false);
   }
 
   useEffect(() => {
     if (!session || session.user.email !== allowedEmail) {
-      setCheckingAal(false);
       return;
     }
-    void refreshAal();
+
+    let cancelled = false;
+    void Promise.all([
+      supabase.auth.mfa.getAuthenticatorAssuranceLevel(),
+      supabase.auth.mfa.listFactors(),
+    ]).then(([{ data: aalData }, { data: factorData }]) => {
+      if (cancelled) return;
+      setAal(aalData ? { current: aalData.currentLevel, next: aalData.nextLevel } : null);
+      setTotpFactorId(
+        factorData?.totp.find((factor) => factor.status === "verified")?.id ?? null,
+      );
+      setCheckingAal(false);
+    });
+
+    return () => {
+      cancelled = true;
+    };
   }, [session]);
 
   const mfaPending = Boolean(aal && aal.next === "aal2" && aal.current !== "aal2");
@@ -211,6 +231,36 @@ export default function AdminDashboard() {
         ? "We could not send the sign-in email. Please try again."
         : "Check your inbox for your secure OPR sign-in link.",
     );
+  }
+
+  async function downloadFoundingTable() {
+    setMessage("");
+    setExportingFoundingTable(true);
+
+    try {
+      const response = await adminRequest("/api/admin/founding-table");
+      if (!response.ok) {
+        const payload = await response.json().catch(() => null);
+        setMessage(payload?.error ?? "The Founding Table spreadsheet could not be downloaded.");
+        return;
+      }
+
+      const blob = await response.blob();
+      const objectUrl = URL.createObjectURL(blob);
+      const disposition = response.headers.get("content-disposition") ?? "";
+      const filename = disposition.match(/filename="([^"]+)"/)?.[1] ?? "opr-founding-table.xlsx";
+      const link = document.createElement("a");
+      link.href = objectUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(objectUrl), 1_000);
+    } catch {
+      setMessage("The Founding Table spreadsheet could not be downloaded.");
+    } finally {
+      setExportingFoundingTable(false);
+    }
   }
 
   async function updateStatus(id: number, status: SubmissionStatus) {
@@ -432,12 +482,12 @@ export default function AdminDashboard() {
     .sort(([, firstVotes], [, secondVotes]) => secondVotes - firstVotes);
 
   if (loading && !session) {
-    return <main className="min-h-screen bg-[#EED8B2]" />;
+    return <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2]" />;
   }
 
   if (!session) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#EED8B2] px-6 text-[#123C39]">
+      <main id="main-content" tabIndex={-1} className="flex min-h-screen items-center justify-center bg-[#EED8B2] px-6 text-[#123C39]">
         <form
           onSubmit={sendMagicLink}
           className="w-full max-w-md rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-10"
@@ -465,7 +515,7 @@ export default function AdminDashboard() {
           >
             Send secure sign-in link
           </button>
-          {message ? <p className="mt-5 text-sm leading-6 text-stone-700">{message}</p> : null}
+          {message ? <p role="status" aria-live="polite" className="mt-5 text-sm leading-6 text-stone-700">{message}</p> : null}
         </form>
       </main>
     );
@@ -473,7 +523,7 @@ export default function AdminDashboard() {
 
   if (session.user.email !== allowedEmail) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#EED8B2] px-6 text-center text-[#123C39]">
+      <main id="main-content" tabIndex={-1} className="flex min-h-screen items-center justify-center bg-[#EED8B2] px-6 text-center text-[#123C39]">
         <div className="max-w-lg rounded-3xl bg-[#FFF3DF] p-10 shadow-xl shadow-[#1C5A50]/15">
           <h1 className="font-display text-3xl font-bold">This inbox is private.</h1>
           <p className="mt-5 leading-7 text-stone-700">
@@ -523,7 +573,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <main className="min-h-screen bg-[#EED8B2] px-6 py-10 text-[#123C39] md:px-10">
+    <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] px-6 py-10 text-[#123C39] md:px-10">
       <header className="mx-auto flex max-w-7xl flex-col justify-between gap-6 md:flex-row md:items-end">
         <div>
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">Private OPR area</p>
@@ -542,13 +592,21 @@ export default function AdminDashboard() {
             </p>
           )}
         </div>
-        <div className="flex items-center gap-4 self-start md:self-auto">
+        <div className="flex flex-wrap items-center gap-4 self-start md:self-auto">
           <button
             type="button"
             onClick={() => setShowSecurityPanel(true)}
             className="text-sm font-medium underline"
           >
             Security
+          </button>
+          <button
+            type="button"
+            onClick={() => void downloadFoundingTable()}
+            disabled={exportingFoundingTable}
+            className="rounded-full bg-[#123C39] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#08231F] disabled:cursor-wait disabled:opacity-60"
+          >
+            {exportingFoundingTable ? "Preparing spreadsheet…" : "Download Founding Table (.xlsx)"}
           </button>
           <button
             type="button"
@@ -561,7 +619,7 @@ export default function AdminDashboard() {
       </header>
 
       {message ? (
-        <p className={`mx-auto mt-8 max-w-7xl text-sm ${message.startsWith("Published:") || message.startsWith("Deleted:") || message.includes("removed from") ? "text-[#2E5A35]" : "text-red-800"}`}>
+        <p role="status" aria-live="polite" className={`mx-auto mt-8 max-w-7xl text-sm ${message.startsWith("Published:") || message.startsWith("Deleted:") || message.includes("removed from") ? "text-[#2E5A35]" : "text-red-800"}`}>
           {message}
         </p>
       ) : null}
@@ -716,9 +774,12 @@ export default function AdminDashboard() {
                 {selectedPhotoUrl ? (
                   <article>
                     <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#123C39]">Recipe photo</h3>
-                    <img
+                    <Image
                       src={selectedPhotoUrl}
                       alt={selectedSubmission.title}
+                      width={1200}
+                      height={900}
+                      unoptimized
                       className="mt-4 max-h-[28rem] w-full rounded-2xl object-cover shadow-lg"
                     />
                   </article>
@@ -727,9 +788,12 @@ export default function AdminDashboard() {
                   <article>
                     <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#123C39]">Meet the cook</h3>
                     <div className="mt-4 flex items-center gap-4">
-                      <img
+                      <Image
                         src={selectedContributorPhotoUrl}
                         alt={`${selectedSubmission.name}, who shared ${selectedSubmission.title}`}
+                        width={96}
+                        height={96}
+                        unoptimized
                         className="h-24 w-24 rounded-full object-cover shadow-lg"
                       />
                       <p className="font-medium text-[#123C39]">{selectedSubmission.name}</p>
@@ -739,9 +803,12 @@ export default function AdminDashboard() {
                 {selectedOriginalRecipeUrl ? (
                   <article>
                     <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#123C39]">The original recipe</h3>
-                    <img
+                    <Image
                       src={selectedOriginalRecipeUrl}
                       alt={`The original recipe for ${selectedSubmission.title}`}
+                      width={1200}
+                      height={1600}
+                      unoptimized
                       className="mt-4 max-h-[36rem] w-full rounded-2xl object-contain shadow-lg"
                     />
                   </article>
@@ -820,7 +887,7 @@ export default function AdminDashboard() {
               return (
                 <article key={cook.id} className="flex flex-col gap-5 px-6 py-6 md:flex-row md:items-center md:justify-between md:px-8">
                   <div className="flex min-w-0 items-center gap-4">
-                    {photoUrl ? <img src={photoUrl} alt="" className="h-16 w-16 shrink-0 rounded-full object-cover" /> : <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#F4DDAE] font-bold">{cook.name.charAt(0).toUpperCase()}</div>}
+                    {photoUrl ? <Image src={photoUrl} alt="" width={64} height={64} unoptimized className="h-16 w-16 shrink-0 rounded-full object-cover" /> : <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#F4DDAE] font-bold">{cook.name.charAt(0).toUpperCase()}</div>}
                     <div>
                       <p className="font-bold">{cook.name} <span className="font-normal text-stone-500">cooked {cook.recipe_submissions?.title ?? cook.recipe_title ?? "an OPR recipe"}</span></p>
                       {cook.note ? <p className="mt-1 max-w-2xl text-sm leading-6 text-stone-700">“{cook.note}”</p> : <p className="mt-1 text-sm text-stone-500">No note supplied.</p>}

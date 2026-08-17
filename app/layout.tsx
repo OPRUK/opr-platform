@@ -1,8 +1,35 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
+import { Allura, Cabin, Caveat, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import { SITE_NAME, SITE_URL, absoluteUrl } from "../lib/site";
 import SiteFooter from "./components/SiteFooter";
+
+const cabin = Cabin({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-cabin",
+});
+
+const cormorantGaramond = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-cormorant-garamond",
+});
+
+const caveat = Caveat({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-caveat",
+});
+
+const allura = Allura({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-allura",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -59,16 +86,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full antialiased">
+    <html
+      lang="en"
+      data-text-size="default"
+      data-readable-font="false"
+      suppressHydrationWarning
+      className={`${cabin.variable} ${cormorantGaramond.variable} ${caveat.variable} ${allura.variable} h-full antialiased`}
+    >
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Allura&family=Caveat:wght@400;500;600&display=swap"
-          rel="stylesheet"
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var s=localStorage.getItem("opr-text-size");if(["small","default","large","largest"].indexOf(s)>-1)document.documentElement.dataset.textSize=s;document.documentElement.dataset.readableFont=localStorage.getItem("opr-readable-font")==="true"?"true":"false"}catch(e){}})()`,
+          }}
         />
       </head>
       <body className="min-h-full flex flex-col">
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
         {children}
         <SiteFooter />
         <script

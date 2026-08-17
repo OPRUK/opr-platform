@@ -13,7 +13,7 @@ export const metadata: Metadata = buildMetadata({
 
 export default function FounderPage() {
   return (
-    <main className="min-h-screen bg-[#EED8B2] text-[#123C39]">
+    <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] text-[#123C39]">
       <Navigation />
 
       <section className="relative isolate overflow-hidden px-6 pb-24 pt-36 md:px-8 md:pt-44">

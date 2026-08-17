@@ -20,7 +20,17 @@ export default function MfaSecurityPanel({ onFactorsChanged }: { onFactorsChange
   }
 
   useEffect(() => {
-    void refresh();
+    let cancelled = false;
+
+    void supabase.auth.mfa.listFactors().then(({ data }) => {
+      if (cancelled) return;
+      setFactors(data?.totp ?? []);
+      setLoading(false);
+    });
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   async function removeFactor(factor: Factor) {
@@ -29,6 +39,18 @@ export default function MfaSecurityPanel({ onFactorsChanged }: { onFactorsChange
     }
     setRemovingId(factor.id);
     setMessage("");
+
+    if (factor.status === "verified") {
+      const { data: aalData, error: aalError } =
+        await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+      if (aalError || aalData.currentLevel !== "aal2") {
+        setMessage("Verify with your authenticator again before removing this factor.");
+        setRemovingId(null);
+        onFactorsChanged?.();
+        return;
+      }
+    }
+
     const { error } = await supabase.auth.mfa.unenroll({ factorId: factor.id });
     if (error) {
       setMessage("We could not remove that authenticator. Please try again.");
@@ -57,7 +79,7 @@ export default function MfaSecurityPanel({ onFactorsChanged }: { onFactorsChange
   return (
     <div>
       <h2 className="text-2xl font-bold text-[#123C39]">Two-factor authentication</h2>
-      {message ? <p className="mt-3 text-sm text-[#2E5A35]">{message}</p> : null}
+      {message ? <p role="status" aria-live="polite" className="mt-3 text-sm text-[#2E5A35]">{message}</p> : null}
       {loading ? (
         <p className="mt-4 text-stone-600">Loading...</p>
       ) : factors.length ? (

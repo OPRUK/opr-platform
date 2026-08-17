@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { supabase } from "../../../lib/supabase/client";
 
 export default function MfaEnroll({
@@ -45,7 +46,7 @@ export default function MfaEnroll({
 
   async function verify() {
     setError("");
-    if (!code.trim()) {
+    if (!/^\d{6}$/.test(code.trim())) {
       setError("Enter the 6-digit code from your authenticator app.");
       return;
     }
@@ -89,9 +90,16 @@ export default function MfaEnroll({
         Scan this code with an authenticator app (like Google Authenticator or 1Password), or enter the
         secret below by hand.
       </p>
-      {error ? <p className="mt-4 text-sm text-red-800">{error}</p> : null}
+      {error ? <p role="alert" className="mt-4 text-sm text-red-800">{error}</p> : null}
       {qrCode ? (
-        <img src={qrCode} alt="Two-factor QR code" className="mt-5 h-48 w-48 rounded-xl border border-[#D1AD75]/70 bg-white p-3" />
+        <Image
+          src={qrCode}
+          alt="Two-factor QR code"
+          width={192}
+          height={192}
+          unoptimized
+          className="mt-5 h-48 w-48 rounded-xl border border-[#D1AD75]/70 bg-white p-3"
+        />
       ) : null}
       {secret ? (
         <p className="mt-4 break-all rounded-xl bg-[#F4DDAE] px-4 py-3 font-mono text-sm text-[#123C39]">{secret}</p>
@@ -100,7 +108,7 @@ export default function MfaEnroll({
         Code from your authenticator app
         <input
           value={code}
-          onChange={(event) => setCode(event.target.value)}
+          onChange={(event) => setCode(event.target.value.replace(/\D/g, "").slice(0, 6))}
           inputMode="numeric"
           autoComplete="one-time-code"
           placeholder="123456"

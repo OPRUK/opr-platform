@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabase/client";
 import { WORLD_LAND_PATH } from "./world-map-path";
@@ -286,7 +287,7 @@ export default function PublishedRecipes({
         </div>
       </div>
 
-      <div className="mt-8 rounded-3xl border border-[#D1AD75]/70 bg-[#F4DDAE]/55 px-6 py-6 md:flex md:items-center md:justify-between md:gap-8">
+      <div className="mt-5 rounded-3xl border border-[#D1AD75]/70 bg-[#F4DDAE]/55 px-6 py-6 md:flex md:items-center md:justify-between md:gap-8">
         <div>
           <p className="text-sm uppercase tracking-[0.22em] text-[#9A622A]">
             The cookbook is growing
@@ -305,7 +306,7 @@ export default function PublishedRecipes({
         </Link>
       </div>
 
-      <section className="mt-10 overflow-hidden rounded-3xl border border-[#D1AD75]/70 bg-[#123C39] p-6 text-[#FFF3DF] shadow-xl shadow-[#1C5A50]/20 md:p-10">
+      <section className="mt-6 overflow-hidden rounded-3xl border border-[#D1AD75]/70 bg-[#123C39] p-6 text-[#FFF3DF] shadow-xl shadow-[#1C5A50]/20 md:p-10">
         <div className="max-w-3xl">
           <p className="text-sm uppercase tracking-[0.28em] text-[#F0C45A]">From kitchen to kitchen</p>
           <h2 className="font-display mt-3 text-4xl font-bold leading-tight md:text-5xl">The OPR recipe map</h2>
@@ -318,7 +319,7 @@ export default function PublishedRecipes({
             map needs overflow-hidden to keep its rounded corners, but a
             cluster popover must be able to spill outside the map's own
             bounds without getting clipped by that same rule. */}
-        <div className="relative mt-8">
+        <div className="relative mt-6">
           <div className="overflow-hidden rounded-3xl border border-[#D1AD75]/60 bg-[#0B2622]">
             <svg viewBox={WORLD_MAP_VIEWBOX} className="block w-full" aria-hidden="true">
               <rect width="960" height="480" fill="#0B2622" />
@@ -400,7 +401,7 @@ export default function PublishedRecipes({
         </p>
 
         {recipePlaces.length ? (
-          <div className="mt-7 border-t border-[#D1AD75]/40 pt-6">
+          <div className="mt-5 border-t border-[#D1AD75]/40 pt-5">
             <p className="text-sm uppercase tracking-[0.22em] text-[#F0C45A]">Browse by place</p>
             <div className="mt-4 flex flex-wrap gap-2">
               {recipePlaces.map((recipe) => (
@@ -413,7 +414,7 @@ export default function PublishedRecipes({
         ) : null}
       </section>
 
-      <section id="recipe-of-the-month" className="mt-10 scroll-mt-24 overflow-hidden rounded-3xl border border-[#D1AD75]/80 bg-[#123C39] px-6 py-9 text-[#FFF3DF] shadow-xl shadow-[#1C5A50]/20 md:px-10">
+      <section id="recipe-of-the-month" className="mt-6 scroll-mt-24 overflow-hidden rounded-3xl border border-[#D1AD75]/80 bg-[#123C39] px-6 py-9 text-[#FFF3DF] shadow-xl shadow-[#1C5A50]/20 md:px-10">
         <div className="max-w-3xl">
           <p className="text-sm uppercase tracking-[0.28em] text-[#F0C45A]">OPR Recipe of the Month</p>
           <h2 className="font-display mt-3 text-4xl font-bold leading-tight md:text-5xl">Which recipe should take the table this {monthName}?</h2>
@@ -425,7 +426,7 @@ export default function PublishedRecipes({
           </p>
         </div>
 
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {votingRecipes.map((recipe) => {
             const selected = voteResults?.selectedRecipeKey === recipe.id;
             const votes = voteResults?.totals[recipe.id] ?? 0;
@@ -452,12 +453,12 @@ export default function PublishedRecipes({
         {voteError ? <p className="mt-5 rounded-xl border border-red-300/70 bg-red-950/30 px-4 py-3 text-sm text-red-100">{voteError}</p> : null}
       </section>
 
-      <p className="mt-8 text-sm text-stone-600">
+      <p className="mt-5 text-sm text-stone-600">
         {visibleRecipes.length} {visibleRecipes.length === 1 ? "recipe" : "recipes"} to discover
       </p>
 
       {visibleRecipes.length ? (
-        <div className="mt-5 grid gap-px overflow-hidden border border-[#123C39]/30 bg-[#123C39]/30 md:grid-cols-3">
+        <div className="mt-4 grid gap-px overflow-hidden border border-[#123C39]/30 bg-[#123C39]/30 md:grid-cols-3">
           {visibleRecipes.map((recipe, index) => (
             <Link
               key={recipe.id}
@@ -465,9 +466,12 @@ export default function PublishedRecipes({
               className="group flex flex-col overflow-hidden bg-[#FFF3DF] transition-colors duration-300 hover:bg-[#FBEBC8]"
             >
               {recipe.imageUrl ? (
-                <img
+                <Image
                   src={recipe.imageUrl}
                   alt={recipe.title}
+                  width={800}
+                  height={600}
+                  unoptimized
                   className="aspect-[4/3] w-full object-cover grayscale-[15%] transition duration-500 group-hover:grayscale-0"
                 />
               ) : (

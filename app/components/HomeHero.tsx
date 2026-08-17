@@ -49,13 +49,13 @@ export default function HomeHero({ children }: HomeHeroProps) {
   // rather than hard-swapping a single video's `src` (the previous jump cut).
   const [activeSlot, setActiveSlot] = useState<0 | 1>(0);
   const [slotFilm, setSlotFilm] = useState<[number, number]>([0, 1 % introductionFilms.length]);
-  const videoRefs = [useRef<HTMLVideoElement | null>(null), useRef<HTMLVideoElement | null>(null)];
+  const videoRefs = useRef<[HTMLVideoElement | null, HTMLVideoElement | null]>([null, null]);
   const currentIndexRef = useRef(0);
   const transitioningRef = useRef(false);
   const transitionTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
-    const el = videoRefs[activeSlot].current;
+    const el = videoRefs.current[activeSlot];
     if (!el) return;
     el.muted = isMuted;
     void el.play().catch(() => {
@@ -76,15 +76,14 @@ export default function HomeHero({ children }: HomeHeroProps) {
     if (!window.matchMedia("(max-width: 640px)").matches) return;
     const timer = window.setTimeout(() => {
       setIntroductionComplete(true);
-      videoRefs[0].current?.pause();
-      videoRefs[1].current?.pause();
+      videoRefs.current[0]?.pause();
+      videoRefs.current[1]?.pause();
     }, MOBILE_INTRO_MS);
     return () => window.clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function toggleSound() {
-    const current = videoRefs[activeSlot].current;
+    const current = videoRefs.current[activeSlot];
     if (!current) return;
     current.muted = !isMuted;
     setIsMuted((value) => !value);
@@ -113,7 +112,7 @@ export default function HomeHero({ children }: HomeHeroProps) {
     // their own.
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        const el = videoRefs[nextSlot].current;
+        const el = videoRefs.current[nextSlot];
         if (el) {
           el.muted = isMuted;
           el.currentTime = 0;
@@ -123,7 +122,7 @@ export default function HomeHero({ children }: HomeHeroProps) {
         setActiveSlot(nextSlot);
         currentIndexRef.current = nextIndex;
         window.setTimeout(() => {
-          videoRefs[previousSlot].current?.pause();
+          videoRefs.current[previousSlot]?.pause();
           transitioningRef.current = false;
         }, CROSSFADE_MS);
       });
@@ -136,7 +135,7 @@ export default function HomeHero({ children }: HomeHeroProps) {
 
     // Finish slightly early, then let the final visual breathe for a moment
     // before crossfading into the next film. The films now remain unobstructed.
-    videoRefs[activeSlot].current?.pause();
+    videoRefs.current[activeSlot]?.pause();
     transitionTimerRef.current = window.setTimeout(() => {
       transitionTimerRef.current = null;
       beginCrossfade();
@@ -145,7 +144,7 @@ export default function HomeHero({ children }: HomeHeroProps) {
 
   function handleTimeUpdate(slot: 0 | 1) {
     if (slot !== activeSlot || transitioningRef.current) return;
-    const el = videoRefs[slot].current;
+    const el = videoRefs.current[slot];
     if (!el || !el.duration) return;
     if (el.duration - el.currentTime <= END_TRIM_SECONDS) {
       moveToNextFilm();
@@ -170,7 +169,9 @@ export default function HomeHero({ children }: HomeHeroProps) {
             return (
               <video
                 key={slot}
-                ref={videoRefs[slot]}
+                ref={(element) => {
+                  videoRefs.current[slot] = element;
+                }}
                 muted={isMuted}
                 playsInline
                 preload="auto"
@@ -181,7 +182,7 @@ export default function HomeHero({ children }: HomeHeroProps) {
                 }}
                 onCanPlay={() => {
                   if (slot === activeSlot) {
-                    void videoRefs[slot].current?.play().catch(() => {});
+                    void videoRefs.current[slot]?.play().catch(() => {});
                   }
                 }}
                 className="absolute inset-0 h-full w-full object-contain transition-opacity ease-in-out sm:object-cover"

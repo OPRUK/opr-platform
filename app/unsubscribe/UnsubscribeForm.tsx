@@ -28,7 +28,7 @@ export default function UnsubscribeForm({ email, token }: { email: string; token
   }
 
   if (status === "done") {
-    return <p className="rounded-2xl bg-[#E2F2E7] px-5 py-4 leading-7 text-[#123C39]">{message}</p>;
+    return <p role="status" aria-live="polite" className="rounded-2xl bg-[#E2F2E7] px-5 py-4 leading-7 text-[#123C39]">{message}</p>;
   }
 
   return (
@@ -41,7 +41,7 @@ export default function UnsubscribeForm({ email, token }: { email: string; token
       >
         {status === "working" ? "Updating your preferences…" : "Unsubscribe from OPR updates"}
       </button>
-      {status === "error" ? <p className="mt-4 text-sm text-red-800">{message}</p> : null}
+      {status === "error" ? <p role="alert" className="mt-4 text-sm text-red-800">{message}</p> : null}
     </div>
   );
 }

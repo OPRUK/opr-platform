@@ -68,7 +68,7 @@ export default function HeroCarousel() {
 
       <div className="absolute bottom-9 left-1/2 z-10 flex -translate-x-1/2 items-center gap-3 text-xs font-medium tracking-wide text-[#FFF3DF] sm:bottom-11">
         <span className="hidden sm:inline">{slides[activeSlide].label}</span>
-        <div className="flex gap-2" aria-label="Featured recipe images">
+        <div className="flex gap-2" role="group" aria-label="Featured recipe images">
           {slides.map((slide, index) => (
             <button
               key={slide.image}

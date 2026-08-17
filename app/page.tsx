@@ -49,7 +49,7 @@ export default async function Home() {
     ? supabase.storage.from("recipe-published").getPublicUrl(recipeOfWeek.photo_path).data.publicUrl
     : null;
   return (
-    <main className="min-h-screen bg-[#EED8B2] text-[#123C39]">
+    <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] text-[#123C39]">
       <Navigation />
 
       {/* Hero */}
@@ -203,11 +203,13 @@ export default async function Home() {
 
       <section className="bg-[#123C39] px-6 py-24 md:px-8">
         <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2">
-          <div className="overflow-hidden rounded-[2rem] shadow-2xl">
-            <img
+          <div className="relative min-h-[360px] overflow-hidden rounded-[2rem] shadow-2xl md:min-h-[530px]">
+            <Image
               src="/images/recipes/krishna-vantis-baingan-ka-bharta-wide.webp"
               alt="Krishna Anand's Baingan ka Bharta"
-              className="h-full min-h-[360px] w-full object-cover md:min-h-[530px]"
+              fill
+              sizes="(min-width: 768px) 50vw, 100vw"
+              className="object-cover"
             />
           </div>
 
@@ -245,7 +247,7 @@ export default async function Home() {
         <div className="mx-auto grid max-w-6xl overflow-hidden rounded-[2rem] bg-[#1C5A50] shadow-2xl md:grid-cols-2">
           <div className="relative min-h-[340px]">
             {recipeOfWeek ? (
-              recipeOfWeekImage ? <img src={recipeOfWeekImage} alt={recipeOfWeek.title} className="h-full w-full object-cover" /> : <div className="flex h-full items-center justify-center bg-[#DDBB82] p-8 text-center text-2xl font-bold text-[#123C39]">A treasured family recipe</div>
+              recipeOfWeekImage ? <Image src={recipeOfWeekImage} alt={recipeOfWeek.title} fill sizes="(min-width: 768px) 50vw, 100vw" unoptimized className="object-cover" /> : <div className="flex h-full items-center justify-center bg-[#DDBB82] p-8 text-center text-2xl font-bold text-[#123C39]">A treasured family recipe</div>
             ) : (
               <Image
                 src="/images/recipes/daves-butter-chicken-feature.webp"

@@ -22,7 +22,7 @@ export default async function UnsubscribePage({
   const valid = Boolean(email && hasValidUnsubscribeToken(email, token));
 
   return (
-    <main className="min-h-screen bg-[#EED8B2] text-[#123C39]">
+    <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] text-[#123C39]">
       <Navigation />
       <section className="px-6 pb-24 pt-40">
         <div className="mx-auto max-w-2xl rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-12">

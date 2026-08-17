@@ -1,23 +1,12 @@
 import "server-only";
 import { createClient } from "@supabase/supabase-js";
+import { decodeAal, extractBearerToken } from "./admin-auth-token";
 import { getSupabaseAdmin } from "./supabase/admin";
 
 const adminEmail = "chaten@otherpeoplesrecipes.co.uk";
 
-// The service-role client this returns bypasses RLS entirely, so aal2 is
-// enforced here rather than left to a database policy.
-function decodeAal(accessToken: string): string | null {
-  try {
-    const payload = accessToken.split(".")[1];
-    const json = Buffer.from(payload, "base64url").toString("utf8");
-    return JSON.parse(json).aal ?? null;
-  } catch {
-    return null;
-  }
-}
-
 export async function requireAdmin(request: Request) {
-  const token = request.headers.get("authorization")?.replace("Bearer ", "");
+  const token = extractBearerToken(request.headers.get("authorization"));
   const publicUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 

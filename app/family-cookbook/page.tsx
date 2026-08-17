@@ -60,7 +60,7 @@ const cookbookJsonLd = {
 
 export default function FamilyCookbook() {
   return (
-    <main className="min-h-screen bg-[#EED8B2] text-[#123C39]">
+    <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] text-[#123C39]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -69,7 +69,7 @@ export default function FamilyCookbook() {
       />
       <Navigation />
 
-      <section className="relative isolate overflow-hidden bg-[#123C39] px-6 pb-24 pt-40 text-center text-white">
+      <section className="relative isolate overflow-hidden bg-[#123C39] px-6 pb-12 pt-40 text-center text-white">
         <video
           className="absolute inset-0 -z-20 h-full w-full object-cover"
           autoPlay
@@ -110,8 +110,8 @@ export default function FamilyCookbook() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-6 py-20 md:px-8">
-        <div className="mb-14 max-w-2xl">
+      <section className="mx-auto max-w-6xl px-6 py-10 md:px-8 md:py-12">
+        <div className="mb-7 max-w-2xl">
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
             Choose a recipe
           </p>
@@ -127,7 +127,7 @@ export default function FamilyCookbook() {
         <PublishedRecipes featuredRecipes={recipes} />
       </section>
 
-      <section className="bg-[#FFF3DF] px-6 py-24 text-center">
+      <section className="bg-[#FFF3DF] px-6 py-12 text-center">
         <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
           Whet Our Appetite
         </p>
@@ -136,7 +136,7 @@ export default function FamilyCookbook() {
         </h2>
         <Link
           href="/share"
-          className="mt-10 inline-block rounded-full bg-[#123C39] px-8 py-4 text-lg font-medium text-white transition hover:scale-105"
+          className="mt-6 inline-block rounded-full bg-[#123C39] px-8 py-4 text-lg font-medium text-white transition hover:scale-105"
         >
           Share Your Story
         </Link>

@@ -18,7 +18,7 @@ export default function MfaChallenge({
 
   async function verify() {
     setError("");
-    if (!code.trim()) {
+    if (!/^\d{6}$/.test(code.trim())) {
       setError("Enter the 6-digit code from your authenticator app.");
       return;
     }
@@ -52,12 +52,12 @@ export default function MfaChallenge({
         <p className="mt-5 leading-7 text-stone-700">
           Enter the 6-digit code from your authenticator app to finish signing in.
         </p>
-        {error ? <p className="mt-4 text-sm text-red-800">{error}</p> : null}
+        {error ? <p role="alert" className="mt-4 text-sm text-red-800">{error}</p> : null}
         <label className="mt-6 block text-sm font-medium">
           Authenticator code
           <input
             value={code}
-            onChange={(event) => setCode(event.target.value)}
+            onChange={(event) => setCode(event.target.value.replace(/\D/g, "").slice(0, 6))}
             onKeyDown={(event) => {
               if (event.key === "Enter") void verify();
             }}
