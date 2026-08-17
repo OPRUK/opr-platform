@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { preload } from "react-dom";
+import { Suspense } from "react";
 import Navigation from "./components/Navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -46,20 +46,23 @@ async function getRecipeOfWeek(): Promise<RecipeOfWeek | null> {
 }
 
 export default async function Home() {
-  const recipeOfWeek = await getRecipeOfWeek();
-  const recipeOfWeekImage = recipeOfWeek?.photo_path
-    ? supabase.storage.from("recipe-published").getPublicUrl(recipeOfWeek.photo_path).data.publicUrl
-    : null;
-
-  // The hero's first video poster is the LCP element, but HomeHero is a
-  // client component — without this hint the browser only discovers the
-  // poster after JS hydrates, well after the preload scanner has moved on.
-  // Must match the exact URL HomeHero requests (the optimized one, not the
-  // raw file) or this preload goes to waste on a resource nothing uses.
-  preload(optimizedPoster("/images/opr-add-your-recipe-promo-poster.jpg"), { as: "image", fetchPriority: "high" });
-
   return (
     <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] text-[#123C39]">
+      {/* The hero's first video poster is the LCP element, but HomeHero is a
+          client component — without this hint the browser only discovers the
+          poster after JS hydrates, well after the preload scanner has moved
+          on. Rendered directly (rather than via react-dom's preload() call)
+          because the imperative API stopped flushing once a Suspense
+          boundary was introduced below — a literal <link> is hoisted to
+          <head> by React regardless of where it sits in the tree, so it
+          isn't affected by the streaming boundary. Must match the exact URL
+          HomeHero requests or this preload goes to waste. */}
+      <link
+        rel="preload"
+        href={optimizedPoster("/images/opr-add-your-recipe-promo-poster.jpg")}
+        as="image"
+        fetchPriority="high"
+      />
       <Navigation />
 
       {/* Hero */}
@@ -228,44 +231,9 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="bg-[#FFF3DF] px-6 py-24">
-        <div className="mx-auto grid max-w-6xl overflow-hidden rounded-[2rem] bg-[#1C5A50] shadow-2xl md:grid-cols-2">
-          <div className="relative min-h-[340px]">
-            {recipeOfWeek ? (
-              recipeOfWeekImage ? <Image src={recipeOfWeekImage} alt={recipeOfWeek.title} fill sizes="(min-width: 768px) 50vw, 100vw" unoptimized className="object-cover" /> : <div className="flex h-full items-center justify-center bg-[#EED8B2] p-8 text-center text-2xl font-bold text-[#123C39]">A treasured family recipe</div>
-            ) : (
-              <Image
-                src="/images/recipes/daves-butter-chicken-feature.webp"
-                alt="Dave's Butter Chicken"
-                fill
-                sizes="(min-width: 768px) 50vw, 100vw"
-                className="object-cover"
-              />
-            )}
-          </div>
-
-          <div className="flex flex-col justify-center p-9 text-[#FFF3DF] md:p-14">
-            <p className="text-sm uppercase tracking-[0.35em] text-[#DDB765]">
-              This week&apos;s story from the OPR cookbook
-            </p>
-            <h2 className="mt-5 text-4xl font-bold leading-tight md:text-5xl">
-              {recipeOfWeek?.title ?? "Dave's Butter Chicken"}
-            </h2>
-            <p className="mt-3 text-sm uppercase tracking-[0.25em] text-[#DDB765]">
-              {recipeOfWeek?.location ?? "New Malden, England"}
-            </p>
-            <p className="mt-7 text-lg leading-8 text-[#FFF3DF]">
-              {recipeOfWeek?.recipe_of_week_note ?? recipeOfWeek?.story ?? "Dave learned this from his Indian mother-in-law, then made it his own with passata for a smoother, richer sauce. He has cooked it in India for family — and even she now says his is better."}
-            </p>
-            <Link
-              href={recipeOfWeek ? `/family-cookbook/community/${recipeOfWeek.id}` : "/family-cookbook/daves-butter-chicken"}
-              className="mt-9 inline-flex w-fit items-center rounded-full bg-[#DDB765] px-7 py-4 font-medium text-[#08231F] transition hover:scale-105 hover:bg-[#DDB765]"
-            >
-              Read {recipeOfWeek ? `${recipeOfWeek.name}'s` : "Dave's"} story →
-            </Link>
-          </div>
-        </div>
-      </section>
+      <Suspense fallback={<RecipeOfWeekFallback />}>
+        <RecipeOfWeekSection />
+      </Suspense>
 
       <section
         id="cookbook"
@@ -302,5 +270,91 @@ export default async function Home() {
           </div>
       </section>
     </main>
+  );
+}
+
+// Isolated behind Suspense so the Supabase lookup doesn't block the whole
+// page (and the hero poster's preload hint) from streaming to the browser —
+// this section is well below the fold and can arrive a beat later.
+async function RecipeOfWeekSection() {
+  const recipeOfWeek = await getRecipeOfWeek();
+  if (!recipeOfWeek) return <RecipeOfWeekFallback />;
+
+  const recipeOfWeekImage = recipeOfWeek.photo_path
+    ? supabase.storage.from("recipe-published").getPublicUrl(recipeOfWeek.photo_path).data.publicUrl
+    : null;
+
+  return (
+    <section className="bg-[#FFF3DF] px-6 py-24">
+      <div className="mx-auto grid max-w-6xl overflow-hidden rounded-[2rem] bg-[#1C5A50] shadow-2xl md:grid-cols-2">
+        <div className="relative min-h-[340px]">
+          {recipeOfWeekImage ? (
+            <Image src={recipeOfWeekImage} alt={recipeOfWeek.title} fill sizes="(min-width: 768px) 50vw, 100vw" unoptimized className="object-cover" />
+          ) : (
+            <div className="flex h-full items-center justify-center bg-[#EED8B2] p-8 text-center text-2xl font-bold text-[#123C39]">A treasured family recipe</div>
+          )}
+        </div>
+
+        <div className="flex flex-col justify-center p-9 text-[#FFF3DF] md:p-14">
+          <p className="text-sm uppercase tracking-[0.35em] text-[#DDB765]">
+            This week&apos;s story from the OPR cookbook
+          </p>
+          <h2 className="mt-5 text-4xl font-bold leading-tight md:text-5xl">
+            {recipeOfWeek.title}
+          </h2>
+          <p className="mt-3 text-sm uppercase tracking-[0.25em] text-[#DDB765]">
+            {recipeOfWeek.location ?? "New Malden, England"}
+          </p>
+          <p className="mt-7 text-lg leading-8 text-[#FFF3DF]">
+            {recipeOfWeek.recipe_of_week_note ?? recipeOfWeek.story}
+          </p>
+          <Link
+            href={`/family-cookbook/community/${recipeOfWeek.id}`}
+            className="mt-9 inline-flex w-fit items-center rounded-full bg-[#DDB765] px-7 py-4 font-medium text-[#08231F] transition hover:scale-105 hover:bg-[#DDB765]"
+          >
+            Read {recipeOfWeek.name}&apos;s story →
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function RecipeOfWeekFallback() {
+  return (
+    <section className="bg-[#FFF3DF] px-6 py-24">
+      <div className="mx-auto grid max-w-6xl overflow-hidden rounded-[2rem] bg-[#1C5A50] shadow-2xl md:grid-cols-2">
+        <div className="relative min-h-[340px]">
+          <Image
+            src="/images/recipes/daves-butter-chicken-feature.webp"
+            alt="Dave's Butter Chicken"
+            fill
+            sizes="(min-width: 768px) 50vw, 100vw"
+            className="object-cover"
+          />
+        </div>
+
+        <div className="flex flex-col justify-center p-9 text-[#FFF3DF] md:p-14">
+          <p className="text-sm uppercase tracking-[0.35em] text-[#DDB765]">
+            This week&apos;s story from the OPR cookbook
+          </p>
+          <h2 className="mt-5 text-4xl font-bold leading-tight md:text-5xl">
+            Dave&apos;s Butter Chicken
+          </h2>
+          <p className="mt-3 text-sm uppercase tracking-[0.25em] text-[#DDB765]">
+            New Malden, England
+          </p>
+          <p className="mt-7 text-lg leading-8 text-[#FFF3DF]">
+            Dave learned this from his Indian mother-in-law, then made it his own with passata for a smoother, richer sauce. He has cooked it in India for family — and even she now says his is better.
+          </p>
+          <Link
+            href="/family-cookbook/daves-butter-chicken"
+            className="mt-9 inline-flex w-fit items-center rounded-full bg-[#DDB765] px-7 py-4 font-medium text-[#08231F] transition hover:scale-105 hover:bg-[#DDB765]"
+          >
+            Read Dave&apos;s story →
+          </Link>
+        </div>
+      </div>
+    </section>
   );
 }
