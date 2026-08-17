@@ -38,6 +38,7 @@ const slides = [
 
 export default function HeroCarousel() {
   const [activeSlide, setActiveSlide] = useState(0);
+  const nextSlide = (activeSlide + 1) % slides.length;
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -49,23 +50,32 @@ export default function HeroCarousel() {
 
   return (
     <div className="absolute inset-0 z-0 overflow-hidden bg-[#123C39]">
-      {slides.map((slide, index) => (
-        <Image
-          key={slide.image}
-          src={slide.image}
-          alt={index === activeSlide ? slide.alt : ""}
-          fill
-          // This carousel sits behind the intro video (HomeHero renders it
-          // at opacity-0 until the video sequence finishes, several+
-          // seconds in) — eagerly preloading its first slide competed with
-          // the actual LCP-critical video poster for the same bandwidth
-          // during the crucial first paint, for content nobody sees yet.
-          sizes="100vw"
-          className={`object-cover transition-opacity duration-[1800ms] ease-in-out ${
-            index === activeSlide ? "opacity-100" : "opacity-0"
-          }`}
-        />
-      ))}
+      {slides.map((slide, index) => {
+        // Only the active slide and the one it will crossfade into next are
+        // mounted — with all six always in the DOM, Next downloaded every
+        // slide's full-size image on first paint even though five of them
+        // sit behind the intro video (still hidden below at opacity-0)
+        // and wouldn't be visible for 30+ seconds, if ever.
+        if (index !== activeSlide && index !== nextSlide) return null;
+        return (
+          <Image
+            key={slide.image}
+            src={slide.image}
+            alt={index === activeSlide ? slide.alt : ""}
+            fill
+            quality={65}
+            // This carousel sits behind the intro video (HomeHero renders it
+            // at opacity-0 until the video sequence finishes, several+
+            // seconds in) — eagerly preloading its first slide competed with
+            // the actual LCP-critical video poster for the same bandwidth
+            // during the crucial first paint, for content nobody sees yet.
+            sizes="100vw"
+            className={`object-cover transition-opacity duration-[1800ms] ease-in-out ${
+              index === activeSlide ? "opacity-100" : "opacity-0"
+            }`}
+          />
+        );
+      })}
 
       <div className="absolute inset-0 bg-[#08231F]/55" />
       <div className="absolute inset-0 bg-gradient-to-b from-[#08231F]/35 via-transparent to-[#08231F]/60" />

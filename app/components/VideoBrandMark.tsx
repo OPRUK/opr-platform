@@ -9,7 +9,7 @@ export default function VideoBrandMark({ className = "" }: { className?: string 
       aria-hidden="true"
       className={`pointer-events-none absolute bottom-5 left-5 z-20 inline-flex h-9 w-9 items-center justify-center sm:h-11 sm:w-11 ${className}`}
     >
-      <OprBadge className="h-full w-full" />
+      <OprBadge className="h-full w-full" sizes="(min-width: 640px) 44px, 36px" />
     </span>
   );
 }

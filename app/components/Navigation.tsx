@@ -28,7 +28,7 @@ export default function Navigation() {
           {/* Not preloaded — a 36-44px header logo isn't the LCP element on
               any page, and on the homepage it was competing with the hero
               video's poster (the actual LCP candidate) for bandwidth. */}
-          <OprBadge className="h-9 w-9 sm:h-11 sm:w-11" />
+          <OprBadge className="h-9 w-9 sm:h-11 sm:w-11" sizes="(min-width: 640px) 44px, 36px" />
           <span className="sm:hidden" aria-hidden="true">OPR</span>
           <span className="hidden sm:inline">Other People&apos;s Recipes<sup aria-hidden="true" className="ml-0.5 align-super text-[0.35em]">™</sup></span>
         </Link>

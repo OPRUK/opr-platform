@@ -41,7 +41,19 @@ const FINAL_FRAME_HOLD_MS = 250;
 // Cut the intro short on small screens only; desktop keeps the full sequence.
 const MOBILE_INTRO_MS = 4000;
 
+// Visitors who've asked the OS for less motion, or the browser for less
+// data, should land on a static poster rather than have ~3 film downloads
+// kick off and autoplay regardless. Read once on the client, before the
+// first video's preload attribute is committed to the DOM.
+function prefersStaticHero() {
+  if (typeof window === "undefined") return false;
+  const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+  const nav = navigator as Navigator & { connection?: { saveData?: boolean } };
+  return reducedMotion || nav.connection?.saveData === true;
+}
+
 export default function HomeHero({ children }: HomeHeroProps) {
+  const [skipAutoplay] = useState(prefersStaticHero);
   const [introductionComplete, setIntroductionComplete] = useState(false);
   const [videosDone, setVideosDone] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
@@ -56,6 +68,7 @@ export default function HomeHero({ children }: HomeHeroProps) {
   const transitionTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
+    if (skipAutoplay) return;
     const el = videoRefs.current[activeSlot];
     if (!el) return;
     el.muted = isMuted;
@@ -183,7 +196,7 @@ export default function HomeHero({ children }: HomeHeroProps) {
                 // not yet visible waits for its explicit load()/play() call
                 // in beginCrossfade(), which already fires ahead of the
                 // crossfade with a 250ms hold + 500ms fade as buffer time.
-                preload={slot === activeSlot ? "auto" : "none"}
+                preload={slot === activeSlot && !skipAutoplay ? "auto" : "none"}
                 // Tells the browser the active slot's poster (the LCP
                 // candidate) matters more than everything else competing
                 // for bandwidth — pairs with the preload hint in page.tsx,
@@ -197,7 +210,7 @@ export default function HomeHero({ children }: HomeHeroProps) {
                   if (slot === activeSlot) moveToNextFilm();
                 }}
                 onCanPlay={() => {
-                  if (slot === activeSlot) {
+                  if (slot === activeSlot && !skipAutoplay) {
                     void videoRefs.current[slot]?.play().catch(() => {});
                   }
                 }}
@@ -216,7 +229,7 @@ export default function HomeHero({ children }: HomeHeroProps) {
       ) : null}
 
       <div className="absolute inset-0 z-[1] bg-[#08231F]/35" />
-      {!introductionComplete ? (
+      {!introductionComplete && !skipAutoplay ? (
         <button
           type="button"
           onClick={toggleSound}
@@ -226,11 +239,16 @@ export default function HomeHero({ children }: HomeHeroProps) {
           {isMuted ? "Turn sound on" : "Mute sound"}
         </button>
       ) : null}
+      {/* Visible immediately on mobile (base, unprefixed classes below) —
+          waiting for the film intro to finish before painting the heading
+          and CTA was directly responsible for a ~4s mobile LCP delay.
+          Desktop keeps the original crossfade-in-after-intro choreography
+          via the sm: breakpoint. */}
       <div
-        className={`relative z-10 transition-all duration-1000 ${
+        className={`relative z-10 pointer-events-auto translate-y-0 opacity-100 transition-all duration-1000 ${
           introductionComplete
-            ? "translate-y-0 opacity-100"
-            : "pointer-events-none translate-y-4 opacity-0"
+            ? "sm:translate-y-0 sm:opacity-100 sm:pointer-events-auto"
+            : "sm:pointer-events-none sm:translate-y-4 sm:opacity-0"
         }`}
         style={{ transitionDelay: introductionComplete ? `${CROSSFADE_MS}ms` : "0ms" }}
       >
