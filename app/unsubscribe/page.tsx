@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import Navigation from "../components/Navigation";
 import UnsubscribeForm from "./UnsubscribeForm";
 import { hasValidUnsubscribeToken } from "../../lib/unsubscribe";
@@ -38,7 +37,7 @@ export default async function UnsubscribePage({
           ) : (
             <>
               <p className="mt-6 leading-8 text-stone-700">This link is incomplete or has expired. Please use the unsubscribe link in a recent OPR email, or contact us and we will help.</p>
-              <Link href="/contact" className="mt-8 inline-block rounded-full bg-[#123C39] px-7 py-4 font-medium text-white transition hover:bg-[#08231F]">Get in touch</Link>
+              <a href="mailto:info@otherpeoplesrecipes.co.uk" className="mt-8 inline-block rounded-full bg-[#123C39] px-7 py-4 font-medium text-white transition hover:bg-[#08231F]">Get in touch</a>
             </>
           )}
         </div>

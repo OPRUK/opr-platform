@@ -11,7 +11,6 @@ const staticRoutes: Array<{ path: string; changeFrequency: MetadataRoute.Sitemap
   { path: "/join-our-table", changeFrequency: "monthly", priority: 0.7 },
   { path: "/share", changeFrequency: "monthly", priority: 0.8 },
   { path: "/accessibility", changeFrequency: "yearly", priority: 0.4 },
-  { path: "/links", changeFrequency: "monthly", priority: 0.3 },
 ];
 
 const siteLaunchDate = new Date("2026-08-01");
