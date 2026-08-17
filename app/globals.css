@@ -109,12 +109,12 @@ a[href^="mailto:"] {
   position: relative;
   overflow: hidden;
   border: 1px solid rgba(102, 67, 34, 0.5);
+  border-radius: 0.125rem;
   background-color: #d9b879;
   background-image: url("/images/paper-texture.jpg");
   background-size: cover;
   background-position: center;
-  clip-path: polygon(0.4% 2%, 3% 0.6%, 8% 1.2%, 12% 0.2%, 18% 1%, 25% 0.4%, 33% 1.1%, 42% 0.3%, 51% 0.8%, 61% 0.15%, 70% 0.9%, 79% 0.35%, 87% 1.1%, 95% 0.5%, 99.5% 2%, 99.1% 13%, 99.8% 28%, 99.2% 43%, 99.7% 58%, 99.1% 74%, 99.6% 90%, 98.4% 98.9%, 91% 99.5%, 82% 98.9%, 72% 99.7%, 62% 99%, 51% 99.6%, 40% 98.9%, 30% 99.7%, 20% 99%, 10% 99.6%, 1.2% 98.5%, 0.5% 86%, 0.9% 70%, 0.2% 55%, 0.8% 38%, 0.15% 20%);
-  filter: drop-shadow(0 14px 16px rgba(68, 44, 22, 0.3));
+  box-shadow: 0 24px 52px rgba(0, 0, 0, 0.35);
   transform: rotate(-0.12deg);
 }
 
