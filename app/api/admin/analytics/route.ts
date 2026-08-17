@@ -3,7 +3,12 @@ import { loadAdminAnalytics } from "../../../../lib/admin-analytics-server";
 
 export async function GET(request: Request) {
   const { client, error: accessError } = await requireAdmin(request);
-  if (!client) return Response.json({ error: accessError }, { status: 401 });
+  if (!client) {
+    return Response.json(
+      { error: accessError },
+      { status: 401, headers: { "Cache-Control": "private, no-store" } },
+    );
+  }
 
   try {
     return Response.json(await loadAdminAnalytics(client), {
