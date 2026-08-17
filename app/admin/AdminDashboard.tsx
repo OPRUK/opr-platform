@@ -2,9 +2,12 @@
 
 import type { Session } from "@supabase/supabase-js";
 import Image from "next/image";
+import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
+import type { AdminAnalyticsResponse } from "../../lib/admin-analytics-types";
 import { featuredRecipes } from "../../lib/recipes";
 import { supabase } from "../../lib/supabase/client";
+import AdminAnalyticsPanel from "./AdminAnalyticsPanel";
 import MfaChallenge from "./mfa/MfaChallenge";
 import MfaSecurityPanel from "./mfa/MfaSecurityPanel";
 
@@ -63,19 +66,6 @@ type RecipeOfMonthResults = {
   totalVotes: number;
 };
 
-type AttributionSummary = {
-  windowDays: number;
-  linkClicks: number;
-  ctaClicks: number;
-  conversions: number;
-  sources: Array<{
-    source: string;
-    linkClicks: number;
-    ctaClicks: number;
-    conversions: number;
-  }>;
-};
-
 const allowedEmail = "chaten@otherpeoplesrecipes.co.uk";
 
 const statusStyle: Record<SubmissionStatus, string> = {
@@ -84,14 +74,18 @@ const statusStyle: Record<SubmissionStatus, string> = {
   selected: "bg-[#EED8B2] text-[#1C5A50]",
 };
 
-export default function AdminDashboard() {
+export default function AdminDashboard({
+  initialView = "inbox",
+}: {
+  initialView?: "inbox" | "analytics";
+}) {
   const [session, setSession] = useState<Session | null>(null);
   const [email, setEmail] = useState(allowedEmail);
   const [message, setMessage] = useState("");
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [communityCooks, setCommunityCooks] = useState<CommunityCook[]>([]);
   const [recipeOfMonthResults, setRecipeOfMonthResults] = useState<RecipeOfMonthResults | null>(null);
-  const [attributionSummary, setAttributionSummary] = useState<AttributionSummary | null>(null);
+  const [attributionSummary, setAttributionSummary] = useState<AdminAnalyticsResponse | null>(null);
   const [selectedSubmission, setSelectedSubmission] = useState<Submission | null>(null);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<number | null>(null);
@@ -100,6 +94,7 @@ export default function AdminDashboard() {
   const [checkingAal, setCheckingAal] = useState(true);
   const [showSecurityPanel, setShowSecurityPanel] = useState(false);
   const [exportingFoundingTable, setExportingFoundingTable] = useState(false);
+  const [exportingAnalytics, setExportingAnalytics] = useState(false);
 
   useEffect(() => {
     async function checkSession() {
@@ -169,8 +164,22 @@ export default function AdminDashboard() {
       return;
     }
 
-    async function loadSubmissions() {
+    async function loadAdminData() {
       setLoading(true);
+
+      if (initialView === "analytics") {
+        const analyticsResponse = await adminRequest("/api/admin/analytics");
+        if (analyticsResponse.ok) {
+          setAttributionSummary((await analyticsResponse.json()) as AdminAnalyticsResponse);
+          setMessage("");
+        } else {
+          const payload = await analyticsResponse.json().catch(() => null);
+          setMessage(payload?.error ?? "The analytics dashboard could not be loaded just now.");
+        }
+        setLoading(false);
+        return;
+      }
+
       const [recipeResponse, communityResponse, votingResponse, analyticsResponse] = await Promise.all([
         adminRequest("/api/admin/recipe-submission"),
         adminRequest("/api/admin/community-cook"),
@@ -198,15 +207,15 @@ export default function AdminDashboard() {
         setRecipeOfMonthResults((await votingResponse.json()) as RecipeOfMonthResults);
       }
       if (analyticsResponse.ok) {
-        setAttributionSummary((await analyticsResponse.json()) as AttributionSummary);
+        setAttributionSummary((await analyticsResponse.json()) as AdminAnalyticsResponse);
       } else if (recipeResponse.ok && communityResponse.ok && votingResponse.ok) {
         setMessage("The recipe inbox loaded, but traffic-source reporting could not be loaded just now.");
       }
       setLoading(false);
     }
 
-    void loadSubmissions();
-  }, [session, checkingAal, mfaPending, totpFactorId]);
+    void loadAdminData();
+  }, [session, checkingAal, mfaPending, totpFactorId, initialView]);
 
   async function adminRequest(path: string, options: RequestInit = {}) {
     const { data } = await supabase.auth.getSession();
@@ -242,7 +251,7 @@ export default function AdminDashboard() {
     const { error } = await supabase.auth.signInWithOtp({
       email: allowedEmail,
       options: {
-        emailRedirectTo: `${window.location.origin}/admin`,
+        emailRedirectTo: `${window.location.origin}${initialView === "analytics" ? "/admin/analytics" : "/admin"}`,
       },
     });
 
@@ -280,6 +289,36 @@ export default function AdminDashboard() {
       setMessage("The table-signup spreadsheet could not be downloaded.");
     } finally {
       setExportingFoundingTable(false);
+    }
+  }
+
+  async function downloadAnalytics() {
+    setMessage("");
+    setExportingAnalytics(true);
+
+    try {
+      const response = await adminRequest("/api/admin/analytics/report");
+      if (!response.ok) {
+        const payload = await response.json().catch(() => null);
+        setMessage(payload?.error ?? "The analytics spreadsheet could not be downloaded.");
+        return;
+      }
+
+      const blob = await response.blob();
+      const objectUrl = URL.createObjectURL(blob);
+      const disposition = response.headers.get("content-disposition") ?? "";
+      const filename = disposition.match(/filename="([^"]+)"/)?.[1] ?? "opr-analytics.xlsx";
+      const link = document.createElement("a");
+      link.href = objectUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(objectUrl), 1_000);
+    } catch {
+      setMessage("The analytics spreadsheet could not be downloaded.");
+    } finally {
+      setExportingAnalytics(false);
     }
   }
 
@@ -515,7 +554,9 @@ export default function AdminDashboard() {
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
             Private OPR area
           </p>
-          <h1 className="mt-4 text-4xl font-bold">Recipe inbox</h1>
+          <h1 className="mt-4 text-4xl font-bold">
+            {initialView === "analytics" ? "Analytics dashboard" : "Recipe inbox"}
+          </h1>
           <p className="mt-5 leading-7 text-stone-700">
             We&apos;ll send a secure sign-in link to your OPR email address.
           </p>
@@ -585,10 +626,24 @@ export default function AdminDashboard() {
             onClick={() => setShowSecurityPanel(false)}
             className="mt-8 text-sm font-medium underline"
           >
-            Back to recipe inbox
+            Back to {initialView === "analytics" ? "analytics dashboard" : "recipe inbox"}
           </button>
         </div>
       </main>
+    );
+  }
+
+  if (initialView === "analytics") {
+    return (
+      <AdminAnalyticsPanel
+        analytics={attributionSummary}
+        loading={loading}
+        message={message}
+        exporting={exportingAnalytics}
+        onDownload={() => void downloadAnalytics()}
+        onOpenSecurity={() => setShowSecurityPanel(true)}
+        onSignOut={() => void supabase.auth.signOut()}
+      />
     );
   }
 
@@ -613,6 +668,9 @@ export default function AdminDashboard() {
           )}
         </div>
         <div className="flex flex-wrap items-center gap-4 self-start md:self-auto">
+          <Link href="/admin/analytics" className="text-sm font-medium underline underline-offset-4">
+            Analytics
+          </Link>
           <button
             type="button"
             onClick={() => setShowSecurityPanel(true)}
