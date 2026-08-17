@@ -5,11 +5,13 @@ import Image from "next/image";
 import Navigation from "../../../components/Navigation";
 import IngredientMeasurements from "../../../components/IngredientMeasurements";
 import RecipeActions from "../../../components/RecipeActions";
+import RecipeVisualGuide from "../../../components/RecipeVisualGuide";
 import CommunityCookForm from "../../../components/CommunityCookForm";
 import FamiliesWhoMadeThis from "../../../components/FamiliesWhoMadeThis";
 import { fallbackImageForCommunityRecipe } from "../../../../lib/community-recipe-image";
 import { supabase } from "../../../../lib/supabase/client";
 import { getApprovedCommunityCooks } from "../../../../lib/community-cooks";
+import { communityRecipeMethodPhotos } from "../../../../lib/community-recipe-visuals";
 import { SITE_NAME, absoluteUrl } from "../../../../lib/site";
 
 export const dynamic = "force-dynamic";
@@ -146,6 +148,7 @@ export default async function CommunityRecipePage({
   const recipeVideoUrl = recipeVideoUrlFor(recipe);
   const ingredients = splitRecipeLines(recipe.ingredients);
   const method = splitRecipeLines(recipe.method);
+  const methodPhotos = communityRecipeMethodPhotos[recipe.id] ?? [];
 
   const recipeJsonLd = {
     "@context": "https://schema.org",
@@ -163,12 +166,17 @@ export default async function CommunityRecipePage({
     ...(recipe.prep_time_minutes ? { prepTime: `PT${recipe.prep_time_minutes}M` } : {}),
     ...(recipe.cook_time_minutes ? { cookTime: `PT${recipe.cook_time_minutes}M` } : {}),
     recipeIngredient: ingredients,
-    recipeInstructions: method.map((step, index) => ({
-      "@type": "HowToStep",
-      position: index + 1,
-      name: truncate(step, 60),
-      text: step,
-    })),
+    recipeInstructions: method.map((step, index) => {
+      const methodPhoto = methodPhotos.find((photo) => photo.step === index + 1);
+
+      return {
+        "@type": "HowToStep",
+        position: index + 1,
+        name: truncate(step, 60),
+        text: step,
+        ...(methodPhoto ? { image: absoluteUrl(methodPhoto.src) } : {}),
+      };
+    }),
   };
 
   const breadcrumbJsonLd = {
@@ -314,6 +322,7 @@ export default async function CommunityRecipePage({
           </ol>
         </div>
       </section>
+      <RecipeVisualGuide photos={methodPhotos} />
       {recipe.cook_notes ? (
         <section className="bg-[#EED8B2] px-6 py-10 md:py-12">
           <div className="mx-auto max-w-5xl rounded-[2rem] border border-[#DDB765] bg-[#FFF3DF] p-6 shadow-xl shadow-[#1C5A50]/10 md:p-8">
