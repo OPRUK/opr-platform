@@ -10,9 +10,9 @@ export default function Navigation() {
 
   const links = [
     { href: "/", label: "Home" },
-    { href: "/our-story", label: "Your Story" },
+    { href: "/#your-story", label: "Your Story" },
     { href: "/founder", label: "Founder" },
-    { href: "/family-cookbook", label: "Cookbook" },
+    { href: "/family-cookbook", label: "Living Cookbook" },
     { href: "/films", label: "Films" },
     { href: "/founding-table", label: "Founding Table" },
     { href: "/share", label: "Share" },
