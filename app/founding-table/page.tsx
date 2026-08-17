@@ -9,7 +9,7 @@ export const metadata: Metadata = buildMetadata({
   title: "Join Our Table",
   description:
     "Be there at the beginning. Free to join, first look at every new recipe and story.",
-  path: "/founding-table",
+  path: "/join-our-table",
 });
 
 const benefits = [

@@ -912,9 +912,9 @@ export default function RecipeForm() {
           className="mt-1 h-4 w-4 accent-[#123C39]"
         />
         <span>
-          I confirm that I am aged 18 or over;{" "}
+          I confirm that I am aged 18 or over.{" "}
           <Link href="/terms" className="underline underline-offset-4">
-            read our full terms.
+            Read our full terms here.
           </Link>
         </span>
       </label>
