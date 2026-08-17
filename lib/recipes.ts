@@ -32,6 +32,14 @@ export type FeaturedRecipe = {
   notes?: { title: string; text: string }[];
   /** Answers derived only from the recipe's own method and contributor notes. */
   faqs?: { question: string; answer: string }[];
+  /** Clearly disclosed illustrative photography used to explain key method stages. */
+  methodPhotos?: {
+    src: string;
+    alt: string;
+    title: string;
+    caption: string;
+    step: number;
+  }[];
   /** Canonical recipe slugs used for contextual internal links. */
   relatedRecipeSlugs?: string[];
 };
@@ -270,6 +278,29 @@ export const featuredRecipes: FeaturedRecipe[] = [
         answer: "Sudesh serves this bhindi with warm roti and dal. It also works well with paratha or rice.",
       },
     ],
+    methodPhotos: [
+      {
+        src: "/images/recipes/sudeshs-bhindi-step-1-ai.webp",
+        alt: "Whole dry okra and sliced okra rounds resting on a clean linen cloth",
+        title: "Dry before slicing",
+        caption: "Wash the okra whole, then dry it completely before cutting. This is the most important preparation step for limiting stickiness.",
+        step: 1,
+      },
+      {
+        src: "/images/recipes/sudeshs-bhindi-step-2-ai.webp",
+        alt: "Sliced okra rounds gently frying uncovered in a dark pan",
+        title: "Cook the okra on its own",
+        caption: "Give the sliced okra room to cook uncovered in a little oil. Moderate heat lets the stickiness disappear without burning it.",
+        step: 2,
+      },
+      {
+        src: "/images/recipes/sudeshs-bhindi-step-3-ai.webp",
+        alt: "Green okra being folded through a cooked onion and tomato masala",
+        title: "Fold through the masala",
+        caption: "Add the pre-cooked okra only after the onions, tomatoes and spices have softened into a rich masala.",
+        step: 7,
+      },
+    ],
     relatedRecipeSlugs: ["krishna-anands-baingan-ka-bharta", "daves-butter-chicken"],
   },
   {
@@ -346,6 +377,29 @@ export const featuredRecipes: FeaturedRecipe[] = [
       {
         question: "How do you create the scorched bottom without burning the rice?",
         answer: "Keep the pot tightly covered while the rice steams, then use medium-high heat only for the final three minutes and watch it closely. The bottom should be lightly scorched, not burnt.",
+      },
+    ],
+    methodPhotos: [
+      {
+        src: "/images/recipes/adas-jollof-step-1-ai.webp",
+        alt: "A smooth red pepper and tomato blend reducing in a saucepan",
+        title: "Reduce the pepper blend",
+        caption: "Boil the blended peppers, tomatoes, onion, garlic and ginger until the mixture is thicker and its excess water has evaporated.",
+        step: 1,
+      },
+      {
+        src: "/images/recipes/adas-jollof-step-2-ai.webp",
+        alt: "Thick red Jollof sauce with bay leaves and a light sheen of oil around the edge",
+        title: "Wait for the oil to separate",
+        caption: "Fry the tomato paste and reduced pepper base patiently. A light red-orange sheen at the edge shows that the sauce is concentrated and ready.",
+        step: 3,
+      },
+      {
+        src: "/images/recipes/adas-jollof-step-3-ai.webp",
+        alt: "Orange-red Jollof rice steaming in a foil-sealed heavy pot with a lightly scorched edge",
+        title: "Trap the steam, then finish",
+        caption: "The foil and lid keep the steam inside. A brief final burst of heat creates the treasured lightly scorched party-Jollof finish without burning the rice.",
+        step: 8,
       },
     ],
     relatedRecipeSlugs: ["daves-butter-chicken", "sams-shepherds-pie"],

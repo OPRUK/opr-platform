@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import Navigation from "../../components/Navigation";
+import IngredientMeasurements from "../../components/IngredientMeasurements";
 import RecipeActions from "../../components/RecipeActions";
 import CommunityCookForm from "../../components/CommunityCookForm";
 import FamiliesWhoMadeThis from "../../components/FamiliesWhoMadeThis";
@@ -114,12 +115,17 @@ export default async function RecipePage({
     ...(recipe.cookTime ? { cookTime: recipe.cookTime } : {}),
     ...(recipe.serves ? { recipeYield: recipe.serves } : {}),
     recipeIngredient: recipe.ingredients,
-    recipeInstructions: recipe.method.map((step, index) => ({
-      "@type": "HowToStep",
-      position: index + 1,
-      name: truncate(step, 60),
-      text: step,
-    })),
+    recipeInstructions: recipe.method.map((step, index) => {
+      const methodPhoto = recipe.methodPhotos?.find((photo) => photo.step === index + 1);
+
+      return {
+        "@type": "HowToStep",
+        position: index + 1,
+        name: truncate(step, 60),
+        text: step,
+        ...(methodPhoto ? { image: absoluteUrl(methodPhoto.src) } : {}),
+      };
+    }),
     ...(recipe.datePublished ? { datePublished: recipe.datePublished } : {}),
   };
 
@@ -225,14 +231,7 @@ export default async function RecipePage({
             />
             <RecipeActions title={recipe.title} imageUrl={recipe.image} />
           </div>
-          <h2 className="recipe-card-ingredients text-center text-4xl font-semibold text-[#344F50] md:text-5xl">What you&apos;ll need</h2>
-          <ul className="recipe-card-ingredients mt-6 space-y-1.5 text-center text-2xl leading-8 text-[#4B3524] md:text-3xl md:leading-9">
-            {recipe.ingredients.map((ingredient) => (
-              <li key={ingredient} className="pb-1.5">
-                {ingredient}
-              </li>
-            ))}
-          </ul>
+          <IngredientMeasurements ingredients={recipe.ingredients} />
         </aside>
       </section>
 
@@ -253,6 +252,43 @@ export default async function RecipePage({
           </ol>
         </div>
       </section>
+
+      {recipe.methodPhotos?.length ? (
+        <section className="bg-[#EED8B2] px-6 py-12 md:px-8 md:py-16">
+          <div className="mx-auto max-w-6xl">
+            <p className="text-center text-sm font-bold uppercase tracking-[0.35em] text-[#9A622A]">
+              A visual guide
+            </p>
+            <h2 className="font-display mx-auto mt-3 max-w-3xl text-center text-4xl font-bold text-[#123C39] md:text-5xl">
+              See the key stages
+            </h2>
+            <p className="mx-auto mt-5 max-w-3xl text-center text-base leading-7 text-stone-700">
+              Three key moments to look for as you cook. Use these visual cues alongside the written method.
+            </p>
+            <div className="mt-9 grid gap-6 md:grid-cols-3">
+              {recipe.methodPhotos.map((photo) => (
+                <figure key={photo.src} className="overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/10">
+                  <Image
+                    src={photo.src}
+                    alt={photo.alt}
+                    width={1536}
+                    height={1024}
+                    sizes="(min-width: 768px) 33vw, 100vw"
+                    className="aspect-[3/2] w-full object-cover"
+                  />
+                  <figcaption className="p-6">
+                    <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#9A622A]">
+                      Step {photo.step}
+                    </p>
+                    <h3 className="mt-3 text-2xl font-bold text-[#123C39]">{photo.title}</h3>
+                    <p className="mt-3 leading-7 text-stone-700">{photo.caption}</p>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       {recipe.notes?.length ? (
         <section className="bg-[#EED8B2] px-6 pb-4 pt-10 md:pb-5 md:pt-12">
