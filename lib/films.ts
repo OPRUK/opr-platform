@@ -31,6 +31,11 @@ export const films: Film[] = [
       "Dave: “It just needs one secret ingredient.”\nRubble: “Chicken?”\nDave: “Apparently.”",
   },
   {
+    title: "Dave & Rubble | Quality Control",
+    video: "/videos/opr-dave-and-rubble-quality-control.mp4",
+    poster: "/images/opr-dave-and-rubble-quality-control-poster.jpg",
+  },
+  {
     title: "Dave & Rubble | Dave's Butter Chicken",
     video: "/videos/opr-dave-and-rubble-daves-butter-chicken.mp4",
   },
