@@ -1,4 +1,5 @@
 import Link from "next/link";
+import FooterFoundingTableForm from "./FooterFoundingTableForm";
 
 export default function Footer() {
   return (
@@ -12,6 +13,7 @@ export default function Footer() {
             Preserving recipes. Celebrating people. Sharing stories around the
             table.
           </p>
+          <FooterFoundingTableForm />
         </div>
 
         <div>
