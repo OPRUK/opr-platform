@@ -42,9 +42,12 @@ export default function FooterFoundingTableForm() {
   }
 
   return (
-    <div className="mt-7 max-w-md border-t border-[#1C5A50] pt-6">
-      <p className="font-display text-2xl font-semibold text-[#FFF3DF]">Save your seat at the table</p>
-      <form onSubmit={saveSeat} className="mt-4 grid gap-2 sm:grid-cols-2">
+    <div
+      className="mt-7 max-w-md border-t border-[#1C5A50] pt-6"
+      style={{ fontFamily: '"Gill Sans MT", "Gill Sans", Avenir, Corbel, Arial, sans-serif' }}
+    >
+      <p className="text-2xl font-semibold text-[#FFF3DF]">Save your seat at the table</p>
+      <form onSubmit={saveSeat} className="mt-4 grid gap-3 sm:grid-cols-2">
         <label className="sr-only" htmlFor="footer-founding-name">First name</label>
         <input
           id="footer-founding-name"
