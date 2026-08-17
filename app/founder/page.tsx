@@ -69,7 +69,7 @@ export default function FounderPage() {
             </h2>
 
           <div
-            className="font-brand mt-9 space-y-6 text-xl leading-[1.7] text-[#5B4834]"
+            className="font-founder-hand mt-9 space-y-6 text-[1.4rem] leading-[1.55] text-[#5B4834] md:text-[1.55rem]"
           >
             <p>
               Other People&apos;s Recipes began as an idea back in 2000. It has
