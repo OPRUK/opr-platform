@@ -7,7 +7,7 @@ import { supabase } from "../../lib/supabase/client";
 import { WORLD_LAND_PATH } from "./world-map-path";
 import { WORLD_MAP_VIEWBOX, coordinatesForLocation, percentPosition } from "./world-map-geocode";
 
-type PublishedRecipe = {
+export type PublishedRecipe = {
   id: number;
   title: string;
   name: string;
@@ -58,10 +58,12 @@ function recipeTitleKey(title: string) {
 
 export default function PublishedRecipes({
   featuredRecipes,
+  initialCommunityRecipes,
 }: {
   featuredRecipes: FeaturedRecipe[];
+  initialCommunityRecipes: PublishedRecipe[];
 }) {
-  const [communityRecipes, setCommunityRecipes] = useState<PublishedRecipe[]>([]);
+  const [communityRecipes, setCommunityRecipes] = useState<PublishedRecipe[]>(initialCommunityRecipes);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
   const [voteResults, setVoteResults] = useState<VoteResults | null>(null);
@@ -77,7 +79,7 @@ export default function PublishedRecipes({
         .eq("is_published", true)
         .order("published_at", { ascending: false });
 
-      setCommunityRecipes((data ?? []) as PublishedRecipe[]);
+      if (data) setCommunityRecipes(data as PublishedRecipe[]);
     }
 
     void loadPublishedRecipes();
@@ -306,6 +308,68 @@ export default function PublishedRecipes({
         </Link>
       </div>
 
+      <p className="mt-5 text-sm text-stone-600">
+        {visibleRecipes.length} {visibleRecipes.length === 1 ? "recipe" : "recipes"} to discover
+      </p>
+
+      {visibleRecipes.length ? (
+        <div className="mt-4 grid gap-px overflow-hidden border border-[#123C39]/30 bg-[#123C39]/30 md:grid-cols-3">
+          {visibleRecipes.map((recipe, index) => (
+            <Link
+              key={recipe.id}
+              href={recipe.href}
+              className="group flex flex-col overflow-hidden bg-[#FFF3DF] transition-colors duration-300 hover:bg-[#FBEBC8]"
+            >
+              {recipe.imageUrl ? (
+                <Image
+                  src={recipe.imageUrl}
+                  alt={recipe.title}
+                  width={800}
+                  height={600}
+                  unoptimized
+                  className="aspect-[4/3] w-full object-cover grayscale-[15%] transition duration-500 group-hover:grayscale-0"
+                />
+              ) : (
+                <div className="flex aspect-[4/3] items-center justify-center bg-[#DDBB82] px-8 text-center text-xl font-bold text-[#123C39]">
+                  A treasured family recipe
+                </div>
+              )}
+              <div className="flex min-h-80 flex-col p-8">
+                <p
+                  className="text-[11px] uppercase tracking-[0.14em] text-[#0E5C3E]"
+                  style={{ fontFamily: "'Courier New', ui-monospace, monospace" }}
+                >
+                  No. {String(index + 1).padStart(2, "0")} &middot; {recipe.category}
+                </p>
+                <h3 className="font-display mt-5 text-3xl font-bold leading-tight">{recipe.title}</h3>
+                <p className="mt-3 text-sm uppercase tracking-[0.16em] text-stone-500">
+                  {recipe.contributor}
+                  {recipe.location ? ` · ${recipe.location}` : ""}
+                </p>
+                <p className="mt-6 grow leading-7 text-stone-700">“{recipe.story}”</p>
+                <span className="mt-8 font-medium transition group-hover:text-amber-700">
+                  Open recipe →
+                </span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      ) : (
+        <div className="mt-8 rounded-3xl border border-dashed border-[#D1AD75] bg-[#FFF3DF]/60 px-8 py-14 text-center">
+          <h3 className="text-2xl font-bold">No recipes match that search.</h3>
+          <button
+            type="button"
+            onClick={() => {
+              setSearch("");
+              setCategory("all");
+            }}
+            className="mt-5 font-medium text-[#9A622A] underline underline-offset-4"
+          >
+            Show every recipe
+          </button>
+        </div>
+      )}
+
       <section className="mt-6 overflow-hidden rounded-3xl border border-[#D1AD75]/70 bg-[#123C39] p-6 text-[#FFF3DF] shadow-xl shadow-[#1C5A50]/20 md:p-10">
         <div className="max-w-3xl">
           <p className="text-sm uppercase tracking-[0.28em] text-[#F0C45A]">From kitchen to kitchen</p>
@@ -453,67 +517,6 @@ export default function PublishedRecipes({
         {voteError ? <p className="mt-5 rounded-xl border border-red-300/70 bg-red-950/30 px-4 py-3 text-sm text-red-100">{voteError}</p> : null}
       </section>
 
-      <p className="mt-5 text-sm text-stone-600">
-        {visibleRecipes.length} {visibleRecipes.length === 1 ? "recipe" : "recipes"} to discover
-      </p>
-
-      {visibleRecipes.length ? (
-        <div className="mt-4 grid gap-px overflow-hidden border border-[#123C39]/30 bg-[#123C39]/30 md:grid-cols-3">
-          {visibleRecipes.map((recipe, index) => (
-            <Link
-              key={recipe.id}
-              href={recipe.href}
-              className="group flex flex-col overflow-hidden bg-[#FFF3DF] transition-colors duration-300 hover:bg-[#FBEBC8]"
-            >
-              {recipe.imageUrl ? (
-                <Image
-                  src={recipe.imageUrl}
-                  alt={recipe.title}
-                  width={800}
-                  height={600}
-                  unoptimized
-                  className="aspect-[4/3] w-full object-cover grayscale-[15%] transition duration-500 group-hover:grayscale-0"
-                />
-              ) : (
-                <div className="flex aspect-[4/3] items-center justify-center bg-[#DDBB82] px-8 text-center text-xl font-bold text-[#123C39]">
-                  A treasured family recipe
-                </div>
-              )}
-              <div className="flex min-h-80 flex-col p-8">
-                <p
-                  className="text-[11px] uppercase tracking-[0.14em] text-[#0E5C3E]"
-                  style={{ fontFamily: "'Courier New', ui-monospace, monospace" }}
-                >
-                  No. {String(index + 1).padStart(2, "0")} &middot; {recipe.category}
-                </p>
-                <h3 className="font-display mt-5 text-3xl font-bold leading-tight">{recipe.title}</h3>
-                <p className="mt-3 text-sm uppercase tracking-[0.16em] text-stone-500">
-                  {recipe.contributor}
-                  {recipe.location ? ` · ${recipe.location}` : ""}
-                </p>
-                <p className="mt-6 grow leading-7 text-stone-700">“{recipe.story}”</p>
-                <span className="mt-8 font-medium transition group-hover:text-amber-700">
-                  Open recipe →
-                </span>
-              </div>
-            </Link>
-          ))}
-        </div>
-      ) : (
-        <div className="mt-8 rounded-3xl border border-dashed border-[#D1AD75] bg-[#FFF3DF]/60 px-8 py-14 text-center">
-          <h3 className="text-2xl font-bold">No recipes match that search.</h3>
-          <button
-            type="button"
-            onClick={() => {
-              setSearch("");
-              setCategory("all");
-            }}
-            className="mt-5 font-medium text-[#9A622A] underline underline-offset-4"
-          >
-            Show every recipe
-          </button>
-        </div>
-      )}
     </section>
   );
 }

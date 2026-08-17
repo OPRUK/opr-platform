@@ -5,6 +5,9 @@ import VideoBrandMark from "../components/VideoBrandMark";
 import PublishedRecipes from "./PublishedRecipes";
 import { featuredRecipes } from "../../lib/recipes";
 import { absoluteUrl } from "../../lib/site";
+import { supabase } from "../../lib/supabase/client";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "The Family Cookbook",
@@ -42,6 +45,19 @@ const recipes = [...featuredRecipes].sort((firstRecipe, secondRecipe) => {
   return courseDifference || firstRecipe.title.localeCompare(secondRecipe.title, "en");
 });
 
+async function getPublishedCommunityRecipes() {
+  const { data } = await supabase
+    .from("recipe_submissions")
+    .select("id, title, name, location, story, photo_path, category")
+    .eq("is_published", true)
+    .order("published_at", { ascending: false });
+
+  return (data ?? []).map((recipe) => ({
+    ...recipe,
+    category: recipe.category ?? "Recipe",
+  }));
+}
+
 const cookbookJsonLd = {
   "@context": "https://schema.org",
   "@type": "ItemList",
@@ -58,7 +74,9 @@ const cookbookJsonLd = {
   })),
 };
 
-export default function FamilyCookbook() {
+export default async function FamilyCookbook() {
+  const communityRecipes = await getPublishedCommunityRecipes();
+
   return (
     <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] text-[#123C39]">
       <script
@@ -124,7 +142,10 @@ export default function FamilyCookbook() {
           </p>
         </div>
 
-        <PublishedRecipes featuredRecipes={recipes} />
+        <PublishedRecipes
+          featuredRecipes={recipes}
+          initialCommunityRecipes={communityRecipes}
+        />
       </section>
 
       <section className="bg-[#FFF3DF] px-6 py-12 text-center">
