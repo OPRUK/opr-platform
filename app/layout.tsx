@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import localFont from "next/font/local";
-import { Suspense } from "react";
 import "./globals.css";
 import { SITE_NAME, SITE_URL, absoluteUrl } from "../lib/site";
 import AttributionCapture from "./components/AttributionCapture";
@@ -93,9 +92,7 @@ export default function RootLayout({
         <a href="#main-content" className="skip-link">
           Skip to main content
         </a>
-        <Suspense fallback={null}>
-          <AttributionCapture />
-        </Suspense>
+        <AttributionCapture />
         {children}
         <SiteFooter />
         <script
