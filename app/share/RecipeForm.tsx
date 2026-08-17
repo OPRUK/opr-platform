@@ -912,15 +912,9 @@ export default function RecipeForm() {
           className="mt-1 h-4 w-4 accent-[#123C39]"
         />
         <span>
-          I confirm that I am aged 18 or over; that this recipe and story are
-          mine to share; and that I have permission to share anyone identifiable
-          in my photos, including an optional Meet the cook photo, recipe-card images or voice recording. I grant Other
-          People&apos;s Recipes a perpetual, worldwide, royalty-free licence to
-          publish, edit, adapt and reproduce the recipe, story and submitted
-          media, including in print, film, at OPR events and, if we ever open
-          one, an OPR restaurant. {" "}
+          I confirm that I am aged 18 or over;{" "}
           <Link href="/terms" className="underline underline-offset-4">
-            Read our full terms.
+            read our full terms.
           </Link>
         </span>
       </label>
