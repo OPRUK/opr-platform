@@ -1,32 +1,50 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
-import { Allura, Cabin, Caveat, Cormorant_Garamond } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { SITE_NAME, SITE_URL, absoluteUrl } from "../lib/site";
 import SiteFooter from "./components/SiteFooter";
 
-const cabin = Cabin({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
+const cabin = localFont({
+  src: [
+    {
+      path: "./fonts/Cabin-Variable.ttf",
+      weight: "400 700",
+      style: "normal",
+    },
+    {
+      path: "./fonts/Cabin-Italic-Variable.ttf",
+      weight: "400 700",
+      style: "italic",
+    },
+  ],
   variable: "--font-cabin",
 });
 
-const cormorantGaramond = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
-  style: ["normal", "italic"],
+const cormorantGaramond = localFont({
+  src: [
+    {
+      path: "./fonts/CormorantGaramond-Variable.ttf",
+      weight: "300 700",
+      style: "normal",
+    },
+    {
+      path: "./fonts/CormorantGaramond-Italic-Variable.ttf",
+      weight: "300 700",
+      style: "italic",
+    },
+  ],
   variable: "--font-cormorant-garamond",
 });
 
-const caveat = Caveat({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
+const caveat = localFont({
+  src: "./fonts/Caveat-Variable.ttf",
+  weight: "400 700",
   variable: "--font-caveat",
 });
 
-const allura = Allura({
-  subsets: ["latin"],
+const allura = localFont({
+  src: "./fonts/Allura-Regular.ttf",
   weight: "400",
   variable: "--font-allura",
 });
