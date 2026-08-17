@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { preload } from "react-dom";
 import Navigation from "./components/Navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -48,6 +49,12 @@ export default async function Home() {
   const recipeOfWeekImage = recipeOfWeek?.photo_path
     ? supabase.storage.from("recipe-published").getPublicUrl(recipeOfWeek.photo_path).data.publicUrl
     : null;
+
+  // The hero's first video poster is the LCP element, but HomeHero is a
+  // client component — without this hint the browser only discovers the
+  // poster after JS hydrates, well after the preload scanner has moved on.
+  preload("/images/opr-add-your-recipe-promo-poster.jpg", { as: "image", fetchPriority: "high" });
+
   return (
     <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] text-[#123C39]">
       <Navigation />
