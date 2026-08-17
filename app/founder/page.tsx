@@ -122,10 +122,10 @@ export default function FounderPage() {
 
       <section className="bg-[#08231F] px-6 py-20 text-center text-[#FFF3DF]">
         <p className="text-sm uppercase tracking-[0.35em] text-[#FFD58C]">
-          Join the story
+          Join the table
         </p>
         <h2 className="mx-auto mt-5 max-w-3xl text-4xl font-bold leading-tight md:text-5xl">
-          There is a place for your story at our table.
+          There is a place for your recipe at our table.
         </h2>
         <div className="mx-auto mt-10 flex max-w-3xl flex-col justify-center gap-4 sm:flex-row sm:flex-wrap">
           <Link

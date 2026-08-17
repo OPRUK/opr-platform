@@ -73,19 +73,12 @@ export default async function Home() {
             behind them.
           </p>
 
-          <div className="mt-9 flex flex-col justify-center gap-4 sm:flex-row sm:gap-5">
+          <div className="mt-9 flex justify-center">
             <Link
               href="/family-cookbook"
               className="rounded-full bg-[#123C39] px-8 py-3.5 text-base font-medium transition hover:scale-105 sm:px-10 sm:py-4 sm:text-lg"
             >
               Open the Living Cookbook
-            </Link>
-
-            <Link
-              href="/#your-story"
-              className="rounded-full border border-white px-8 py-3.5 text-base transition hover:bg-white hover:text-black sm:px-10 sm:py-4 sm:text-lg"
-            >
-              Your Story
             </Link>
           </div>
         </div>
@@ -132,13 +125,10 @@ export default async function Home() {
         </div>
       </section>
 
-      <section id="your-story" className="scroll-mt-6 bg-[#EED8B2] px-6 py-16 animate-rise-in-delayed md:px-8 md:py-20">
+      <section className="bg-[#EED8B2] px-6 py-16 animate-rise-in-delayed md:px-8 md:py-20">
         <div className="mx-auto max-w-6xl">
           <div className="text-center">
-            <p className="text-sm font-bold uppercase tracking-[0.35em] text-amber-700">
-              Your Story
-            </p>
-            <h2 className="font-display mx-auto mt-5 max-w-4xl text-4xl font-bold leading-tight text-[#123C39] md:text-6xl">
+            <h2 className="font-display mx-auto max-w-4xl text-4xl font-bold leading-tight text-[#123C39] md:text-6xl">
               Every family has a recipe worth remembering.
             </h2>
             <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-stone-700 md:text-xl md:leading-9">
@@ -180,7 +170,7 @@ export default async function Home() {
               href="/share"
               className="mt-8 inline-block rounded-full bg-[#123C39] px-8 py-4 text-lg font-medium text-white transition hover:scale-105 hover:bg-[#08231F]"
             >
-              Share Your Story
+              Share Your Recipe
             </Link>
           </div>
         </div>

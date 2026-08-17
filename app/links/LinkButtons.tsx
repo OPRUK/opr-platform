@@ -8,7 +8,6 @@ type LinkKey =
   | "founding-table"
   | "recipe-of-month"
   | "films"
-  | "our-story"
   | "contact"
   | "instagram"
   | "facebook"
@@ -31,7 +30,6 @@ const primaryLinks: Array<{ key: LinkKey; label: string; href: string; external?
   { key: "founding-table", label: "Join the Founding Table", href: "/founding-table" },
   { key: "recipe-of-month", label: "Recipe of the Month", href: "/app/vote" },
   { key: "films", label: "Watch OPR films", href: "/films" },
-  { key: "our-story", label: "Our story", href: "/#your-story" },
   { key: "contact", label: "Contact OPR", href: "mailto:info@otherpeoplesrecipes.co.uk", external: true },
 ];
 
