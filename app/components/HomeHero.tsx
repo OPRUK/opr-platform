@@ -188,15 +188,17 @@ export default function HomeHero({ children }: HomeHeroProps) {
                 }}
                 muted={isMuted}
                 playsInline
-                // Only the film currently on screen should eagerly download —
-                // both slots defaulting to "auto" meant the browser fetched
-                // every intro film's full video in parallel from first paint,
-                // which is exactly what PageSpeed's "enormous network
-                // payloads" and mobile LCP warnings were flagging. The slot
-                // not yet visible waits for its explicit load()/play() call
-                // in beginCrossfade(), which already fires ahead of the
-                // crossfade with a 250ms hold + 500ms fade as buffer time.
-                preload={slot === activeSlot && !skipAutoplay ? "auto" : "none"}
+                // Always "none": `skipAutoplay` is only known once this
+                // component hydrates on the client (matchMedia/connection
+                // aren't available during SSR), so a server-rendered
+                // preload="auto" would already have told the browser to
+                // start fetching before React ever got a chance to check
+                // prefers-reduced-motion / saveData — the fetch doesn't
+                // wait for JS. Eager loading for the active slot instead
+                // comes entirely from the explicit play() call below (and
+                // load()+play() in beginCrossfade for the next slot), both
+                // already gated on !skipAutoplay.
+                preload="none"
                 // Tells the browser the active slot's poster (the LCP
                 // candidate) matters more than everything else competing
                 // for bandwidth — pairs with the preload hint in page.tsx,
@@ -246,7 +248,7 @@ export default function HomeHero({ children }: HomeHeroProps) {
           via the sm: breakpoint. */}
       <div
         className={`relative z-10 pointer-events-auto translate-y-0 opacity-100 transition-all duration-1000 ${
-          introductionComplete
+          introductionComplete || skipAutoplay
             ? "sm:translate-y-0 sm:opacity-100 sm:pointer-events-auto"
             : "sm:pointer-events-none sm:translate-y-4 sm:opacity-0"
         }`}

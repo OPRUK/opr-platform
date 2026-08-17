@@ -36,27 +36,52 @@ const slides = [
   },
 ];
 
+const CROSSFADE_MS = 1800;
+
 export default function HeroCarousel() {
   const [activeSlide, setActiveSlide] = useState(0);
-  const nextSlide = (activeSlide + 1) % slides.length;
+  // The slide being faded out. Kept mounted only for the duration of the
+  // crossfade so the incoming slide always has something to fade over —
+  // without it, swapping which index counts as "active" unmounts the
+  // outgoing image in the same render, and the new one fades in over the
+  // plain background instead of crossfading with it.
+  const [previousSlide, setPreviousSlide] = useState<number | null>(null);
+
+  function goToSlide(index: number) {
+    setActiveSlide((current) => {
+      if (current === index) return current;
+      setPreviousSlide(current);
+      return index;
+    });
+  }
 
   useEffect(() => {
     const timer = window.setInterval(() => {
-      setActiveSlide((currentSlide) => (currentSlide + 1) % slides.length);
+      setActiveSlide((current) => {
+        setPreviousSlide(current);
+        return (current + 1) % slides.length;
+      });
     }, 6000);
 
     return () => window.clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    if (previousSlide === null) return;
+    const timer = window.setTimeout(() => setPreviousSlide(null), CROSSFADE_MS);
+    return () => window.clearTimeout(timer);
+  }, [previousSlide]);
+
   return (
     <div className="absolute inset-0 z-0 overflow-hidden bg-[#123C39]">
       {slides.map((slide, index) => {
-        // Only the active slide and the one it will crossfade into next are
-        // mounted — with all six always in the DOM, Next downloaded every
-        // slide's full-size image on first paint even though five of them
-        // sit behind the intro video (still hidden below at opacity-0)
-        // and wouldn't be visible for 30+ seconds, if ever.
-        if (index !== activeSlide && index !== nextSlide) return null;
+        // Only the active slide and, briefly during a transition, the one
+        // it's crossfading from are mounted — with all six always in the
+        // DOM, Next downloaded every slide's full-size image on first
+        // paint even though five of them sit behind the intro video (still
+        // hidden below at opacity-0) and wouldn't be visible for 30+
+        // seconds, if ever.
+        if (index !== activeSlide && index !== previousSlide) return null;
         return (
           <Image
             key={slide.image}
@@ -70,9 +95,10 @@ export default function HeroCarousel() {
             // the actual LCP-critical video poster for the same bandwidth
             // during the crucial first paint, for content nobody sees yet.
             sizes="100vw"
-            className={`object-cover transition-opacity duration-[1800ms] ease-in-out ${
+            className={`object-cover transition-opacity ease-in-out ${
               index === activeSlide ? "opacity-100" : "opacity-0"
             }`}
+            style={{ transitionDuration: `${CROSSFADE_MS}ms` }}
           />
         );
       })}
@@ -87,7 +113,7 @@ export default function HeroCarousel() {
             <button
               key={slide.image}
               type="button"
-              onClick={() => setActiveSlide(index)}
+              onClick={() => goToSlide(index)}
               className={`h-2 rounded-full transition-all ${
                 index === activeSlide
                   ? "w-7 bg-[#DDB765]"
