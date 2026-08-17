@@ -80,7 +80,7 @@ export default function FounderPage() {
             <p>
               I&apos;ve been lucky enough to travel the world and taste some
               extraordinary food. But here&apos;s the thing: a family recipe cooked
-              with love, passed on by your mum, your uncle, Grandad or your Masi, is
+              with love, passed on by your Mum, your Uncle, Grandad or your Masi, is
               something special.
             </p>
             <p>
