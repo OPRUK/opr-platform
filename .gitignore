@@ -13,6 +13,9 @@
 # testing
 /coverage
 
+# local generated reports
+/outputs/
+
 # next.js
 /.next/
 /out/
