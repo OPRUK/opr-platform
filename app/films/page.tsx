@@ -24,6 +24,7 @@ export default function FilmsPage() {
       uploadDate: "2026-08-01",
       contentUrl: absoluteUrl(film.video),
       embedUrl: absoluteUrl("/films") + "#" + encodeURIComponent(film.title),
+      transcript: film.transcript,
     })),
   };
 
