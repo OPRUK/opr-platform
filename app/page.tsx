@@ -68,30 +68,30 @@ export default async function Home() {
 
       {/* Hero */}
       <HomeHero>
-        <div className="relative z-10 mx-auto max-w-4xl px-6 pb-24 text-center text-white animate-rise-in sm:px-8 sm:pb-28">
-          <p className="mb-5 text-xs font-semibold uppercase tracking-[0.35em] text-[#DDB765] drop-shadow-md sm:text-sm sm:tracking-[0.4em]">
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-24 pt-12 text-center text-white animate-rise-in sm:px-8 sm:pb-28">
+          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.35em] text-[#DDB765] drop-shadow-md sm:text-sm sm:tracking-[0.4em]">
             A Living Cookbook
           </p>
 
-          <h1 className="font-brand mx-auto max-w-3xl text-5xl font-semibold leading-[0.92] tracking-[-0.02em] drop-shadow-2xl sm:text-6xl md:text-7xl lg:text-8xl">
-            Other People&apos;s <span className="block">Recipes</span>
+          <h1 className="font-brand mx-auto max-w-6xl text-balance text-[clamp(2.8rem,7vw,5.5rem)] font-semibold leading-[0.94] tracking-[-0.025em] drop-shadow-2xl">
+            Other People&apos;s Recipes
           </h1>
 
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-stone-200 sm:text-xl sm:leading-9">
+          <p className="font-display mx-auto mt-6 max-w-3xl text-balance text-2xl leading-tight text-[#FFF3DF] sm:text-3xl md:text-4xl">
             Every Recipe has a Story.
           </p>
 
-          <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-stone-100 sm:text-lg sm:leading-8">
+          <p className="mx-auto mt-4 max-w-3xl text-pretty text-base leading-7 text-stone-100 sm:text-lg sm:leading-8">
             Other People&apos;s Recipes is a living cookbook preserving the
             recipes families return to, and the people, memories and traditions
             behind them.
           </p>
 
-          <div className="mt-9 flex justify-center">
+          <div className="mt-8 flex justify-center">
             <TrackedLink
               href="/family-cookbook"
               eventKey="home_cookbook"
-              className="rounded-full bg-[#123C39] px-8 py-3.5 text-base font-medium transition hover:scale-105 sm:px-10 sm:py-4 sm:text-lg"
+              className="inline-flex min-h-12 items-center justify-center rounded-full bg-[#123C39] px-8 py-3.5 text-base font-medium leading-tight transition hover:scale-105 sm:px-10 sm:py-4 sm:text-lg"
             >
               Open the Living Cookbook
             </TrackedLink>

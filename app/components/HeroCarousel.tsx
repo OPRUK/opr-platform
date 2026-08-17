@@ -70,9 +70,9 @@ export default function HeroCarousel() {
       <div className="absolute inset-0 bg-[#08231F]/55" />
       <div className="absolute inset-0 bg-gradient-to-b from-[#08231F]/35 via-transparent to-[#08231F]/60" />
 
-      <div className="absolute bottom-9 left-1/2 z-10 flex -translate-x-1/2 items-center gap-3 text-xs font-medium tracking-wide text-[#FFF3DF] sm:bottom-11">
-        <span className="hidden sm:inline">{slides[activeSlide].label}</span>
-        <div className="flex gap-2" role="group" aria-label="Featured recipe images">
+      <div className="absolute bottom-7 left-1/2 z-10 flex w-full max-w-4xl -translate-x-1/2 flex-col items-center justify-center gap-3 px-6 text-center text-xs font-medium leading-5 tracking-wide text-[#FFF3DF] sm:bottom-10 sm:flex-row sm:gap-4">
+        <span className="hidden text-balance sm:inline">{slides[activeSlide].label}</span>
+        <div className="flex shrink-0 gap-2" role="group" aria-label="Featured recipe images">
           {slides.map((slide, index) => (
             <button
               key={slide.image}
