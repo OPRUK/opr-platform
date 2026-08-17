@@ -8,6 +8,14 @@
 // from the dish's unambiguous origin. Krishna's bharta cookTime (30 min)
 // and every recipe's prepTime were confirmed directly by Chaten.
 
+export type RecipeMethodPhoto = {
+  src: string;
+  alt: string;
+  title: string;
+  caption: string;
+  step: number;
+};
+
 export type FeaturedRecipe = {
   slug: string;
   title: string;
@@ -32,14 +40,8 @@ export type FeaturedRecipe = {
   notes?: { title: string; text: string }[];
   /** Answers derived only from the recipe's own method and contributor notes. */
   faqs?: { question: string; answer: string }[];
-  /** Clearly disclosed illustrative photography used to explain key method stages. */
-  methodPhotos?: {
-    src: string;
-    alt: string;
-    title: string;
-    caption: string;
-    step: number;
-  }[];
+  /** Illustrative photography used to explain key method stages. */
+  methodPhotos?: RecipeMethodPhoto[];
   /** Canonical recipe slugs used for contextual internal links. */
   relatedRecipeSlugs?: string[];
 };
@@ -80,6 +82,29 @@ export const featuredRecipes: FeaturedRecipe[] = [
       {
         title: "The best bit",
         text: "Do not rush the resting time. Ten minutes lets the pudding settle and gives it that soft, comforting texture Nana Serb loved.",
+      },
+    ],
+    methodPhotos: [
+      {
+        src: "/images/recipes/nana-serbs-rice-pudding-step-2-ai.webp",
+        alt: "Pudding rice, milk, sugar and vanilla stirred together in a buttered cream baking dish",
+        title: "Stir the pudding together",
+        caption: "The rice, sugar and vanilla should sit in a loose pool of milk before the dish goes anywhere near the oven.",
+        step: 2,
+      },
+      {
+        src: "/images/recipes/nana-serbs-rice-pudding-step-3-ai.webp",
+        alt: "The uncooked rice pudding mixture dusted with nutmeg and dotted with small pieces of butter",
+        title: "Add nutmeg and butter",
+        caption: "Dust the whole surface with freshly grated nutmeg, then dot over small pieces of butter for a richly flavoured top.",
+        step: 3,
+      },
+      {
+        src: "/images/recipes/nana-serbs-rice-pudding-step-4-ai.webp",
+        alt: "Baked rice pudding with a golden wrinkled nutmeg skin in a cream ceramic dish",
+        title: "Look for the golden skin",
+        caption: "The rice is ready when it is tender beneath a golden nutmeg skin. Let it stand before serving so the pudding can settle.",
+        step: 4,
       },
     ],
   },
@@ -131,6 +156,29 @@ export const featuredRecipes: FeaturedRecipe[] = [
         text: "Finger or rocket chillies bring freshness and heat. For a gentler dish, use fewer chillies or remove them before serving.",
       },
     ],
+    methodPhotos: [
+      {
+        src: "/images/recipes/daves-butter-chicken-step-3-ai.webp",
+        alt: "Smooth passata reducing in a dark pan with whole green chillies and melting butter",
+        title: "Reduce the sauce uncovered",
+        caption: "Let the passata simmer briskly without a lid so steam can escape. It should become noticeably thicker and deeper in colour.",
+        step: 3,
+      },
+      {
+        src: "/images/recipes/daves-butter-chicken-step-5-ai.webp",
+        alt: "Tandoori-coated chicken pieces shallow-frying in a single layer",
+        title: "Cook the chicken separately",
+        caption: "Give the coated chicken space in the pan. Shallow-fry it until the pieces are cooking evenly before adding them to the sauce.",
+        step: 5,
+      },
+      {
+        src: "/images/recipes/daves-butter-chicken-step-7-ai.webp",
+        alt: "Double cream swirling through a deep red butter chicken sauce",
+        title: "Finish with cream",
+        caption: "Stir the cream through just before serving. Pale ribbons show the moment the sauce turns silkier and the chilli heat begins to soften.",
+        step: 7,
+      },
+    ],
   },
   {
     slug: "barbaras-beef-casserole",
@@ -168,6 +216,29 @@ export const featuredRecipes: FeaturedRecipe[] = [
       {
         title: "No ale?",
         text: "Use extra beef stock instead. You will lose some of the malty depth, but the Bovril will still give the casserole a rich savoury finish.",
+      },
+    ],
+    methodPhotos: [
+      {
+        src: "/images/recipes/barbaras-beef-casserole-step-1-ai.webp",
+        alt: "Diced braising steak browning in an uncrowded heavy casserole pan",
+        title: "Brown in batches",
+        caption: "Keep space around the beef so it sears instead of steaming. The browned crust is the first layer of flavour in the casserole.",
+        step: 1,
+      },
+      {
+        src: "/images/recipes/barbaras-beef-casserole-step-3-ai.webp",
+        alt: "Beef, carrots and onions simmering gently in a dark ale gravy",
+        title: "Keep the simmer gentle",
+        caption: "Small, steady bubbles are enough. Two hours at a gentle simmer tenderises the beef without reducing the gravy too quickly.",
+        step: 3,
+      },
+      {
+        src: "/images/recipes/barbaras-beef-casserole-step-4-ai.webp",
+        alt: "Tender beef in a thick glossy dark gravy with a wooden spoon drawn through it",
+        title: "Reheat until glossy",
+        caption: "After its overnight rest, warm the casserole slowly. The finished gravy should cling to the beef and briefly hold a trail from the spoon.",
+        step: 4,
       },
     ],
   },
@@ -209,6 +280,29 @@ export const featuredRecipes: FeaturedRecipe[] = [
       {
         title: "Keep the onions pink",
         text: "This is the key instruction from Krishna Anand's recipe. Let the onions soften, but do not allow them to brown — it keeps the finished bharta sweet, fresh and light.",
+      },
+    ],
+    methodPhotos: [
+      {
+        src: "/images/recipes/krishna-anands-baingan-ka-bharta-step-1-ai.webp",
+        alt: "A whole aubergine with blackened blistered skin roasting over a gas flame",
+        title: "Char the aubergine fully",
+        caption: "Roast until the skin is blackened all over and the aubergine has softened and collapsed. That deep char gives the bharta its smoke.",
+        step: 1,
+      },
+      {
+        src: "/images/recipes/krishna-anands-baingan-ka-bharta-step-5-ai.webp",
+        alt: "Soft pale onions and broken-down tomatoes bubbling with two slit green chillies",
+        title: "Build the tomato base",
+        caption: "The onions should stay soft and pale while the tomatoes break down around them. Add the slit chillies once the masala is bubbling.",
+        step: 5,
+      },
+      {
+        src: "/images/recipes/krishna-anands-baingan-ka-bharta-step-6-ai.webp",
+        alt: "Soft fibrous roasted aubergine folded through onion and tomato masala with green chillies",
+        title: "Fold in the smoky aubergine",
+        caption: "Keep the aubergine coarsely mashed and stir until its soft, fibrous flesh is coated throughout with the tomato-onion masala.",
+        step: 6,
       },
     ],
   },
@@ -458,6 +552,29 @@ export const featuredRecipes: FeaturedRecipe[] = [
         text: "White anchovies, or boquerones, are milder and fruitier than standard dark, salt-cured anchovies. Finely mince them so they melt seamlessly into the filling.",
       },
     ],
+    methodPhotos: [
+      {
+        src: "/images/recipes/sams-shepherds-pie-step-4-ai.webp",
+        alt: "Browned lamb and finely diced vegetables forming a thick savoury base in a pan",
+        title: "Melt in the savoury layer",
+        caption: "The finely minced anchovies and Marmite disappear into the browned lamb. Cook the tomato purée and flour through before adding stock.",
+        step: 4,
+      },
+      {
+        src: "/images/recipes/sams-shepherds-pie-step-6-ai.webp",
+        alt: "A shepherd's pie covered edge-to-edge with mashed potato marked with fork ridges",
+        title: "Rake deep potato ridges",
+        caption: "Spread the mash right to the edges, then drag a fork across the surface. Those raised ridges are what turn crisp in the oven.",
+        step: 6,
+      },
+      {
+        src: "/images/recipes/sams-shepherds-pie-step-7-ai.webp",
+        alt: "Baked shepherd's pie with golden crisp potato peaks and bubbling filling at the edges",
+        title: "Bake until the peaks are golden",
+        caption: "Look for bubbling filling around the edge and deeply golden potato peaks. Rest the pie for ten minutes before serving.",
+        step: 7,
+      },
+    ],
   },
   {
     slug: "phils-and-serbs-three-cheese-souffle",
@@ -504,6 +621,29 @@ export const featuredRecipes: FeaturedRecipe[] = [
       {
         title: "Keep the door closed",
         text: "Do not open the oven during the first 25 minutes. A rush of cold air can deflate the airy structure.",
+      },
+    ],
+    methodPhotos: [
+      {
+        src: "/images/recipes/phils-and-serbs-three-cheese-souffle-step-1-ai.webp",
+        alt: "An empty soufflé dish brushed upwards with butter and coated with finely grated cheese",
+        title: "Prepare a path to rise",
+        caption: "Brush the butter from base to rim in straight upward strokes, then coat the dish evenly with Parmigiano-Reggiano.",
+        step: 1,
+      },
+      {
+        src: "/images/recipes/phils-and-serbs-three-cheese-souffle-step-4-ai.webp",
+        alt: "Glossy stiff egg whites being folded gently into a pale cheese base",
+        title: "Fold without losing the air",
+        caption: "The whites should hold glossy stiff peaks. Loosen the cheese base with one-third, then fold in the rest until the streaks just disappear.",
+        step: 4,
+      },
+      {
+        src: "/images/recipes/phils-and-serbs-three-cheese-souffle-step-5-ai.webp",
+        alt: "A tall golden three-cheese soufflé risen above the rim of a white ceramic dish",
+        title: "Serve at its highest",
+        caption: "The soufflé is ready when it is tall, deeply golden and still gently jiggly. Take it straight from oven to table.",
+        step: 5,
       },
     ],
   },
