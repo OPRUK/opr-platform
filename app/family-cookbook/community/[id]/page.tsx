@@ -5,6 +5,7 @@ import Image from "next/image";
 import Navigation from "../../../components/Navigation";
 import IngredientMeasurements from "../../../components/IngredientMeasurements";
 import RecipeActions from "../../../components/RecipeActions";
+import RecipeFaqs from "../../../components/RecipeFaqs";
 import RecipeVisualGuide from "../../../components/RecipeVisualGuide";
 import CommunityCookForm from "../../../components/CommunityCookForm";
 import FamiliesWhoMadeThis from "../../../components/FamiliesWhoMadeThis";
@@ -12,6 +13,7 @@ import { fallbackImageForCommunityRecipe } from "../../../../lib/community-recip
 import { supabase } from "../../../../lib/supabase/client";
 import { getApprovedCommunityCooks } from "../../../../lib/community-cooks";
 import { communityRecipeMethodPhotos } from "../../../../lib/community-recipe-visuals";
+import { buildFaqPageJsonLd, communityRecipeFaqs } from "../../../../lib/recipe-faqs";
 import { SITE_NAME, absoluteUrl } from "../../../../lib/site";
 
 export const dynamic = "force-dynamic";
@@ -149,6 +151,7 @@ export default async function CommunityRecipePage({
   const ingredients = splitRecipeLines(recipe.ingredients);
   const method = splitRecipeLines(recipe.method);
   const methodPhotos = communityRecipeMethodPhotos[recipe.id] ?? [];
+  const faqs = communityRecipeFaqs[recipe.id] ?? [];
 
   const recipeJsonLd = {
     "@context": "https://schema.org",
@@ -188,6 +191,8 @@ export default async function CommunityRecipePage({
     ],
   };
 
+  const faqJsonLd = faqs.length ? buildFaqPageJsonLd(faqs) : null;
+
   return (
     <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] text-[#123C39]">
       <script
@@ -202,6 +207,14 @@ export default async function CommunityRecipePage({
           __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, "\\u003c"),
         }}
       />
+      {faqJsonLd ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(faqJsonLd).replace(/</g, "\\u003c"),
+          }}
+        />
+      ) : null}
       <Navigation />
       <section className="bg-[#123C39] px-6 pb-12 pt-32 text-center text-white">
         <p className="text-sm uppercase tracking-[0.4em] text-amber-300">A page from the Living Cookbook</p>
@@ -332,6 +345,7 @@ export default async function CommunityRecipePage({
           </div>
         </section>
       ) : null}
+      <RecipeFaqs recipeTitle={recipe.title} faqs={faqs} />
       <FamiliesWhoMadeThis cooks={communityCooks} recipeTitle={recipe.title} />
       <CommunityCookForm recipeId={recipe.id} recipeTitle={recipe.title} />
       <section className="px-6 py-10 text-center md:py-12">

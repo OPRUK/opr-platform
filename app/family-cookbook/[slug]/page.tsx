@@ -5,10 +5,12 @@ import { notFound } from "next/navigation";
 import Navigation from "../../components/Navigation";
 import IngredientMeasurements from "../../components/IngredientMeasurements";
 import RecipeActions from "../../components/RecipeActions";
+import RecipeFaqs from "../../components/RecipeFaqs";
 import RecipeVisualGuide from "../../components/RecipeVisualGuide";
 import CommunityCookForm from "../../components/CommunityCookForm";
 import FamiliesWhoMadeThis from "../../components/FamiliesWhoMadeThis";
 import { getFeaturedRecipe } from "../../../lib/recipes";
+import { buildFaqPageJsonLd } from "../../../lib/recipe-faqs";
 import { getApprovedCommunityCooks } from "../../../lib/community-cooks";
 import { SITE_NAME, absoluteUrl } from "../../../lib/site";
 
@@ -139,20 +141,7 @@ export default async function RecipePage({
     ],
   };
 
-  const faqJsonLd = recipe.faqs?.length
-    ? {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        mainEntity: recipe.faqs.map((faq) => ({
-          "@type": "Question",
-          name: faq.question,
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: faq.answer,
-          },
-        })),
-      }
-    : null;
+  const faqJsonLd = buildFaqPageJsonLd(recipe.faqs);
 
   const timeLabel = [
     recipe.prepTime ? `${formatDuration(recipe.prepTime)} prep` : null,
@@ -181,14 +170,12 @@ export default async function RecipePage({
           __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, "\\u003c"),
         }}
       />
-      {faqJsonLd ? (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(faqJsonLd).replace(/</g, "\\u003c"),
-          }}
-        />
-      ) : null}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(faqJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       <Navigation />
 
       <section className="bg-[#123C39] px-6 pb-12 pt-32 text-center text-white">
@@ -281,26 +268,7 @@ export default async function RecipePage({
         </section>
       ) : null}
 
-      {recipe.faqs?.length ? (
-        <section className="bg-[#EED8B2] px-6 py-12 md:py-16">
-          <div className="mx-auto max-w-5xl">
-            <p className="text-center text-sm font-bold uppercase tracking-[0.35em] text-[#9A622A]">
-              Helpful answers
-            </p>
-            <h2 className="mt-3 text-center text-4xl font-bold text-[#123C39]">
-              Questions about {recipe.title}
-            </h2>
-            <div className="mt-8 grid gap-4 md:grid-cols-2">
-              {recipe.faqs.map((faq) => (
-                <article key={faq.question} className="rounded-2xl bg-[#FFF3DF] p-6 shadow-sm">
-                  <h3 className="text-xl font-bold text-[#123C39]">{faq.question}</h3>
-                  <p className="mt-3 leading-7 text-stone-700">{faq.answer}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-      ) : null}
+      <RecipeFaqs recipeTitle={recipe.title} faqs={recipe.faqs} />
 
       {relatedRecipes.length ? (
         <section className="bg-[#FFF3DF] px-6 py-12 md:py-16">
