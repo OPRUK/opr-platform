@@ -15,15 +15,15 @@ export async function GET(request: Request) {
     .order("created_at", { ascending: true });
 
   if (error) {
-    console.error("OPR Founding Table export failed", error);
-    return Response.json({ error: "The Founding Table list could not be exported." }, { status: 400 });
+    console.error("OPR table-signup export failed", error);
+    return Response.json({ error: "The table-signup list could not be exported." }, { status: 400 });
   }
 
   const workbook = new ExcelJS.Workbook();
   workbook.creator = "Other People's Recipes";
   workbook.created = new Date();
 
-  const worksheet = workbook.addWorksheet("Founding Table", {
+  const worksheet = workbook.addWorksheet("Our Table", {
     views: [{ state: "frozen", ySplit: 1 }],
   });
   worksheet.columns = [
@@ -61,7 +61,7 @@ export async function GET(request: Request) {
   return new Response(new Uint8Array(buffer), {
     headers: {
       "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      "Content-Disposition": `attachment; filename="opr-founding-table-${date}.xlsx"`,
+      "Content-Disposition": `attachment; filename="opr-table-signups-${date}.xlsx"`,
       "Cache-Control": "private, no-store",
     },
   });

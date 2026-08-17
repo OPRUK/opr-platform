@@ -6,7 +6,7 @@ import FoundingTableForm from "./FoundingTableForm";
 import { buildMetadata } from "../../lib/metadata";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Join the Founding Table",
+  title: "Join Our Table",
   description:
     "Be there at the beginning. Free to join, first look at every new recipe and story.",
   path: "/founding-table",
@@ -16,7 +16,7 @@ const benefits = [
   "First look at new family recipes and stories",
   "Early invitations to OPR tasting events and launch nights",
   "A future vote in Recipe of the Month",
-  "Priority news on Founding Table membership",
+  "Priority news and invitations from OPR",
 ];
 
 export default function FoundingTablePage() {
@@ -28,7 +28,7 @@ export default function FoundingTablePage() {
         <HeroCarousel />
         <div className="relative z-10">
           <p className="mb-5 text-sm uppercase tracking-[0.4em] text-[#FFD58C]">
-            The Founding Table
+            Join Our Table
           </p>
           <h1 className="font-display mx-auto max-w-4xl text-5xl font-bold leading-tight drop-shadow-2xl md:text-7xl">
             Be there at the beginning.
@@ -49,7 +49,7 @@ export default function FoundingTablePage() {
             Join the people who believe family recipes deserve a future.
           </h2>
           <p className="mt-7 max-w-xl text-lg leading-8 text-stone-700">
-            The Founding Table is free to join. It is where we will share the
+            Joining our table is free. It is where we will share the
             first news, invite our earliest supporters into the conversation,
             and begin building future OPR membership together.
           </p>

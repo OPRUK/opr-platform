@@ -24,7 +24,7 @@ export default function PrivacyPolicyPage() {
         <div className="mx-auto max-w-3xl rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-12">
           <div className="space-y-9 leading-7 text-stone-700">
             <p>
-              This notice explains how <strong>OTHER PEOPLES RECIPES LTD</strong> (company number 17370145, “OPR”, “we”, “us”) uses personal information when you visit <strong>otherpeoplesrecipes.co.uk</strong>, share a recipe, join the Founding Table or contact us.
+              This notice explains how <strong>OTHER PEOPLES RECIPES LTD</strong> (company number 17370145, “OPR”, “we”, “us”) uses personal information when you visit <strong>otherpeoplesrecipes.co.uk</strong>, share a recipe, join our table or contact us.
             </p>
 
             <div>
@@ -41,7 +41,7 @@ export default function PrivacyPolicyPage() {
                 <li>the recipe, ingredients, method, notes and story or memory you share;</li>
                 <li>photos of a finished dish, a contributor, or an original handwritten recipe card, plus any optional audio you provide;</li>
                 <li>comments, photos or notes you share after cooking another family&apos;s recipe;</li>
-                <li>your Founding Table details and marketing choices; and</li>
+                <li>your table-signup details and marketing choices; and</li>
                 <li>limited, aggregated information about how people use the website.</li>
               </ul>
               <p className="mt-3">Please do not include someone else&apos;s private information unless you have their permission to share it. Recipe submissions are currently for adults aged 18 and over. We do not knowingly collect recipe submissions from children.</p>
@@ -52,7 +52,7 @@ export default function PrivacyPolicyPage() {
               <ul className="mt-3 list-disc space-y-2 pl-6">
                 <li><strong>To receive, assess, administer and contact you about a recipe submission or enquiry:</strong> this is necessary for our legitimate interests in operating OPR and responding to people who choose to contact us.</li>
                 <li><strong>To publish and celebrate a recipe, story, image or audio:</strong> we do this where you have submitted it and granted the contributor licence shown on the submission form.</li>
-                <li><strong>To send OPR news, events and Founding Table invitations:</strong> we rely on your consent. You can withdraw it at any time by using the unsubscribe link in an email or contacting us.</li>
+                <li><strong>To send OPR news, events and invitations:</strong> we rely on your consent. You can withdraw it at any time by using the unsubscribe link in an email or contacting us.</li>
                 <li><strong>To keep the site secure, working and useful:</strong> we rely on our legitimate interests in running, protecting and improving OPR.</li>
               </ul>
               <p className="mt-3">You are not required by law to provide personal information. However, we need the contact and recipe details marked as required on a form in order to process that submission or request.</p>
@@ -80,7 +80,7 @@ export default function PrivacyPolicyPage() {
               <ul className="mt-3 list-disc space-y-2 pl-6">
                 <li>Published recipes and their accompanying stories are kept in the living OPR archive unless we agree to remove them.</li>
                 <li>Unpublished recipe submissions are normally deleted within 24 months, unless we need to keep them longer to resolve a query, protect legal rights or meet a legal obligation.</li>
-                <li>Founding Table and marketing details are kept until you unsubscribe or ask us to remove them.</li>
+                <li>Table-signup and marketing details are kept until you unsubscribe or ask us to remove them.</li>
                 <li>We retain a minimal suppression record after an unsubscribe where necessary to make sure we honour that choice.</li>
               </ul>
             </div>

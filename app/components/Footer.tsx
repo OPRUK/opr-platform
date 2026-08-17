@@ -34,7 +34,7 @@ export default function Footer() {
           </p>
           <ul className="mt-5 space-y-3 text-[#FFF3DF]">
             <li><Link href="/share" className="transition hover:text-[#DDB765]">Share your recipe</Link></li>
-            <li><Link href="/founding-table" className="transition hover:text-[#DDB765]">Join the Founding Table</Link></li>
+            <li><Link href="/founding-table" className="transition hover:text-[#DDB765]">Join Our Table</Link></li>
             <li><a href="mailto:info@otherpeoplesrecipes.co.uk" className="transition hover:text-[#DDB765]">Contact OPR</a></li>
             <li className="flex flex-wrap items-center gap-4 pt-2">
               <a
