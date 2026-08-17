@@ -3,6 +3,7 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import HeroCarousel from "./HeroCarousel";
 import VideoBrandMark from "./VideoBrandMark";
+import { optimizedPoster } from "../../lib/optimized-poster";
 
 type HomeHeroProps = {
   children: ReactNode;
@@ -12,19 +13,19 @@ const introductionFilms = [
   {
     desktop: "/videos/opr-add-your-recipe-promo.mp4",
     mobile: "/videos/opr-add-your-recipe-promo-mobile.mp4",
-    poster: "/images/opr-add-your-recipe-promo-poster.jpg",
+    poster: optimizedPoster("/images/opr-add-your-recipe-promo-poster.jpg"),
     label: "Add your family recipe to Other People's Recipes",
   },
   {
     desktop: "/videos/opr-sam-and-nadines-shepherds-pie.mp4",
     mobile: "/videos/opr-sam-and-nadines-shepherds-pie-mobile.mp4",
-    poster: "/images/opr-sam-and-nadines-shepherds-pie-poster.jpg",
+    poster: optimizedPoster("/images/opr-sam-and-nadines-shepherds-pie-poster.jpg"),
     label: "Sam & Nadine's Shepherd's Pie | A Recipe Worth Passing On",
   },
   {
     desktop: "/videos/opr-krishna-kitchen-drawer.mp4",
     mobile: "/videos/opr-krishna-kitchen-drawer-mobile.mp4",
-    poster: "/images/opr-krishna-kitchen-drawer-poster.jpg",
+    poster: optimizedPoster("/images/opr-krishna-kitchen-drawer-poster.jpg"),
     label: "Krishna Anand's Baingan Ka Bharta | From the Kitchen Drawer",
   },
 ];

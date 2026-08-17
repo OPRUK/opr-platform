@@ -4,6 +4,7 @@ import Navigation from "./components/Navigation";
 import Image from "next/image";
 import Link from "next/link";
 import HomeHero from "./components/HomeHero";
+import { optimizedPoster } from "../lib/optimized-poster";
 import { supabase } from "../lib/supabase/client";
 
 export const dynamic = "force-dynamic";
@@ -53,7 +54,9 @@ export default async function Home() {
   // The hero's first video poster is the LCP element, but HomeHero is a
   // client component — without this hint the browser only discovers the
   // poster after JS hydrates, well after the preload scanner has moved on.
-  preload("/images/opr-add-your-recipe-promo-poster.jpg", { as: "image", fetchPriority: "high" });
+  // Must match the exact URL HomeHero requests (the optimized one, not the
+  // raw file) or this preload goes to waste on a resource nothing uses.
+  preload(optimizedPoster("/images/opr-add-your-recipe-promo-poster.jpg"), { as: "image", fetchPriority: "high" });
 
   return (
     <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] text-[#123C39]">
