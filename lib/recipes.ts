@@ -1,3 +1,5 @@
+import type { RecipeFaq } from "./recipe-faqs";
+
 // Featured recipes from the original OPR collection.
 //
 // serves / datePublished are intentionally left undefined where the real
@@ -39,7 +41,7 @@ export type FeaturedRecipe = {
   /** Optional practical tips and ingredient alternatives from the contributor. */
   notes?: { title: string; text: string }[];
   /** Answers derived only from the recipe's own method and contributor notes. */
-  faqs?: { question: string; answer: string }[];
+  faqs: RecipeFaq[];
   /** Illustrative photography used to explain key method stages. */
   methodPhotos?: RecipeMethodPhoto[];
   /** Canonical recipe slugs used for contextual internal links. */
@@ -82,6 +84,28 @@ export const featuredRecipes: FeaturedRecipe[] = [
       {
         title: "The best bit",
         text: "Do not rush the resting time. Ten minutes lets the pudding settle and gives it that soft, comforting texture Nana Serb loved.",
+      },
+    ],
+    faqs: [
+      {
+        question: "Which rice should you use for baked rice pudding?",
+        answer:
+          "Nana Serb's recipe uses pudding rice. Its short grains soften during the long, gentle bake and give the pudding its comforting texture.",
+      },
+      {
+        question: "How do you know when the rice pudding is ready?",
+        answer:
+          "After 1 hour 45 minutes to 2 hours, the rice should be tender beneath a golden nutmeg skin. Stir it once after the first 45 minutes so it cooks evenly.",
+      },
+      {
+        question: "Can you use vanilla extract instead of a vanilla pod?",
+        answer:
+          "Yes. Replace the vanilla pod with one teaspoon of vanilla extract, as listed in Nana Serb's recipe.",
+      },
+      {
+        question: "Why should rice pudding rest before serving?",
+        answer:
+          "Let it stand for ten minutes after baking. The resting time allows the pudding to settle and develop the soft texture Nana Serb loved.",
       },
     ],
     methodPhotos: [
@@ -156,6 +180,28 @@ export const featuredRecipes: FeaturedRecipe[] = [
         text: "Finger or rocket chillies bring freshness and heat. For a gentler dish, use fewer chillies or remove them before serving.",
       },
     ],
+    faqs: [
+      {
+        question: "Why does Dave use passata in butter chicken?",
+        answer:
+          "Dave replaces tinned tomatoes with passata because it gives the sauce a smoother, richer texture.",
+      },
+      {
+        question: "How do you make the butter chicken sauce thicker?",
+        answer:
+          "Simmer the passata briskly for 20–25 minutes without a lid so the steam can escape. Use a splash guard to control the splashes without trapping moisture.",
+      },
+      {
+        question: "How can you make this butter chicken milder?",
+        answer:
+          "Use fewer whole chillies or remove them before serving, then add the cream to taste. More cream makes the sauce milder and paler.",
+      },
+      {
+        question: "What can replace tandoori masala?",
+        answer:
+          "The cook's notes suggest garam masala with a little mild paprika. It will taste different, but it keeps the warmth and colour of the dish.",
+      },
+    ],
     methodPhotos: [
       {
         src: "/images/recipes/daves-butter-chicken-step-3-ai.webp",
@@ -216,6 +262,28 @@ export const featuredRecipes: FeaturedRecipe[] = [
       {
         title: "No ale?",
         text: "Use extra beef stock instead. You will lose some of the malty depth, but the Bovril will still give the casserole a rich savoury finish.",
+      },
+    ],
+    faqs: [
+      {
+        question: "Can you make beef casserole the day before?",
+        answer:
+          "Yes. Barbara always prepared it the day before because the flavour deepens overnight. Reheat it slowly the next day until the sauce is rich and glossy.",
+      },
+      {
+        question: "What can you use instead of dark ale?",
+        answer:
+          "Use extra beef stock in place of the ale. The casserole will lose some malty depth, but the Bovril will still give the gravy a rich savoury finish.",
+      },
+      {
+        question: "Why should the beef be browned in batches?",
+        answer:
+          "Leaving space around the diced braising steak helps it develop a brown crust instead of steaming, creating the first layer of flavour in the casserole.",
+      },
+      {
+        question: "How do you know when the casserole is ready?",
+        answer:
+          "After about two hours at a gentle simmer, the beef should be tender. When reheated, the finished gravy should look glossy and cling to the meat.",
       },
     ],
     methodPhotos: [
@@ -280,6 +348,28 @@ export const featuredRecipes: FeaturedRecipe[] = [
       {
         title: "Keep the onions pink",
         text: "This is the key instruction from Krishna Anand's recipe. Let the onions soften, but do not allow them to brown — it keeps the finished bharta sweet, fresh and light.",
+      },
+    ],
+    faqs: [
+      {
+        question: "How do you give baingan ka bharta its smoky flavour?",
+        answer:
+          "Roast the whole aubergine until its skin is completely blackened and the inside is soft and collapsed. The charred skin creates the smoke that flavours the mashed flesh.",
+      },
+      {
+        question: "Can you roast the aubergine in the oven?",
+        answer:
+          "Yes. Krishna Anand's method allows the aubergine to be roasted over an open gas flame or in the oven. In either case, cook it until the skin is charred and the centre has collapsed.",
+      },
+      {
+        question: "Why should the onions stay pink?",
+        answer:
+          "Cook the onions only until they are soft and pink, without browning them. This keeps the finished bharta sweet, fresh and light.",
+      },
+      {
+        question: "What can replace degi mirch?",
+        answer:
+          "Use mild paprika with a small pinch of cayenne. The paprika brings colour and the cayenne replaces a little of degi mirch's gentle heat.",
       },
     ],
     methodPhotos: [
@@ -552,6 +642,28 @@ export const featuredRecipes: FeaturedRecipe[] = [
         text: "White anchovies, or boquerones, are milder and fruitier than standard dark, salt-cured anchovies. Finely mince them so they melt seamlessly into the filling.",
       },
     ],
+    faqs: [
+      {
+        question: "Do the anchovies make shepherd's pie taste fishy?",
+        answer:
+          "No. The finely minced white anchovies melt into the lamb with the Marmite, leaving a deeper, rounded savoury flavour rather than a fishy taste.",
+      },
+      {
+        question: "Which anchovies does Sam use?",
+        answer:
+          "Sam uses white anchovies, also called boquerones. They are milder and fruitier than dark salt-cured anchovies and should be finely minced so they disappear into the filling.",
+      },
+      {
+        question: "How do you keep the mashed potato from becoming watery?",
+        answer:
+          "Drain the cooked potatoes thoroughly and leave them to steam in the colander for two minutes before mashing. This removes excess moisture.",
+      },
+      {
+        question: "How do you make the potato topping crisp?",
+        answer:
+          "Spread the mash to the edges of the dish, drag a fork across it to create raised ridges and bake until those peaks are golden. Cheddar can be added before baking if you like.",
+      },
+    ],
     methodPhotos: [
       {
         src: "/images/recipes/sams-shepherds-pie-step-4-ai.webp",
@@ -621,6 +733,28 @@ export const featuredRecipes: FeaturedRecipe[] = [
       {
         title: "Keep the door closed",
         text: "Do not open the oven during the first 25 minutes. A rush of cold air can deflate the airy structure.",
+      },
+    ],
+    faqs: [
+      {
+        question: "Why do you brush a soufflé dish with upward strokes?",
+        answer:
+          "Brushing the butter vertically from the base to the rim gives the soufflé mixture a straight path to rise up the sides of the dish.",
+      },
+      {
+        question: "How stiff should the egg whites be for a soufflé?",
+        answer:
+          "Beat them until they hold stiff peaks but still look glossy. Fold them into the cheese base gently, stopping when the last white streaks disappear.",
+      },
+      {
+        question: "Why should you keep the oven door closed?",
+        answer:
+          "Do not open the oven during the first 25 minutes. A rush of cold air can deflate the light structure before it has finished setting.",
+      },
+      {
+        question: "How long do individual soufflés take to bake?",
+        answer:
+          "Four 6 oz ramekins take about 20–22 minutes, while one 4-cup soufflé dish takes 30–35 minutes. They should be puffed, golden and still gently jiggly.",
       },
     ],
     methodPhotos: [
