@@ -46,8 +46,9 @@ export default function FounderPage() {
           <article
             className="relative ml-auto mt-14 max-w-2xl rotate-[0.35deg] overflow-hidden rounded-sm border border-[#9B6935]/75 bg-[#EAD09B] p-8 shadow-2xl shadow-black/45 md:mt-18 md:p-12"
             style={{
-              backgroundImage:
-                "radial-gradient(ellipse at 14% 10%, rgba(112, 68, 26, 0.22) 0%, transparent 23%), radial-gradient(ellipse at 88% 84%, rgba(112, 68, 26, 0.18) 0%, transparent 25%), radial-gradient(ellipse at 42% 64%, rgba(255, 247, 218, 0.48) 0%, transparent 32%), repeating-linear-gradient(to bottom, transparent 0, transparent 33px, rgba(125, 83, 41, 0.16) 34px)",
+              backgroundImage: "url('/images/paper-texture.jpg')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
               boxShadow:
                 "inset 0 0 46px rgba(74, 42, 14, 0.42), inset 0 0 8px rgba(90, 48, 14, 0.45), 0 24px 52px rgba(0, 0, 0, 0.45)",
             }}
