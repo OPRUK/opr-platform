@@ -183,6 +183,13 @@ export default function HomeHero({ children }: HomeHeroProps) {
                 // in beginCrossfade(), which already fires ahead of the
                 // crossfade with a 250ms hold + 500ms fade as buffer time.
                 preload={slot === activeSlot ? "auto" : "none"}
+                // Tells the browser the active slot's poster (the LCP
+                // candidate) matters more than everything else competing
+                // for bandwidth — pairs with the preload hint in page.tsx,
+                // which gets the browser started on it before this
+                // component has even hydrated. Not yet in React's DOM
+                // types for <video>, though browsers support it there.
+                {...({ fetchPriority: slot === activeSlot ? "high" : "auto" } as Record<string, string>)}
                 poster={film.poster}
                 onTimeUpdate={() => handleTimeUpdate(slot)}
                 onEnded={() => {
