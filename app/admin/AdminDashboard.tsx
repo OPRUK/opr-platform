@@ -241,14 +241,14 @@ export default function AdminDashboard() {
       const response = await adminRequest("/api/admin/founding-table");
       if (!response.ok) {
         const payload = await response.json().catch(() => null);
-        setMessage(payload?.error ?? "The Founding Table spreadsheet could not be downloaded.");
+        setMessage(payload?.error ?? "The table-signup spreadsheet could not be downloaded.");
         return;
       }
 
       const blob = await response.blob();
       const objectUrl = URL.createObjectURL(blob);
       const disposition = response.headers.get("content-disposition") ?? "";
-      const filename = disposition.match(/filename="([^"]+)"/)?.[1] ?? "opr-founding-table.xlsx";
+      const filename = disposition.match(/filename="([^"]+)"/)?.[1] ?? "opr-table-signups.xlsx";
       const link = document.createElement("a");
       link.href = objectUrl;
       link.download = filename;
@@ -257,7 +257,7 @@ export default function AdminDashboard() {
       link.remove();
       window.setTimeout(() => URL.revokeObjectURL(objectUrl), 1_000);
     } catch {
-      setMessage("The Founding Table spreadsheet could not be downloaded.");
+      setMessage("The table-signup spreadsheet could not be downloaded.");
     } finally {
       setExportingFoundingTable(false);
     }
@@ -606,7 +606,7 @@ export default function AdminDashboard() {
             disabled={exportingFoundingTable}
             className="rounded-full bg-[#123C39] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#08231F] disabled:cursor-wait disabled:opacity-60"
           >
-            {exportingFoundingTable ? "Preparing spreadsheet…" : "Download Founding Table (.xlsx)"}
+            {exportingFoundingTable ? "Preparing spreadsheet…" : "Download Table Signups (.xlsx)"}
           </button>
           <button
             type="button"

@@ -276,10 +276,9 @@ export default function MobileShareForm() {
           className="mt-[3px] accent-[#123C39]"
         />
         <span>
-          I confirm I&apos;m 18 or over, this recipe and story are mine to share, and I have permission to
-          share anyone identifiable in my photos or recordings. I grant OPR a licence to publish it.{" "}
+          I confirm that I am aged 18 or over.{" "}
           <Link href="/terms" className="underline underline-offset-4">
-            Read our full terms.
+            Read our full terms here.
           </Link>
         </span>
       </label>

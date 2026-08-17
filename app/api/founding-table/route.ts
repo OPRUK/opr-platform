@@ -16,8 +16,8 @@ export async function POST(request: Request) {
 
     const supabase = getSupabaseAdmin();
     if (!supabase) {
-      console.error("OPR Founding Table service is not configured");
-      return Response.json({ error: "The Founding Table is not available just now. Please try again shortly." }, { status: 503 });
+      console.error("OPR table-signup service is not configured");
+      return Response.json({ error: "Our table sign-up is not available just now. Please try again shortly." }, { status: 503 });
     }
 
     const wantsMarketing = marketingOptIn === true;
@@ -58,7 +58,7 @@ export async function POST(request: Request) {
 
     return Response.json({ ok: true });
   } catch (error) {
-    console.error("OPR Founding Table signup failed", error);
-    return Response.json({ error: "We could not join you to the Founding Table just now." }, { status: 400 });
+    console.error("OPR table signup failed", error);
+    return Response.json({ error: "We could not add you to our table just now." }, { status: 400 });
   }
 }

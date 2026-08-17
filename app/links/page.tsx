@@ -6,7 +6,7 @@ import LinkButtons from "./LinkButtons";
 
 export const metadata: Metadata = buildMetadata({
   title: "Links",
-  description: "Every way to explore Other People's Recipes — share a recipe, browse the Family Cookbook, join the Founding Table and more.",
+  description: "Every way to explore Other People's Recipes — share a recipe, browse the Living Cookbook, join our table and more.",
   path: "/links",
 });
 

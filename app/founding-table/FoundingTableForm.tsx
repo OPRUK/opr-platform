@@ -30,7 +30,7 @@ export default function FoundingTableForm() {
       }
 
       if (result.alreadyJoined) {
-        setMessage("You are already on the Founding Table. Thank you for being part of OPR.");
+        setMessage("You have already joined our table. Thank you for being part of OPR.");
       } else {
         setMessage("You are on the list. Please check your inbox for a welcome from OPR.");
       }
@@ -83,10 +83,10 @@ export default function FoundingTableForm() {
         disabled={isSubmitting}
         className="w-full rounded-full bg-[#DDB765] px-7 py-4 font-medium text-[#08231F] transition hover:scale-[1.02] hover:bg-[#FFD58C] disabled:cursor-not-allowed disabled:opacity-70"
       >
-        {isSubmitting ? "Joining the table…" : "Join the Founding Table"}
+        {isSubmitting ? "Joining the table…" : "Join Our Table"}
       </button>
       <p className="text-center text-xs leading-5 text-[#F0D4A0]">
-        Your details are kept securely for the Founding Table. You can unsubscribe from optional news at any time. Read our{" "}
+        Your details are kept securely for our invitation list. You can unsubscribe from optional news at any time. Read our{" "}
         <Link href="/privacy" className="underline underline-offset-2">Privacy Notice</Link>.
       </p>
       {message ? <p role="status" aria-live="polite" className="text-center text-sm text-[#FFE4A3]">{message}</p> : null}

@@ -113,14 +113,14 @@ export function foundingTableWelcomeEmail({
   marketingOptIn: boolean;
 }) {
   return {
-    subject: "Welcome to the OPR Founding Table",
+    subject: "Welcome to the OPR table",
     html: `
       <div style="font-family: Georgia, serif; max-width: 620px; margin: 0 auto; color: #4A4232; line-height: 1.65;">
         <p style="color: #9A622A; letter-spacing: 2px; font-size: 12px; text-transform: uppercase;">Other People's Recipes</p>
-        <h1 style="font-size: 34px; line-height: 1.2;">You have a place at the Founding Table.</h1>
+        <h1 style="font-size: 34px; line-height: 1.2;">You have a place at our table.</h1>
         <p>Dear ${escapeHtml(name)},</p>
         <p>Thank you for joining the very first people shaping Other People's Recipes.</p>
-        ${marketingOptIn ? "<p>You will be first to hear about new family recipes, future tasting events, Recipe of the Month voting and the next chapter of OPR.</p>" : "<p>We have saved your place at the Founding Table. You have not opted in to optional OPR news, so we will not send you marketing updates.</p>"}
+        ${marketingOptIn ? "<p>You will be first to hear about new family recipes, future tasting events, Recipe of the Month voting and the next chapter of OPR.</p>" : "<p>We have saved your place at our table. You have not opted in to optional OPR news, so we will not send you marketing updates.</p>"}
         <p>While you wait, the first stories are already waiting for you in the Family Cookbook.</p>
         <p><a href="${siteUrl}/family-cookbook" style="display: inline-block; background: #1C5A50; color: #FFF3DF; padding: 12px 18px; border-radius: 999px; text-decoration: none;">Explore the Family Cookbook</a></p>
         <p style="margin-top: 32px;">Warmly,<br /><strong>Chaten &amp; the OPR team</strong></p>
@@ -133,11 +133,11 @@ export function foundingTableWelcomeEmail({
 
 export function newFoundingTableEmail({ name, email }: { name: string; email: string }) {
   return {
-    subject: `New Founding Table member: ${name}`,
+    subject: `New table signup: ${name}`,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 620px; margin: 0 auto; color: #4A4232; line-height: 1.65;">
         <p style="color: #9A622A; font-size: 12px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase;">Private OPR alert</p>
-        <h1 style="font-family: Georgia, serif; font-size: 30px;">A new person has joined the Founding Table.</h1>
+        <h1 style="font-family: Georgia, serif; font-size: 30px;">A new person has joined our table.</h1>
         <p><strong>${escapeHtml(name)}</strong> has joined the waitlist.</p>
         <p>Contact: <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></p>
       </div>
