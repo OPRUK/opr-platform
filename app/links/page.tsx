@@ -8,6 +8,7 @@ export const metadata: Metadata = buildMetadata({
   title: "Links",
   description: "Every way to explore Other People's Recipes — share a recipe, browse the Living Cookbook, join our table and more.",
   path: "/links",
+  index: false,
 });
 
 export default function LinksPage() {

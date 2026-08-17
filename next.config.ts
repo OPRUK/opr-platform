@@ -9,6 +9,21 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/our-story",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/family-cookbook/grandads-steak-and-ale-pie",
+        destination: "/family-cookbook/community/41",
+        permanent: true,
+      },
+      {
+        source: "/family-cookbook/phil-and-serbs-three-cheese-souffle",
+        destination: "/family-cookbook/phils-and-serbs-three-cheese-souffle",
+        permanent: true,
+      },
+      {
         source: "/family-cookbook/dads-friday-night-butter-chicken",
         destination: "/family-cookbook/daves-butter-chicken",
         permanent: true,
