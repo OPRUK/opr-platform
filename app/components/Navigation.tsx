@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import AccessibilityControls from "./AccessibilityControls";
@@ -23,8 +24,16 @@ export default function Navigation() {
         <Link
           href="/"
           aria-label="Other People's Recipes home"
-          className="font-brand shrink-0 text-2xl font-semibold leading-none tracking-[0.01em] text-[#123C39] transition hover:text-[#75451F] sm:text-3xl"
+          className="font-brand flex shrink-0 items-center gap-2.5 text-2xl font-semibold leading-none tracking-[0.01em] text-[#123C39] transition hover:text-[#75451F] sm:gap-3 sm:text-3xl"
         >
+          <Image
+            src="/images/social/opr-pinterest-profile.png"
+            alt=""
+            width={44}
+            height={44}
+            priority
+            className="h-9 w-9 rounded-full sm:h-11 sm:w-11"
+          />
           <span className="sm:hidden" aria-hidden="true">OPR</span>
           <span className="hidden sm:inline">Other People&apos;s Recipes<sup aria-hidden="true" className="ml-0.5 align-super text-[0.35em]">™</sup></span>
         </Link>
