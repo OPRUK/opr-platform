@@ -27,11 +27,11 @@ function logClick(key: LinkKey) {
 
 const primaryLinks: Array<{ key: LinkKey; label: string; href: string; external?: boolean }> = [
   { key: "share", label: "Share your family recipe", href: "/share" },
-  { key: "family-cookbook", label: "Explore the Family Cookbook", href: "/family-cookbook" },
+  { key: "family-cookbook", label: "Explore the Living Cookbook", href: "/family-cookbook" },
   { key: "founding-table", label: "Join the Founding Table", href: "/founding-table" },
   { key: "recipe-of-month", label: "Recipe of the Month", href: "/app/vote" },
   { key: "films", label: "Watch OPR films", href: "/films" },
-  { key: "our-story", label: "Our story", href: "/our-story" },
+  { key: "our-story", label: "Our story", href: "/#your-story" },
   { key: "contact", label: "Contact OPR", href: "mailto:info@otherpeoplesrecipes.co.uk", external: true },
 ];
 

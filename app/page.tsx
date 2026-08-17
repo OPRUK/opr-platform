@@ -78,11 +78,11 @@ export default async function Home() {
               href="/family-cookbook"
               className="rounded-full bg-[#123C39] px-8 py-3.5 text-base font-medium transition hover:scale-105 sm:px-10 sm:py-4 sm:text-lg"
             >
-              Open the Cookbook
+              Open the Living Cookbook
             </Link>
 
             <Link
-              href="/our-story"
+              href="/#your-story"
               className="rounded-full border border-white px-8 py-3.5 text-base transition hover:bg-white hover:text-black sm:px-10 sm:py-4 sm:text-lg"
             >
               Your Story
@@ -132,73 +132,58 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="bg-[#EED8B2] px-8 py-24 animate-rise-in-delayed">
-          <div className="mx-auto max-w-6xl text-center">
-            <p className="mb-4 uppercase tracking-[0.35em] text-amber-700">
-              EVERY RECIPE HAS A STORY
+      <section id="your-story" className="scroll-mt-6 bg-[#EED8B2] px-6 py-16 animate-rise-in-delayed md:px-8 md:py-20">
+        <div className="mx-auto max-w-6xl">
+          <div className="text-center">
+            <p className="text-sm font-bold uppercase tracking-[0.35em] text-amber-700">
+              Your Story
             </p>
-
-            <h2 className="text-5xl font-bold text-[#123C39]">
-              More Than Just Recipes
+            <h2 className="font-display mx-auto mt-5 max-w-4xl text-4xl font-bold leading-tight text-[#123C39] md:text-6xl">
+              Every family has a recipe worth remembering.
             </h2>
-
-            <p className="mx-auto mt-8 max-w-3xl text-xl leading-9 text-stone-700">
-              Some recipes are passed down through generations. Others are
-              found in faded notebooks, handwritten cards, or scribbled on the
-              back of shopping lists. Every one carries a memory worth
-              preserving.
+            <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-stone-700 md:text-xl md:leading-9">
+              Other People&apos;s Recipes exists to preserve the meals, memories and
+              traditions that make a house feel like home.
             </p>
+          </div>
 
-            <div className="mt-16 grid gap-8 md:grid-cols-3">
-              <Link
-                href="/our-story"
-                className="group rounded-3xl bg-[#FFF3DF] p-10 text-left shadow-lg shadow-[#1C5A50]/15 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
-              >
-                <h3 className="mb-4 text-2xl font-bold text-[#123C39]">
-                  Family Stories
-                </h3>
-
-                <p className="text-stone-600">
-                  Discover the memories behind treasured family recipes.
-                </p>
-                <span className="mt-7 inline-block text-sm font-semibold text-[#9A622A] transition group-hover:translate-x-1">
-                  Read Your Story →
-                </span>
-              </Link>
-
-              <Link
-                href="/family-cookbook"
-                className="group rounded-3xl bg-[#FFF3DF] p-10 text-left shadow-lg shadow-[#1C5A50]/15 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
-              >
-                <h3 className="mb-4 text-2xl font-bold text-[#123C39]">
-                  Kitchen Keepsakes
-                </h3>
-
-                <p className="text-stone-600">
-                  Preserve recipes that deserve to live on for generations.
-                </p>
-                <span className="mt-7 inline-block text-sm font-semibold text-[#9A622A] transition group-hover:translate-x-1">
-                  Explore the cookbook →
-                </span>
-              </Link>
-
-              <Link
-                href="/share"
-                className="group rounded-3xl bg-[#FFF3DF] p-10 text-left shadow-lg shadow-[#1C5A50]/15 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
-              >
-                <h3 className="mb-4 text-2xl font-bold text-[#123C39]">
-                  Shared Around the Table
-                </h3>
-
-                <p className="text-stone-600">
-                  Celebrate the moments that bring families together.
-                </p>
-                <span className="mt-7 inline-block text-sm font-semibold text-[#9A622A] transition group-hover:translate-x-1">
-                  Share your recipe →
-                </span>
-              </Link>
+          <div className="mt-12 grid overflow-hidden rounded-[2rem] bg-[#FFF3DF] shadow-xl shadow-[#1C5A50]/15 md:grid-cols-[0.85fr_1.15fr]">
+            <div className="flex flex-col justify-center bg-[#123C39] p-8 text-[#FFF3DF] md:p-12">
+              <p className="text-sm font-bold uppercase tracking-[0.35em] text-[#FFD58C]">
+                Why we started
+              </p>
+              <h3 className="mt-5 text-4xl font-bold leading-tight md:text-5xl">
+                Recipes are more than instructions.
+              </h3>
+            </div>
+            <div className="space-y-6 p-8 text-lg leading-8 text-stone-700 md:p-12">
+              <p>
+                They are Sunday lunches, birthday cakes, handwritten notes and
+                the people who taught us how to cook them.
+              </p>
+              <p>
+                We are creating a living collection of family recipes and the
+                stories behind them — shared with care, discovered by others,
+                and one day celebrated around real restaurant tables.
+              </p>
             </div>
           </div>
+
+          <div className="mt-8 rounded-[2rem] border border-[#D1AD75] bg-[#FFF3DF] px-7 py-10 text-center shadow-lg shadow-[#1C5A50]/10 md:px-12 md:py-12">
+            <p className="text-sm font-bold uppercase tracking-[0.35em] text-amber-700">
+              The invitation
+            </p>
+            <h3 className="mx-auto mt-5 max-w-4xl text-3xl font-bold leading-tight md:text-5xl">
+              What&apos;s the one recipe your family would never let disappear?
+            </h3>
+            <Link
+              href="/share"
+              className="mt-8 inline-block rounded-full bg-[#123C39] px-8 py-4 text-lg font-medium text-white transition hover:scale-105 hover:bg-[#08231F]"
+            >
+              Share Your Story
+            </Link>
+          </div>
+        </div>
       </section>
 
       <section className="bg-[#123C39] px-6 py-24 md:px-8">
