@@ -59,6 +59,7 @@ export const metadata: Metadata = {
   verification: {
     other: {
       "msvalidate.01": "009D35C64947BC371E16705EC522B712",
+      "p:domain_verify": "37c33f8ed4264a33475c9f670e20565c",
     },
   },
   openGraph: {
