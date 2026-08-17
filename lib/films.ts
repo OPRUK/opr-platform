@@ -24,6 +24,13 @@ function film(title: string, file: string, hasPoster = true): Film {
 
 export const films: Film[] = [
   {
+    title: "Dave & Rubble | The Secret Ingredient",
+    video: "/videos/opr-dave-and-rubble-secret-ingredient.mp4",
+    poster: "/images/opr-dave-and-rubble-secret-ingredient-poster.jpg",
+    transcript:
+      "Dave: “It just needs one secret ingredient.”\nRubble: “Chicken?”\nDave: “Apparently.”",
+  },
+  {
     title: "Dave & Rubble | Dave's Butter Chicken",
     video: "/videos/opr-dave-and-rubble-daves-butter-chicken.mp4",
   },
