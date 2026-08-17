@@ -56,7 +56,7 @@ export default function AccessibilityStatementPage() {
             <div>
               <h2 className="text-2xl font-bold text-[#123C39]">Known limitations</h2>
               <p className="mt-3">
-                Some films and contributor audio or video recordings do not yet have verified synchronised captions or complete transcripts. We are preparing these progressively. Decorative recipe-card textures may also be less comfortable for some readers; the Readable font setting simplifies the type while preserving the recipe content.
+                Every film in the OPR Film Collection includes a written transcript. Verified synchronised captions for films and complete transcripts for some contributor audio or video recordings are still being prepared. Decorative recipe-card textures may also be less comfortable for some readers; the Readable font setting simplifies the type while preserving the recipe content.
               </p>
             </div>
 
