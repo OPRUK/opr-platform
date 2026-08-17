@@ -29,12 +29,12 @@ export default function FounderPage() {
 
         <div className="mx-auto max-w-6xl">
           <div className="max-w-2xl text-[#FFF3DF]">
-            <p className="mb-5 text-sm uppercase tracking-[0.4em] text-[#FFD58C]">
+            <p className="mb-5 text-sm uppercase tracking-[0.4em] text-[#DDB765]">
               A note to my future self
             </p>
             <h1 className="font-display text-5xl font-bold leading-tight drop-shadow-lg md:text-7xl">
               A founder&apos;s letter,
-              <span className="block text-[#FFD58C]">written in 2000.</span>
+              <span className="block text-[#DDB765]">written in 2000.</span>
             </h1>
             <p className="mt-7 max-w-xl text-lg leading-8 text-[#FFF3DF]/90">
               A small reminder left in a desk drawer: when life gives you the
@@ -43,7 +43,7 @@ export default function FounderPage() {
           </div>
 
           <article
-            className="font-founder-hand relative ml-auto mt-14 max-w-2xl rotate-[0.35deg] overflow-hidden rounded-sm border border-[#9B6935]/75 bg-[#EAD09B] p-8 shadow-2xl shadow-black/45 md:mt-18 md:p-12"
+            className="relative ml-auto mt-14 max-w-2xl rotate-[0.35deg] overflow-hidden rounded-sm border border-[#9B6935]/75 bg-[#EAD09B] p-8 shadow-2xl shadow-black/45 md:mt-18 md:p-12"
             style={{
               backgroundImage:
                 "radial-gradient(ellipse at 14% 10%, rgba(112, 68, 26, 0.22) 0%, transparent 23%), radial-gradient(ellipse at 88% 84%, rgba(112, 68, 26, 0.18) 0%, transparent 25%), radial-gradient(ellipse at 42% 64%, rgba(255, 247, 218, 0.48) 0%, transparent 32%), repeating-linear-gradient(to bottom, transparent 0, transparent 33px, rgba(125, 83, 41, 0.16) 34px)",
@@ -58,7 +58,7 @@ export default function FounderPage() {
               <p className="text-xs uppercase tracking-[0.3em] text-[#8B5A2B]">
                 A founder&apos;s letter
               </p>
-              <p className="text-3xl italic text-[#8B5A2B]">2000</p>
+              <p className="font-founder-hand text-3xl italic text-[#8B5A2B]">2000</p>
             </div>
             <h2
               className="font-founder-hand mt-8 text-4xl font-semibold leading-tight text-[#123C39] md:text-5xl"
@@ -67,7 +67,7 @@ export default function FounderPage() {
             </h2>
 
           <div
-            className="font-founder-hand mt-9 space-y-6 text-[1.4rem] leading-[1.55] text-[#5B4834] md:text-[1.55rem]"
+            className="font-brand mt-9 space-y-6 text-xl leading-[1.7] text-[#5B4834]"
           >
             <p>
               Other People&apos;s Recipes began as an idea back in 2000. It has
@@ -121,7 +121,7 @@ export default function FounderPage() {
       </section>
 
       <section className="bg-[#08231F] px-6 py-20 text-center text-[#FFF3DF]">
-        <p className="text-sm uppercase tracking-[0.35em] text-[#FFD58C]">
+        <p className="text-sm uppercase tracking-[0.35em] text-[#DDB765]">
           Join the table
         </p>
         <h2 className="mx-auto mt-5 max-w-3xl text-4xl font-bold leading-tight md:text-5xl">
@@ -130,7 +130,7 @@ export default function FounderPage() {
         <div className="mx-auto mt-10 flex max-w-3xl flex-col justify-center gap-4 sm:flex-row sm:flex-wrap">
           <Link
             href="/share"
-            className="rounded-full bg-[#DDB765] px-7 py-4 font-medium text-[#08231F] transition hover:scale-105 hover:bg-[#FFD58C]"
+            className="rounded-full bg-[#DDB765] px-7 py-4 font-medium text-[#08231F] transition hover:scale-105 hover:bg-[#DDB765]"
           >
             Share your recipe
           </Link>

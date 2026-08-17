@@ -10,8 +10,8 @@ export default function ShareScreen() {
     <div className="flex flex-1 flex-col overflow-hidden">
       <div className="flex-1 overflow-y-auto px-5 pb-6 pt-16">
         <Eyebrow className="mb-2">Whet our appetite</Eyebrow>
-        <h1 className="font-display mb-2 text-[27px]">Share your family&apos;s recipe</h1>
-        <p className="mb-5 text-sm opacity-80">Every one carries a memory worth preserving.</p>
+        <h1 className="mb-2 text-[27px] font-bold">Share your family&apos;s recipe</h1>
+        <p className="mb-5 text-base opacity-80">Every one carries a memory worth preserving.</p>
         <MobileShareForm />
       </div>
       <MobileTabBar />

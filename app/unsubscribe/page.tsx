@@ -26,7 +26,7 @@ export default async function UnsubscribePage({
       <section className="px-6 pb-24 pt-40">
         <div className="mx-auto max-w-2xl rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-12">
           <p className="text-sm uppercase tracking-[0.35em] text-[#9A622A]">Email preferences</p>
-          <h1 className="font-display mt-4 text-4xl font-bold md:text-5xl">Stay in control of your inbox.</h1>
+          <h1 className="mt-4 text-4xl font-bold md:text-5xl">Stay in control of your inbox.</h1>
           {valid ? (
             <>
               <p className="mt-6 leading-8 text-stone-700">

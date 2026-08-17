@@ -16,7 +16,7 @@ export function Eyebrow({
   tone?: "gold" | "cream";
   className?: string;
 }) {
-  const color = tone === "cream" ? "text-[#EED8B2]" : "text-[#6B4F1F]";
+  const color = tone === "cream" ? "text-[#EED8B2]" : "text-[#9A622A]";
   return (
     <p className={`text-xs font-extrabold uppercase tracking-[0.2em] ${color} ${className}`}>
       {children}
@@ -26,7 +26,7 @@ export function Eyebrow({
 
 export function Tag({ children }: { children: ReactNode }) {
   return (
-    <span className="bg-[#DCE7E1] px-2.5 py-1 text-xs font-medium uppercase tracking-[0.05em] text-[#123C39]">
+    <span className="bg-[#EED8B2] px-2.5 py-1 text-xs font-medium uppercase tracking-[0.05em] text-[#123C39]">
       {children}
     </span>
   );
@@ -66,7 +66,7 @@ export function PrimaryButton({
   type?: "button" | "submit";
   inverted?: boolean;
 }) {
-  const colorClass = inverted ? "bg-[#EED8B2] text-[#123C39]" : "bg-[#123C39] text-[#EED8B2] hover:bg-[#0d2b28]";
+  const colorClass = inverted ? "bg-[#EED8B2] text-[#123C39]" : "bg-[#123C39] text-[#EED8B2] hover:bg-[#08231F]";
   const content = (
     <>
       <span>{children}</span>
@@ -106,7 +106,7 @@ export function SecondaryButton({
   type?: "button" | "submit";
   block?: boolean;
 }) {
-  const className = `flex items-center gap-2 border border-[#123C39] px-4 py-3 text-sm font-medium text-[#123C39] transition hover:bg-[#123C39] hover:text-[#EED8B2] disabled:cursor-not-allowed disabled:opacity-50 ${block ? "w-full" : ""}`;
+  const className = `flex items-center gap-2 border border-[#123C39] px-4 py-3 text-base font-medium text-[#123C39] transition hover:bg-[#123C39] hover:text-[#EED8B2] disabled:cursor-not-allowed disabled:opacity-50 ${block ? "w-full" : ""}`;
 
   if (href) {
     return (

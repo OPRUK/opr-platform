@@ -123,7 +123,7 @@ export default async function RecipePage({
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Family Cookbook", item: absoluteUrl("/family-cookbook") },
+      { "@type": "ListItem", position: 1, name: "Living Cookbook", item: absoluteUrl("/family-cookbook") },
       { "@type": "ListItem", position: 2, name: recipe.title, item: absoluteUrl(`/family-cookbook/${recipe.slug}`) },
     ],
   };
@@ -159,7 +159,7 @@ export default async function RecipePage({
 
       <section className="bg-[#123C39] px-6 pb-12 pt-32 text-center text-white">
         <p className="mb-3 text-sm uppercase tracking-[0.4em] text-amber-300">
-          A page from the family cookbook
+          A page from the living cookbook
         </p>
         <h1 className="font-display mx-auto max-w-4xl text-5xl font-bold leading-tight md:text-7xl">
           {recipe.title}
@@ -182,7 +182,7 @@ export default async function RecipePage({
           <p className="mt-7 text-2xl leading-relaxed text-[#123C39]">
             “{recipe.story}”
           </p>
-          <p className="mt-10 border-t border-[#D1AD75] pt-6 text-sm italic text-stone-600">
+          <p className="mt-10 border-t border-[#DDB765] pt-6 text-sm italic text-stone-600">
             This recipe now belongs to every family who cooks it.
           </p>
         </article>
@@ -229,7 +229,7 @@ export default async function RecipePage({
 
       {recipe.notes?.length ? (
         <section className="bg-[#EED8B2] px-6 pb-4 pt-10 md:pb-5 md:pt-12">
-          <div className="mx-auto max-w-5xl rounded-[2rem] border border-[#D1AD75] bg-[#FFF3DF] p-6 shadow-xl shadow-[#1C5A50]/10 md:p-8">
+          <div className="mx-auto max-w-5xl rounded-[2rem] border border-[#DDB765] bg-[#FFF3DF] p-6 shadow-xl shadow-[#1C5A50]/10 md:p-8">
             <p className="text-sm font-bold uppercase tracking-[0.35em] text-[#9A622A]">
               Cook&apos;s notes &amp; swaps
             </p>
@@ -242,7 +242,7 @@ export default async function RecipePage({
             </p>
             <div className="mt-6 grid gap-4 md:grid-cols-2">
               {recipe.notes.map((note) => (
-                <article key={note.title} className="rounded-2xl border border-[#E7CEA2] bg-[#FFF9EC] p-5">
+                <article key={note.title} className="rounded-2xl border border-[#DDB765] bg-[#FFF3DF] p-5">
                   <h3 className="text-xl font-bold text-[#123C39]">{note.title}</h3>
                   <p className="mt-3 leading-7 text-stone-700">{note.text}</p>
                 </article>
@@ -274,7 +274,7 @@ export default async function RecipePage({
           href="/family-cookbook"
           className="inline-block rounded-full bg-[#123C39] px-8 py-4 text-lg font-medium text-white transition hover:scale-105"
         >
-          Return to the Cookbook
+          Return to the Living Cookbook
         </Link>
       </section>
     </main>

@@ -3,8 +3,8 @@
 :root {
   --background: #eed8b2;
   --foreground: #4a4232;
-  --font-brand: var(--font-cabin), "Gill Sans MT", "Gill Sans", Avenir, Corbel, Arial, sans-serif;
-  --font-display: var(--font-cormorant-garamond), Didot, "Bodoni MT", Georgia, "Times New Roman", serif;
+  --font-brand: "Gill Sans MT", "Gill Sans", Avenir, Corbel, Arial, sans-serif;
+  --font-display: Didot, "Bodoni MT", Georgia, "Times New Roman", serif;
   --font-founder-hand: var(--font-caveat);
   --font-founder-signature: var(--font-allura);
   --font-recipe-card: var(--font-caveat), "Bradley Hand", cursive;
@@ -23,10 +23,10 @@ html[data-text-size="largest"] {
 }
 
 html[data-readable-font="true"] {
-  --font-display: var(--font-cabin), "Gill Sans MT", "Gill Sans", Avenir, Corbel, Arial, sans-serif;
-  --font-founder-hand: var(--font-cabin), "Gill Sans MT", "Gill Sans", Avenir, Corbel, Arial, sans-serif;
-  --font-founder-signature: var(--font-cabin), "Gill Sans MT", "Gill Sans", Avenir, Corbel, Arial, sans-serif;
-  --font-recipe-card: var(--font-cabin), "Gill Sans MT", "Gill Sans", Avenir, Corbel, Arial, sans-serif;
+  --font-display: var(--font-brand);
+  --font-founder-hand: var(--font-brand);
+  --font-founder-signature: var(--font-brand);
+  --font-recipe-card: var(--font-brand);
 }
 
 @theme inline {
@@ -51,7 +51,7 @@ body {
   z-index: 1000;
   transform: translateY(-200%);
   border-radius: 0.75rem;
-  background: #fff9ec;
+  background: #fff3df;
   color: #123c39;
   padding: 0.8rem 1rem;
   font-weight: 700;
@@ -64,7 +64,7 @@ body {
 }
 
 :where(a, button, input, textarea, select, summary):focus-visible {
-  outline: 3px solid #7a461f;
+  outline: 3px solid #9a622a;
   outline-offset: 3px;
 }
 
@@ -74,7 +74,7 @@ body {
 }
 
 .text-amber-700 {
-  color: #75451f;
+  color: #9a622a;
 }
 
 main:focus {

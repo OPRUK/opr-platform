@@ -4,7 +4,7 @@ import { Eyebrow, Tag } from "../_components/primitives";
 import MobileTabBar from "../_components/MobileTabBar";
 import { getAllMobileRecipes } from "../../../lib/mobile-recipes";
 
-export const metadata: Metadata = { title: "The Family Cookbook" };
+export const metadata: Metadata = { title: "The Living Cookbook" };
 
 export default async function CookbookScreen() {
   const recipes = await getAllMobileRecipes();
@@ -13,7 +13,7 @@ export default async function CookbookScreen() {
     <div className="flex flex-1 flex-col overflow-hidden">
       <div className="flex-shrink-0 border-b-2 border-[#123C39]/35 px-5 pb-4 pt-16">
         <Eyebrow className="mb-2">A living cookbook</Eyebrow>
-        <h1 className="font-display text-[30px]">The Family Cookbook</h1>
+        <h1 className="text-[30px] font-bold">The Living Cookbook</h1>
       </div>
 
       <div className="flex-1 overflow-y-auto px-5 py-4">
@@ -29,7 +29,7 @@ export default async function CookbookScreen() {
                 href={`/app/cookbook/${recipe.id}`}
                 className="flex gap-3.5 border-b-2 border-[#123C39]/35 pb-4"
               >
-                <div className="h-24 w-24 flex-shrink-0 bg-[#F5E6C4]">
+                <div className="h-24 w-24 flex-shrink-0 bg-[#EED8B2]">
                   {recipe.image ? (
                     // eslint-disable-next-line @next/next/no-img-element -- may be a Supabase Storage URL, not a configured Image domain
                     <img
@@ -44,8 +44,8 @@ export default async function CookbookScreen() {
                     <Tag>{recipe.category}</Tag>
                     <span className="text-xs text-[#123C39]/80">{recipe.place}</span>
                   </div>
-                  <div className="font-display text-[19px] font-bold leading-tight">{recipe.title}</div>
-                  <div className="line-clamp-2 text-sm opacity-80">{recipe.story}</div>
+                  <div className="text-[19px] font-bold leading-tight">{recipe.title}</div>
+                  <div className="line-clamp-2 text-base opacity-80">{recipe.story}</div>
                 </div>
               </Link>
             ))}

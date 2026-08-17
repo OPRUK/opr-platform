@@ -104,7 +104,7 @@ export default function LinkButtons() {
               key={link.key}
               href={link.href}
               onClick={() => logClick(link.key)}
-              className="min-h-14 rounded-2xl border border-[#D1AD75] bg-[#FFF3DF] px-6 py-4 text-center text-lg font-medium text-[#123C39] shadow-sm transition hover:-translate-y-0.5 hover:border-[#123C39] hover:bg-white focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#9A622A]"
+              className="min-h-14 rounded-2xl border border-[#DDB765] bg-[#FFF3DF] px-6 py-4 text-center text-lg font-medium text-[#123C39] shadow-sm transition hover:-translate-y-0.5 hover:border-[#123C39] hover:bg-white focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#9A622A]"
             >
               {link.label}
             </a>
@@ -113,7 +113,7 @@ export default function LinkButtons() {
               key={link.key}
               href={link.href}
               onClick={() => logClick(link.key)}
-              className="min-h-14 rounded-2xl border border-[#D1AD75] bg-[#FFF3DF] px-6 py-4 text-center text-lg font-medium text-[#123C39] shadow-sm transition hover:-translate-y-0.5 hover:border-[#123C39] hover:bg-white focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#9A622A]"
+              className="min-h-14 rounded-2xl border border-[#DDB765] bg-[#FFF3DF] px-6 py-4 text-center text-lg font-medium text-[#123C39] shadow-sm transition hover:-translate-y-0.5 hover:border-[#123C39] hover:bg-white focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#9A622A]"
             >
               {link.label}
             </Link>
@@ -131,7 +131,7 @@ export default function LinkButtons() {
             onClick={() => logClick(social.key)}
             aria-label={social.label}
             title={social.label}
-            className="flex h-12 w-12 items-center justify-center rounded-full border border-[#D1AD75] bg-[#FFF3DF] text-[#123C39] shadow-sm transition hover:-translate-y-0.5 hover:border-[#123C39] hover:bg-[#123C39] hover:text-white focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#9A622A]"
+            className="flex h-12 w-12 items-center justify-center rounded-full border border-[#DDB765] bg-[#FFF3DF] text-[#123C39] shadow-sm transition hover:-translate-y-0.5 hover:border-[#123C39] hover:bg-[#123C39] hover:text-white focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#9A622A]"
           >
             {social.icon}
           </a>

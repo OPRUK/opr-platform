@@ -260,7 +260,7 @@ export default function PublishedRecipes({
 
   return (
     <section>
-      <div className="rounded-3xl border border-[#D1AD75]/70 bg-[#FFF3DF] p-5 shadow-sm shadow-[#1C5A50]/10 md:flex md:items-center md:justify-between md:gap-6 md:p-6">
+      <div className="rounded-3xl border border-[#DDB765]/70 bg-[#FFF3DF] p-5 shadow-sm shadow-[#1C5A50]/10 md:flex md:items-center md:justify-between md:gap-6 md:p-6">
         <label className="block flex-1">
           <span className="sr-only">Search recipes</span>
           <input
@@ -268,7 +268,7 @@ export default function PublishedRecipes({
             onChange={(event) => setSearch(event.target.value)}
             type="search"
             placeholder="Search by recipe, story, cook or place"
-            className="w-full rounded-xl border border-[#D1AD75] bg-white px-5 py-3.5 text-[#123C39] outline-none transition placeholder:text-stone-500 focus:border-[#9A622A] focus:ring-2 focus:ring-[#D1AD75]/50"
+            className="w-full rounded-xl border border-[#DDB765] bg-white px-5 py-3.5 text-[#123C39] outline-none transition placeholder:text-stone-500 focus:border-[#9A622A] focus:ring-2 focus:ring-[#DDB765]/50"
           />
         </label>
         <div className="mt-4 flex flex-wrap gap-2 md:mt-0">
@@ -280,7 +280,7 @@ export default function PublishedRecipes({
               className={`rounded-full px-4 py-2 text-sm font-medium transition ${
                 category === item.value
                   ? "bg-[#123C39] text-white"
-                  : "border border-[#D1AD75] text-[#123C39] hover:bg-[#F4DDAE]"
+                  : "border border-[#DDB765] text-[#123C39] hover:bg-[#EED8B2]"
               }`}
             >
               {item.label}
@@ -289,7 +289,7 @@ export default function PublishedRecipes({
         </div>
       </div>
 
-      <div className="mt-5 rounded-3xl border border-[#D1AD75]/70 bg-[#F4DDAE]/55 px-6 py-6 md:flex md:items-center md:justify-between md:gap-8">
+      <div className="mt-5 rounded-3xl border border-[#DDB765]/70 bg-[#EED8B2]/55 px-6 py-6 md:flex md:items-center md:justify-between md:gap-8">
         <div>
           <p className="text-sm uppercase tracking-[0.22em] text-[#9A622A]">
             The cookbook is growing
@@ -318,7 +318,7 @@ export default function PublishedRecipes({
             <Link
               key={recipe.id}
               href={recipe.href}
-              className="group flex flex-col overflow-hidden bg-[#FFF3DF] transition-colors duration-300 hover:bg-[#FBEBC8]"
+              className="group flex flex-col overflow-hidden bg-[#FFF3DF] transition-colors duration-300 hover:bg-[#EED8B2]"
             >
               {recipe.imageUrl ? (
                 <Image
@@ -327,21 +327,18 @@ export default function PublishedRecipes({
                   width={800}
                   height={600}
                   unoptimized
-                  className="aspect-[4/3] w-full object-cover grayscale-[15%] transition duration-500 group-hover:grayscale-0"
+                  className="aspect-[4/3] w-full object-cover transition duration-500 group-hover:scale-[1.02]"
                 />
               ) : (
-                <div className="flex aspect-[4/3] items-center justify-center bg-[#DDBB82] px-8 text-center text-xl font-bold text-[#123C39]">
+                <div className="flex aspect-[4/3] items-center justify-center bg-[#EED8B2] px-8 text-center text-xl font-bold text-[#123C39]">
                   A treasured family recipe
                 </div>
               )}
               <div className="flex min-h-80 flex-col p-8">
-                <p
-                  className="text-[11px] uppercase tracking-[0.14em] text-[#0E5C3E]"
-                  style={{ fontFamily: "'Courier New', ui-monospace, monospace" }}
-                >
+                <p className="font-founder-hand text-sm uppercase tracking-[0.12em] text-[#1C5A50]">
                   No. {String(index + 1).padStart(2, "0")} &middot; {recipe.category}
                 </p>
-                <h3 className="font-display mt-5 text-3xl font-bold leading-tight">{recipe.title}</h3>
+                <h3 className="mt-5 text-3xl font-bold leading-tight">{recipe.title}</h3>
                 <p className="mt-3 text-sm uppercase tracking-[0.16em] text-stone-500">
                   {recipe.contributor}
                   {recipe.location ? ` · ${recipe.location}` : ""}
@@ -355,7 +352,7 @@ export default function PublishedRecipes({
           ))}
         </div>
       ) : (
-        <div className="mt-8 rounded-3xl border border-dashed border-[#D1AD75] bg-[#FFF3DF]/60 px-8 py-14 text-center">
+        <div className="mt-8 rounded-3xl border border-dashed border-[#DDB765] bg-[#FFF3DF]/60 px-8 py-14 text-center">
           <h3 className="text-2xl font-bold">No recipes match that search.</h3>
           <button
             type="button"
@@ -370,11 +367,11 @@ export default function PublishedRecipes({
         </div>
       )}
 
-      <section className="mt-6 overflow-hidden rounded-3xl border border-[#D1AD75]/70 bg-[#123C39] p-6 text-[#FFF3DF] shadow-xl shadow-[#1C5A50]/20 md:p-10">
+      <section className="mt-6 overflow-hidden rounded-3xl border border-[#DDB765]/70 bg-[#123C39] p-6 text-[#FFF3DF] shadow-xl shadow-[#1C5A50]/20 md:p-10">
         <div className="max-w-3xl">
-          <p className="text-sm uppercase tracking-[0.28em] text-[#F0C45A]">From kitchen to kitchen</p>
-          <h2 className="font-display mt-3 text-4xl font-bold leading-tight md:text-5xl">The OPR recipe map</h2>
-          <p className="mt-4 max-w-2xl leading-7 text-[#F6E3BE]">
+          <p className="text-sm uppercase tracking-[0.28em] text-[#DDB765]">From kitchen to kitchen</p>
+          <h2 className="mt-3 text-4xl font-bold leading-tight md:text-5xl">The OPR recipe map</h2>
+          <p className="mt-4 max-w-2xl leading-7 text-[#EED8B2]">
             Every pin begins with a person, a place and a recipe worth passing on. Explore the kitchens that make up the OPR cookbook so far.
           </p>
         </div>
@@ -384,10 +381,10 @@ export default function PublishedRecipes({
             cluster popover must be able to spill outside the map's own
             bounds without getting clipped by that same rule. */}
         <div className="relative mt-6">
-          <div className="overflow-hidden rounded-3xl border border-[#D1AD75]/60 bg-[#0B2622]">
+          <div className="overflow-hidden rounded-3xl border border-[#DDB765]/60 bg-[#08231F]">
             <svg viewBox={WORLD_MAP_VIEWBOX} className="block w-full" aria-hidden="true">
-              <rect width="960" height="480" fill="#0B2622" />
-              <path d={WORLD_LAND_PATH} fill="#E8C67C" stroke="#805126" strokeWidth="0.75" strokeLinejoin="round" />
+              <rect width="960" height="480" fill="#08231F" />
+              <path d={WORLD_LAND_PATH} fill="#DDB765" stroke="#9A622A" strokeWidth="0.75" strokeLinejoin="round" />
             </svg>
           </div>
 
@@ -404,13 +401,13 @@ export default function PublishedRecipes({
                   className="group absolute -translate-x-1/2 -translate-y-1/2"
                   aria-label={`Open ${recipe.title}, from ${recipe.location}`}
                 >
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full border-[3px] border-[#FFF3DF] bg-[#123C39] text-sm text-[#F0C45A] shadow-lg transition duration-200 group-hover:scale-125 sm:h-9 sm:w-9 sm:text-base">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full border-[3px] border-[#FFF3DF] bg-[#123C39] text-sm text-[#DDB765] shadow-lg transition duration-200 group-hover:scale-125 sm:h-9 sm:w-9 sm:text-base">
                     ✦
                   </span>
                   <span className="pointer-events-none absolute left-1/2 top-10 z-10 w-max max-w-40 -translate-x-1/2 rounded-lg bg-[#123C39] px-3 py-2 text-center text-xs font-semibold leading-4 text-[#FFF3DF] opacity-0 shadow-lg transition group-hover:opacity-100 sm:top-11">
                     {recipe.title}
                     <br />
-                    <span className="font-normal text-[#F0C45A]">{recipe.location}</span>
+                    <span className="font-normal text-[#DDB765]">{recipe.location}</span>
                   </span>
                 </Link>
               );
@@ -426,16 +423,16 @@ export default function PublishedRecipes({
                   aria-label={`${cluster.recipes.length} recipes clustered here — press to see them`}
                   className={`flex h-9 w-9 items-center justify-center rounded-full border-[3px] text-sm font-bold shadow-lg transition duration-200 hover:scale-125 sm:h-10 sm:w-10 sm:text-base ${
                     expanded
-                      ? "border-[#F0C45A] bg-[#F0C45A] text-[#123C39]"
-                      : "border-[#FFF3DF] bg-[#123C39] text-[#F0C45A]"
+                      ? "border-[#DDB765] bg-[#DDB765] text-[#123C39]"
+                      : "border-[#FFF3DF] bg-[#123C39] text-[#DDB765]"
                   }`}
                 >
                   {cluster.recipes.length}
                 </button>
 
                 {expanded ? (
-                  <div className="absolute left-1/2 top-11 z-20 w-56 -translate-x-1/2 rounded-2xl border border-[#D1AD75]/60 bg-[#123C39] p-3 text-left shadow-2xl sm:top-12">
-                    <p className="px-1 pb-2 text-[11px] uppercase tracking-[0.14em] text-[#F0C45A]">
+                  <div className="absolute left-1/2 top-11 z-20 w-56 -translate-x-1/2 rounded-2xl border border-[#DDB765]/60 bg-[#123C39] p-3 text-left shadow-2xl sm:top-12">
+                    <p className="px-1 pb-2 text-[11px] uppercase tracking-[0.14em] text-[#DDB765]">
                       {cluster.recipes.length} recipes near here
                     </p>
                     <div className="space-y-1">
@@ -446,7 +443,7 @@ export default function PublishedRecipes({
                           className="block rounded-lg px-2 py-1.5 transition hover:bg-white/10"
                         >
                           <span className="block text-sm font-semibold text-[#FFF3DF]">{recipe.title}</span>
-                          <span className="block text-xs text-[#F0C45A]">{recipe.location}</span>
+                          <span className="block text-xs text-[#DDB765]">{recipe.location}</span>
                         </Link>
                       ))}
                     </div>
@@ -457,19 +454,19 @@ export default function PublishedRecipes({
           })}
         </div>
 
-        <p className="mt-5 text-center text-sm text-[#F6E3BE]">
+        <p className="mt-5 text-center text-sm text-[#EED8B2]">
           Press a pin to open that family&apos;s recipe.{" "}
-          <Link href="/share" className="font-medium text-[#F0C45A] underline underline-offset-4">
+          <Link href="/share" className="font-medium text-[#DDB765] underline underline-offset-4">
             Put your family on the map →
           </Link>
         </p>
 
         {recipePlaces.length ? (
-          <div className="mt-5 border-t border-[#D1AD75]/40 pt-5">
-            <p className="text-sm uppercase tracking-[0.22em] text-[#F0C45A]">Browse by place</p>
+          <div className="mt-5 border-t border-[#DDB765]/40 pt-5">
+            <p className="text-sm uppercase tracking-[0.22em] text-[#DDB765]">Browse by place</p>
             <div className="mt-4 flex flex-wrap gap-2">
               {recipePlaces.map((recipe) => (
-                <Link key={recipe.id} href={recipe.href} className="rounded-full border border-[#D1AD75]/60 px-4 py-2 text-sm text-[#FFF3DF] transition hover:bg-white/10">
+                <Link key={recipe.id} href={recipe.href} className="rounded-full border border-[#DDB765]/60 px-4 py-2 text-sm text-[#FFF3DF] transition hover:bg-white/10">
                   {recipe.location}
                 </Link>
               ))}
@@ -478,14 +475,14 @@ export default function PublishedRecipes({
         ) : null}
       </section>
 
-      <section id="recipe-of-the-month" className="mt-6 scroll-mt-24 overflow-hidden rounded-3xl border border-[#D1AD75]/80 bg-[#123C39] px-6 py-9 text-[#FFF3DF] shadow-xl shadow-[#1C5A50]/20 md:px-10">
+      <section id="recipe-of-the-month" className="mt-6 scroll-mt-24 overflow-hidden rounded-3xl border border-[#DDB765]/80 bg-[#123C39] px-6 py-9 text-[#FFF3DF] shadow-xl shadow-[#1C5A50]/20 md:px-10">
         <div className="max-w-3xl">
-          <p className="text-sm uppercase tracking-[0.28em] text-[#F0C45A]">OPR Recipe of the Month</p>
-          <h2 className="font-display mt-3 text-4xl font-bold leading-tight md:text-5xl">Which recipe should take the table this {monthName}?</h2>
-          <p className="mt-4 max-w-2xl leading-7 text-[#F6E3BE]">
+          <p className="text-sm uppercase tracking-[0.28em] text-[#DDB765]">OPR Recipe of the Month</p>
+          <h2 className="mt-3 text-4xl font-bold leading-tight md:text-5xl">Which recipe should take the table this {monthName}?</h2>
+          <p className="mt-4 max-w-2xl leading-7 text-[#EED8B2]">
             Choose the family recipe you would most like to cook. The winning story becomes OPR&apos;s Recipe of the Month.
           </p>
-          <p className="mt-4 text-sm text-[#F0C45A]">
+          <p className="mt-4 text-sm text-[#DDB765]">
             {hasVoted ? "Your vote is safely recorded. Thank you for helping choose this month’s recipe." : "One vote per person each month."}
           </p>
         </div>
@@ -496,19 +493,19 @@ export default function PublishedRecipes({
             const votes = voteResults?.totals[recipe.id] ?? 0;
 
             return (
-              <div key={recipe.id} className={`rounded-2xl border p-5 ${selected ? "border-[#F0C45A] bg-[#1D665C]" : "border-[#D1AD75]/60 bg-white/10"}`}>
-                <p className="text-xs uppercase tracking-[0.18em] text-[#F0C45A]">{recipe.category}</p>
+              <div key={recipe.id} className={`rounded-2xl border p-5 ${selected ? "border-[#DDB765] bg-[#1C5A50]" : "border-[#DDB765]/60 bg-white/10"}`}>
+                <p className="text-xs uppercase tracking-[0.18em] text-[#DDB765]">{recipe.category}</p>
                 <h3 className="mt-2 text-xl font-bold text-white">{recipe.title}</h3>
-                <p className="mt-1 text-sm text-[#F6E3BE]">{recipe.location ?? "From the OPR cookbook"}</p>
+                <p className="mt-1 text-sm text-[#EED8B2]">{recipe.location ?? "From the OPR cookbook"}</p>
                 <button
                   type="button"
                   onClick={() => voteForRecipe(recipe.id)}
                   disabled={hasVoted || Boolean(votingFor)}
-                  className={`mt-5 rounded-full px-4 py-2.5 text-sm font-semibold transition ${selected ? "bg-[#F0C45A] text-[#123C39]" : hasVoted ? "cursor-default border border-[#D1AD75]/70 text-[#F6E3BE]" : "bg-[#F0C45A] text-[#123C39] hover:scale-105"}`}
+                  className={`mt-5 rounded-full px-4 py-2.5 text-sm font-semibold transition ${selected ? "bg-[#DDB765] text-[#123C39]" : hasVoted ? "cursor-default border border-[#DDB765]/70 text-[#EED8B2]" : "bg-[#DDB765] text-[#123C39] hover:scale-105"}`}
                 >
                   {selected ? "Your choice ✓" : votingFor === recipe.id ? "Saving your vote…" : hasVoted ? "Voting complete" : "Vote for this recipe"}
                 </button>
-                {hasVoted ? <p className="mt-3 text-sm text-[#F6E3BE]">{votes} {votes === 1 ? "vote" : "votes"}</p> : null}
+                {hasVoted ? <p className="mt-3 text-sm text-[#EED8B2]">{votes} {votes === 1 ? "vote" : "votes"}</p> : null}
               </div>
             );
           })}

@@ -26,9 +26,10 @@ export default async function RecipeOpenGraphImage({ params }: { params: Promise
           alignItems: "center",
           justifyContent: "space-between",
           padding: "74px 92px",
-          color: "#fff8ea",
+          color: "#FFF3DF",
+          fontFamily: '"Gill Sans MT", "Gill Sans", Avenir, Corbel, Arial, sans-serif',
           background:
-            "radial-gradient(circle at 88% 12%, #d9a949 0, #d9a949 10%, transparent 33%), linear-gradient(135deg, #0d3f3a 0%, #123c39 52%, #092d29 100%)",
+            "radial-gradient(circle at 88% 12%, #DDB765 0, #DDB765 10%, transparent 33%), linear-gradient(135deg, #08231F 0%, #123C39 52%, #08231F 100%)",
         }}
       >
         <div style={{ display: "flex", flexDirection: "column", maxWidth: 700 }}>
@@ -39,7 +40,7 @@ export default async function RecipeOpenGraphImage({ params }: { params: Promise
               fontWeight: 700,
               letterSpacing: 5,
               textTransform: "uppercase",
-              color: "#f2c563",
+              color: "#DDB765",
               marginBottom: 30,
             }}
           >
@@ -52,6 +53,7 @@ export default async function RecipeOpenGraphImage({ params }: { params: Promise
               fontWeight: 800,
               letterSpacing: -2,
               lineHeight: 1.08,
+              fontFamily: 'Didot, "Bodoni MT", Georgia, "Times New Roman", serif',
             }}
           >
             {title}
@@ -62,7 +64,7 @@ export default async function RecipeOpenGraphImage({ params }: { params: Promise
               marginTop: 26,
               fontSize: 26,
               lineHeight: 1.35,
-              color: "#f6e9cf",
+              color: "#FFF3DF",
             }}
           >
             A family recipe from Other People&apos;s Recipes.
@@ -77,9 +79,9 @@ export default async function RecipeOpenGraphImage({ params }: { params: Promise
             alignItems: "center",
             justifyContent: "center",
             borderRadius: "50%",
-            background: "#123c39",
-            border: "8px solid #e2ad42",
-            boxShadow: "inset 0 0 0 12px #0a2e2b",
+            background: "#123C39",
+            border: "8px solid #DDB765",
+            boxShadow: "inset 0 0 0 12px #08231F",
             flexShrink: 0,
           }}
         >
@@ -89,10 +91,10 @@ export default async function RecipeOpenGraphImage({ params }: { params: Promise
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
-              color: "#fff3dc",
+              color: "#FFF3DF",
             }}
           >
-            <div style={{ display: "flex", fontSize: 76, fontWeight: 800, fontFamily: "serif" }}>
+            <div style={{ display: "flex", fontSize: 76, fontWeight: 800, fontFamily: 'Didot, "Bodoni MT", Georgia, "Times New Roman", serif' }}>
               OPR
             </div>
             <div
@@ -102,7 +104,7 @@ export default async function RecipeOpenGraphImage({ params }: { params: Promise
                 fontSize: 10,
                 fontWeight: 700,
                 letterSpacing: 2,
-                color: "#e2ad42",
+                color: "#DDB765",
               }}
             >
               OTHER PEOPLE&apos;S RECIPES

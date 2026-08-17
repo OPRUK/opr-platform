@@ -10,12 +10,12 @@ import { supabase } from "../../lib/supabase/client";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "The Family Cookbook",
+  title: "The Living Cookbook",
   description:
     "Real recipes from real family kitchens, each one saved with the memory that made it matter.",
   alternates: { canonical: "/family-cookbook" },
   openGraph: {
-    title: "The Family Cookbook | Other People's Recipes",
+    title: "The Living Cookbook | Other People's Recipes",
     description:
       "Real recipes from real family kitchens, each one saved with the memory that made it matter.",
     url: "/family-cookbook",
@@ -61,7 +61,7 @@ async function getPublishedCommunityRecipes() {
 const cookbookJsonLd = {
   "@context": "https://schema.org",
   "@type": "ItemList",
-  name: "The Family Cookbook",
+  name: "The Living Cookbook",
   description:
     "Real recipes from real family kitchens, each one saved with the memory that made it matter.",
   url: absoluteUrl("/family-cookbook"),
@@ -101,12 +101,11 @@ export default async function FamilyCookbook() {
           <source src="/videos/opr-recipe-stories-film-v2.mp4" type="video/mp4" />
         </video>
         <VideoBrandMark />
-        <div className="absolute inset-0 -z-10 bg-[#0D342F]/75" />
+        <div className="absolute inset-0 -z-10 bg-[#123C39]/75" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#08231F]/65 via-[#123C39]/45 to-[#08231F]/80" />
 
         <div
-          className="absolute right-6 top-24 hidden h-24 w-24 rotate-[8deg] items-center justify-center rounded-full border-2 border-[#0E5C3E] text-center text-[9px] font-bold uppercase leading-tight tracking-[0.06em] text-[#4FAE85] sm:flex md:right-10 md:top-28"
-          style={{ fontFamily: "'Courier New', ui-monospace, monospace" }}
+          className="font-founder-hand absolute right-6 top-24 hidden h-24 w-24 rotate-[8deg] items-center justify-center rounded-full border-2 border-[#DDB765] text-center text-[11px] font-bold uppercase leading-tight tracking-[0.04em] text-[#DDB765] sm:flex md:right-10 md:top-28"
           aria-hidden="true"
         >
           Every
@@ -120,7 +119,7 @@ export default async function FamilyCookbook() {
 
         <div className="mx-auto max-w-4xl">
           <p className="mb-5 text-sm uppercase tracking-[0.4em] text-amber-200">
-            The Family Cookbook
+            The Living Cookbook
           </p>
           <h1 className="font-display text-5xl font-bold leading-tight drop-shadow-lg md:text-7xl">
             Every recipe has travelled through time before finding its way here.
@@ -152,14 +151,14 @@ export default async function FamilyCookbook() {
         <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
           Whet Our Appetite
         </p>
-        <h2 className="font-display mx-auto mt-5 max-w-3xl text-4xl font-bold md:text-5xl">
+        <h2 className="mx-auto mt-5 max-w-3xl text-4xl font-bold md:text-5xl">
           Could your family&apos;s recipe be next?
         </h2>
         <Link
           href="/share"
           className="mt-6 inline-block rounded-full bg-[#123C39] px-8 py-4 text-lg font-medium text-white transition hover:scale-105"
         >
-          Share Your Recipe
+          Share your recipe
         </Link>
       </section>
     </main>

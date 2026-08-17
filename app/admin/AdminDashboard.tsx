@@ -66,9 +66,9 @@ type RecipeOfMonthResults = {
 const allowedEmail = "chaten@otherpeoplesrecipes.co.uk";
 
 const statusStyle: Record<SubmissionStatus, string> = {
-  new: "bg-[#F4DDAE] text-[#6B431E]",
+  new: "bg-[#EED8B2] text-[#6B431E]",
   reviewed: "bg-[#E8E2CF] text-[#123C39]",
-  selected: "bg-[#CDE4CD] text-[#2E5A35]",
+  selected: "bg-[#EED8B2] text-[#1C5A50]",
 };
 
 export default function AdminDashboard() {
@@ -318,7 +318,7 @@ export default function AdminDashboard() {
     );
 
     if (willPublish) {
-      setMessage(`Published: ${submission.title} is now live in the Family Cookbook.`);
+      setMessage(`Published: ${submission.title} is now live in the Living Cookbook.`);
       try {
         const { data: sessionData } = await supabase.auth.getSession();
         await fetch("/api/recipe-published", {
@@ -338,7 +338,7 @@ export default function AdminDashboard() {
         // Publishing remains successful even if the email service is temporarily unavailable.
       }
     } else {
-      setMessage(`${submission.title} has been removed from the public Family Cookbook.`);
+      setMessage(`${submission.title} has been removed from the public Living Cookbook.`);
     }
   }
 
@@ -495,7 +495,7 @@ export default function AdminDashboard() {
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
             Private OPR area
           </p>
-          <h1 className="font-display mt-4 text-4xl font-bold">Recipe inbox</h1>
+          <h1 className="mt-4 text-4xl font-bold">Recipe inbox</h1>
           <p className="mt-5 leading-7 text-stone-700">
             We&apos;ll send a secure sign-in link to your OPR email address.
           </p>
@@ -506,7 +506,7 @@ export default function AdminDashboard() {
               onChange={(event) => setEmail(event.target.value)}
               type="email"
               autoComplete="email"
-              className="mt-3 w-full rounded-xl border border-[#D1AD75] bg-[#F4DDAE] px-4 py-3 outline-none transition focus:border-[#123C39] focus:ring-2 focus:ring-[#D1AD75]/60"
+              className="mt-3 w-full rounded-xl border border-[#DDB765] bg-[#EED8B2] px-4 py-3 outline-none transition focus:border-[#123C39] focus:ring-2 focus:ring-[#DDB765]/60"
             />
           </label>
           <button
@@ -525,7 +525,7 @@ export default function AdminDashboard() {
     return (
       <main id="main-content" tabIndex={-1} className="flex min-h-screen items-center justify-center bg-[#EED8B2] px-6 text-center text-[#123C39]">
         <div className="max-w-lg rounded-3xl bg-[#FFF3DF] p-10 shadow-xl shadow-[#1C5A50]/15">
-          <h1 className="font-display text-3xl font-bold">This inbox is private.</h1>
+          <h1 className="text-3xl font-bold">This inbox is private.</h1>
           <p className="mt-5 leading-7 text-stone-700">
             Please sign in using the OPR team email address.
           </p>
@@ -577,7 +577,7 @@ export default function AdminDashboard() {
       <header className="mx-auto flex max-w-7xl flex-col justify-between gap-6 md:flex-row md:items-end">
         <div>
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">Private OPR area</p>
-          <h1 className="font-display mt-4 text-4xl font-bold md:text-5xl">Recipe inbox</h1>
+          <h1 className="mt-4 text-4xl font-bold md:text-5xl">Recipe inbox</h1>
           {totpFactorId ? (
             <p className="mt-4 text-lg text-stone-700">
               {submissions.length} {submissions.length === 1 ? "recipe" : "recipes"} shared with OPR.
@@ -619,45 +619,45 @@ export default function AdminDashboard() {
       </header>
 
       {message ? (
-        <p role="status" aria-live="polite" className={`mx-auto mt-8 max-w-7xl text-sm ${message.startsWith("Published:") || message.startsWith("Deleted:") || message.includes("removed from") ? "text-[#2E5A35]" : "text-red-800"}`}>
+        <p role="status" aria-live="polite" className={`mx-auto mt-8 max-w-7xl text-sm ${message.startsWith("Published:") || message.startsWith("Deleted:") || message.includes("removed from") ? "text-[#1C5A50]" : "text-red-800"}`}>
           {message}
         </p>
       ) : null}
 
-      <section className="mx-auto mt-10 max-w-7xl overflow-hidden rounded-3xl border border-[#D1AD75]/70 bg-[#123C39] px-6 py-7 text-[#FFF3DF] shadow-xl shadow-[#1C5A50]/15 md:px-8">
-        <p className="text-sm uppercase tracking-[0.3em] text-[#F0C45A]">Recipe of the Month</p>
+      <section className="mx-auto mt-10 max-w-7xl overflow-hidden rounded-3xl border border-[#DDB765]/70 bg-[#123C39] px-6 py-7 text-[#FFF3DF] shadow-xl shadow-[#1C5A50]/15 md:px-8">
+        <p className="text-sm uppercase tracking-[0.3em] text-[#DDB765]">Recipe of the Month</p>
         <div className="mt-3 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div>
             <h2 className="text-2xl font-bold">This month&apos;s voting</h2>
-            <p className="mt-2 text-sm leading-6 text-[#F6E3BE]">
+            <p className="mt-2 text-sm leading-6 text-[#EED8B2]">
               {recipeOfMonthResults
                 ? `${recipeOfMonthResults.totalVotes} ${recipeOfMonthResults.totalVotes === 1 ? "vote has" : "votes have"} been cast in ${new Intl.DateTimeFormat("en-GB", { month: "long", timeZone: "Europe/London" }).format(new Date(`${recipeOfMonthResults.monthKey}-01T12:00:00Z`))}.`
                 : "Voting results will appear here once the new voting table is live."}
             </p>
           </div>
-          <p className="max-w-md text-sm leading-6 text-[#F6E3BE]">At month-end, use the leading recipe as your clear winner, then announce it through the homepage and social channels.</p>
+          <p className="max-w-md text-sm leading-6 text-[#EED8B2]">At month-end, use the leading recipe as your clear winner, then announce it through the homepage and social channels.</p>
         </div>
         {recipeOfMonthResults ? (
           monthlyVoteLeaders.length ? (
             <ol className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {monthlyVoteLeaders.map(([recipeKey, votes], index) => (
-                <li key={recipeKey} className="rounded-2xl border border-[#D1AD75]/60 bg-white/10 px-4 py-4">
-                  <p className="text-xs uppercase tracking-[0.18em] text-[#F0C45A]">{index === 0 ? "Leading recipe" : `Place ${index + 1}`}</p>
+                <li key={recipeKey} className="rounded-2xl border border-[#DDB765]/60 bg-white/10 px-4 py-4">
+                  <p className="text-xs uppercase tracking-[0.18em] text-[#DDB765]">{index === 0 ? "Leading recipe" : `Place ${index + 1}`}</p>
                   <p className="mt-2 font-bold text-white">{recipeVoteLabels.get(recipeKey) ?? "A recipe shared with OPR"}</p>
-                  <p className="mt-1 text-sm text-[#F6E3BE]">{votes} {votes === 1 ? "vote" : "votes"}</p>
+                  <p className="mt-1 text-sm text-[#EED8B2]">{votes} {votes === 1 ? "vote" : "votes"}</p>
                 </li>
               ))}
             </ol>
-          ) : <p className="mt-6 rounded-2xl border border-[#D1AD75]/60 bg-white/10 px-4 py-4 text-sm text-[#F6E3BE]">No votes yet. The first visitor can choose the recipe that should take this month&apos;s table.</p>
+          ) : <p className="mt-6 rounded-2xl border border-[#DDB765]/60 bg-white/10 px-4 py-4 text-sm text-[#EED8B2]">No votes yet. The first visitor can choose the recipe that should take this month&apos;s table.</p>
         ) : null}
       </section>
 
       <section className="mx-auto mt-10 grid max-w-7xl gap-8 lg:grid-cols-[0.9fr_1.1fr]">
         <div className="overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-xl shadow-[#1C5A50]/10">
-          <div className="border-b border-[#D1AD75]/70 px-6 py-5">
+          <div className="border-b border-[#DDB765]/70 px-6 py-5">
             <h2 className="text-xl font-bold">All submissions</h2>
           </div>
-          <div className="divide-y divide-[#D1AD75]/50">
+          <div className="divide-y divide-[#DDB765]/50">
             {loading ? <p className="p-6 text-stone-600">Loading recipes...</p> : null}
             {!loading && submissions.length === 0 ? (
               <p className="p-6 leading-7 text-stone-700">No recipes have arrived yet.</p>
@@ -667,7 +667,7 @@ export default function AdminDashboard() {
                 type="button"
                 key={submission.id}
                 onClick={() => setSelectedSubmission(submission)}
-                className="w-full px-6 py-5 text-left transition hover:bg-[#F4DDAE]/65"
+                className="w-full px-6 py-5 text-left transition hover:bg-[#EED8B2]/65"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div>
@@ -704,7 +704,7 @@ export default function AdminDashboard() {
                   onChange={(event) =>
                     void updateStatus(selectedSubmission.id, event.target.value as SubmissionStatus)
                   }
-                  className="rounded-full border border-[#D1AD75] bg-[#F4DDAE] px-4 py-2.5 text-sm font-medium capitalize outline-none"
+                  className="rounded-full border border-[#DDB765] bg-[#EED8B2] px-4 py-2.5 text-sm font-medium capitalize outline-none"
                 >
                   <option value="new">New</option>
                   <option value="reviewed">Reviewed</option>
@@ -712,13 +712,13 @@ export default function AdminDashboard() {
                 </select>
               </div>
 
-              <div className="mt-7 rounded-2xl border border-[#D1AD75]/70 bg-[#F4DDAE]/45 p-5 md:flex md:items-center md:justify-between md:gap-6">
+              <div className="mt-7 rounded-2xl border border-[#DDB765]/70 bg-[#EED8B2]/45 p-5 md:flex md:items-center md:justify-between md:gap-6">
                 <div>
-                  <h3 className="font-bold">{selectedSubmission.is_published ? "Live in the Family Cookbook" : "Approve and publish"}</h3>
+                  <h3 className="font-bold">{selectedSubmission.is_published ? "Live in the Living Cookbook" : "Approve and publish"}</h3>
                   <p className="mt-1 text-sm leading-6 text-stone-700">
                     {selectedSubmission.is_published
                       ? "This recipe is visible to everyone in the public cookbook."
-                      : "When you approve it, this recipe, its story and its photo become visible in the public Family Cookbook."}
+                      : "When you approve it, this recipe, its story and its photo become visible in the public Living Cookbook."}
                   </p>
                 </div>
                 <button
@@ -740,7 +740,7 @@ export default function AdminDashboard() {
                 </a>
               ) : null}
 
-              <div className="mt-5 rounded-2xl border border-[#D1AD75]/70 bg-[#FFF3DF] p-5">
+              <div className="mt-5 rounded-2xl border border-[#DDB765]/70 bg-[#FFF3DF] p-5">
                 <div className="md:flex md:items-start md:justify-between md:gap-6">
                   <div>
                     <h3 className="font-bold">
@@ -765,7 +765,7 @@ export default function AdminDashboard() {
                     onChange={(event) => updateRecipeOfWeekNote(event.target.value)}
                     rows={3}
                     placeholder="For example: A family favourite that deserves a place at the centre of the table."
-                    className="mt-3 w-full resize-y rounded-xl border border-[#D1AD75] bg-white px-4 py-3 leading-6 outline-none transition focus:border-[#123C39] focus:ring-2 focus:ring-[#D1AD75]/60"
+                    className="mt-3 w-full resize-y rounded-xl border border-[#DDB765] bg-white px-4 py-3 leading-6 outline-none transition focus:border-[#123C39] focus:ring-2 focus:ring-[#DDB765]/60"
                   />
                 </label>
               </div>
@@ -843,7 +843,7 @@ export default function AdminDashboard() {
                     <p className="mt-3 whitespace-pre-wrap leading-8">{selectedSubmission.cook_notes}</p>
                   </article>
                 ) : null}
-                <p className="border-t border-[#D1AD75]/70 pt-6 text-sm">
+                <p className="border-t border-[#DDB765]/70 pt-6 text-sm">
                   Contact: <a className="underline" href={`mailto:${selectedSubmission.email}`}>{selectedSubmission.email}</a>
                   {selectedSubmission.servings ? ` · Serves ${selectedSubmission.servings}` : ""}
                   {selectedSubmission.prep_time_minutes ? ` · Prep ${selectedSubmission.prep_time_minutes} min` : ""}
@@ -875,23 +875,23 @@ export default function AdminDashboard() {
       </section>
 
       <section className="mx-auto mt-10 max-w-7xl overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-xl shadow-[#1C5A50]/10">
-        <div className="border-b border-[#D1AD75]/70 px-6 py-5 md:px-8">
+        <div className="border-b border-[#DDB765]/70 px-6 py-5 md:px-8">
           <p className="text-sm uppercase tracking-[0.3em] text-amber-700">Cooked by our community</p>
           <h2 className="mt-2 text-2xl font-bold">Community posts awaiting your review</h2>
           <p className="mt-2 text-sm leading-6 text-stone-700">Approve a post to show it on the recipe page, hide it again at any time, or remove it permanently.</p>
         </div>
         {communityCooks.length ? (
-          <div className="divide-y divide-[#D1AD75]/50">
+          <div className="divide-y divide-[#DDB765]/50">
             {communityCooks.map((cook) => {
               const photoUrl = communityCookPhotoUrl(cook);
               return (
                 <article key={cook.id} className="flex flex-col gap-5 px-6 py-6 md:flex-row md:items-center md:justify-between md:px-8">
                   <div className="flex min-w-0 items-center gap-4">
-                    {photoUrl ? <Image src={photoUrl} alt="" width={64} height={64} unoptimized className="h-16 w-16 shrink-0 rounded-full object-cover" /> : <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#F4DDAE] font-bold">{cook.name.charAt(0).toUpperCase()}</div>}
+                    {photoUrl ? <Image src={photoUrl} alt="" width={64} height={64} unoptimized className="h-16 w-16 shrink-0 rounded-full object-cover" /> : <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#EED8B2] font-bold">{cook.name.charAt(0).toUpperCase()}</div>}
                     <div>
                       <p className="font-bold">{cook.name} <span className="font-normal text-stone-500">cooked {cook.recipe_submissions?.title ?? cook.recipe_title ?? "an OPR recipe"}</span></p>
                       {cook.note ? <p className="mt-1 max-w-2xl text-sm leading-6 text-stone-700">“{cook.note}”</p> : <p className="mt-1 text-sm text-stone-500">No note supplied.</p>}
-                      <p className={`mt-2 text-xs font-bold uppercase tracking-[0.18em] ${cook.is_approved ? "text-[#2E5A35]" : "text-[#9A622A]"}`}>{cook.is_approved ? "Live on recipe page" : "Awaiting approval"}</p>
+                      <p className={`mt-2 text-xs font-bold uppercase tracking-[0.18em] ${cook.is_approved ? "text-[#1C5A50]" : "text-[#9A622A]"}`}>{cook.is_approved ? "Live on recipe page" : "Awaiting approval"}</p>
                     </div>
                   </div>
                   <div className="flex shrink-0 flex-wrap gap-3">

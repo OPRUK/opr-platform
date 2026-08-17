@@ -153,7 +153,7 @@ export default function HomeHero({ children }: HomeHeroProps) {
   }
 
   return (
-    <section className="relative isolate flex min-h-screen items-center justify-center overflow-hidden bg-[#0D342F]">
+    <section className="relative isolate flex min-h-screen items-center justify-center overflow-hidden bg-[#123C39]">
       <div
         className={`absolute inset-0 transition-opacity duration-1000 ${
           introductionComplete ? "opacity-100" : "opacity-0"

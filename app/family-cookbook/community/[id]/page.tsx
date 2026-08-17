@@ -180,7 +180,7 @@ export default async function CommunityRecipePage({
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Family Cookbook", item: absoluteUrl("/family-cookbook") },
+      { "@type": "ListItem", position: 1, name: "Living Cookbook", item: absoluteUrl("/family-cookbook") },
       { "@type": "ListItem", position: 2, name: recipe.title, item: absoluteUrl(`/family-cookbook/community/${recipe.id}`) },
     ],
   };
@@ -201,7 +201,7 @@ export default async function CommunityRecipePage({
       />
       <Navigation />
       <section className="bg-[#123C39] px-6 pb-12 pt-32 text-center text-white">
-        <p className="text-sm uppercase tracking-[0.4em] text-amber-300">A page from the community cookbook</p>
+        <p className="text-sm uppercase tracking-[0.4em] text-amber-300">A page from the Living Cookbook</p>
         <h1 className="font-display mx-auto mt-3 max-w-4xl text-5xl font-bold leading-tight md:text-7xl">{recipe.title}</h1>
         <p className="mt-4 text-sm uppercase tracking-[0.25em] text-stone-300">Shared by {recipe.name}{recipe.location ? ` · ${recipe.location}` : ""}</p>
       </section>
@@ -210,7 +210,7 @@ export default async function CommunityRecipePage({
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">The story</p>
           <p className="mt-5 max-w-5xl text-xl leading-9 md:text-2xl md:leading-relaxed">“{recipe.story}”</p>
           {contributorPhotoUrl ? (
-            <div className="mt-10 flex items-center gap-4 border-t border-[#D1AD75] pt-6">
+            <div className="mt-10 flex items-center gap-4 border-t border-[#DDB765] pt-6">
               <Image
                 src={contributorPhotoUrl}
                 alt={`${recipe.name}, who shared ${recipe.title}`}
@@ -226,7 +226,7 @@ export default async function CommunityRecipePage({
               </div>
             </div>
           ) : null}
-          <p className="mt-7 border-t border-[#D1AD75] pt-5 text-sm italic text-stone-600">Shared with the Other People&apos;s Recipes community.</p>
+          <p className="mt-7 border-t border-[#DDB765] pt-5 text-sm italic text-stone-600">Shared with the Other People&apos;s Recipes community.</p>
         </article>
         <aside className="recipe-card-paper w-full p-5 sm:p-7 md:p-9">
           <div className="mb-6 flex flex-col gap-4 md:mb-8 md:flex-row md:items-start md:gap-3">
@@ -241,14 +241,14 @@ export default async function CommunityRecipePage({
               />
             ) : (
               <div className="min-w-0 flex-1 rounded-2xl border border-[#9A622A]/30 bg-[#FFF3DF]/45 px-5 py-6 text-center">
-                <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#805126]">From the family table</p>
+                <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#9A622A]">From the family table</p>
                 <p className="mt-2 text-lg font-bold text-[#123C39]">A treasured family recipe</p>
               </div>
             )}
             <RecipeActions title={recipe.title} imageUrl={imageUrl} layout="responsive" />
           </div>
           <div className="flex flex-wrap justify-center gap-2 text-sm text-[#5F4B38]">
-            <span className="rounded-full border border-[#9A622A]/30 bg-[#FFF3DF]/45 px-4 py-2 font-bold uppercase tracking-[0.18em] text-[#805126]">{recipe.category}</span>
+            <span className="rounded-full border border-[#9A622A]/30 bg-[#FFF3DF]/45 px-4 py-2 font-bold uppercase tracking-[0.18em] text-[#9A622A]">{recipe.category}</span>
             {recipe.servings ? <span className="rounded-full border border-[#9A622A]/25 bg-[#FFF3DF]/35 px-4 py-2">Serves {recipe.servings}</span> : null}
             {recipe.prep_time_minutes || recipe.cook_time_minutes ? (
               <span className="rounded-full border border-[#9A622A]/25 bg-[#FFF3DF]/35 px-4 py-2">
@@ -277,7 +277,7 @@ export default async function CommunityRecipePage({
         </section>
       ) : null}
       {recipeVideoUrl ? (
-        <section className="bg-[#F4DDAE]/60 px-6 py-20">
+        <section className="bg-[#EED8B2]/60 px-6 py-20">
           <div className="mx-auto max-w-4xl text-center">
             <p className="text-sm uppercase tracking-[0.35em] text-amber-700">Watch it come to life</p>
             <h2 className="mt-5 text-4xl font-bold">Made in their kitchen.</h2>
@@ -287,7 +287,7 @@ export default async function CommunityRecipePage({
         </section>
       ) : null}
       {originalRecipeImageUrl ? (
-        <section className="bg-[#F4DDAE]/60 px-6 py-20">
+        <section className="bg-[#EED8B2]/60 px-6 py-20">
           <div className="mx-auto grid max-w-5xl items-center gap-10 rounded-3xl bg-[#FFF3DF] p-7 shadow-xl shadow-[#1C5A50]/10 md:grid-cols-[0.85fr_1.15fr] md:p-10">
             <Image
               src={originalRecipeImageUrl}
@@ -312,7 +312,7 @@ export default async function CommunityRecipePage({
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">The method</p>
           <ol className="mt-7 space-y-4">
             {method.map((step, index) => (
-              <li key={`${index}-${step}`} className="grid grid-cols-[2.25rem_1fr] gap-4 rounded-2xl border border-[#E7CEA2] bg-white/55 p-4 text-base leading-7 text-stone-700 md:p-5 md:text-lg md:leading-8">
+              <li key={`${index}-${step}`} className="grid grid-cols-[2.25rem_1fr] gap-4 rounded-2xl border border-[#DDB765] bg-white/55 p-4 text-base leading-7 text-stone-700 md:p-5 md:text-lg md:leading-8">
                 <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#123C39] text-sm font-bold text-white">{index + 1}</span>
                 <span>{step}</span>
               </li>
@@ -322,7 +322,7 @@ export default async function CommunityRecipePage({
       </section>
       {recipe.cook_notes ? (
         <section className="bg-[#EED8B2] px-6 py-10 md:py-12">
-          <div className="mx-auto max-w-5xl rounded-[2rem] border border-[#D1AD75] bg-[#FFF3DF] p-6 shadow-xl shadow-[#1C5A50]/10 md:p-8">
+          <div className="mx-auto max-w-5xl rounded-[2rem] border border-[#DDB765] bg-[#FFF3DF] p-6 shadow-xl shadow-[#1C5A50]/10 md:p-8">
             <p className="text-sm font-bold uppercase tracking-[0.35em] text-[#9A622A]">Cook&apos;s notes &amp; swaps</p>
             <h2 className="mt-3 text-4xl font-bold text-[#123C39]">A little help from the OPR kitchen</h2>
             <p className="mt-4 whitespace-pre-wrap text-lg leading-8 text-stone-700">{recipe.cook_notes}</p>
@@ -336,7 +336,7 @@ export default async function CommunityRecipePage({
           href="/family-cookbook"
           className="inline-block rounded-full bg-[#123C39] px-8 py-4 text-lg font-medium text-white transition hover:scale-105"
         >
-          Return to the Cookbook
+          Return to the Living Cookbook
         </Link>
       </section>
     </main>

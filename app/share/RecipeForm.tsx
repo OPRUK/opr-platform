@@ -423,7 +423,7 @@ export default function RecipeForm() {
           read it and may be in touch if it could become part of the living
           cookbook.
         </p>
-        <div className="mx-auto mt-10 max-w-xl rounded-2xl border border-[#D1AD75]/80 bg-[#F4DDAE]/65 p-6">
+        <div className="mx-auto mt-10 max-w-xl rounded-2xl border border-[#DDB765]/80 bg-[#EED8B2]/65 p-6">
           <p className="text-sm uppercase tracking-[0.27em] text-[#9A622A]">
             Keep the story moving
           </p>
@@ -444,7 +444,7 @@ export default function RecipeForm() {
             <button
               type="button"
               onClick={shareOnFacebook}
-              className="rounded-full bg-[#315B9A] px-5 py-3 font-medium text-white transition hover:scale-105 hover:bg-[#244779]"
+              className="rounded-full bg-[#1C5A50] px-5 py-3 font-medium text-white transition hover:scale-105 hover:bg-[#123C39]"
             >
               Share on Facebook
             </button>
@@ -488,14 +488,14 @@ export default function RecipeForm() {
   }
 
   const inputClassName =
-    "mt-3 w-full rounded-xl border border-[#D1AD75] bg-[#F4DDAE] px-4 py-3 outline-none transition placeholder:text-stone-500 focus:border-[#123C39] focus:ring-2 focus:ring-[#D1AD75]/60";
+    "mt-3 w-full rounded-xl border border-[#DDB765] bg-[#EED8B2] px-4 py-3 outline-none transition placeholder:text-stone-500 focus:border-[#123C39] focus:ring-2 focus:ring-[#DDB765]/60";
 
   return (
     <form
       onSubmit={submitRecipe}
       className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-12"
     >
-      <div className="border-b border-[#D1AD75]/70 pb-8">
+      <div className="border-b border-[#DDB765]/70 pb-8">
         <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
           Your recipe
         </p>
@@ -511,7 +511,7 @@ export default function RecipeForm() {
       <fieldset className="mt-10">
         <legend className="text-xl font-bold">About you</legend>
         <div className="mt-6 grid gap-7 md:grid-cols-2">
-          <label className="block text-sm font-medium">
+          <label className="block text-base font-medium">
             Your name
             <input
               required
@@ -525,7 +525,7 @@ export default function RecipeForm() {
             />
           </label>
 
-          <label className="block text-sm font-medium">
+          <label className="block text-base font-medium">
             Email address
             <input
               required
@@ -540,7 +540,7 @@ export default function RecipeForm() {
           </label>
         </div>
 
-        <label className="mt-7 block text-sm font-medium">
+        <label className="mt-7 block text-base font-medium">
           Town or city <span className="font-normal text-stone-500">(optional)</span>
           <input
             value={values.location}
@@ -553,10 +553,10 @@ export default function RecipeForm() {
         </label>
       </fieldset>
 
-      <fieldset className="mt-12 border-t border-[#D1AD75]/70 pt-10">
+      <fieldset className="mt-12 border-t border-[#DDB765]/70 pt-10">
         <legend className="text-xl font-bold">The recipe</legend>
 
-        <label className="mt-6 block text-sm font-medium">
+        <label className="mt-6 block text-base font-medium">
           What&apos;s it called?
           <input
             required
@@ -570,7 +570,7 @@ export default function RecipeForm() {
         </label>
 
         <div className="mt-7 grid gap-7 md:grid-cols-2">
-          <label className="block text-sm font-medium">
+          <label className="block text-base font-medium">
             Type of recipe
             <select
               required
@@ -591,7 +591,7 @@ export default function RecipeForm() {
             </select>
           </label>
 
-          <label className="block text-sm font-medium">
+          <label className="block text-base font-medium">
             How many does it serve? <span className="font-normal text-stone-500">(optional)</span>
             <input
               value={values.servings}
@@ -605,7 +605,7 @@ export default function RecipeForm() {
         </div>
 
         <div className="mt-7 grid gap-7 md:grid-cols-2">
-          <label className="block text-sm font-medium">
+          <label className="block text-base font-medium">
             Prep time (minutes) <span className="font-normal text-stone-500">(optional)</span>
             <input
               value={values.prepTime}
@@ -618,7 +618,7 @@ export default function RecipeForm() {
             />
           </label>
 
-          <label className="block text-sm font-medium">
+          <label className="block text-base font-medium">
             Cook time (minutes) <span className="font-normal text-stone-500">(optional)</span>
             <input
               value={values.cookTime}
@@ -632,7 +632,7 @@ export default function RecipeForm() {
           </label>
         </div>
 
-        <label className="mt-7 block text-sm font-medium">
+        <label className="mt-7 block text-base font-medium">
           Tell us why it&apos;s special
           <textarea
             required
@@ -645,7 +645,7 @@ export default function RecipeForm() {
           />
         </label>
 
-        <label className="mt-7 block text-sm font-medium">
+        <label className="mt-7 block text-base font-medium">
           Ingredients
           <textarea
             required
@@ -658,7 +658,7 @@ export default function RecipeForm() {
           />
         </label>
 
-        <label className="mt-7 block text-sm font-medium">
+        <label className="mt-7 block text-base font-medium">
           Method
           <textarea
             required
@@ -671,7 +671,7 @@ export default function RecipeForm() {
           />
         </label>
 
-        <label className="mt-7 block rounded-2xl border border-[#D1AD75] bg-[#F4DDAE]/45 p-5 text-sm font-medium">
+        <label className="mt-7 block rounded-2xl border border-[#DDB765] bg-[#EED8B2]/45 p-5 text-base font-medium">
           Cook&apos;s notes &amp; swaps <span className="font-normal text-stone-500">(optional)</span>
           <textarea
             value={values.cookNotes}
@@ -679,25 +679,25 @@ export default function RecipeForm() {
             name="cookNotes"
             rows={4}
             placeholder="For example: If you cannot find this ingredient, use this instead. Or share a helpful tip that makes the recipe work."
-            className={`${inputClassName} mt-3 bg-[#FFF9EC]`}
+            className={`${inputClassName} mt-3 bg-[#FFF3DF]`}
           />
           <p className="mt-3 font-normal leading-6 text-stone-600">
             A lovely place for substitutions, serving ideas or a family tip.
           </p>
         </label>
 
-        <div className="mt-7 rounded-2xl border border-dashed border-[#B77938]/70 bg-[#F4DDAE]/45 p-5">
-          <label className="block text-sm font-medium">
+        <div className="mt-7 rounded-2xl border border-dashed border-[#9A622A]/70 bg-[#EED8B2]/45 p-5">
+          <label className="block text-base font-medium">
             Add a photo <span className="font-normal text-stone-500">(optional)</span>
             <input
               onChange={(event) => choosePhoto(event.target.files?.[0] ?? null)}
               type="file"
               name="photo"
               accept="image/jpeg,image/png,image/webp"
-              className="mt-3 block w-full text-sm text-stone-700 file:mr-4 file:rounded-full file:border-0 file:bg-[#123C39] file:px-4 file:py-2 file:font-medium file:text-white hover:file:bg-[#08231F]"
+              className="mt-3 block w-full text-base text-stone-700 file:mr-4 file:rounded-full file:border-0 file:bg-[#123C39] file:px-4 file:py-2 file:font-medium file:text-white hover:file:bg-[#08231F]"
             />
           </label>
-          <p className="mt-3 text-sm leading-6 text-stone-600">
+          <p className="mt-3 text-base leading-7 text-stone-600">
             A clear photo of the finished dish is perfect. JPG, PNG or WebP, up to 5 MB.
           </p>
           {photoPreview ? (
@@ -713,7 +713,7 @@ export default function RecipeForm() {
               <button
                 type="button"
                 onClick={() => choosePhoto(null)}
-                className="rounded-full border border-[#123C39] px-4 py-2 text-sm font-medium transition hover:bg-[#123C39] hover:text-white"
+                className="rounded-full border border-[#123C39] px-4 py-2 text-base font-medium transition hover:bg-[#123C39] hover:text-white"
               >
                 Remove photo
               </button>
@@ -721,19 +721,19 @@ export default function RecipeForm() {
           ) : null}
         </div>
 
-        <div className="mt-5 rounded-2xl border border-dashed border-[#B77938]/70 bg-[#F4DDAE]/45 p-5">
+        <div className="mt-5 rounded-2xl border border-dashed border-[#9A622A]/70 bg-[#EED8B2]/45 p-5">
           <p className="text-sm uppercase tracking-[0.22em] text-[#9A622A]">Meet the cook</p>
-          <label className="mt-3 block text-sm font-medium">
+          <label className="mt-3 block text-base font-medium">
             Add a photo of the person behind the recipe <span className="font-normal text-stone-500">(optional)</span>
             <input
               onChange={(event) => chooseContributorPhoto(event.target.files?.[0] ?? null)}
               type="file"
               name="contributorPhoto"
               accept="image/jpeg,image/png,image/webp"
-              className="mt-3 block w-full text-sm text-stone-700 file:mr-4 file:rounded-full file:border-0 file:bg-[#123C39] file:px-4 file:py-2 file:font-medium file:text-white hover:file:bg-[#08231F]"
+              className="mt-3 block w-full text-base text-stone-700 file:mr-4 file:rounded-full file:border-0 file:bg-[#123C39] file:px-4 file:py-2 file:font-medium file:text-white hover:file:bg-[#08231F]"
             />
           </label>
-          <p className="mt-3 text-sm leading-6 text-stone-600">
+          <p className="mt-3 text-base leading-7 text-stone-600">
             Put a face to the story. If OPR publishes the recipe, we may show this portrait alongside the contributor&apos;s story in the cookbook. JPG, PNG or WebP, up to 5 MB.
           </p>
           {contributorPhotoPreview ? (
@@ -749,7 +749,7 @@ export default function RecipeForm() {
               <button
                 type="button"
                 onClick={() => chooseContributorPhoto(null)}
-                className="rounded-full border border-[#123C39] px-4 py-2 text-sm font-medium transition hover:bg-[#123C39] hover:text-white"
+                className="rounded-full border border-[#123C39] px-4 py-2 text-base font-medium transition hover:bg-[#123C39] hover:text-white"
               >
                 Remove cook&apos;s photo
               </button>
@@ -757,25 +757,25 @@ export default function RecipeForm() {
           ) : null}
         </div>
 
-        <div id="scan-a-recipe" className="mt-5 rounded-2xl border-2 border-dashed border-[#B77938]/70 bg-[#F4DDAE]/45 p-5 shadow-sm scroll-mt-8">
+        <div id="scan-a-recipe" className="mt-5 rounded-2xl border-2 border-dashed border-[#9A622A]/70 bg-[#EED8B2]/45 p-5 shadow-sm scroll-mt-8">
           <p className="text-sm uppercase tracking-[0.22em] text-[#9A622A]">
             Bring an old recipe back to life
           </p>
           <h3 className="mt-2 text-xl font-bold text-[#123C39]">Scan a handwritten recipe card</h3>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-700">
+          <p className="mt-2 max-w-2xl text-base leading-7 text-stone-700">
             Take a clear photo of a recipe card or notebook page and OPR will make an editable first draft of the title, ingredients and method. You stay in control and can correct every word before sharing.
           </p>
-          <label className="mt-5 block text-sm font-medium">
+          <label className="mt-5 block text-base font-medium">
             Choose the recipe card <span className="font-normal text-stone-500">(optional)</span>
             <input
               onChange={(event) => chooseOriginalRecipe(event.target.files?.[0] ?? null)}
               type="file"
               name="originalRecipe"
               accept="image/jpeg,image/png,image/webp"
-              className="mt-3 block w-full text-sm text-stone-700 file:mr-4 file:rounded-full file:border-0 file:bg-[#123C39] file:px-4 file:py-2 file:font-medium file:text-white hover:file:bg-[#08231F]"
+              className="mt-3 block w-full text-base text-stone-700 file:mr-4 file:rounded-full file:border-0 file:bg-[#123C39] file:px-4 file:py-2 file:font-medium file:text-white hover:file:bg-[#08231F]"
             />
           </label>
-          <p className="mt-3 text-sm leading-6 text-stone-600">
+          <p className="mt-3 text-base leading-7 text-stone-600">
             A photo of the recipe card, a handwritten notebook page or even the back of an envelope can be the most precious part of the story. JPG, PNG or WebP, up to 10 MB.
           </p>
           {originalRecipe ? (
@@ -791,11 +791,11 @@ export default function RecipeForm() {
                 />
               ) : null}
               <div>
-                <p className="text-sm font-medium text-[#123C39]">{originalRecipe.name}</p>
+                <p className="text-base font-medium text-[#123C39]">{originalRecipe.name}</p>
                 <button
                   type="button"
                   onClick={() => chooseOriginalRecipe(null)}
-                  className="mt-3 rounded-full border border-[#123C39] px-4 py-2 text-sm font-medium transition hover:bg-[#123C39] hover:text-white"
+                  className="mt-3 rounded-full border border-[#123C39] px-4 py-2 text-base font-medium transition hover:bg-[#123C39] hover:text-white"
                 >
                   Remove original
                 </button>
@@ -803,25 +803,25 @@ export default function RecipeForm() {
                   type="button"
                   onClick={() => void readOriginalRecipe()}
                   disabled={isReadingRecipe}
-                  className="mt-3 block rounded-full bg-[#123C39] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#08231F] disabled:cursor-not-allowed disabled:opacity-70"
+                  className="mt-3 block rounded-full bg-[#123C39] px-4 py-2 text-base font-medium text-white transition hover:bg-[#08231F] disabled:cursor-not-allowed disabled:opacity-70"
                 >
                   {isReadingRecipe ? "Reading your recipe…" : "Create my editable recipe draft"}
                 </button>
               </div>
             </div>
           ) : null}
-          {recipeReadMessage ? <p className="mt-5 rounded-xl bg-[#E2F2E7] px-4 py-3 text-sm leading-6 text-[#123C39]">{recipeReadMessage}</p> : null}
-          <p className="mt-4 text-xs leading-5 text-stone-600">
+          {recipeReadMessage ? <p className="mt-5 rounded-xl bg-[#EED8B2] px-4 py-3 text-base leading-7 text-[#123C39]">{recipeReadMessage}</p> : null}
+          <p className="mt-4 text-base leading-7 text-stone-600">
             When you choose “Read my recipe with AI”, the image is securely sent to OpenAI only to create this editable draft. Check every detail before sharing. It is not saved by the reader itself. Read our{" "}
             <Link href="/privacy" className="underline underline-offset-2">Privacy Notice</Link>.
           </p>
         </div>
 
-        <div className="mt-5 rounded-2xl border border-dashed border-[#B77938]/70 bg-[#F4DDAE]/45 p-5">
-          <p className="text-sm font-medium">
+        <div className="mt-5 rounded-2xl border border-dashed border-[#9A622A]/70 bg-[#EED8B2]/45 p-5">
+          <p className="text-base font-medium">
             Tell us the story in your own words <span className="font-normal text-stone-500">(optional)</span>
           </p>
-          <p className="mt-3 text-sm leading-6 text-stone-600">
+          <p className="mt-3 text-base leading-7 text-stone-600">
             A short voice note can bring a family recipe to life. Record it here or choose an existing audio file, up to 10 MB.
           </p>
           <div className="mt-4 flex flex-wrap gap-3">
@@ -829,7 +829,7 @@ export default function RecipeForm() {
               <button
                 type="button"
                 onClick={() => void startVoiceRecording()}
-                className="rounded-full bg-[#123C39] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#08231F]"
+                className="rounded-full bg-[#123C39] px-4 py-2 text-base font-medium text-white transition hover:bg-[#08231F]"
               >
                 Record a voice note
               </button>
@@ -837,31 +837,31 @@ export default function RecipeForm() {
               <button
                 type="button"
                 onClick={stopVoiceRecording}
-                className="rounded-full bg-red-800 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-950"
+                className="rounded-full bg-red-800 px-4 py-2 text-base font-medium text-white transition hover:bg-red-950"
               >
                 Stop recording
               </button>
             )}
-            {isRecording ? <p className="self-center text-sm font-medium text-red-800">Recording…</p> : null}
+            {isRecording ? <p className="self-center text-base font-medium text-red-800">Recording…</p> : null}
           </div>
-          <label className="mt-5 block text-sm font-medium">
+          <label className="mt-5 block text-base font-medium">
             Or choose an audio file
             <input
               onChange={(event) => chooseAudioStory(event.target.files?.[0] ?? null)}
               type="file"
               name="audioStory"
               accept="audio/*"
-              className="mt-3 block w-full text-sm text-stone-700 file:mr-4 file:rounded-full file:border-0 file:bg-[#123C39] file:px-4 file:py-2 file:font-medium file:text-white hover:file:bg-[#08231F]"
+              className="mt-3 block w-full text-base text-stone-700 file:mr-4 file:rounded-full file:border-0 file:bg-[#123C39] file:px-4 file:py-2 file:font-medium file:text-white hover:file:bg-[#08231F]"
             />
           </label>
           {audioStory ? (
             <div className="mt-5">
-              <p className="text-sm font-medium text-[#123C39]">{audioStory.name}</p>
+              <p className="text-base font-medium text-[#123C39]">{audioStory.name}</p>
               {audioStoryPreview ? <audio controls src={audioStoryPreview} className="mt-3 w-full" /> : null}
               <button
                 type="button"
                 onClick={() => chooseAudioStory(null)}
-                className="mt-4 rounded-full border border-[#123C39] px-4 py-2 text-sm font-medium transition hover:bg-[#123C39] hover:text-white"
+                className="mt-4 rounded-full border border-[#123C39] px-4 py-2 text-base font-medium transition hover:bg-[#123C39] hover:text-white"
               >
                 Remove voice story
               </button>
@@ -869,31 +869,31 @@ export default function RecipeForm() {
           ) : null}
         </div>
 
-        <div className="mt-5 rounded-2xl border border-dashed border-[#B77938]/70 bg-[#F4DDAE]/45 p-5">
-          <p className="text-sm font-medium">
+        <div className="mt-5 rounded-2xl border border-dashed border-[#9A622A]/70 bg-[#EED8B2]/45 p-5">
+          <p className="text-base font-medium">
             Show us how it is made <span className="font-normal text-stone-500">(optional)</span>
           </p>
-          <p className="mt-3 text-sm leading-6 text-stone-600">
+          <p className="mt-3 text-base leading-7 text-stone-600">
             Add a short recipe video, up to 20 MB. We will review it before it appears alongside your recipe in the cookbook.
           </p>
-          <label className="mt-5 block text-sm font-medium">
+          <label className="mt-5 block text-base font-medium">
             Choose a recipe video
             <input
               onChange={(event) => chooseRecipeVideo(event.target.files?.[0] ?? null)}
               type="file"
               name="recipeVideo"
               accept="video/mp4,video/quicktime,video/webm"
-              className="mt-3 block w-full text-sm text-stone-700 file:mr-4 file:rounded-full file:border-0 file:bg-[#123C39] file:px-4 file:py-2 file:font-medium file:text-white hover:file:bg-[#08231F]"
+              className="mt-3 block w-full text-base text-stone-700 file:mr-4 file:rounded-full file:border-0 file:bg-[#123C39] file:px-4 file:py-2 file:font-medium file:text-white hover:file:bg-[#08231F]"
             />
           </label>
           {recipeVideo ? (
             <div className="mt-5">
-              <p className="text-sm font-medium text-[#123C39]">{recipeVideo.name}</p>
+              <p className="text-base font-medium text-[#123C39]">{recipeVideo.name}</p>
               {recipeVideoPreview ? <video controls playsInline preload="metadata" src={recipeVideoPreview} className="mt-3 aspect-video w-full rounded-xl bg-black" /> : null}
               <button
                 type="button"
                 onClick={() => chooseRecipeVideo(null)}
-                className="mt-4 rounded-full border border-[#123C39] px-4 py-2 text-sm font-medium transition hover:bg-[#123C39] hover:text-white"
+                className="mt-4 rounded-full border border-[#123C39] px-4 py-2 text-base font-medium transition hover:bg-[#123C39] hover:text-white"
               >
                 Remove recipe video
               </button>
@@ -902,7 +902,7 @@ export default function RecipeForm() {
         </div>
       </fieldset>
 
-      <label className="mt-10 flex gap-4 rounded-2xl border border-[#D1AD75]/80 bg-[#F4DDAE]/70 p-5 text-sm leading-6">
+      <label className="mt-10 flex gap-4 rounded-2xl border border-[#DDB765]/80 bg-[#EED8B2]/70 p-5 text-base leading-7">
         <input
           required
           checked={values.submissionAgreementAccepted}
@@ -919,7 +919,7 @@ export default function RecipeForm() {
         </span>
       </label>
 
-      <label className="mt-4 flex gap-4 rounded-2xl border border-[#D1AD75]/80 bg-[#F4DDAE]/70 p-5 text-sm leading-6">
+      <label className="mt-4 flex gap-4 rounded-2xl border border-[#DDB765]/80 bg-[#EED8B2]/70 p-5 text-base leading-7">
         <input
           checked={values.marketingOptIn}
           onChange={(event) => updateValue("marketingOptIn", event.target.checked)}
@@ -939,12 +939,12 @@ export default function RecipeForm() {
       </button>
 
       {submissionError ? (
-        <p role="alert" className="mt-5 rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-sm leading-6 text-red-800">
+        <p role="alert" className="mt-5 rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-base leading-7 text-red-800">
           {submissionError}
         </p>
       ) : null}
 
-      <p className="mt-5 text-sm leading-6 text-stone-600">
+      <p className="mt-5 text-base leading-7 text-stone-600">
         Your recipe is sent securely to the OPR team. We&apos;ll only use your
         details to respond about your submission. Read our{" "}
         <Link href="/privacy" className="underline underline-offset-4">Privacy Notice</Link>.

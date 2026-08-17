@@ -4,7 +4,7 @@ import { FormEvent, useState } from "react";
 import { CheckIcon, Eyebrow } from "../_components/primitives";
 
 const inputClassName =
-  "mt-1.5 w-full border border-[#D1AD75] bg-[#FFF3DF] px-3.5 py-3 text-[15px] outline-none transition placeholder:text-stone-500 focus:border-[#123C39]";
+  "mt-1.5 w-full border border-[#DDB765] bg-[#FFF3DF] px-3.5 py-3 text-base outline-none transition placeholder:text-stone-500 focus:border-[#123C39]";
 
 export default function MobileFoundingTableForm() {
   const [name, setName] = useState("");
@@ -46,8 +46,8 @@ export default function MobileFoundingTableForm() {
     return (
       <div role="status" aria-live="polite" className="flex h-full flex-col items-center justify-center px-5 text-center">
         <CheckIcon />
-        <h1 className="font-display mb-2.5 mt-5 text-[26px]">You&apos;re on the list.</h1>
-        <p className="max-w-[26ch] text-[15px] opacity-80">
+        <h1 className="mb-2.5 mt-5 text-[26px] font-bold">You&apos;re on the list.</h1>
+        <p className="max-w-[26ch] text-base opacity-80">
           We&apos;ll invite you to join our table as OPR grows.
         </p>
       </div>
@@ -57,16 +57,16 @@ export default function MobileFoundingTableForm() {
   return (
     <form onSubmit={submit} className="px-5 pb-6 pt-16">
       <Eyebrow className="mb-2.5">OPR invitation</Eyebrow>
-      <h1 className="font-display mb-3 text-[28px]">Join Our Table</h1>
-      <p className="mb-6 text-[15px] leading-[1.6] opacity-80">
+      <h1 className="mb-3 text-[28px] font-bold">Join Our Table</h1>
+      <p className="mb-6 text-base leading-[1.6] opacity-80">
         A small circle of early members shaping OPR from the start. We&apos;ll invite you in as we grow.
       </p>
 
-      <label className="mb-3.5 block text-sm font-medium">
+      <label className="mb-3.5 block text-base font-medium">
         Name
         <input required value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" className={inputClassName} />
       </label>
-      <label className="mb-5 block text-sm font-medium">
+      <label className="mb-5 block text-base font-medium">
         Email
         <input
           required
@@ -77,7 +77,7 @@ export default function MobileFoundingTableForm() {
           className={inputClassName}
         />
       </label>
-      <label className="mb-5 flex items-start gap-2.5 text-[13px] leading-[1.5]">
+      <label className="mb-5 flex items-start gap-2.5 text-base leading-[1.5]">
         <input type="checkbox" checked={optIn} onChange={(e) => setOptIn(e.target.checked)} className="mt-[3px] accent-[#123C39]" />
         <span>Send me occasional OPR updates.</span>
       </label>
@@ -85,11 +85,11 @@ export default function MobileFoundingTableForm() {
       <button
         type="submit"
         disabled={!canSubmit || isSubmitting}
-        className="w-full bg-[#123C39] px-4 py-[14px] text-[16px] font-medium text-[#EED8B2] transition hover:bg-[#0d2b28] disabled:cursor-not-allowed disabled:opacity-50"
+        className="w-full bg-[#123C39] px-4 py-[14px] text-[16px] font-medium text-[#EED8B2] transition hover:bg-[#08231F] disabled:cursor-not-allowed disabled:opacity-50"
       >
         {isSubmitting ? "Joining…" : "Join the waiting list"}
       </button>
-      {error ? <p role="alert" className="mt-3 text-sm text-red-800">{error}</p> : null}
+      {error ? <p role="alert" className="mt-3 text-base text-red-800">{error}</p> : null}
     </form>
   );
 }

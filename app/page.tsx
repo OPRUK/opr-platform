@@ -65,7 +65,7 @@ export default async function Home() {
       {/* Hero */}
       <HomeHero>
         <div className="relative z-10 mx-auto max-w-4xl px-6 pb-24 text-center text-white animate-rise-in sm:px-8 sm:pb-28">
-          <p className="mb-5 text-xs font-semibold uppercase tracking-[0.35em] text-[#FFD58C] drop-shadow-md sm:text-sm sm:tracking-[0.4em]">
+          <p className="mb-5 text-xs font-semibold uppercase tracking-[0.35em] text-[#DDB765] drop-shadow-md sm:text-sm sm:tracking-[0.4em]">
             A Living Cookbook
           </p>
 
@@ -109,13 +109,13 @@ export default async function Home() {
             </div>
 
             <div className="relative px-8 py-11 text-[#FFF3DF] md:px-14 md:py-14">
-              <p className="text-sm font-bold uppercase tracking-[0.38em] text-[#FFD58C]">
+              <p className="text-sm font-bold uppercase tracking-[0.38em] text-[#DDB765]">
                 The Recipe That Feels Like Home
               </p>
               <h2 className="mt-5 max-w-3xl text-4xl font-bold leading-tight md:text-6xl">
                 Every family has that one recipe. What&apos;s yours?
               </h2>
-              <p className="mt-6 max-w-3xl text-lg leading-8 text-[#FFF1D8] md:text-xl">
+              <p className="mt-6 max-w-3xl text-lg leading-8 text-[#FFF3DF] md:text-xl">
                 Throughout August, we&apos;re looking for the recipes your family
                 asks for again and again. Share the recipe and the story behind
                 it for a chance to be featured in the OPR Cookbook and
@@ -124,11 +124,11 @@ export default async function Home() {
               <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
                 <Link
                   href="/share"
-                  className="inline-flex w-fit rounded-full bg-[#DDB765] px-8 py-4 text-base font-bold text-[#08231F] transition hover:scale-105 hover:bg-[#FFD58C]"
+                  className="inline-flex w-fit rounded-full bg-[#DDB765] px-8 py-4 text-base font-bold text-[#08231F] transition hover:scale-105 hover:bg-[#DDB765]"
                 >
                   Share your recipe →
                 </Link>
-                <p className="text-sm text-[#F0D4A0]">Your family story could be next.</p>
+                <p className="text-sm text-[#DDB765]">Your family story could be next.</p>
               </div>
             </div>
           </div>
@@ -149,7 +149,7 @@ export default async function Home() {
 
           <div className="mt-12 grid overflow-hidden rounded-[2rem] bg-[#FFF3DF] shadow-xl shadow-[#1C5A50]/15 md:grid-cols-[0.85fr_1.15fr]">
             <div className="flex flex-col justify-center bg-[#123C39] p-8 text-[#FFF3DF] md:p-12">
-              <p className="text-sm font-bold uppercase tracking-[0.35em] text-[#FFD58C]">
+              <p className="text-sm font-bold uppercase tracking-[0.35em] text-[#DDB765]">
                 Why we started
               </p>
               <h3 className="mt-5 text-4xl font-bold leading-tight md:text-5xl">
@@ -169,7 +169,7 @@ export default async function Home() {
             </div>
           </div>
 
-          <div className="mt-8 rounded-[2rem] border border-[#D1AD75] bg-[#FFF3DF] px-7 py-10 text-center shadow-lg shadow-[#1C5A50]/10 md:px-12 md:py-12">
+          <div className="mt-8 rounded-[2rem] border border-[#DDB765] bg-[#FFF3DF] px-7 py-10 text-center shadow-lg shadow-[#1C5A50]/10 md:px-12 md:py-12">
             <p className="text-sm font-bold uppercase tracking-[0.35em] text-amber-700">
               The invitation
             </p>
@@ -180,7 +180,7 @@ export default async function Home() {
               href="/share"
               className="mt-8 inline-block rounded-full bg-[#123C39] px-8 py-4 text-lg font-medium text-white transition hover:scale-105 hover:bg-[#08231F]"
             >
-              Share Your Recipe
+              Share your recipe
             </Link>
           </div>
         </div>
@@ -199,25 +199,25 @@ export default async function Home() {
           </div>
 
           <div className="text-[#FFF3DF]">
-            <p className="text-sm uppercase tracking-[0.35em] text-[#FFD58C]">
+            <p className="text-sm uppercase tracking-[0.35em] text-[#DDB765]">
               From the kitchen drawer
             </p>
             <h2 className="mt-5 max-w-xl text-4xl font-bold leading-tight md:text-6xl">
               Krishna Anand&apos;s Baingan ka Bharta
             </h2>
-            <div className="font-founder-hand mt-8 space-y-2 text-2xl leading-[1.35] text-[#F6DEC0] md:text-3xl">
+            <div className="font-founder-hand mt-8 space-y-2 text-2xl leading-[1.35] text-[#EED8B2] md:text-3xl">
               <p>onions, cooked till pink</p>
               <p>tomatoes, salt &amp; deghi mirch</p>
               <p>2 slit green chillies</p>
               <p>fold in mashed bhuna baingan</p>
               <p className="pl-6">simmer till smoky &amp; rich</p>
             </div>
-            <p className="font-founder-hand mt-7 text-2xl italic text-[#FFD58C] md:text-3xl">
+            <p className="font-founder-hand mt-7 text-2xl italic text-[#DDB765] md:text-3xl">
               Don&apos;t let it turn brown.
             </p>
             <Link
               href="/family-cookbook/krishna-anands-baingan-ka-bharta"
-              className="mt-10 inline-flex w-fit items-center rounded-full bg-[#DDB765] px-8 py-4 text-lg font-bold text-[#123C39] shadow-lg transition hover:scale-105 hover:bg-[#F0CC7A]"
+              className="mt-10 inline-flex w-fit items-center rounded-full bg-[#DDB765] px-8 py-4 text-lg font-bold text-[#123C39] shadow-lg transition hover:scale-105 hover:bg-[#EED8B2]"
             >
               Cook Krishna&apos;s recipe →
             </Link>
@@ -232,7 +232,7 @@ export default async function Home() {
         <div className="mx-auto grid max-w-6xl overflow-hidden rounded-[2rem] bg-[#1C5A50] shadow-2xl md:grid-cols-2">
           <div className="relative min-h-[340px]">
             {recipeOfWeek ? (
-              recipeOfWeekImage ? <Image src={recipeOfWeekImage} alt={recipeOfWeek.title} fill sizes="(min-width: 768px) 50vw, 100vw" unoptimized className="object-cover" /> : <div className="flex h-full items-center justify-center bg-[#DDBB82] p-8 text-center text-2xl font-bold text-[#123C39]">A treasured family recipe</div>
+              recipeOfWeekImage ? <Image src={recipeOfWeekImage} alt={recipeOfWeek.title} fill sizes="(min-width: 768px) 50vw, 100vw" unoptimized className="object-cover" /> : <div className="flex h-full items-center justify-center bg-[#EED8B2] p-8 text-center text-2xl font-bold text-[#123C39]">A treasured family recipe</div>
             ) : (
               <Image
                 src="/images/recipes/daves-butter-chicken-feature.webp"
@@ -245,21 +245,21 @@ export default async function Home() {
           </div>
 
           <div className="flex flex-col justify-center p-9 text-[#FFF3DF] md:p-14">
-            <p className="text-sm uppercase tracking-[0.35em] text-[#FFD58C]">
+            <p className="text-sm uppercase tracking-[0.35em] text-[#DDB765]">
               This week&apos;s story from the OPR cookbook
             </p>
             <h2 className="mt-5 text-4xl font-bold leading-tight md:text-5xl">
               {recipeOfWeek?.title ?? "Dave's Butter Chicken"}
             </h2>
-            <p className="mt-3 text-sm uppercase tracking-[0.25em] text-[#F0D4A0]">
+            <p className="mt-3 text-sm uppercase tracking-[0.25em] text-[#DDB765]">
               {recipeOfWeek?.location ?? "New Malden, England"}
             </p>
-            <p className="mt-7 text-lg leading-8 text-[#FFF1D8]">
+            <p className="mt-7 text-lg leading-8 text-[#FFF3DF]">
               {recipeOfWeek?.recipe_of_week_note ?? recipeOfWeek?.story ?? "Dave learned this from his Indian mother-in-law, then made it his own with passata for a smoother, richer sauce. He has cooked it in India for family — and even she now says his is better."}
             </p>
             <Link
               href={recipeOfWeek ? `/family-cookbook/community/${recipeOfWeek.id}` : "/family-cookbook/daves-butter-chicken"}
-              className="mt-9 inline-flex w-fit items-center rounded-full bg-[#DDB765] px-7 py-4 font-medium text-[#08231F] transition hover:scale-105 hover:bg-[#FFD58C]"
+              className="mt-9 inline-flex w-fit items-center rounded-full bg-[#DDB765] px-7 py-4 font-medium text-[#08231F] transition hover:scale-105 hover:bg-[#DDB765]"
             >
               Read {recipeOfWeek ? `${recipeOfWeek.name}'s` : "Dave's"} story →
             </Link>

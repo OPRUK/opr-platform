@@ -83,7 +83,7 @@ export default function AccessibilityControls() {
       <button
         type="button"
         onClick={() => setOpen((current) => !current)}
-        className="flex min-h-11 min-w-11 items-center justify-center rounded-full border border-[#123C39]/35 bg-white/70 px-3 font-bold text-[#123C39] transition hover:bg-[#F4DDAE] focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#9A622A]"
+        className="flex min-h-11 min-w-11 items-center justify-center rounded-full border border-[#123C39]/35 bg-white/70 px-3 font-bold text-[#123C39] transition hover:bg-[#EED8B2] focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#9A622A]"
         aria-label="Open text accessibility settings"
         aria-expanded={open}
         aria-controls="accessibility-controls"
@@ -94,7 +94,7 @@ export default function AccessibilityControls() {
       {open ? (
         <div
           id="accessibility-controls"
-          className="absolute right-0 top-[calc(100%+0.75rem)] z-50 w-72 rounded-2xl border border-[#D1AD75] bg-[#FFF9EC] p-4 text-[#123C39] shadow-2xl"
+          className="absolute right-0 top-[calc(100%+0.75rem)] z-50 w-72 rounded-2xl border border-[#DDB765] bg-[#FFF3DF] p-4 text-[#123C39] shadow-2xl"
           aria-label="Text accessibility settings"
         >
           <p className="font-bold">Text size</p>
@@ -107,7 +107,7 @@ export default function AccessibilityControls() {
                 className={`min-h-11 rounded-xl border px-2 font-bold transition focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#9A622A] ${
                   textSize === size.value
                     ? "border-[#123C39] bg-[#123C39] text-white"
-                    : "border-[#D1AD75] bg-white hover:bg-[#F4DDAE]"
+                    : "border-[#DDB765] bg-white hover:bg-[#EED8B2]"
                 }`}
                 aria-label={size.description}
                 aria-pressed={textSize === size.value}
@@ -120,7 +120,7 @@ export default function AccessibilityControls() {
           <button
             type="button"
             onClick={toggleReadableFont}
-            className="mt-4 flex min-h-11 w-full items-center justify-between gap-4 rounded-xl border border-[#D1AD75] bg-white px-4 py-2 text-left font-medium transition hover:bg-[#F4DDAE] focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#9A622A]"
+            className="mt-4 flex min-h-11 w-full items-center justify-between gap-4 rounded-xl border border-[#DDB765] bg-white px-4 py-2 text-left font-medium transition hover:bg-[#EED8B2] focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#9A622A]"
             aria-pressed={readableFont}
           >
             <span>Readable font</span>

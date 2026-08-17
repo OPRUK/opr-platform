@@ -115,7 +115,7 @@ export default function FilmEmbed({
       role="dialog"
       aria-modal="true"
       aria-label={title}
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-[#03110F]/95 px-3 py-5 backdrop-blur-sm sm:px-8"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-[#08231F]/95 px-3 py-5 backdrop-blur-sm sm:px-8"
       onPointerMove={keepControlsVisible}
       onClick={closeFilm}
     >
@@ -201,7 +201,7 @@ export default function FilmEmbed({
               onChange={(event) => {
                 if (videoRef.current) videoRef.current.currentTime = Number(event.target.value);
               }}
-              className="min-w-0 flex-1 accent-[#F0C45A]"
+              className="min-w-0 flex-1 accent-[#DDB765]"
             />
             <span className="shrink-0 text-xs tabular-nums text-white/85 sm:text-sm">
               {formatTime(currentTime)} / {formatTime(duration)}

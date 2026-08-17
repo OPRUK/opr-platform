@@ -18,7 +18,7 @@ export async function GET() {
         <div
           style={{
             display: "flex",
-            fontFamily: "Georgia, serif",
+            fontFamily: 'Didot, "Bodoni MT", Georgia, "Times New Roman", serif',
             fontSize: 214,
             fontWeight: 700,
             color: "#EED8B2",
