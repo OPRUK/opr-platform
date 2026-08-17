@@ -26,7 +26,7 @@ export default function ShareYourStory() {
 
       <section className="bg-[#123C39] px-6 pb-24 pt-40 text-center text-white">
         <p className="mb-5 text-sm uppercase tracking-[0.4em] text-amber-300">
-          Add a page to the book
+          Share your recipe to the Living Cookbook
         </p>
         <h1 className="font-display mx-auto max-w-4xl text-5xl font-bold leading-tight md:text-7xl">
           Share your family&apos;s recipe.

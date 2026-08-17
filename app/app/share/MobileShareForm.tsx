@@ -248,7 +248,7 @@ export default function MobileShareForm() {
         />
       </label>
 
-      <p className="mb-2.5 text-[11px] font-bold uppercase tracking-[0.14em]">Add to your story</p>
+      <p className="mb-2.5 text-[11px] font-bold uppercase tracking-[0.14em]">Add photos or audio</p>
       <div className="flex flex-col gap-2.5">
         {attachments.map((attachment) => {
           const file = files[attachment.key];

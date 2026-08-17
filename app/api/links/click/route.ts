@@ -11,7 +11,6 @@ const knownKeys = new Set([
   "founding-table",
   "recipe-of-month",
   "films",
-  "our-story",
   "contact",
   "instagram",
   "facebook",

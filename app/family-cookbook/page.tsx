@@ -138,7 +138,7 @@ export default function FamilyCookbook() {
           href="/share"
           className="mt-6 inline-block rounded-full bg-[#123C39] px-8 py-4 text-lg font-medium text-white transition hover:scale-105"
         >
-          Share Your Story
+          Share Your Recipe
         </Link>
       </section>
     </main>
