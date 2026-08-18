@@ -163,4 +163,15 @@ a[href^="mailto:"] {
   .animate-rise-in-delayed {
     animation: none;
   }
+
+  .home-hero-copy {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .home-hero-sound-control {
+    display: none;
+  }
 }
