@@ -115,6 +115,10 @@ export default function RecipeForm() {
   const [isRecording, setIsRecording] = useState(false);
   const recorderRef = useRef<MediaRecorder | null>(null);
   const recordingTimerRef = useRef<number | null>(null);
+  // The title/ingredients/method fields the AI draft fills in sit earlier in
+  // the form than the upload section that triggers it, so "the draft below"
+  // was never actually visible without scrolling back up manually.
+  const recipeFieldsetRef = useRef<HTMLFieldSetElement | null>(null);
   const [submissionComplete, setSubmissionComplete] = useState(false);
   const [submissionError, setSubmissionError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -254,7 +258,8 @@ export default function RecipeForm() {
         method: draft.method || current.method,
         cookNotes: draft.cookNotes || current.cookNotes,
       }));
-      setRecipeReadMessage("We have made a first draft below. Please check every detail before you share it — old handwriting can be wonderfully unpredictable.");
+      setRecipeReadMessage("We have made a first draft — please check every detail above before you share it, old handwriting can be wonderfully unpredictable.");
+      recipeFieldsetRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (error) {
       setSubmissionError(error instanceof Error ? error.message : "We could not read that recipe just now.");
     } finally {
@@ -555,7 +560,7 @@ export default function RecipeForm() {
         </label>
       </fieldset>
 
-      <fieldset className="mt-12 border-t border-[#DDB765]/70 pt-10">
+      <fieldset ref={recipeFieldsetRef} className="mt-12 border-t border-[#DDB765]/70 pt-10">
         <legend className="text-xl font-bold">The recipe</legend>
 
         <label className="mt-6 block text-base font-medium">
