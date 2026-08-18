@@ -108,6 +108,7 @@ export default function RecipeForm() {
   const [originalRecipePreview, setOriginalRecipePreview] = useState("");
   const [isReadingRecipe, setIsReadingRecipe] = useState(false);
   const [recipeReadMessage, setRecipeReadMessage] = useState("");
+  const [recipeReadError, setRecipeReadError] = useState("");
   const [audioStory, setAudioStory] = useState<File | null>(null);
   const [audioStoryPreview, setAudioStoryPreview] = useState("");
   const [recipeVideo, setRecipeVideo] = useState<File | null>(null);
@@ -227,6 +228,7 @@ export default function RecipeForm() {
 
     setSubmissionError("");
     setRecipeReadMessage("");
+    setRecipeReadError("");
     setOriginalRecipe(file);
     setOriginalRecipePreview(URL.createObjectURL(file));
   }
@@ -240,6 +242,7 @@ export default function RecipeForm() {
     setIsReadingRecipe(true);
     setSubmissionError("");
     setRecipeReadMessage("");
+    setRecipeReadError("");
 
     try {
       const formData = new FormData();
@@ -249,6 +252,19 @@ export default function RecipeForm() {
       if (!response.ok) throw new Error(result.error || "We could not read that recipe.");
 
       const draft = result.draft as Partial<RecipeFormValues>;
+      const foundNothing = !draft.title && !draft.ingredients && !draft.method;
+      if (foundNothing) {
+        // The reader is instructed to never invent text, so an unreadable
+        // photo comes back as a "successful" response with every field
+        // null — without this check that looked identical to a real draft,
+        // just with nothing visibly different about the (empty) fields.
+        // Shown in the same spot as recipeReadMessage (not submissionError,
+        // which renders all the way down by the final submit button, out of
+        // sight from someone still looking at the upload button).
+        setRecipeReadError("We couldn't make out any text in that photo. Try a clearer, closer or better-lit photo of the recipe.");
+        return;
+      }
+
       setValues((current) => ({
         ...current,
         title: draft.title || current.title,
@@ -818,6 +834,7 @@ export default function RecipeForm() {
             </div>
           ) : null}
           {recipeReadMessage ? <p className="mt-5 rounded-xl bg-[#EED8B2] px-4 py-3 text-base leading-7 text-[#123C39]">{recipeReadMessage}</p> : null}
+          {recipeReadError ? <p role="alert" className="mt-5 rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-base leading-7 text-red-800">{recipeReadError}</p> : null}
           <p className="mt-4 text-base leading-7 text-stone-600">
             When you choose “Read my recipe with AI”, the image is securely sent to OpenAI only to create this editable draft. Check every detail before sharing. It is not saved by the reader itself. Read our{" "}
             <Link href="/privacy" className="underline underline-offset-2">Privacy Notice</Link>.
