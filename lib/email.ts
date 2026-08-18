@@ -113,17 +113,18 @@ export function foundingTableWelcomeEmail({
   marketingOptIn: boolean;
 }) {
   return {
-    subject: "Welcome to the OPR table",
+    subject: "You've got a seat at our table",
     html: `
       <div style="font-family: 'Gill Sans MT', 'Gill Sans', Avenir, Corbel, Arial, sans-serif; max-width: 620px; margin: 0 auto; color: #4A4232; line-height: 1.65;">
-        <p style="color: #9A622A; letter-spacing: 2px; font-size: 12px; text-transform: uppercase;">Other People's Recipes</p>
-        <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 34px; line-height: 1.2;">You have a place at our table.</h1>
-        <p>Dear ${escapeHtml(name)},</p>
-        <p>Thank you for joining the very first people shaping Other People's Recipes.</p>
-        ${marketingOptIn ? "<p>You will be first to hear about new family recipes, future tasting events, Recipe of the Month voting and the next chapter of OPR.</p>" : "<p>We have saved your place at our table. You have not opted in to optional OPR news, so we will not send you marketing updates.</p>"}
-        <p>While you wait, the first stories are already waiting for you in the Living Cookbook.</p>
+        <img src="${siteUrl}/images/social/opr-pinterest-profile.png" alt="Other People's Recipes" width="56" height="56" style="display: block; margin: 0 auto 20px; border-radius: 999px;" />
+        <p style="color: #9A622A; letter-spacing: 2px; font-size: 12px; text-transform: uppercase; text-align: center;">Other People's Recipes</p>
+        <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 34px; line-height: 1.2; text-align: center;">You&apos;ve got a seat at our table.</h1>
+        <p>Hi ${escapeHtml(name)},</p>
+        <p>Other People&apos;s Recipes started as a note I wrote myself back in 2000 — one day, build the place where family recipes can live on. You just became one of the first people helping make that real.</p>
+        ${marketingOptIn ? "<p>You&apos;ll be the first to hear when a new family recipe goes up, when tasting events open, when Recipe of the Month voting starts, and whatever we build next.</p>" : "<p>Your place is saved. You didn&apos;t opt in to OPR news, so that&apos;s the last you&apos;ll hear from us unless you get in touch.</p>"}
+        <p>While you wait, the Living Cookbook is already open.</p>
         <p><a href="${siteUrl}/family-cookbook" style="display: inline-block; background: #1C5A50; color: #FFF3DF; padding: 12px 18px; border-radius: 999px; text-decoration: none;">Explore the Living Cookbook</a></p>
-        <p style="margin-top: 32px;">Warmly,<br /><strong>Chaten &amp; the OPR team</strong></p>
+        <p style="margin-top: 32px;">Warmly,<br /><strong>Chaten</strong><br />Founder, Other People&apos;s Recipes</p>
         ${marketingFooter(unsubscribeUrl)}
         <p style="font-size: 13px; color: #6B6254;">Every Recipe has a Story.</p>
       </div>
