@@ -57,10 +57,10 @@ export default function FounderPage() {
           <div className="absolute -top-3 left-1/2 z-20 h-7 w-28 -translate-x-1/2 rotate-[-2deg] bg-[#C9A55B]/70 shadow-sm" />
           <div className="relative z-10">
             <div className="flex items-start justify-between gap-4 border-b border-[#9A622A]/35 pb-5">
-              <p className="text-xs uppercase tracking-[0.3em] text-[#8B5A2B]">
+              <p className="text-xs uppercase tracking-[0.3em] text-[#123C39]">
                 A founder&apos;s letter
               </p>
-              <p className="font-founder-hand text-3xl italic text-[#8B5A2B]">2000</p>
+              <p className="font-founder-hand text-3xl italic text-[#123C39]">2000</p>
             </div>
             <h2
               className="font-founder-hand mt-8 text-4xl font-semibold leading-tight text-[#123C39] md:text-5xl"
@@ -69,7 +69,7 @@ export default function FounderPage() {
             </h2>
 
           <div
-            className="font-founder-hand mt-9 space-y-6 text-[1.4rem] leading-[1.55] text-[#5B4834] md:text-[1.55rem]"
+            className="font-founder-hand mt-9 space-y-6 text-[1.4rem] font-semibold leading-[1.55] text-[#123C39] md:text-[1.55rem]"
           >
             <p>
               Other People&apos;s Recipes began as an idea back in 2000. It has
@@ -112,7 +112,7 @@ export default function FounderPage() {
                 height={671}
                 className="h-auto w-48 md:w-56"
               />
-              <p className="mt-1 text-xs uppercase tracking-[0.25em] text-[#9A622A]">
+              <p className="mt-1 text-xs uppercase tracking-[0.25em] text-[#123C39]">
                 Founder, Other People&apos;s Recipes
               </p>
             </div>
