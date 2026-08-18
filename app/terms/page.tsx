@@ -66,7 +66,7 @@ export default function TermsPage() {
 
             <div>
               <h2 className="text-2xl font-bold text-[#123C39]">8. Contact and governing law</h2>
-              <p className="mt-3">Questions? Email <a className="underline underline-offset-4" href="mailto:info@otherpeoplesrecipes.co.uk">info@otherpeoplesrecipes.co.uk</a> or write to us at 1a Bazalgette Close, New Malden, KT3 5HG. These terms are governed by the law of England and Wales. The courts of England and Wales will have non-exclusive jurisdiction, except where consumer law gives you the right to bring proceedings elsewhere.</p>
+              <p className="mt-3">Questions? Email <a className="underline underline-offset-4" href="mailto:info@otherpeoplesrecipes.co.uk">info@otherpeoplesrecipes.co.uk</a>. These terms are governed by the law of England and Wales. The courts of England and Wales will have non-exclusive jurisdiction, except where consumer law gives you the right to bring proceedings elsewhere.</p>
             </div>
           </div>
         </div>
