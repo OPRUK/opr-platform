@@ -66,7 +66,7 @@ export default function IngredientMeasurements({
         </div>
       </fieldset>
 
-      <p className="recipe-card-ingredients mx-auto mt-3 max-w-xl text-center text-[1.75rem] leading-9">
+      <p className="recipe-card-ingredients mx-auto mt-3 max-w-xl text-center text-lg leading-7">
         Conversions are approximate. Teaspoons and tablespoons stay as written.
       </p>
 
