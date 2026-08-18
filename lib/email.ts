@@ -55,15 +55,16 @@ export async function sendEmail({
 
 export function recipeReceivedEmail({ name, title }: { name: string; title: string }) {
   return {
-    subject: `We received “${title}” — Other People's Recipes`,
+    subject: `We've got "${title}"`,
     html: `
       <div style="font-family: 'Gill Sans MT', 'Gill Sans', Avenir, Corbel, Arial, sans-serif; max-width: 620px; margin: 0 auto; color: #4A4232; line-height: 1.65;">
-        <p style="color: #9A622A; letter-spacing: 2px; font-size: 12px; text-transform: uppercase;">Other People's Recipes</p>
-        <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 34px; line-height: 1.2;">Thank you for sharing your recipe.</h1>
-        <p>Dear ${escapeHtml(name)},</p>
-        <p>We&apos;ve received <strong>${escapeHtml(title)}</strong> and the story behind it. Thank you for trusting Other People&apos;s Recipes with a page from your family kitchen.</p>
-        <p>Our team will read every recipe carefully. If it is selected for the Living Cookbook, the restaurant or a future film, we&apos;ll be in touch.</p>
-        <p style="margin-top: 32px;">Warmly,<br /><strong>The OPR team</strong></p>
+        <img src="${siteUrl}/images/social/opr-pinterest-profile.png" alt="Other People's Recipes" width="56" height="56" style="display: block; margin: 0 auto 20px; border-radius: 999px;" />
+        <p style="color: #9A622A; letter-spacing: 2px; font-size: 12px; text-transform: uppercase; text-align: center;">Other People's Recipes</p>
+        <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 34px; line-height: 1.2; text-align: center;">Thank you for sharing your recipe.</h1>
+        <p>Hi ${escapeHtml(name)},</p>
+        <p>Thank you for trusting us with <strong>${escapeHtml(title)}</strong> and the story behind it — that&apos;s exactly what Other People&apos;s Recipes is for.</p>
+        <p>I read every recipe that comes in myself. If it&apos;s selected for the Living Cookbook, the restaurant, or a future film, I&apos;ll be in touch.</p>
+        <p style="margin-top: 32px;">Warmly,<br /><strong>Chaten</strong><br />Founder, Other People&apos;s Recipes</p>
         <p style="border-top: 1px solid #DDB765; padding-top: 18px; margin-top: 36px; font-size: 13px; color: #6B6254;">Every Recipe has a Story.</p>
       </div>
     `,
@@ -88,16 +89,17 @@ export function newSubmissionEmail({ name, email, title, location }: { name: str
 
 export function publishedRecipeEmail({ name, title, recipeUrl }: { name: string; title: string; recipeUrl: string }) {
   return {
-    subject: `Your recipe is now in the OPR Living Cookbook`,
+    subject: `"${title}" is live in the Living Cookbook`,
     html: `
       <div style="font-family: 'Gill Sans MT', 'Gill Sans', Avenir, Corbel, Arial, sans-serif; max-width: 620px; margin: 0 auto; color: #4A4232; line-height: 1.65;">
-        <p style="color: #9A622A; letter-spacing: 2px; font-size: 12px; text-transform: uppercase;">Other People's Recipes</p>
-        <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 34px; line-height: 1.2;">Your recipe is now part of the book.</h1>
-        <p>Dear ${escapeHtml(name)},</p>
-        <p>We&apos;re delighted to let you know that <strong>${escapeHtml(title)}</strong> is now live in the Other People&apos;s Recipes Living Cookbook.</p>
+        <img src="${siteUrl}/images/social/opr-pinterest-profile.png" alt="Other People's Recipes" width="56" height="56" style="display: block; margin: 0 auto 20px; border-radius: 999px;" />
+        <p style="color: #9A622A; letter-spacing: 2px; font-size: 12px; text-transform: uppercase; text-align: center;">Other People's Recipes</p>
+        <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 34px; line-height: 1.2; text-align: center;">Your recipe is now part of the book.</h1>
+        <p>Hi ${escapeHtml(name)},</p>
+        <p><strong>${escapeHtml(title)}</strong> is now live in the Living Cookbook — permanently, alongside the story of who taught it to you and why it matters.</p>
         <p><a href="${recipeUrl}" style="display: inline-block; background: #123C39; color: #FFF3DF; padding: 12px 18px; border-radius: 999px; text-decoration: none;">See your recipe</a></p>
-        <p>Thank you for helping us preserve the food and stories that matter.</p>
-        <p style="margin-top: 32px;">Warmly,<br /><strong>The OPR team</strong></p>
+        <p>Thank you for trusting us with it. This is exactly what Other People&apos;s Recipes is for.</p>
+        <p style="margin-top: 32px;">Warmly,<br /><strong>Chaten</strong><br />Founder, Other People&apos;s Recipes</p>
       </div>
     `,
   };
@@ -113,17 +115,18 @@ export function foundingTableWelcomeEmail({
   marketingOptIn: boolean;
 }) {
   return {
-    subject: "Welcome to the OPR table",
+    subject: "You've got a seat at our table",
     html: `
       <div style="font-family: 'Gill Sans MT', 'Gill Sans', Avenir, Corbel, Arial, sans-serif; max-width: 620px; margin: 0 auto; color: #4A4232; line-height: 1.65;">
-        <p style="color: #9A622A; letter-spacing: 2px; font-size: 12px; text-transform: uppercase;">Other People's Recipes</p>
-        <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 34px; line-height: 1.2;">You have a place at our table.</h1>
-        <p>Dear ${escapeHtml(name)},</p>
-        <p>Thank you for joining the very first people shaping Other People's Recipes.</p>
-        ${marketingOptIn ? "<p>You will be first to hear about new family recipes, future tasting events, Recipe of the Month voting and the next chapter of OPR.</p>" : "<p>We have saved your place at our table. You have not opted in to optional OPR news, so we will not send you marketing updates.</p>"}
-        <p>While you wait, the first stories are already waiting for you in the Living Cookbook.</p>
+        <img src="${siteUrl}/images/social/opr-pinterest-profile.png" alt="Other People's Recipes" width="56" height="56" style="display: block; margin: 0 auto 20px; border-radius: 999px;" />
+        <p style="color: #9A622A; letter-spacing: 2px; font-size: 12px; text-transform: uppercase; text-align: center;">Other People's Recipes</p>
+        <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 34px; line-height: 1.2; text-align: center;">You&apos;ve got a seat at our table.</h1>
+        <p>Hi ${escapeHtml(name)},</p>
+        <p>Other People&apos;s Recipes started as a note I wrote myself back in 2000 — one day, build the place where family recipes can live on. You just became one of the first people helping make that real.</p>
+        ${marketingOptIn ? "<p>You&apos;ll be the first to hear when a new family recipe goes up, when tasting events open, when Recipe of the Month voting starts, and whatever we build next.</p>" : "<p>Your place is saved. You didn&apos;t opt in to OPR news, so that&apos;s the last you&apos;ll hear from us unless you get in touch.</p>"}
+        <p>While you wait, the Living Cookbook is already open.</p>
         <p><a href="${siteUrl}/family-cookbook" style="display: inline-block; background: #1C5A50; color: #FFF3DF; padding: 12px 18px; border-radius: 999px; text-decoration: none;">Explore the Living Cookbook</a></p>
-        <p style="margin-top: 32px;">Warmly,<br /><strong>Chaten &amp; the OPR team</strong></p>
+        <p style="margin-top: 32px;">Warmly,<br /><strong>Chaten</strong><br />Founder, Other People&apos;s Recipes</p>
         ${marketingFooter(unsubscribeUrl)}
         <p style="font-size: 13px; color: #6B6254;">Every Recipe has a Story.</p>
       </div>
