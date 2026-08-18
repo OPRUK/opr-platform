@@ -11,7 +11,7 @@ export default function LinksLanding({
   return (
     <main id="main-content" tabIndex={-1} className="flex min-h-screen flex-col items-center bg-[#EED8B2] px-6 py-14 text-[#123C39]">
       <Link href="/" className="flex flex-col items-center text-center">
-        <OprBadge preload className="h-28 w-28 sm:h-32 sm:w-32" />
+        <OprBadge preload className="h-28 w-28 sm:h-32 sm:w-32" sizes="(min-width: 640px) 128px, 112px" />
         <span className="font-brand mt-5 text-3xl font-semibold leading-none tracking-[0.01em]">
           Other People&apos;s Recipes
           <sup aria-label="Trade mark" className="ml-0.5 align-super text-[0.3em]">™</sup>

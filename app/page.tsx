@@ -298,13 +298,13 @@ async function RecipeOfWeekSection() {
         </div>
 
         <div className="flex flex-col justify-center p-9 text-[#FFF3DF] md:p-14">
-          <p className="text-sm uppercase tracking-[0.35em] text-[#DDB765]">
+          <p className="text-sm uppercase tracking-[0.35em] text-[#FFF3DF]">
             This week&apos;s story from the OPR cookbook
           </p>
           <h2 className="mt-5 text-4xl font-bold leading-tight md:text-5xl">
             {recipeOfWeek.title}
           </h2>
-          <p className="mt-3 text-sm uppercase tracking-[0.25em] text-[#DDB765]">
+          <p className="mt-3 text-sm uppercase tracking-[0.25em] text-[#FFF3DF]">
             {recipeOfWeek.location ?? "New Malden, England"}
           </p>
           <p className="mt-7 text-lg leading-8 text-[#FFF3DF]">
@@ -337,13 +337,13 @@ function RecipeOfWeekFallback() {
         </div>
 
         <div className="flex flex-col justify-center p-9 text-[#FFF3DF] md:p-14">
-          <p className="text-sm uppercase tracking-[0.35em] text-[#DDB765]">
+          <p className="text-sm uppercase tracking-[0.35em] text-[#FFF3DF]">
             This week&apos;s story from the OPR cookbook
           </p>
           <h2 className="mt-5 text-4xl font-bold leading-tight md:text-5xl">
             Dave&apos;s Butter Chicken
           </h2>
-          <p className="mt-3 text-sm uppercase tracking-[0.25em] text-[#DDB765]">
+          <p className="mt-3 text-sm uppercase tracking-[0.25em] text-[#FFF3DF]">
             New Malden, England
           </p>
           <p className="mt-7 text-lg leading-8 text-[#FFF3DF]">
