@@ -117,8 +117,8 @@ async function withLiveInstagram(snapshot: AnalyticsSnapshot | null): Promise<An
         ? {
             ...platform,
             period: live.period,
-            exposureLabel: "Reach",
-            exposures: live.reach28d,
+            exposureLabel: "Views",
+            exposures: live.views28d,
             followers: live.followers,
             profileVisits: live.profileViews28d,
             fetchedAt: live.fetchedAt,

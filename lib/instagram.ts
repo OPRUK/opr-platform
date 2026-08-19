@@ -9,7 +9,7 @@ export type InstagramSummary = {
   period: string;
   followers: number;
   mediaCount: number;
-  reach28d: number;
+  views28d: number;
   profileViews28d: number;
   fetchedAt: string;
 };
@@ -41,7 +41,7 @@ export async function getInstagramSummary(): Promise<InstagramSummary | null> {
         `https://graph.facebook.com/${GRAPH_API_VERSION}/${accountId}?fields=followers_count,media_count&access_token=${accessToken}`,
       ),
       fetch(
-        `https://graph.facebook.com/${GRAPH_API_VERSION}/${accountId}/insights?metric=reach,profile_views&period=day&metric_type=total_value&since=${isoDate(startDate)}&until=${isoDate(endDate)}&access_token=${accessToken}`,
+        `https://graph.facebook.com/${GRAPH_API_VERSION}/${accountId}/insights?metric=views,profile_views&period=day&metric_type=total_value&since=${isoDate(startDate)}&until=${isoDate(endDate)}&access_token=${accessToken}`,
       ),
     ]);
 
@@ -51,12 +51,12 @@ export async function getInstagramSummary(): Promise<InstagramSummary | null> {
     }
     const account = await accountResponse.json();
 
-    let reach = 0;
+    let views = 0;
     let profileViews = 0;
     if (insightsResponse.ok) {
       const insights = await insightsResponse.json();
       for (const metric of insights.data ?? []) {
-        if (metric.name === "reach") reach = metric.total_value?.value ?? 0;
+        if (metric.name === "views") views = metric.total_value?.value ?? 0;
         if (metric.name === "profile_views") profileViews = metric.total_value?.value ?? 0;
       }
     } else {
@@ -67,7 +67,7 @@ export async function getInstagramSummary(): Promise<InstagramSummary | null> {
       period: `${REPORT_WINDOW_DAYS} days to ${isoDate(endDate)}`,
       followers: account.followers_count ?? 0,
       mediaCount: account.media_count ?? 0,
-      reach28d: reach,
+      views28d: views,
       profileViews28d: profileViews,
       fetchedAt: new Date().toISOString(),
     };
