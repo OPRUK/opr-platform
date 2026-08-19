@@ -4,6 +4,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { attributionSources } from "./attribution";
 import { getSearchConsoleSummary } from "./google-search-console";
 import { getYouTubeSummary } from "./youtube";
+import { getInstagramSummary } from "./instagram";
 import { analyticsReport } from "./analytics-report-data";
 import type {
   AdminAnalyticsResponse,
@@ -94,6 +95,30 @@ async function withLiveYouTube(snapshot: AnalyticsSnapshot | null): Promise<Anal
             exposureLabel: "Views",
             exposures: live.views28d,
             followers: live.subscribers,
+            fetchedAt: live.fetchedAt,
+          }
+        : platform,
+    ),
+  };
+}
+
+async function withLiveInstagram(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
+  if (!snapshot) return snapshot;
+
+  const live = await getInstagramSummary();
+  if (!live) return snapshot;
+
+  return {
+    ...snapshot,
+    social: snapshot.social.map((platform) =>
+      platform.platform.toLowerCase() === "instagram"
+        ? {
+            ...platform,
+            period: live.period,
+            exposureLabel: "Reach",
+            exposures: live.reach28d,
+            followers: live.followers,
+            profileVisits: live.profileViews28d,
             fetchedAt: live.fetchedAt,
           }
         : platform,
@@ -210,7 +235,7 @@ export async function loadAdminAnalytics(
     ).length,
     sources,
     participation,
-    snapshot: await withLiveYouTube(await withLiveSearchConsole(getSnapshot())),
+    snapshot: await withLiveInstagram(await withLiveYouTube(await withLiveSearchConsole(getSnapshot()))),
     report: analyticsReport,
   };
 }
