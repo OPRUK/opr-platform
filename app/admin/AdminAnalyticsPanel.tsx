@@ -208,14 +208,26 @@ export default function AdminAnalyticsPanel({
                     <h2 id="baseline-heading" className="mt-3 text-3xl font-bold">Website and Google visibility</h2>
                   </div>
                   <p className="text-sm text-stone-600">
-                    Manual snapshot—captured {new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(new Date(`${snapshot.capturedAt}T12:00:00Z`))}, not refreshed by the button above
+                    Website visitors: manual snapshot—captured {new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(new Date(`${snapshot.capturedAt}T12:00:00Z`))}, not refreshed by the button above
                   </p>
                 </div>
                 <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                   <MetricCard label="Website visitors" value={formatNumber(snapshot.website.visitors)} note={snapshot.website.period} />
                   <MetricCard label="Page views" value={formatNumber(snapshot.website.pageViews)} note={`${formatNumber(snapshot.website.pagesPerVisitor, 2)} pages per visitor`} />
-                  <MetricCard label="Google clicks" value={formatNumber(snapshot.google.clicks)} note={`${formatNumber(snapshot.google.impressions)} search impressions`} />
-                  <MetricCard label="Google CTR" value={formatPercent(snapshot.google.ctr)} note={`Average position ${formatNumber(snapshot.google.averagePosition, 1)}`} />
+                  <MetricCard
+                    label="Google clicks"
+                    value={formatNumber(snapshot.google.clicks)}
+                    note={
+                      snapshot.google.fetchedAt
+                        ? `${formatNumber(snapshot.google.impressions)} impressions · Live, refreshed ${new Intl.DateTimeFormat("en-GB", { timeStyle: "short" }).format(new Date(snapshot.google.fetchedAt))}`
+                        : `${formatNumber(snapshot.google.impressions)} search impressions · Manual snapshot`
+                    }
+                  />
+                  <MetricCard
+                    label="Google CTR"
+                    value={formatPercent(snapshot.google.ctr)}
+                    note={`Average position ${formatNumber(snapshot.google.averagePosition, 1)} · ${snapshot.google.fetchedAt ? "Live from Search Console" : "Manual snapshot"}`}
+                  />
                 </div>
               </section>
 
