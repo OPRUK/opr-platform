@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import type { AdminAnalyticsResponse } from "../../lib/admin-analytics-types";
+import type { AnalyticsReport } from "../../lib/analytics-report-types";
 
 type AdminAnalyticsPanelProps = {
   analytics: AdminAnalyticsResponse | null;
@@ -45,6 +46,63 @@ function MetricCard({ label, value, note }: { label: string; value: string; note
   );
 }
 
+function formatCell(value: number | string | null) {
+  if (value === null) return "Not reported";
+  if (typeof value === "string") return value;
+  return formatNumber(value);
+}
+
+type Column<T> = { header: string; render: (row: T) => React.ReactNode; className?: string };
+
+function DataTable<T>({ columns, rows, keyFn }: { columns: Column<T>[]; rows: T[]; keyFn: (row: T, index: number) => string }) {
+  return (
+    <div className="mt-4 overflow-x-auto rounded-3xl border border-[#DDB765]/70 bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/10">
+      <table className="w-full min-w-[640px] border-collapse text-left text-sm">
+        <thead>
+          <tr className="border-b border-[#DDB765] text-[#6B431E]">
+            {columns.map((column) => (
+              <th key={column.header} className={`px-4 py-3 font-semibold first:px-6 last:px-6 ${column.className ?? ""}`}>
+                {column.header}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, index) => (
+            <tr key={keyFn(row, index)} className="border-b border-[#DDB765]/40 last:border-0">
+              {columns.map((column) => (
+                <td key={column.header} className={`px-4 py-3 align-top first:px-6 first:font-semibold last:px-6 ${column.className ?? ""}`}>
+                  {column.render(row)}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function SubHeading({ eyebrow, title, note }: { eyebrow: string; title: string; note?: string }) {
+  return (
+    <div className="mt-10 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+      <div>
+        <p className="text-sm font-bold uppercase tracking-[0.25em] text-[#9A622A]">{eyebrow}</p>
+        <h3 className="mt-2 text-2xl font-bold">{title}</h3>
+      </div>
+      {note ? <p className="max-w-xl text-sm leading-6 text-stone-700">{note}</p> : null}
+    </div>
+  );
+}
+
+const platformEntries: Array<{ key: keyof AnalyticsReport["platforms"]; label: string }> = [
+  { key: "instagram", label: "Instagram" },
+  { key: "facebook", label: "Facebook" },
+  { key: "pinterest", label: "Pinterest" },
+  { key: "youtube", label: "YouTube" },
+  { key: "tiktok", label: "TikTok" },
+];
+
 export default function AdminAnalyticsPanel({
   analytics,
   loading,
@@ -57,6 +115,7 @@ export default function AdminAnalyticsPanel({
   onSignOut,
 }: AdminAnalyticsPanelProps) {
   const snapshot = analytics?.snapshot ?? null;
+  const report = analytics?.report ?? null;
   const sourceMaximum = Math.max(
     1,
     ...(analytics?.sources.map(
@@ -296,6 +355,404 @@ export default function AdminAnalyticsPanel({
           <p className="mx-auto mt-10 max-w-7xl text-sm leading-6 text-stone-600">
             Dashboard generated {new Intl.DateTimeFormat("en-GB", { dateStyle: "medium", timeStyle: "short" }).format(new Date(analytics.generatedAt))}. The figures above update whenever this page opens, or any time you click Refresh dashboard. The website, Google and social baseline further down is a manual snapshot updated separately and does not change when you refresh.
           </p>
+
+          {report ? (
+          <section aria-labelledby="full-report-heading" className="mx-auto mt-16 max-w-7xl rounded-[2rem] bg-[#123C39] p-6 text-[#EED8B2] shadow-xl shadow-[#1C5A50]/20 md:p-9">
+            <p className="text-sm font-bold uppercase tracking-[0.3em] text-[#DDB765]">Full report</p>
+            <h2 id="full-report-heading" className="mt-3 text-3xl font-bold text-white">SEO &amp; social traffic report</h2>
+            <p className="mt-3 max-w-3xl text-sm leading-6 text-[#EED8B2]">
+              Prepared {new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(new Date(`${report.preparedDate}T12:00:00Z`))} from Vercel Web Analytics, Google Search Console and each platform&apos;s native dashboard. This is a periodic manual export—it updates when the report is re-run, not when you click Refresh dashboard above.
+            </p>
+
+            <div className="mt-8 rounded-[1.5rem] bg-[#EED8B2] p-5 text-[#123C39] shadow-inner md:p-7">
+              <SubHeading eyebrow="Executive summary" title="Headline KPIs" />
+              <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+                {report.executiveSummary.kpis.map((kpi) => (
+                  <div key={kpi.label} className="rounded-2xl border border-[#DDB765]/60 bg-[#FFF3DF] px-4 py-3 shadow shadow-[#1C5A50]/10">
+                    <p className="text-xs font-bold uppercase tracking-[0.15em] text-[#9A622A]">{kpi.label}</p>
+                    <p className="mt-1 text-2xl font-bold text-[#123C39]">{kpi.value}</p>
+                  </div>
+                ))}
+              </div>
+
+              <SubHeading eyebrow="Executive summary" title="What the numbers say" />
+              <DataTable<(typeof report.executiveSummary.whatTheNumbersSay)[number]>
+                keyFn={(row) => row.area}
+                rows={report.executiveSummary.whatTheNumbersSay}
+                columns={[
+                  { header: "Area", render: (row) => row.area },
+                  { header: "Evidence", render: (row) => row.evidence },
+                  { header: "Meaning", render: (row) => row.meaning },
+                  { header: "Decision", render: (row) => row.decision },
+                ]}
+              />
+
+              <SubHeading eyebrow="Executive summary" title="Top priorities" />
+              <div className="mt-4 grid gap-5 lg:grid-cols-2">
+                {report.executiveSummary.topPriorities.map((priority, index) => (
+                  <article key={`${priority.priority}-${index}`} className="rounded-3xl border border-[#DDB765]/70 bg-[#FFF3DF] p-6 shadow-lg shadow-[#1C5A50]/10">
+                    <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#9A622A]">{priority.priority} · {priority.owner}</p>
+                    <h4 className="mt-3 text-lg font-bold leading-6">{priority.action}</h4>
+                    <p className="mt-3 text-sm leading-6 text-stone-700">{priority.whyNow}</p>
+                    <p className="mt-3 border-t border-[#DDB765]/60 pt-3 text-sm font-medium leading-6 text-[#123C39]">{priority.successMeasure}</p>
+                  </article>
+                ))}
+              </div>
+              <p className="mt-4 text-xs leading-5 text-stone-600">{report.executiveSummary.footnote}</p>
+            </div>
+
+            <div className="mt-8 rounded-[1.5rem] bg-[#EED8B2] p-5 text-[#123C39] shadow-inner md:p-7">
+              <SubHeading eyebrow="Website" title="Traffic detail" note={report.website.period} />
+              <DataTable<(typeof report.website.core)[number]>
+                keyFn={(row) => row.metric}
+                rows={report.website.core}
+                columns={[
+                  { header: "Metric", render: (row) => row.metric },
+                  { header: "Last 30 days", render: (row) => (row.metric === "Bounce rate" ? formatPercent(row.last30Days) : formatNumber(row.last30Days, row.metric === "Pages per visitor" ? 2 : 0)) },
+                  { header: "Last 7 days", render: (row) => (row.metric === "Bounce rate" ? formatPercent(row.last7Days) : formatNumber(row.last7Days, row.metric === "Pages per visitor" ? 2 : 0)) },
+                  { header: "Change (7d)", render: (row) => (row.change7d === null ? "—" : formatPercent(row.change7d)) },
+                ]}
+              />
+
+              <SubHeading eyebrow="Website" title="Top pages" />
+              <DataTable<(typeof report.website.topPages)[number]>
+                keyFn={(row) => row.path}
+                rows={report.website.topPages}
+                columns={[
+                  { header: "Page", render: (row) => row.path },
+                  { header: "Visitors", render: (row) => formatNumber(row.visitors) },
+                  { header: "Role", render: (row) => row.role },
+                  { header: "SEO note", render: (row) => row.seoNote },
+                ]}
+              />
+
+              <SubHeading eyebrow="Website" title="Top referrers" />
+              <DataTable<(typeof report.website.topReferrers)[number]>
+                keyFn={(row) => row.host}
+                rows={report.website.topReferrers}
+                columns={[
+                  { header: "Host", render: (row) => row.host },
+                  { header: "Visitors", render: (row) => formatNumber(row.visitors) },
+                  { header: "Channel", render: (row) => row.channel },
+                  { header: "Observation", render: (row) => row.observation },
+                  { header: "Action", render: (row) => row.action },
+                ]}
+              />
+
+              <SubHeading eyebrow="Website" title="Audience" />
+              <div className="mt-4 grid gap-5 lg:grid-cols-3">
+                <DataTable<(typeof report.website.audienceCountry)[number]>
+                  keyFn={(row) => row.country}
+                  rows={report.website.audienceCountry}
+                  columns={[
+                    { header: "Country", render: (row) => row.country },
+                    { header: "Share", render: (row) => formatPercent(row.share) },
+                    { header: "Visitors", render: (row) => formatNumber(row.visitors) },
+                  ]}
+                />
+                <DataTable<(typeof report.website.audienceDevice)[number]>
+                  keyFn={(row) => row.device}
+                  rows={report.website.audienceDevice}
+                  columns={[
+                    { header: "Device", render: (row) => row.device },
+                    { header: "Share", render: (row) => formatPercent(row.share) },
+                  ]}
+                />
+                <DataTable<(typeof report.website.audienceOS)[number]>
+                  keyFn={(row) => row.os}
+                  rows={report.website.audienceOS}
+                  columns={[
+                    { header: "OS", render: (row) => row.os },
+                    { header: "Share", render: (row) => formatPercent(row.share) },
+                    { header: "Visitors", render: (row) => formatNumber(row.visitors) },
+                  ]}
+                />
+              </div>
+              <p className="mt-4 text-xs leading-5 text-stone-600">{report.website.note}</p>
+            </div>
+
+            <div className="mt-8 rounded-[1.5rem] bg-[#EED8B2] p-5 text-[#123C39] shadow-inner md:p-7">
+              <SubHeading eyebrow="Google Search" title="Search Console detail" note={report.googleSearch.period} />
+              <p className="mt-2 text-xs leading-5 text-stone-600">The live Google Search tiles higher up this page are the current source of truth. These tables add the query, page, country and device breakdown behind that headline data as of the report date.</p>
+              <DataTable<(typeof report.googleSearch.kpis)[number]>
+                keyFn={(row) => row.metric}
+                rows={report.googleSearch.kpis}
+                columns={[
+                  { header: "Metric", render: (row) => row.metric },
+                  { header: "Value", render: (row) => (row.metric === "CTR" ? formatPercent(row.value) : formatNumber(row.value, row.metric === "Average position" ? 1 : 0)) },
+                  { header: "Definition", render: (row) => row.definition },
+                  { header: "Read", render: (row) => row.read },
+                ]}
+              />
+
+              <SubHeading eyebrow="Google Search" title="Daily clicks and impressions" />
+              <DataTable<(typeof report.googleSearch.daily)[number]>
+                keyFn={(row) => row.date}
+                rows={report.googleSearch.daily}
+                columns={[
+                  { header: "Date", render: (row) => row.date },
+                  { header: "Clicks", render: (row) => formatNumber(row.clicks) },
+                  { header: "Impressions", render: (row) => formatNumber(row.impressions) },
+                  { header: "CTR", render: (row) => formatPercent(row.ctr) },
+                ]}
+              />
+
+              <div className="mt-4 grid gap-5 lg:grid-cols-2">
+                <div>
+                  <SubHeading eyebrow="Google Search" title="Queries" />
+                  <DataTable<(typeof report.googleSearch.queries)[number]>
+                    keyFn={(row) => row.query}
+                    rows={report.googleSearch.queries}
+                    columns={[
+                      { header: "Query", render: (row) => row.query },
+                      { header: "Clicks", render: (row) => formatNumber(row.clicks) },
+                      { header: "Impressions", render: (row) => formatNumber(row.impressions) },
+                    ]}
+                  />
+                </div>
+                <div>
+                  <SubHeading eyebrow="Google Search" title="Pages" />
+                  <DataTable<(typeof report.googleSearch.pages)[number]>
+                    keyFn={(row) => row.page}
+                    rows={report.googleSearch.pages}
+                    columns={[
+                      { header: "Page", render: (row) => row.page },
+                      { header: "Clicks", render: (row) => formatNumber(row.clicks) },
+                      { header: "Impressions", render: (row) => formatNumber(row.impressions) },
+                    ]}
+                  />
+                </div>
+                <div>
+                  <SubHeading eyebrow="Google Search" title="Countries" />
+                  <DataTable<(typeof report.googleSearch.countries)[number]>
+                    keyFn={(row) => row.country}
+                    rows={report.googleSearch.countries}
+                    columns={[
+                      { header: "Country", render: (row) => row.country },
+                      { header: "Clicks", render: (row) => formatNumber(row.clicks) },
+                      { header: "Impressions", render: (row) => formatNumber(row.impressions) },
+                    ]}
+                  />
+                </div>
+                <div>
+                  <SubHeading eyebrow="Google Search" title="Devices" />
+                  <DataTable<(typeof report.googleSearch.devices)[number]>
+                    keyFn={(row) => row.device}
+                    rows={report.googleSearch.devices}
+                    columns={[
+                      { header: "Device", render: (row) => row.device },
+                      { header: "Clicks", render: (row) => formatNumber(row.clicks) },
+                      { header: "Impressions", render: (row) => formatNumber(row.impressions) },
+                    ]}
+                  />
+                </div>
+              </div>
+              <p className="mt-4 text-xs leading-5 text-stone-600">{report.googleSearch.note}</p>
+            </div>
+
+            <div className="mt-8 rounded-[1.5rem] bg-[#EED8B2] p-5 text-[#123C39] shadow-inner md:p-7">
+              <SubHeading eyebrow="Technical SEO" title="Site health" note={`As of ${new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(new Date(`${report.seoTechnical.asOf}T12:00:00Z`))}`} />
+              <DataTable<(typeof report.seoTechnical.indexing)[number]>
+                keyFn={(row) => row.measure}
+                rows={report.seoTechnical.indexing}
+                columns={[
+                  { header: "Measure", render: (row) => row.measure },
+                  { header: "Value", render: (row) => formatNumber(row.value) },
+                  { header: "Status", render: (row) => row.status },
+                  { header: "Interpretation", render: (row) => row.interpretation },
+                  { header: "Action", render: (row) => row.action },
+                ]}
+              />
+
+              <SubHeading eyebrow="Technical SEO" title="Not indexed" />
+              <DataTable<(typeof report.seoTechnical.notIndexed)[number]>
+                keyFn={(row) => row.url}
+                rows={report.seoTechnical.notIndexed}
+                columns={[
+                  { header: "URL", render: (row) => row.url },
+                  { header: "Reason", render: (row) => row.reason },
+                  { header: "Assessment", render: (row) => row.assessment },
+                  { header: "Treatment", render: (row) => row.treatment },
+                  { header: "Priority", render: (row) => row.priority },
+                ]}
+              />
+
+              <SubHeading eyebrow="Technical SEO" title="PageSpeed (lab data)" />
+              <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {report.seoTechnical.pageSpeed.map((metric) => (
+                  <div key={metric.metric} className="rounded-2xl border border-[#DDB765]/60 bg-[#FFF3DF] px-4 py-3 shadow shadow-[#1C5A50]/10">
+                    <p className="text-xs font-bold uppercase tracking-[0.15em] text-[#9A622A]">{metric.metric}</p>
+                    <p className="mt-1 text-2xl font-bold text-[#123C39]">{metric.value}{metric.unit === "score" ? "" : ` ${metric.unit === "seconds" ? "s" : metric.unit === "milliseconds" ? "ms" : metric.unit}`}</p>
+                    <p className="mt-2 text-xs leading-5 text-stone-600">{metric.context}</p>
+                  </div>
+                ))}
+              </div>
+
+              <SubHeading eyebrow="Technical SEO" title="Structured data" />
+              <DataTable<(typeof report.seoTechnical.structuredData)[number]>
+                keyFn={(row) => row.area}
+                rows={report.seoTechnical.structuredData}
+                columns={[
+                  { header: "Area", render: (row) => row.area },
+                  { header: "Valid", render: (row) => formatNumber(row.valid) },
+                  { header: "Invalid/excluded", render: (row) => formatNumber(row.invalidOrExcluded) },
+                  { header: "Finding", render: (row) => row.finding },
+                  { header: "Action", render: (row) => row.action },
+                ]}
+              />
+
+              <SubHeading eyebrow="Technical SEO" title="Authority" />
+              <DataTable<(typeof report.seoTechnical.authority)[number]>
+                keyFn={(row) => row.measure}
+                rows={report.seoTechnical.authority}
+                columns={[
+                  { header: "Measure", render: (row) => row.measure },
+                  { header: "Count", render: (row) => formatNumber(row.count) },
+                  { header: "Breakdown", render: (row) => row.breakdown },
+                  { header: "Implication", render: (row) => row.implication },
+                  { header: "Action", render: (row) => row.action },
+                ]}
+              />
+              <p className="mt-4 text-xs leading-5 text-stone-600">{report.seoTechnical.note}</p>
+            </div>
+
+            <div className="mt-8 rounded-[1.5rem] bg-[#EED8B2] p-5 text-[#123C39] shadow-inner md:p-7">
+              <SubHeading eyebrow="Social" title="Platform overview" />
+              <DataTable<(typeof report.socialOverview.platforms)[number]>
+                keyFn={(row) => row.platform}
+                rows={report.socialOverview.platforms}
+                columns={[
+                  { header: "Platform", render: (row) => row.platform },
+                  { header: "Period", render: (row) => row.period },
+                  { header: "Views", render: (row) => formatNumber(row.views) },
+                  { header: "Viewers", render: (row) => formatCell(row.viewers) },
+                  { header: "Interactions", render: (row) => formatCell(row.interactions) },
+                  { header: "Followers", render: (row) => formatCell(row.followers) },
+                  { header: "Profile visits", render: (row) => formatCell(row.profileVisits) },
+                  { header: "Outbound clicks", render: (row) => formatCell(row.outboundClicks) },
+                  { header: "Website visitors", render: (row) => formatCell(row.websiteVisitors) },
+                ]}
+              />
+
+              <SubHeading eyebrow="Social" title="Channel diagnosis" />
+              <DataTable<(typeof report.socialOverview.diagnosis)[number]>
+                keyFn={(row) => row.channel}
+                rows={report.socialOverview.diagnosis}
+                columns={[
+                  { header: "Channel", render: (row) => row.channel },
+                  { header: "Strength", render: (row) => row.strength },
+                  { header: "Constraint", render: (row) => row.constraint },
+                  { header: "Next move", render: (row) => row.nextMove },
+                  { header: "Working KPI", render: (row) => row.workingKpi },
+                ]}
+              />
+              <p className="mt-4 text-xs leading-5 text-stone-600">{report.socialOverview.note}</p>
+            </div>
+
+            {platformEntries.map(({ key, label }) => {
+              const platform = report.platforms[key];
+              return (
+                <div key={key} className="mt-8 rounded-[1.5rem] bg-[#EED8B2] p-5 text-[#123C39] shadow-inner md:p-7">
+                  <SubHeading eyebrow="Social platform" title={`${label} · ${platform.handle}`} note={platform.period} />
+                  <DataTable<(typeof platform.metrics)[number]>
+                    keyFn={(row) => row.metric}
+                    rows={platform.metrics}
+                    columns={[
+                      { header: "Metric", render: (row) => row.metric },
+                      { header: "Value", render: (row) => row.value },
+                      { header: "Interpretation", render: (row) => row.interpretation },
+                      { header: "Action", render: (row) => row.action },
+                    ]}
+                  />
+
+                  {platform.topContent.length ? (
+                    <>
+                      <SubHeading eyebrow="Social platform" title="Top content" />
+                      <DataTable<(typeof platform.topContent)[number]>
+                        keyFn={(row) => `${row.rank}-${row.title}`}
+                        rows={platform.topContent}
+                        columns={[
+                          { header: "#", render: (row) => String(row.rank) },
+                          { header: "Title", render: (row) => row.title },
+                          { header: "Value", render: (row) => row.value },
+                          { header: "Extra", render: (row) => row.extra },
+                          { header: "Note", render: (row) => row.note },
+                        ]}
+                      />
+                    </>
+                  ) : null}
+
+                  {platform.discoverySources.length ? (
+                    <>
+                      <SubHeading eyebrow="Social platform" title="Discovery sources" />
+                      <DataTable<(typeof platform.discoverySources)[number]>
+                        keyFn={(row) => row.source}
+                        rows={platform.discoverySources}
+                        columns={[
+                          { header: "Source", render: (row) => row.source },
+                          { header: "Share", render: (row) => formatPercent(row.share) },
+                          { header: "Approx. views", render: (row) => formatNumber(row.approxViews) },
+                          { header: "Meaning", render: (row) => row.meaning },
+                          { header: "Action", render: (row) => row.action },
+                        ]}
+                      />
+                    </>
+                  ) : null}
+                  <p className="mt-4 text-xs leading-5 text-stone-600">{platform.note}</p>
+                </div>
+              );
+            })}
+
+            <div className="mt-8 rounded-[1.5rem] bg-[#EED8B2] p-5 text-[#123C39] shadow-inner md:p-7">
+              <SubHeading eyebrow="Measurement" title="Link clicks" />
+              <DataTable<(typeof report.measurementActions.linkClicks)[number]>
+                keyFn={(row) => row.linkKey}
+                rows={report.measurementActions.linkClicks}
+                columns={[
+                  { header: "Link key", render: (row) => row.linkKey },
+                  { header: "Clicks", render: (row) => formatNumber(row.clicks) },
+                  { header: "First click", render: (row) => row.firstClick },
+                  { header: "Last click", render: (row) => row.lastClick },
+                  { header: "Status", render: (row) => row.status },
+                  { header: "Interpretation", render: (row) => row.interpretation },
+                ]}
+              />
+
+              <SubHeading eyebrow="Measurement" title="Gaps to close" />
+              <DataTable<(typeof report.measurementActions.gaps)[number]>
+                keyFn={(row) => row.gap}
+                rows={report.measurementActions.gaps}
+                columns={[
+                  { header: "Gap", render: (row) => row.gap },
+                  { header: "Current state", render: (row) => row.currentState },
+                  { header: "Risk", render: (row) => row.risk },
+                  { header: "Fix", render: (row) => row.fix },
+                  { header: "Priority", render: (row) => row.priority },
+                  { header: "Owner", render: (row) => row.owner },
+                  { header: "Due", render: (row) => row.due },
+                ]}
+              />
+
+              <SubHeading eyebrow="Measurement" title="90-day delivery plan" />
+              <DataTable<(typeof report.measurementActions.deliveryPlan)[number]>
+                keyFn={(row) => `${row.priority}-${row.workstream}`}
+                rows={report.measurementActions.deliveryPlan}
+                columns={[
+                  { header: "Priority", render: (row) => row.priority },
+                  { header: "Workstream", render: (row) => row.workstream },
+                  { header: "Action", render: (row) => row.action },
+                  { header: "Baseline", render: (row) => row.baseline },
+                  { header: "30-day goal", render: (row) => row.goal30d },
+                  { header: "90-day goal", render: (row) => row.goal90d },
+                  { header: "Owner", render: (row) => row.owner },
+                  { header: "Timing", render: (row) => row.timing },
+                  { header: "Status", render: (row) => row.status },
+                ]}
+              />
+              <p className="mt-4 text-xs leading-5 text-stone-600">{report.measurementActions.note}</p>
+            </div>
+          </section>
+          ) : null}
         </>
       ) : null}
     </main>

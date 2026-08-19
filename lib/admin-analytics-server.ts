@@ -3,6 +3,7 @@ import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { attributionSources } from "./attribution";
 import { getSearchConsoleSummary } from "./google-search-console";
+import { analyticsReport } from "./analytics-report-data";
 import type {
   AdminAnalyticsResponse,
   AnalyticsParticipationMetric,
@@ -182,5 +183,6 @@ export async function loadAdminAnalytics(
     sources,
     participation,
     snapshot: await withLiveSearchConsole(getSnapshot()),
+    report: analyticsReport,
   };
 }
