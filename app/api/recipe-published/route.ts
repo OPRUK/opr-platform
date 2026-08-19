@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { publishedRecipeEmail, sendEmail } from "../../../lib/email";
+import { isAdminEmail } from "../../../lib/admin-emails";
 
-const adminEmail = "chaten@otherpeoplesrecipes.co.uk";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://otherpeoplesrecipes.co.uk";
 
 export async function POST(request: Request) {
@@ -17,7 +17,7 @@ export async function POST(request: Request) {
   );
   const { data } = await supabase.auth.getUser(token);
 
-  if (data.user?.email !== adminEmail) {
+  if (!isAdminEmail(data.user?.email)) {
     return Response.json({ error: "Not authorised" }, { status: 401 });
   }
 
