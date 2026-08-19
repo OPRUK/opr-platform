@@ -6,6 +6,7 @@ import { getSearchConsoleSummary } from "./google-search-console";
 import { getYouTubeSummary } from "./youtube";
 import { getInstagramSummary } from "./instagram";
 import { getTikTokSummary } from "./tiktok";
+import { getPinterestSummary } from "./pinterest";
 import { analyticsReport } from "./analytics-report-data";
 import type {
   AdminAnalyticsResponse,
@@ -150,6 +151,30 @@ async function withLiveTikTok(snapshot: AnalyticsSnapshot | null): Promise<Analy
   };
 }
 
+async function withLivePinterest(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
+  if (!snapshot) return snapshot;
+
+  const live = await getPinterestSummary();
+  if (!live) return snapshot;
+
+  return {
+    ...snapshot,
+    social: snapshot.social.map((platform) =>
+      platform.platform.toLowerCase() === "pinterest"
+        ? {
+            ...platform,
+            period: live.period,
+            exposureLabel: "Impressions",
+            exposures: live.impressions28d,
+            followers: live.followers,
+            outboundClicks: live.outboundClicks28d,
+            fetchedAt: live.fetchedAt,
+          }
+        : platform,
+    ),
+  };
+}
+
 async function loadParticipation(
   client: SupabaseClient,
   since30Days: string,
@@ -259,8 +284,10 @@ export async function loadAdminAnalytics(
     ).length,
     sources,
     participation,
-    snapshot: await withLiveTikTok(
-      await withLiveInstagram(await withLiveYouTube(await withLiveSearchConsole(getSnapshot()))),
+    snapshot: await withLivePinterest(
+      await withLiveTikTok(
+        await withLiveInstagram(await withLiveYouTube(await withLiveSearchConsole(getSnapshot()))),
+      ),
     ),
     report: analyticsReport,
   };
