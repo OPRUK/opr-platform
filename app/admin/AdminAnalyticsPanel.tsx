@@ -450,7 +450,7 @@ export default function AdminAnalyticsPanel({
               />
 
               <SubHeading eyebrow="Website" title="Audience" />
-              <div className="mt-4 grid gap-5 lg:grid-cols-3">
+              <div className="mt-4 grid gap-5">
                 <DataTable<(typeof report.website.audienceCountry)[number]>
                   keyFn={(row) => row.country}
                   rows={report.website.audienceCountry}
