@@ -507,7 +507,7 @@ export default function AdminAnalyticsPanel({
                 ]}
               />
 
-              <div className="mt-4 grid gap-5 lg:grid-cols-2">
+              <div className="mt-4 grid gap-5">
                 <div>
                   <SubHeading eyebrow="Google Search" title="Queries" />
                   <DataTable<(typeof report.googleSearch.queries)[number]>
