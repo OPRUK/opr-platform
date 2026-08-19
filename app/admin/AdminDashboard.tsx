@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 import type { AdminAnalyticsResponse } from "../../lib/admin-analytics-types";
+import { isAdminEmail } from "../../lib/admin-emails";
 import { featuredRecipes } from "../../lib/recipes";
 import { supabase } from "../../lib/supabase/client";
 import AdminAnalyticsPanel from "./AdminAnalyticsPanel";
@@ -66,8 +67,6 @@ type RecipeOfMonthResults = {
   totalVotes: number;
 };
 
-const allowedEmail = "chaten@otherpeoplesrecipes.co.uk";
-
 const statusStyle: Record<SubmissionStatus, string> = {
   new: "bg-[#EED8B2] text-[#6B431E]",
   reviewed: "bg-[#E8E2CF] text-[#123C39]",
@@ -80,7 +79,7 @@ export default function AdminDashboard({
   initialView?: "inbox" | "analytics";
 }) {
   const [session, setSession] = useState<Session | null>(null);
-  const [email, setEmail] = useState(allowedEmail);
+  const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [communityCooks, setCommunityCooks] = useState<CommunityCook[]>([]);
@@ -130,7 +129,7 @@ export default function AdminDashboard({
   }
 
   useEffect(() => {
-    if (!session || session.user.email !== allowedEmail) {
+    if (!session || !isAdminEmail(session.user.email)) {
       return;
     }
 
@@ -155,7 +154,7 @@ export default function AdminDashboard({
   const mfaPending = Boolean(aal && aal.next === "aal2" && aal.current !== "aal2");
 
   useEffect(() => {
-    if (!session || session.user.email !== allowedEmail) {
+    if (!session || !isAdminEmail(session.user.email)) {
       return;
     }
     if (checkingAal || mfaPending || !totpFactorId) {
@@ -244,13 +243,14 @@ export default function AdminDashboard({
     event.preventDefault();
     setMessage("");
 
-    if (email.trim().toLowerCase() !== allowedEmail) {
+    const normalisedEmail = email.trim().toLowerCase();
+    if (!isAdminEmail(normalisedEmail)) {
       setMessage("This dashboard is only available to the OPR team account.");
       return;
     }
 
     const { error } = await supabase.auth.signInWithOtp({
-      email: allowedEmail,
+      email: normalisedEmail,
       options: {
         emailRedirectTo: `${window.location.origin}${initialView === "analytics" ? "/admin/analytics" : "/admin"}`,
       },
@@ -600,7 +600,7 @@ export default function AdminDashboard({
     );
   }
 
-  if (session.user.email !== allowedEmail) {
+  if (!isAdminEmail(session.user.email)) {
     return (
       <main id="main-content" tabIndex={-1} className="flex min-h-screen items-center justify-center bg-[#EED8B2] px-6 text-center text-[#123C39]">
         <div className="max-w-lg rounded-3xl bg-[#FFF3DF] p-10 shadow-xl shadow-[#1C5A50]/15">

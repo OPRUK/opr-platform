@@ -1,9 +1,8 @@
 import "server-only";
 import { createClient } from "@supabase/supabase-js";
 import { decodeAal, extractBearerToken } from "./admin-auth-token";
+import { isAdminEmail } from "./admin-emails";
 import { getSupabaseAdmin } from "./supabase/admin";
-
-const adminEmail = "chaten@otherpeoplesrecipes.co.uk";
 
 export async function requireAdmin(request: Request) {
   const token = extractBearerToken(request.headers.get("authorization"));
@@ -21,7 +20,7 @@ export async function requireAdmin(request: Request) {
     auth: { persistSession: false, autoRefreshToken: false },
   });
   const { data: authData, error: authError } = await authClient.auth.getUser(token);
-  if (authError || authData.user?.email?.toLowerCase() !== adminEmail) {
+  if (authError || !isAdminEmail(authData.user?.email)) {
     return { client: null, error: "This secure sign-in is not authorised for the OPR inbox. Please sign out and use the OPR team email." };
   }
 
