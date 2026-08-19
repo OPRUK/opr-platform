@@ -24,6 +24,9 @@ export type AnalyticsSnapshotPlatform = {
   websiteVisitors: number | null;
 };
 
+import type { AnalyticsReport } from "./analytics-report-types";
+export type { AnalyticsReport } from "./analytics-report-types";
+
 export type AnalyticsSnapshot = {
   capturedAt: string;
   title: string;
@@ -63,4 +66,8 @@ export type AdminAnalyticsResponse = {
   sources: AnalyticsSourceSummary[];
   participation: AnalyticsParticipationMetric[];
   snapshot: AnalyticsSnapshot | null;
+  // The full manually-compiled SEO/social report (see lib/analytics-report-data.ts).
+  // Its Google Search figures are historical, not live — the live numbers stay
+  // in snapshot.google above so the two never contradict each other on screen.
+  report: AnalyticsReport;
 };
