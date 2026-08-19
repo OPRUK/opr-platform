@@ -5,6 +5,7 @@ import { attributionSources } from "./attribution";
 import { getSearchConsoleSummary } from "./google-search-console";
 import { getYouTubeSummary } from "./youtube";
 import { getInstagramSummary } from "./instagram";
+import { getTikTokSummary } from "./tiktok";
 import { analyticsReport } from "./analytics-report-data";
 import type {
   AdminAnalyticsResponse,
@@ -126,6 +127,29 @@ async function withLiveInstagram(snapshot: AnalyticsSnapshot | null): Promise<An
   };
 }
 
+async function withLiveTikTok(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
+  if (!snapshot) return snapshot;
+
+  const live = await getTikTokSummary();
+  if (!live) return snapshot;
+
+  return {
+    ...snapshot,
+    social: snapshot.social.map((platform) =>
+      platform.platform.toLowerCase() === "tiktok"
+        ? {
+            ...platform,
+            period: live.period,
+            exposureLabel: "Views",
+            exposures: live.views28d,
+            followers: live.followers,
+            fetchedAt: live.fetchedAt,
+          }
+        : platform,
+    ),
+  };
+}
+
 async function loadParticipation(
   client: SupabaseClient,
   since30Days: string,
@@ -235,7 +259,9 @@ export async function loadAdminAnalytics(
     ).length,
     sources,
     participation,
-    snapshot: await withLiveInstagram(await withLiveYouTube(await withLiveSearchConsole(getSnapshot()))),
+    snapshot: await withLiveTikTok(
+      await withLiveInstagram(await withLiveYouTube(await withLiveSearchConsole(getSnapshot()))),
+    ),
     report: analyticsReport,
   };
 }
