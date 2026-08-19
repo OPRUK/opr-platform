@@ -316,8 +316,18 @@ export default function AdminAnalyticsPanel({
                     <tbody>
                       {snapshot.social.map((platform) => (
                         <tr key={platform.platform} className="border-b border-[#DDB765]/40 last:border-0">
-                          <th scope="row" className="px-6 py-4 font-semibold">{platform.platform}</th>
-                          <td className="px-4 py-4 text-stone-600">{platform.period}</td>
+                          <th scope="row" className="px-6 py-4 font-semibold">
+                            {platform.platform}
+                            {platform.fetchedAt ? (
+                              <span className="ml-2 rounded-full bg-[#1C5A50] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white">Live</span>
+                            ) : null}
+                          </th>
+                          <td className="px-4 py-4 text-stone-600">
+                            {platform.period}
+                            {platform.fetchedAt ? (
+                              <span className="block text-xs text-stone-500">Refreshed {new Intl.DateTimeFormat("en-GB", { timeStyle: "short" }).format(new Date(platform.fetchedAt))}</span>
+                            ) : null}
+                          </td>
                           <td className="px-4 py-4"><span className="font-semibold">{formatNumber(platform.exposures)}</span><span className="block text-xs text-stone-500">{platform.exposureLabel}</span></td>
                           <td className="px-4 py-4">{formatNumber(platform.interactions)}</td>
                           <td className="px-4 py-4">{formatNumber(platform.followers)}</td>

@@ -22,6 +22,10 @@ export type AnalyticsSnapshotPlatform = {
   profileVisits: number | null;
   outboundClicks: number | null;
   websiteVisitors: number | null;
+  // Set only when these figures came from a live API call this request
+  // (currently only the YouTube row can be live — see lib/youtube.ts).
+  // Null means it's still the manually-pasted OPR_ANALYTICS_SNAPSHOT baseline.
+  fetchedAt: string | null;
 };
 
 import type { AnalyticsReport } from "./analytics-report-types";

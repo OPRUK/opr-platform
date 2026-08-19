@@ -3,6 +3,7 @@ import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { attributionSources } from "./attribution";
 import { getSearchConsoleSummary } from "./google-search-console";
+import { getYouTubeSummary } from "./youtube";
 import { analyticsReport } from "./analytics-report-data";
 import type {
   AdminAnalyticsResponse,
@@ -43,10 +44,14 @@ function getSnapshot(): AnalyticsSnapshot | null {
     ) {
       throw new Error("The analytics snapshot is incomplete.");
     }
-    // The stored JSON predates the fetchedAt field, so it's never present
-    // on the raw manual snapshot — normalise it explicitly rather than
-    // leaving it undefined, which the AnalyticsSnapshot type doesn't allow.
-    return { ...snapshot, google: { ...snapshot.google, fetchedAt: null } } as AnalyticsSnapshot;
+    // The stored JSON predates the fetchedAt fields, so they're never present
+    // on the raw manual snapshot — normalise them explicitly rather than
+    // leaving them undefined, which the AnalyticsSnapshot type doesn't allow.
+    return {
+      ...snapshot,
+      google: { ...snapshot.google, fetchedAt: null },
+      social: snapshot.social.map((platform) => ({ ...platform, fetchedAt: null })),
+    } as AnalyticsSnapshot;
   } catch (error) {
     console.error("OPR analytics snapshot could not be read", error);
     return null;
@@ -70,6 +75,29 @@ async function withLiveSearchConsole(snapshot: AnalyticsSnapshot | null): Promis
       averagePosition: live.averagePosition,
       fetchedAt: live.fetchedAt,
     },
+  };
+}
+
+async function withLiveYouTube(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
+  if (!snapshot) return snapshot;
+
+  const live = await getYouTubeSummary();
+  if (!live) return snapshot;
+
+  return {
+    ...snapshot,
+    social: snapshot.social.map((platform) =>
+      platform.platform.toLowerCase() === "youtube"
+        ? {
+            ...platform,
+            period: live.period,
+            exposureLabel: "Views",
+            exposures: live.views28d,
+            followers: live.subscribers,
+            fetchedAt: live.fetchedAt,
+          }
+        : platform,
+    ),
   };
 }
 
@@ -182,7 +210,7 @@ export async function loadAdminAnalytics(
     ).length,
     sources,
     participation,
-    snapshot: await withLiveSearchConsole(getSnapshot()),
+    snapshot: await withLiveYouTube(await withLiveSearchConsole(getSnapshot())),
     report: analyticsReport,
   };
 }
