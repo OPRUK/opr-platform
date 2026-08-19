@@ -40,6 +40,7 @@ export type AnalyticsSnapshot = {
     pageViews: number;
     bounceRate: number;
     pagesPerVisitor: number;
+    fetchedAt: string | null;
   };
   google: {
     period: string;

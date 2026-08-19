@@ -124,6 +124,7 @@ export const analyticsReport: AnalyticsReport = {
       { os: "Linux", share: 0.03, visitors: 9 },
     ],
     note: "Action-event rates divide events by visitors; they are not unique-user conversion rates and a person may complete more than one action. Vercel Hobby does not expose UTM reports or custom events.",
+    fetchedAt: null,
   },
 
   googleSearch: {
