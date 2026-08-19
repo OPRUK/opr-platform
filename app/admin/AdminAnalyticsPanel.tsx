@@ -267,12 +267,22 @@ export default function AdminAnalyticsPanel({
                     <h2 id="baseline-heading" className="mt-3 text-3xl font-bold">Website and Google visibility</h2>
                   </div>
                   <p className="text-sm text-stone-600">
-                    Website visitors: manual snapshot—captured {new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(new Date(`${snapshot.capturedAt}T12:00:00Z`))}, not refreshed by the button above
+                    {snapshot.website.fetchedAt
+                      ? `Website visitors: live from Vercel Web Analytics, refreshed ${new Intl.DateTimeFormat("en-GB", { timeStyle: "short" }).format(new Date(snapshot.website.fetchedAt))}`
+                      : `Website visitors: manual snapshot—captured ${new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(new Date(`${snapshot.capturedAt}T12:00:00Z`))}, not refreshed by the button above`}
                   </p>
                 </div>
                 <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                  <MetricCard label="Website visitors" value={formatNumber(snapshot.website.visitors)} note={snapshot.website.period} />
-                  <MetricCard label="Page views" value={formatNumber(snapshot.website.pageViews)} note={`${formatNumber(snapshot.website.pagesPerVisitor, 2)} pages per visitor`} />
+                  <MetricCard
+                    label="Website visitors"
+                    value={formatNumber(snapshot.website.visitors)}
+                    note={snapshot.website.fetchedAt ? `${snapshot.website.period} · Live` : snapshot.website.period}
+                  />
+                  <MetricCard
+                    label="Page views"
+                    value={formatNumber(snapshot.website.pageViews)}
+                    note={`${formatNumber(snapshot.website.pagesPerVisitor, 2)} pages per visitor${snapshot.website.fetchedAt ? " · Live" : ""}`}
+                  />
                   <MetricCard
                     label="Google clicks"
                     value={formatNumber(snapshot.google.clicks)}
@@ -412,7 +422,15 @@ export default function AdminAnalyticsPanel({
             </div>
 
             <div className="mt-8 rounded-[1.5rem] bg-[#EED8B2] p-5 text-[#123C39] shadow-inner md:p-7">
-              <SubHeading eyebrow="Website" title="Traffic detail" note={report.website.period} />
+              <SubHeading
+                eyebrow="Website"
+                title="Traffic detail"
+                note={
+                  report.website.fetchedAt
+                    ? `${report.website.period} · Live, refreshed ${new Intl.DateTimeFormat("en-GB", { timeStyle: "short" }).format(new Date(report.website.fetchedAt))}`
+                    : report.website.period
+                }
+              />
               <DataTable<(typeof report.website.core)[number]>
                 keyFn={(row) => row.metric}
                 rows={report.website.core}
@@ -449,7 +467,7 @@ export default function AdminAnalyticsPanel({
                 ]}
               />
 
-              <SubHeading eyebrow="Website" title="Audience" />
+              <SubHeading eyebrow="Website" title="Audience" note={report.website.fetchedAt ? "Live" : undefined} />
               <div className="mt-4 grid gap-5">
                 <DataTable<(typeof report.website.audienceCountry)[number]>
                   keyFn={(row) => row.country}

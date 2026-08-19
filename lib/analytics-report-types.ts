@@ -52,6 +52,7 @@ export type WebsiteTrafficReport = {
   audienceDevice: Array<{ device: string; share: number }>;
   audienceOS: Array<{ os: string; share: number; visitors: number }>;
   note: string;
+  fetchedAt: string | null;
 };
 
 export type GoogleSearchReport = {

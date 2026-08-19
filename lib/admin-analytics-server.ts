@@ -7,6 +7,7 @@ import { getYouTubeSummary } from "./youtube";
 import { getInstagramSummary } from "./instagram";
 import { getTikTokSummary } from "./tiktok";
 import { getPinterestSummary } from "./pinterest";
+import { getVercelAnalyticsSummary } from "./vercel-analytics";
 import { analyticsReport } from "./analytics-report-data";
 import type {
   AdminAnalyticsResponse,
@@ -14,6 +15,7 @@ import type {
   AnalyticsSnapshot,
   AnalyticsSourceSummary,
 } from "./admin-analytics-types";
+import type { AnalyticsReport } from "./analytics-report-types";
 
 const conversionEvents = new Set([
   "join_table_success",
@@ -52,6 +54,7 @@ function getSnapshot(): AnalyticsSnapshot | null {
     // leaving them undefined, which the AnalyticsSnapshot type doesn't allow.
     return {
       ...snapshot,
+      website: { ...snapshot.website, fetchedAt: null },
       google: { ...snapshot.google, fetchedAt: null },
       social: snapshot.social.map((platform) => ({ ...platform, fetchedAt: null })),
     } as AnalyticsSnapshot;
@@ -175,6 +178,56 @@ async function withLivePinterest(snapshot: AnalyticsSnapshot | null): Promise<An
   };
 }
 
+async function withLiveWebsiteSnapshot(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
+  if (!snapshot) return snapshot;
+
+  const live = await getVercelAnalyticsSummary();
+  if (!live) return snapshot;
+
+  return {
+    ...snapshot,
+    website: {
+      ...snapshot.website,
+      period: live.period,
+      visitors: live.visitors,
+      pageViews: live.pageviews,
+      pagesPerVisitor: live.visitors > 0 ? live.pageviews / live.visitors : 0,
+      fetchedAt: live.fetchedAt,
+    },
+  };
+}
+
+async function withLiveWebsiteReport(report: AnalyticsReport): Promise<AnalyticsReport> {
+  const live = await getVercelAnalyticsSummary();
+  if (!live) return report;
+
+  const pagesPerVisitor = live.visitors > 0 ? live.pageviews / live.visitors : 0;
+
+  return {
+    ...report,
+    website: {
+      ...report.website,
+      period: live.period,
+      core: report.website.core.map((row) => {
+        if (row.metric === "Visitors") return { ...row, last30Days: live.visitors };
+        if (row.metric === "Page views") return { ...row, last30Days: live.pageviews };
+        if (row.metric === "Pages per visitor") return { ...row, last30Days: Number(pagesPerVisitor.toFixed(2)) };
+        return row;
+      }),
+      audienceCountry: live.audienceCountry.length
+        ? live.audienceCountry.map((row) => ({ country: row.label, share: row.share, visitors: row.visitors }))
+        : report.website.audienceCountry,
+      audienceDevice: live.audienceDevice.length
+        ? live.audienceDevice.map((row) => ({ device: row.label, share: row.share }))
+        : report.website.audienceDevice,
+      audienceOS: live.audienceOS.length
+        ? live.audienceOS.map((row) => ({ os: row.label, share: row.share, visitors: row.visitors }))
+        : report.website.audienceOS,
+      fetchedAt: live.fetchedAt,
+    },
+  };
+}
+
 async function loadParticipation(
   client: SupabaseClient,
   since30Days: string,
@@ -284,11 +337,13 @@ export async function loadAdminAnalytics(
     ).length,
     sources,
     participation,
-    snapshot: await withLivePinterest(
-      await withLiveTikTok(
-        await withLiveInstagram(await withLiveYouTube(await withLiveSearchConsole(getSnapshot()))),
+    snapshot: await withLiveWebsiteSnapshot(
+      await withLivePinterest(
+        await withLiveTikTok(
+          await withLiveInstagram(await withLiveYouTube(await withLiveSearchConsole(getSnapshot()))),
+        ),
       ),
     ),
-    report: analyticsReport,
+    report: await withLiveWebsiteReport(analyticsReport),
   };
 }
