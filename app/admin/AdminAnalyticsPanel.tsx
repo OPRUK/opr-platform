@@ -8,7 +8,9 @@ type AdminAnalyticsPanelProps = {
   loading: boolean;
   message: string;
   exporting: boolean;
+  refreshing: boolean;
   onDownload: () => void;
+  onRefresh: () => void;
   onOpenSecurity: () => void;
   onSignOut: () => void;
 };
@@ -48,7 +50,9 @@ export default function AdminAnalyticsPanel({
   loading,
   message,
   exporting,
+  refreshing,
   onDownload,
+  onRefresh,
   onOpenSecurity,
   onSignOut,
 }: AdminAnalyticsPanelProps) {
@@ -80,6 +84,14 @@ export default function AdminAnalyticsPanel({
           </Link>
           <button type="button" onClick={onOpenSecurity} className="text-sm font-medium underline underline-offset-4">
             Security
+          </button>
+          <button
+            type="button"
+            onClick={onRefresh}
+            disabled={refreshing || loading}
+            className="rounded-full border border-[#123C39] px-5 py-2.5 text-sm font-medium transition hover:bg-[#123C39] hover:text-white disabled:cursor-wait disabled:opacity-60"
+          >
+            {refreshing ? "Refreshing…" : "Refresh dashboard"}
           </button>
           <button
             type="button"
@@ -121,6 +133,9 @@ export default function AdminAnalyticsPanel({
               </div>
               <p className="max-w-xl text-sm leading-6 text-stone-700">
                 Last {analytics.windowDays} days. Privacy-safe event counts only—no names, email addresses, IP addresses or visitor identifiers.
+                <span className="mt-1 block font-medium text-[#123C39]">
+                  Last refreshed {new Intl.DateTimeFormat("en-GB", { dateStyle: "medium", timeStyle: "short" }).format(new Date(analytics.generatedAt))}
+                </span>
               </p>
             </div>
 
@@ -192,13 +207,27 @@ export default function AdminAnalyticsPanel({
                     <p className="text-sm font-bold uppercase tracking-[0.3em] text-[#9A622A]">Management baseline</p>
                     <h2 id="baseline-heading" className="mt-3 text-3xl font-bold">Website and Google visibility</h2>
                   </div>
-                  <p className="text-sm text-stone-600">Captured {new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(new Date(`${snapshot.capturedAt}T12:00:00Z`))}</p>
+                  <p className="text-sm text-stone-600">
+                    Website visitors: manual snapshot—captured {new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(new Date(`${snapshot.capturedAt}T12:00:00Z`))}, not refreshed by the button above
+                  </p>
                 </div>
                 <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                   <MetricCard label="Website visitors" value={formatNumber(snapshot.website.visitors)} note={snapshot.website.period} />
                   <MetricCard label="Page views" value={formatNumber(snapshot.website.pageViews)} note={`${formatNumber(snapshot.website.pagesPerVisitor, 2)} pages per visitor`} />
-                  <MetricCard label="Google clicks" value={formatNumber(snapshot.google.clicks)} note={`${formatNumber(snapshot.google.impressions)} search impressions`} />
-                  <MetricCard label="Google CTR" value={formatPercent(snapshot.google.ctr)} note={`Average position ${formatNumber(snapshot.google.averagePosition, 1)}`} />
+                  <MetricCard
+                    label="Google clicks"
+                    value={formatNumber(snapshot.google.clicks)}
+                    note={
+                      snapshot.google.fetchedAt
+                        ? `${formatNumber(snapshot.google.impressions)} impressions · Live, refreshed ${new Intl.DateTimeFormat("en-GB", { timeStyle: "short" }).format(new Date(snapshot.google.fetchedAt))}`
+                        : `${formatNumber(snapshot.google.impressions)} search impressions · Manual snapshot`
+                    }
+                  />
+                  <MetricCard
+                    label="Google CTR"
+                    value={formatPercent(snapshot.google.ctr)}
+                    note={`Average position ${formatNumber(snapshot.google.averagePosition, 1)} · ${snapshot.google.fetchedAt ? "Live from Search Console" : "Manual snapshot"}`}
+                  />
                 </div>
               </section>
 
@@ -265,7 +294,7 @@ export default function AdminAnalyticsPanel({
           )}
 
           <p className="mx-auto mt-10 max-w-7xl text-sm leading-6 text-stone-600">
-            Dashboard generated {new Intl.DateTimeFormat("en-GB", { dateStyle: "medium", timeStyle: "short" }).format(new Date(analytics.generatedAt))}. Native social figures are snapshots and should be refreshed at month-end; live first-party figures update whenever this page is opened.
+            Dashboard generated {new Intl.DateTimeFormat("en-GB", { dateStyle: "medium", timeStyle: "short" }).format(new Date(analytics.generatedAt))}. The figures above update whenever this page opens, or any time you click Refresh dashboard. The website, Google and social baseline further down is a manual snapshot updated separately and does not change when you refresh.
           </p>
         </>
       ) : null}

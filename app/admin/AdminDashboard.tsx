@@ -95,6 +95,7 @@ export default function AdminDashboard({
   const [showSecurityPanel, setShowSecurityPanel] = useState(false);
   const [exportingFoundingTable, setExportingFoundingTable] = useState(false);
   const [exportingAnalytics, setExportingAnalytics] = useState(false);
+  const [refreshingAnalytics, setRefreshingAnalytics] = useState(false);
 
   useEffect(() => {
     async function checkSession() {
@@ -319,6 +320,23 @@ export default function AdminDashboard({
       setMessage("The analytics spreadsheet could not be downloaded.");
     } finally {
       setExportingAnalytics(false);
+    }
+  }
+
+  async function refreshAnalytics() {
+    setRefreshingAnalytics(true);
+    setMessage("");
+
+    try {
+      const response = await adminRequest("/api/admin/analytics");
+      if (response.ok) {
+        setAttributionSummary((await response.json()) as AdminAnalyticsResponse);
+      } else {
+        const payload = await response.json().catch(() => null);
+        setMessage(payload?.error ?? "The analytics dashboard could not be refreshed just now.");
+      }
+    } finally {
+      setRefreshingAnalytics(false);
     }
   }
 
@@ -640,7 +658,9 @@ export default function AdminDashboard({
         loading={loading}
         message={message}
         exporting={exportingAnalytics}
+        refreshing={refreshingAnalytics}
         onDownload={() => void downloadAnalytics()}
+        onRefresh={() => void refreshAnalytics()}
         onOpenSecurity={() => setShowSecurityPanel(true)}
         onSignOut={() => void supabase.auth.signOut()}
       />

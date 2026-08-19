@@ -2,6 +2,7 @@ import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { attributionSources } from "./attribution";
+import { getSearchConsoleSummary } from "./google-search-console";
 import type {
   AdminAnalyticsResponse,
   AnalyticsParticipationMetric,
@@ -41,11 +42,34 @@ function getSnapshot(): AnalyticsSnapshot | null {
     ) {
       throw new Error("The analytics snapshot is incomplete.");
     }
-    return snapshot as AnalyticsSnapshot;
+    // The stored JSON predates the fetchedAt field, so it's never present
+    // on the raw manual snapshot — normalise it explicitly rather than
+    // leaving it undefined, which the AnalyticsSnapshot type doesn't allow.
+    return { ...snapshot, google: { ...snapshot.google, fetchedAt: null } } as AnalyticsSnapshot;
   } catch (error) {
     console.error("OPR analytics snapshot could not be read", error);
     return null;
   }
+}
+
+async function withLiveSearchConsole(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
+  if (!snapshot) return snapshot;
+
+  const live = await getSearchConsoleSummary();
+  if (!live) return snapshot;
+
+  return {
+    ...snapshot,
+    google: {
+      ...snapshot.google,
+      period: live.period,
+      clicks: live.clicks,
+      impressions: live.impressions,
+      ctr: live.ctr,
+      averagePosition: live.averagePosition,
+      fetchedAt: live.fetchedAt,
+    },
+  };
 }
 
 async function loadParticipation(
@@ -157,6 +181,6 @@ export async function loadAdminAnalytics(
     ).length,
     sources,
     participation,
-    snapshot: getSnapshot(),
+    snapshot: await withLiveSearchConsole(getSnapshot()),
   };
 }

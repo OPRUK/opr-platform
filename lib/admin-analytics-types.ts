@@ -41,6 +41,10 @@ export type AnalyticsSnapshot = {
     ctr: number;
     averagePosition: number;
     indexedPages: number;
+    // Set only when these figures came from a live Search Console API call
+    // this request (see lib/google-search-console.ts). Null means they're
+    // still the manually-pasted OPR_ANALYTICS_SNAPSHOT baseline.
+    fetchedAt: string | null;
   };
   social: AnalyticsSnapshotPlatform[];
   recommendations: Array<{
