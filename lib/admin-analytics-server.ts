@@ -7,6 +7,7 @@ import { getYouTubeSummary } from "./youtube";
 import { getInstagramSummary } from "./instagram";
 import { getTikTokSummary } from "./tiktok";
 import { getPinterestSummary } from "./pinterest";
+import { getLinkedInSummary } from "./linkedin";
 import { getVercelAnalyticsSummary } from "./vercel-analytics";
 import { analyticsReport } from "./analytics-report-data";
 import type {
@@ -178,6 +179,37 @@ async function withLivePinterest(snapshot: AnalyticsSnapshot | null): Promise<An
   };
 }
 
+async function withLiveLinkedIn(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
+  if (!snapshot) return snapshot;
+
+  const live = await getLinkedInSummary();
+  if (!live) return snapshot;
+
+  const hasLinkedIn = snapshot.social.some((platform) => platform.platform.toLowerCase() === "linkedin");
+
+  const linkedInRow = {
+    platform: "LinkedIn",
+    period: live.period,
+    exposureLabel: "Impressions",
+    exposures: live.impressions28d,
+    interactions: null,
+    followers: live.followers,
+    profileVisits: null,
+    outboundClicks: live.clicks28d,
+    websiteVisitors: null,
+    fetchedAt: live.fetchedAt,
+  };
+
+  return {
+    ...snapshot,
+    social: hasLinkedIn
+      ? snapshot.social.map((platform) =>
+          platform.platform.toLowerCase() === "linkedin" ? { ...platform, ...linkedInRow } : platform,
+        )
+      : [...snapshot.social, linkedInRow],
+  };
+}
+
 async function withLiveWebsiteSnapshot(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
   if (!snapshot) return snapshot;
 
@@ -337,10 +369,12 @@ export async function loadAdminAnalytics(
     ).length,
     sources,
     participation,
-    snapshot: await withLiveWebsiteSnapshot(
-      await withLivePinterest(
-        await withLiveTikTok(
-          await withLiveInstagram(await withLiveYouTube(await withLiveSearchConsole(getSnapshot()))),
+    snapshot: await withLiveLinkedIn(
+      await withLiveWebsiteSnapshot(
+        await withLivePinterest(
+          await withLiveTikTok(
+            await withLiveInstagram(await withLiveYouTube(await withLiveSearchConsole(getSnapshot()))),
+          ),
         ),
       ),
     ),
