@@ -23,7 +23,7 @@ export default function FilmsPage() {
       name: film.title,
       description: film.title + ", from the OPR Film Collection: short films about food, family and the recipes we choose to pass on.",
       thumbnailUrl: [absoluteUrl(film.poster ?? "/images/recipes/barbaras-beef-casserole-wide.webp")],
-      uploadDate: "2026-08-01",
+      uploadDate: film.uploadDate ?? "2026-08-01",
       contentUrl: absoluteUrl(film.video),
       embedUrl: absoluteUrl("/films") + "#" + encodeURIComponent(film.title),
       transcript: film.transcript,

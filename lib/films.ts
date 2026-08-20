@@ -11,6 +11,7 @@ export type Film = {
   captions?: string;
   transcript?: string;
   recipeSlug?: string;
+  uploadDate?: string;
 };
 
 function film(
@@ -38,6 +39,24 @@ function film(
 }
 
 export const films: Film[] = [
+  {
+    title: "Dave & Rubble | The Longest Two Seconds",
+    video: "/videos/opr-dave-and-rubble-longest-two-seconds.mp4",
+    poster: "/images/opr-dave-and-rubble-longest-two-seconds-poster.jpg",
+    transcript:
+      "Visual description: Dave sets a kitchen timer while Rubble watches closely. They exchange a joke as the final seconds count down before the OPR social card appears.",
+    recipeSlug: "daves-butter-chicken",
+    uploadDate: "2026-08-20",
+  },
+  {
+    title: "Dave & Rubble | Butter Chicken Recipe",
+    video: "/videos/opr-dave-and-rubble-butter-chicken-recipe.mp4",
+    poster: "/images/opr-dave-and-rubble-butter-chicken-recipe-poster.jpg",
+    transcript:
+      "Visual description: Dave stirs a steaming pan of butter chicken while Rubble watches beside the hob. They exchange a joke about the recipe before the OPR social card appears.",
+    recipeSlug: "daves-butter-chicken",
+    uploadDate: "2026-08-20",
+  },
   {
     title: "Dave & Rubble | The Secret Ingredient",
     video: "/videos/opr-dave-and-rubble-secret-ingredient.mp4",
