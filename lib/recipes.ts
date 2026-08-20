@@ -38,6 +38,9 @@ export type FeaturedRecipe = {
   /** ISO 8601 date, e.g. "2026-01-15". Omit if unknown. */
   datePublished?: string;
   contributorName?: string;
+  /** Optional consented portrait of the contributor or family behind the recipe. */
+  contributorImage?: string;
+  contributorImageAlt?: string;
   /** Optional practical tips and ingredient alternatives from the contributor. */
   notes?: { title: string; text: string }[];
   /** Answers derived only from the recipe's own method and contributor notes. */
@@ -786,7 +789,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
     title: "Gautam & Shobha's Tandoori Aloo Nazakat",
     place: "New Delhi, India",
     story:
-      "When Gautam Arora decided he wanted to open his first restaurant, he turned to his mum, Shobha. She taught him how to make Tandoori Aloo Nazakat: potato barrels filled with spiced paneer, coated in tandoori marinade and roasted until smoky and charred. The recipe became part of the moment a family lesson turned into the first step of his professional story.",
+      "When Gautam Arora was preparing to open his first restaurant, Martabaan Tales, he turned to his mum, Shobha. She taught him how to make Tandoori Aloo Nazakat: potato barrels filled with spiced paneer, coated in tandoori marinade and roasted until smoky and golden. The recipe became part of the moment a family lesson turned into the first step of his professional story.",
     ingredients: [
       "600g medium potatoes, evenly sized",
       "150g fresh paneer, crumbled",
@@ -821,6 +824,8 @@ export const featuredRecipes: FeaturedRecipe[] = [
     cuisine: "Indian",
     datePublished: "2026-08-20",
     contributorName: "Gautam Arora & Shobha",
+    contributorImage: "/images/recipes/gautam-shobha-portrait.webp",
+    contributorImageAlt: "Shobha and her son Gautam Arora together in New Delhi",
     notes: [
       {
         title: "A head start for the potatoes",
