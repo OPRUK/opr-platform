@@ -85,6 +85,12 @@ export type SeoTechnicalReport = {
     observed: string;
   }>;
   pageSpeed: Array<{ metric: string; value: number; unit: string; context: string }>;
+  pageSpeedMeta: {
+    testedUrl: string;
+    strategy: "mobile" | "desktop";
+    fetchedAt: string | null;
+    lighthouseVersion: string | null;
+  };
   structuredData: Array<{
     area: string;
     valid: number;

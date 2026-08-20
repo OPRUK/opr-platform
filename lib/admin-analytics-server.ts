@@ -2,13 +2,14 @@ import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { attributionSources } from "./attribution";
-import { getSearchConsoleSummary } from "./google-search-console";
-import { getYouTubeSummary } from "./youtube";
-import { getInstagramSummary } from "./instagram";
-import { getTikTokSummary } from "./tiktok";
-import { getPinterestSummary } from "./pinterest";
-import { getLinkedInSummary } from "./linkedin";
-import { getVercelAnalyticsSummary } from "./vercel-analytics";
+import { getSearchConsoleSummary, type SearchConsoleSummary } from "./google-search-console";
+import { getYouTubeSummary, type YouTubeSummary } from "./youtube";
+import { getInstagramSummary, type InstagramSummary } from "./instagram";
+import { getTikTokSummary, type TikTokSummary } from "./tiktok";
+import { getPinterestSummary, type PinterestSummary } from "./pinterest";
+import { getLinkedInSummary, type LinkedInSummary } from "./linkedin";
+import { getVercelAnalyticsSummary, type VercelAnalyticsSummary } from "./vercel-analytics";
+import { getPageSpeedSummary, type PageSpeedSummary } from "./pagespeed";
 import { analyticsReport } from "./analytics-report-data";
 import type {
   AdminAnalyticsResponse,
@@ -34,6 +35,33 @@ const participationTables: Array<{
   { key: "community", label: "Community cooks", table: "recipe_community_cooks" },
 ];
 
+const analyticsPageSize = 1_000;
+
+async function loadAnalyticsRows<T extends Record<string, unknown>>(
+  client: SupabaseClient,
+  table: "link_clicks" | "site_events",
+  columns: string,
+  since: string,
+): Promise<{ data: T[]; error: unknown | null }> {
+  const data: T[] = [];
+
+  for (let from = 0; ; from += analyticsPageSize) {
+    const result = await client
+      .from(table)
+      .select(columns)
+      .gte("created_at", since)
+      .order("created_at", { ascending: true })
+      .range(from, from + analyticsPageSize - 1);
+
+    if (result.error) return { data, error: result.error };
+    const page = (result.data ?? []) as unknown as T[];
+    data.push(...page);
+    if (page.length < analyticsPageSize) break;
+  }
+
+  return { data, error: null };
+}
+
 function getSnapshot(): AnalyticsSnapshot | null {
   const encoded = process.env.OPR_ANALYTICS_SNAPSHOT;
   if (!encoded) return null;
@@ -56,7 +84,7 @@ function getSnapshot(): AnalyticsSnapshot | null {
     return {
       ...snapshot,
       website: { ...snapshot.website, fetchedAt: null },
-      google: { ...snapshot.google, fetchedAt: null },
+      google: { ...snapshot.google, fetchedAt: null, provisionalFrom: null },
       social: snapshot.social.map((platform) => ({ ...platform, fetchedAt: null })),
     } as AnalyticsSnapshot;
   } catch (error) {
@@ -65,10 +93,11 @@ function getSnapshot(): AnalyticsSnapshot | null {
   }
 }
 
-async function withLiveSearchConsole(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
+function withLiveSearchConsole(
+  snapshot: AnalyticsSnapshot | null,
+  live: SearchConsoleSummary | null,
+): AnalyticsSnapshot | null {
   if (!snapshot) return snapshot;
-
-  const live = await getSearchConsoleSummary();
   if (!live) return snapshot;
 
   return {
@@ -80,15 +109,17 @@ async function withLiveSearchConsole(snapshot: AnalyticsSnapshot | null): Promis
       impressions: live.impressions,
       ctr: live.ctr,
       averagePosition: live.averagePosition,
+      provisionalFrom: live.provisionalFrom,
       fetchedAt: live.fetchedAt,
     },
   };
 }
 
-async function withLiveYouTube(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
+function withLiveYouTube(
+  snapshot: AnalyticsSnapshot | null,
+  live: YouTubeSummary | null,
+): AnalyticsSnapshot | null {
   if (!snapshot) return snapshot;
-
-  const live = await getYouTubeSummary();
   if (!live) return snapshot;
 
   return {
@@ -108,10 +139,11 @@ async function withLiveYouTube(snapshot: AnalyticsSnapshot | null): Promise<Anal
   };
 }
 
-async function withLiveInstagram(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
+function withLiveInstagram(
+  snapshot: AnalyticsSnapshot | null,
+  live: InstagramSummary | null,
+): AnalyticsSnapshot | null {
   if (!snapshot) return snapshot;
-
-  const live = await getInstagramSummary();
   if (!live) return snapshot;
 
   return {
@@ -132,10 +164,11 @@ async function withLiveInstagram(snapshot: AnalyticsSnapshot | null): Promise<An
   };
 }
 
-async function withLiveTikTok(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
+function withLiveTikTok(
+  snapshot: AnalyticsSnapshot | null,
+  live: TikTokSummary | null,
+): AnalyticsSnapshot | null {
   if (!snapshot) return snapshot;
-
-  const live = await getTikTokSummary();
   if (!live) return snapshot;
 
   return {
@@ -155,10 +188,11 @@ async function withLiveTikTok(snapshot: AnalyticsSnapshot | null): Promise<Analy
   };
 }
 
-async function withLivePinterest(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
+function withLivePinterest(
+  snapshot: AnalyticsSnapshot | null,
+  live: PinterestSummary | null,
+): AnalyticsSnapshot | null {
   if (!snapshot) return snapshot;
-
-  const live = await getPinterestSummary();
   if (!live) return snapshot;
 
   return {
@@ -179,10 +213,11 @@ async function withLivePinterest(snapshot: AnalyticsSnapshot | null): Promise<An
   };
 }
 
-async function withLiveLinkedIn(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
+function withLiveLinkedIn(
+  snapshot: AnalyticsSnapshot | null,
+  live: LinkedInSummary | null,
+): AnalyticsSnapshot | null {
   if (!snapshot) return snapshot;
-
-  const live = await getLinkedInSummary();
   if (!live) return snapshot;
 
   const hasLinkedIn = snapshot.social.some((platform) => platform.platform.toLowerCase() === "linkedin");
@@ -210,10 +245,11 @@ async function withLiveLinkedIn(snapshot: AnalyticsSnapshot | null): Promise<Ana
   };
 }
 
-async function withLiveWebsiteSnapshot(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
+function withLiveWebsiteSnapshot(
+  snapshot: AnalyticsSnapshot | null,
+  live: VercelAnalyticsSummary | null,
+): AnalyticsSnapshot | null {
   if (!snapshot) return snapshot;
-
-  const live = await getVercelAnalyticsSummary();
   if (!live) return snapshot;
 
   return {
@@ -229,8 +265,10 @@ async function withLiveWebsiteSnapshot(snapshot: AnalyticsSnapshot | null): Prom
   };
 }
 
-async function withLiveWebsiteReport(report: AnalyticsReport): Promise<AnalyticsReport> {
-  const live = await getVercelAnalyticsSummary();
+function withLiveWebsiteReport(
+  report: AnalyticsReport,
+  live: VercelAnalyticsSummary | null,
+): AnalyticsReport {
   if (!live) return report;
 
   const pagesPerVisitor = live.visitors > 0 ? live.pageviews / live.visitors : 0;
@@ -256,6 +294,27 @@ async function withLiveWebsiteReport(report: AnalyticsReport): Promise<Analytics
         ? live.audienceOS.map((row) => ({ os: row.label, share: row.share, visitors: row.visitors }))
         : report.website.audienceOS,
       fetchedAt: live.fetchedAt,
+    },
+  };
+}
+
+function withLivePageSpeedReport(
+  report: AnalyticsReport,
+  live: PageSpeedSummary | null,
+): AnalyticsReport {
+  if (!live) return report;
+
+  return {
+    ...report,
+    seoTechnical: {
+      ...report.seoTechnical,
+      pageSpeed: live.metrics,
+      pageSpeedMeta: {
+        testedUrl: live.testedUrl,
+        strategy: live.strategy,
+        fetchedAt: live.fetchedAt,
+        lighthouseVersion: live.lighthouseVersion,
+      },
     },
   };
 }
@@ -293,24 +352,48 @@ async function loadParticipation(
 
 export async function loadAdminAnalytics(
   client: SupabaseClient,
+  { forceRefresh = false }: { forceRefresh?: boolean } = {},
 ): Promise<AdminAnalyticsResponse> {
   const since90Days = new Date();
   since90Days.setUTCDate(since90Days.getUTCDate() - 90);
   const since30Days = new Date();
   since30Days.setUTCDate(since30Days.getUTCDate() - 30);
 
-  const [clickResult, eventResult, participation] = await Promise.all([
-    client
-      .from("link_clicks")
-      .select("source, link_key")
-      .gte("created_at", since90Days.toISOString())
-      .limit(10_000),
-    client
-      .from("site_events")
-      .select("source, event_key")
-      .gte("created_at", since90Days.toISOString())
-      .limit(10_000),
+  const liveOptions = { forceRefresh };
+  const [
+    clickResult,
+    eventResult,
+    participation,
+    searchConsole,
+    youtube,
+    instagram,
+    tiktok,
+    pinterest,
+    linkedin,
+    vercel,
+    pageSpeed,
+  ] = await Promise.all([
+    loadAnalyticsRows<{ source: string | null; link_key: string }>(
+      client,
+      "link_clicks",
+      "source, link_key",
+      since90Days.toISOString(),
+    ),
+    loadAnalyticsRows<{ source: string | null; event_key: string }>(
+      client,
+      "site_events",
+      "source, event_key",
+      since90Days.toISOString(),
+    ),
     loadParticipation(client, since30Days.toISOString()),
+    getSearchConsoleSummary(liveOptions),
+    getYouTubeSummary(liveOptions),
+    getInstagramSummary(liveOptions),
+    getTikTokSummary(liveOptions),
+    getPinterestSummary(liveOptions),
+    getLinkedInSummary(liveOptions),
+    getVercelAnalyticsSummary(liveOptions),
+    getPageSpeedSummary(liveOptions),
   ]);
 
   if (clickResult.error || eventResult.error) {
@@ -357,6 +440,23 @@ export async function loadAdminAnalytics(
       return bTotal - aTotal || a.source.localeCompare(b.source);
     });
 
+  const snapshot = withLiveLinkedIn(
+    withLiveWebsiteSnapshot(
+      withLivePinterest(
+        withLiveTikTok(
+          withLiveInstagram(
+            withLiveYouTube(withLiveSearchConsole(getSnapshot(), searchConsole), youtube),
+            instagram,
+          ),
+          tiktok,
+        ),
+        pinterest,
+      ),
+      vercel,
+    ),
+    linkedin,
+  );
+
   return {
     generatedAt: new Date().toISOString(),
     windowDays: 90,
@@ -369,15 +469,10 @@ export async function loadAdminAnalytics(
     ).length,
     sources,
     participation,
-    snapshot: await withLiveLinkedIn(
-      await withLiveWebsiteSnapshot(
-        await withLivePinterest(
-          await withLiveTikTok(
-            await withLiveInstagram(await withLiveYouTube(await withLiveSearchConsole(getSnapshot()))),
-          ),
-        ),
-      ),
+    snapshot,
+    report: withLivePageSpeedReport(
+      withLiveWebsiteReport(analyticsReport, vercel),
+      pageSpeed,
     ),
-    report: await withLiveWebsiteReport(analyticsReport),
   };
 }

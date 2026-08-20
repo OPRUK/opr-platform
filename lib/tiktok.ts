@@ -98,8 +98,10 @@ function isoDate(date: Date) {
   return date.toISOString().slice(0, 10);
 }
 
-export async function getTikTokSummary(): Promise<TikTokSummary | null> {
-  if (cached && cached.expiresAt > Date.now()) return cached.data;
+export async function getTikTokSummary(
+  { forceRefresh = false }: { forceRefresh?: boolean } = {},
+): Promise<TikTokSummary | null> {
+  if (!forceRefresh && cached && cached.expiresAt > Date.now()) return cached.data;
 
   const clientKey = process.env.TIKTOK_CLIENT_KEY;
   const clientSecret = process.env.TIKTOK_CLIENT_SECRET;

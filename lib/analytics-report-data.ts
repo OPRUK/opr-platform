@@ -235,6 +235,12 @@ export const analyticsReport: AnalyticsReport = {
       { metric: "Cumulative Layout Shift", value: 0, unit: "score", context: "Excellent." },
       { metric: "Speed Index", value: 1.8, unit: "seconds", context: "Strong lab result." },
     ],
+    pageSpeedMeta: {
+      testedUrl: "https://otherpeoplesrecipes.co.uk/",
+      strategy: "mobile",
+      fetchedAt: null,
+      lighthouseVersion: null,
+    },
     structuredData: [
       { area: "Recipe rich results", valid: 4, invalidOrExcluded: 0, finding: "Valid; optional fields are missing on some recipes.", action: "Add only verified prep/cook times, cuisine, keywords and instruction media. Never invent ratings or nutrition." },
       { area: "Breadcrumbs", valid: 4, invalidOrExcluded: 0, finding: "No issue in the last 90 days.", action: "Apply same pattern to future pages." },

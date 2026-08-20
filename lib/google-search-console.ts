@@ -3,10 +3,6 @@ import { createSign } from "node:crypto";
 
 const SITE_URL = "https://otherpeoplesrecipes.co.uk/";
 const CACHE_MS = 15 * 60 * 1000;
-// Search Console's own data is typically incomplete for the most recent
-// day or two, so the query window ends a couple of days back rather than
-// "today" to avoid an artificially low final day dragging the average down.
-const REPORT_LAG_DAYS = 2;
 const REPORT_WINDOW_DAYS = 28;
 
 export type SearchConsoleSummary = {
@@ -15,6 +11,7 @@ export type SearchConsoleSummary = {
   impressions: number;
   ctr: number;
   averagePosition: number;
+  provisionalFrom: string | null;
   fetchedAt: string;
 };
 
@@ -71,8 +68,10 @@ function isoDate(date: Date) {
   return date.toISOString().slice(0, 10);
 }
 
-export async function getSearchConsoleSummary(): Promise<SearchConsoleSummary | null> {
-  if (cached && cached.expiresAt > Date.now()) return cached.data;
+export async function getSearchConsoleSummary(
+  { forceRefresh = false }: { forceRefresh?: boolean } = {},
+): Promise<SearchConsoleSummary | null> {
+  if (!forceRefresh && cached && cached.expiresAt > Date.now()) return cached.data;
 
   const clientEmail = process.env.GOOGLE_SEARCH_CONSOLE_CLIENT_EMAIL;
   // Vercel env vars are single strings, so the key's real newlines are
@@ -85,7 +84,6 @@ export async function getSearchConsoleSummary(): Promise<SearchConsoleSummary | 
     if (!accessToken) return null;
 
     const endDate = new Date();
-    endDate.setUTCDate(endDate.getUTCDate() - REPORT_LAG_DAYS);
     const startDate = new Date(endDate);
     startDate.setUTCDate(startDate.getUTCDate() - (REPORT_WINDOW_DAYS - 1));
 
@@ -101,6 +99,7 @@ export async function getSearchConsoleSummary(): Promise<SearchConsoleSummary | 
           startDate: isoDate(startDate),
           endDate: isoDate(endDate),
           dimensions: [],
+          dataState: "all",
         }),
       },
     );
@@ -121,6 +120,7 @@ export async function getSearchConsoleSummary(): Promise<SearchConsoleSummary | 
       impressions: Math.round(row?.impressions ?? 0),
       ctr: row?.ctr ?? 0,
       averagePosition: row?.position ?? 0,
+      provisionalFrom: payload.metadata?.first_incomplete_date ?? null,
       fetchedAt: new Date().toISOString(),
     };
 

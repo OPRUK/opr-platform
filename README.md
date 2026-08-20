@@ -34,3 +34,15 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## PageSpeed analytics
+
+The private analytics dashboard can run a current Google Lighthouse mobile lab
+test for the production homepage. Set `PAGESPEED_API_KEY` to a Google Cloud API
+key with the PageSpeed Insights API enabled. `PAGESPEED_TEST_URL` is optional and
+defaults to `https://otherpeoplesrecipes.co.uk/`.
+
+Normal dashboard refreshes reuse a successful result for 15 minutes. Clicking
+**Refresh dashboard** or downloading the analytics spreadsheet requests a new
+lab run. If Google is unavailable or the key is missing, the dashboard clearly
+labels and retains the dated report snapshot instead.
