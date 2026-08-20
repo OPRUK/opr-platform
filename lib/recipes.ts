@@ -781,6 +781,106 @@ export const featuredRecipes: FeaturedRecipe[] = [
       },
     ],
   },
+  {
+    slug: "gautam-and-shobhas-tandoori-aloo-nazakat",
+    title: "Gautam & Shobha's Tandoori Aloo Nazakat",
+    place: "New Delhi, India",
+    story:
+      "When Gautam Arora decided he wanted to open his first restaurant, he turned to his mum, Shobha. She taught him how to make Tandoori Aloo Nazakat: potato barrels filled with spiced paneer, coated in tandoori marinade and roasted until smoky and charred. The recipe became part of the moment a family lesson turned into the first step of his professional story.",
+    ingredients: [
+      "600g medium potatoes, evenly sized",
+      "150g fresh paneer, crumbled",
+      "50g red onion, finely minced",
+      "5g green chilli, finely chopped",
+      "5g fresh ginger, grated",
+      "6g fresh coriander leaves, chopped, plus extra to garnish",
+      "1g garam masala",
+      "1g roasted cumin powder",
+      "15ml fresh lemon juice",
+      "4g table salt, or to taste",
+      "1 tablespoon reserved potato pulp",
+      "80g tandoori marinade",
+      "5g chaat masala, for dusting",
+      "Thinly sliced onions, to garnish",
+    ],
+    method: [
+      "Wash and peel the potatoes, then cut each one in half lengthways. Using a melon baller or spoon, carefully scoop out the centres to form sturdy potato cups with walls about 5mm thick. Reserve the scooped potato pulp.",
+      "Parboil or blanch the potato cups in salted water for 3–4 minutes, then drain well. This helps the potatoes cook through without scorching the paneer filling.",
+      "In a medium bowl, combine the crumbled paneer, minced red onion, green chilli, ginger and chopped coriander.",
+      "Add the garam masala, roasted cumin powder, lemon juice, salt and one tablespoon of reserved mashed potato pulp. Mix thoroughly.",
+      "Firmly pack the paneer mixture into the potato cavities. Coat the stuffed potatoes generously on all sides with tandoori marinade, then marinate for 30–60 minutes. Refrigerate them if marinating for longer.",
+      "Carefully slide the marinated potatoes onto skewers. Roast in a clay tandoor, on a hot grill, or in an oven preheated to 220°C (425°F) for 8–10 minutes, until charred at the edges.",
+      "Serve the stuffed potatoes whole or sliced into rounds. Dust with chaat masala, garnish with coriander and sliced onion, and serve hot with mint-coriander chutney and lemon wedges.",
+    ],
+    image: "/images/recipes/gautam-shobha-tandoori-aloo-nazakat-wide.webp",
+    category: "Starter",
+    number: "09",
+    prepTime: "PT50M",
+    cookTime: "PT10M",
+    serves: "3–4 portions",
+    cuisine: "Indian",
+    datePublished: "2026-08-20",
+    contributorName: "Gautam Arora & Shobha",
+    notes: [
+      {
+        title: "A head start for the potatoes",
+        text: "Parboil or blanch the hollowed potato cups in salted water for 3–4 minutes before stuffing. This helps them cook through while keeping the paneer filling from scorching.",
+      },
+      {
+        title: "Give the marinade time",
+        text: "Leave the stuffed potatoes in the tandoori marinade for at least 30 minutes. Refrigerate them if you choose the longer 60-minute marination.",
+      },
+      {
+        title: "To serve",
+        text: "Serve piping hot with mint-coriander chutney, thinly sliced pickled onion rings and a wedge of lemon.",
+      },
+    ],
+    faqs: [
+      {
+        question: "How do you stop the potatoes scorching before they are cooked?",
+        answer:
+          "Parboil or blanch the hollowed potato cups in salted water for 3–4 minutes before filling them. This gives the potatoes a head start while protecting the paneer filling from excessive heat.",
+      },
+      {
+        question: "How long should Tandoori Aloo Nazakat marinate?",
+        answer:
+          "Marinate the stuffed, coated potatoes for 30–60 minutes. Keep them refrigerated if you leave them for the longer time.",
+      },
+      {
+        question: "Can you make Tandoori Aloo Nazakat without a clay tandoor?",
+        answer:
+          "Yes. Gautam and Shobha's recipe can be cooked on a hot grill or in an oven preheated to 220°C (425°F), as well as in a clay tandoor.",
+      },
+      {
+        question: "What should you serve with Tandoori Aloo Nazakat?",
+        answer:
+          "Dust the cooked potatoes with chaat masala and serve them hot with fresh coriander, sliced or pickled onions, mint-coriander chutney and lemon wedges.",
+      },
+    ],
+    methodPhotos: [
+      {
+        src: "/images/recipes/gautam-shobha-tandoori-aloo-nazakat-step-1.webp",
+        alt: "A halved potato shell holding paneer filling, showing the sturdy wall around the hollowed centre",
+        title: "Keep the potato walls sturdy",
+        caption: "Leave about 5mm of potato around each hollowed centre so the cups stay intact while they are filled, skewered and roasted.",
+        step: 1,
+      },
+      {
+        src: "/images/recipes/gautam-shobha-tandoori-aloo-nazakat-step-5.webp",
+        alt: "Tandoori potato shells generously filled with a textured spiced paneer mixture",
+        title: "Pack in the paneer filling",
+        caption: "Fill every potato cavity firmly, then coat the outside generously with tandoori marinade before giving it time to rest.",
+        step: 5,
+      },
+      {
+        src: "/images/recipes/gautam-shobha-tandoori-aloo-nazakat-step-6.webp",
+        alt: "Roasted Tandoori Aloo Nazakat with smoky golden edges arranged on a blue plate",
+        title: "Look for smoky, charred edges",
+        caption: "The potatoes are ready when the edges are deeply golden and lightly charred while the paneer filling remains tender.",
+        step: 6,
+      },
+    ],
+  },
 ];
 
 export function getFeaturedRecipe(slug: string): FeaturedRecipe | undefined {
