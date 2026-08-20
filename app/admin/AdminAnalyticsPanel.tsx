@@ -195,6 +195,9 @@ export default function AdminAnalyticsPanel({
                 <span className="mt-1 block font-medium text-[#123C39]">
                   Last refreshed {new Intl.DateTimeFormat("en-GB", { dateStyle: "medium", timeStyle: "short" }).format(new Date(analytics.generatedAt))}
                 </span>
+                <span className="mt-1 block text-stone-600">
+                  Automatically refreshes every minute while this dashboard is open.
+                </span>
               </p>
             </div>
 
@@ -263,7 +266,7 @@ export default function AdminAnalyticsPanel({
               <section aria-labelledby="baseline-heading" className="mx-auto mt-12 max-w-7xl rounded-[2rem] bg-[#FFF3DF] p-6 shadow-xl shadow-[#1C5A50]/10 md:p-9">
                 <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
                   <div>
-                    <p className="text-sm font-bold uppercase tracking-[0.3em] text-[#9A622A]">Management baseline</p>
+                    <p className="text-sm font-bold uppercase tracking-[0.3em] text-[#9A622A]">Current overview</p>
                     <h2 id="baseline-heading" className="mt-3 text-3xl font-bold">Website and Google visibility</h2>
                   </div>
                   <p className="text-sm text-stone-600">
@@ -288,14 +291,14 @@ export default function AdminAnalyticsPanel({
                     value={formatNumber(snapshot.google.clicks)}
                     note={
                       snapshot.google.fetchedAt
-                        ? `${formatNumber(snapshot.google.impressions)} impressions · Live, refreshed ${new Intl.DateTimeFormat("en-GB", { timeStyle: "short" }).format(new Date(snapshot.google.fetchedAt))}`
+                        ? `${formatNumber(snapshot.google.impressions)} impressions · Latest API data, refreshed ${new Intl.DateTimeFormat("en-GB", { timeStyle: "short" }).format(new Date(snapshot.google.fetchedAt))}${snapshot.google.provisionalFrom ? ` · Provisional from ${new Intl.DateTimeFormat("en-GB", { dateStyle: "medium" }).format(new Date(`${snapshot.google.provisionalFrom}T12:00:00Z`))}` : ""}`
                         : `${formatNumber(snapshot.google.impressions)} search impressions · Manual snapshot`
                     }
                   />
                   <MetricCard
                     label="Google CTR"
                     value={formatPercent(snapshot.google.ctr)}
-                    note={`Average position ${formatNumber(snapshot.google.averagePosition, 1)} · ${snapshot.google.fetchedAt ? "Live from Search Console" : "Manual snapshot"}`}
+                    note={`Average position ${formatNumber(snapshot.google.averagePosition, 1)} · ${snapshot.google.fetchedAt ? "Latest available from Search Console" : "Manual snapshot"}`}
                   />
                 </div>
               </section>
@@ -303,7 +306,7 @@ export default function AdminAnalyticsPanel({
               <section aria-labelledby="social-heading" className="mx-auto mt-12 max-w-7xl">
                 <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
                   <div>
-                    <p className="text-sm font-bold uppercase tracking-[0.3em] text-[#9A622A]">Social baseline</p>
+                    <p className="text-sm font-bold uppercase tracking-[0.3em] text-[#9A622A]">Social overview</p>
                     <h2 id="social-heading" className="mt-3 text-3xl font-bold">Discovery across each channel</h2>
                   </div>
                   <p className="max-w-xl text-sm leading-6 text-stone-700">
@@ -328,9 +331,9 @@ export default function AdminAnalyticsPanel({
                         <tr key={platform.platform} className="border-b border-[#DDB765]/40 last:border-0">
                           <th scope="row" className="px-6 py-4 font-semibold">
                             {platform.platform}
-                            {platform.fetchedAt ? (
-                              <span className="ml-2 rounded-full bg-[#1C5A50] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white">Live</span>
-                            ) : null}
+                            <span className={`ml-2 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${platform.fetchedAt ? "bg-[#1C5A50] text-white" : "bg-[#EED8B2] text-[#6B431E]"}`}>
+                              {platform.fetchedAt ? "Latest API data" : "Historical snapshot"}
+                            </span>
                           </th>
                           <td className="px-4 py-4 text-stone-600">
                             {platform.period}
@@ -373,15 +376,15 @@ export default function AdminAnalyticsPanel({
           )}
 
           <p className="mx-auto mt-10 max-w-7xl text-sm leading-6 text-stone-600">
-            Dashboard generated {new Intl.DateTimeFormat("en-GB", { dateStyle: "medium", timeStyle: "short" }).format(new Date(analytics.generatedAt))}. The figures above update whenever this page opens, or any time you click Refresh dashboard. The website, Google and social baseline further down is a manual snapshot updated separately and does not change when you refresh.
+            Dashboard updated {new Intl.DateTimeFormat("en-GB", { dateStyle: "medium", timeStyle: "short" }).format(new Date(analytics.generatedAt))}. OPR activity refreshes automatically every minute. Website, Google and connected social sources use their latest available API data; Refresh dashboard bypasses the short API cache. Anything marked Historical snapshot is retained only where that platform has not yet granted live access.
           </p>
 
           {report ? (
           <section aria-labelledby="full-report-heading" className="mx-auto mt-16 max-w-7xl rounded-[2rem] bg-[#123C39] p-6 text-[#EED8B2] shadow-xl shadow-[#1C5A50]/20 md:p-9">
-            <p className="text-sm font-bold uppercase tracking-[0.3em] text-[#DDB765]">Full report</p>
+            <p className="text-sm font-bold uppercase tracking-[0.3em] text-[#DDB765]">Historical analysis</p>
             <h2 id="full-report-heading" className="mt-3 text-3xl font-bold text-white">SEO &amp; social traffic report</h2>
             <p className="mt-3 max-w-3xl text-sm leading-6 text-[#EED8B2]">
-              Prepared {new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(new Date(`${report.preparedDate}T12:00:00Z`))} from Vercel Web Analytics, Google Search Console and each platform&apos;s native dashboard. This is a periodic manual export—it updates when the report is re-run, not when you click Refresh dashboard above.
+              The original analysis was prepared {new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(new Date(`${report.preparedDate}T12:00:00Z`))}. Current figures are shown above and live website rows in this section are marked accordingly; the remaining detailed tables are preserved as a dated benchmark, not presented as current data.
             </p>
 
             <div className="mt-8 rounded-[1.5rem] bg-[#EED8B2] p-5 text-[#123C39] shadow-inner md:p-7">
@@ -605,7 +608,21 @@ export default function AdminAnalyticsPanel({
                 ]}
               />
 
-              <SubHeading eyebrow="Technical SEO" title="PageSpeed (lab data)" />
+              <SubHeading
+                eyebrow="Technical SEO"
+                title="PageSpeed (lab data)"
+                note={
+                  report.seoTechnical.pageSpeedMeta.fetchedAt
+                    ? `Latest ${report.seoTechnical.pageSpeedMeta.strategy} Lighthouse run · ${new Intl.DateTimeFormat("en-GB", { dateStyle: "medium", timeStyle: "short" }).format(new Date(report.seoTechnical.pageSpeedMeta.fetchedAt))}`
+                    : `Historical ${report.seoTechnical.pageSpeedMeta.strategy} Lighthouse snapshot · live Google data was unavailable`
+                }
+              />
+              <p className="mt-3 text-xs leading-5 text-stone-600">
+                Tested URL: {report.seoTechnical.pageSpeedMeta.testedUrl}
+                {report.seoTechnical.pageSpeedMeta.lighthouseVersion
+                  ? ` · Lighthouse ${report.seoTechnical.pageSpeedMeta.lighthouseVersion}`
+                  : ""}
+              </p>
               <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {report.seoTechnical.pageSpeed.map((metric) => (
                   <div key={metric.metric} className="rounded-2xl border border-[#DDB765]/60 bg-[#FFF3DF] px-4 py-3 shadow shadow-[#1C5A50]/10">

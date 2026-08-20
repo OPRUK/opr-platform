@@ -44,8 +44,10 @@ function isoDate(date: Date) {
   return date.toISOString().slice(0, 10);
 }
 
-export async function getPinterestSummary(): Promise<PinterestSummary | null> {
-  if (cached && cached.expiresAt > Date.now()) return cached.data;
+export async function getPinterestSummary(
+  { forceRefresh = false }: { forceRefresh?: boolean } = {},
+): Promise<PinterestSummary | null> {
+  if (!forceRefresh && cached && cached.expiresAt > Date.now()) return cached.data;
 
   const clientId = process.env.PINTEREST_CLIENT_ID;
   const clientSecret = process.env.PINTEREST_CLIENT_SECRET;

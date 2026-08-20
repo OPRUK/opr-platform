@@ -23,8 +23,10 @@ function isoDate(date: Date) {
   return date.toISOString().slice(0, 10);
 }
 
-export async function getInstagramSummary(): Promise<InstagramSummary | null> {
-  if (cached && cached.expiresAt > Date.now()) return cached.data;
+export async function getInstagramSummary(
+  { forceRefresh = false }: { forceRefresh?: boolean } = {},
+): Promise<InstagramSummary | null> {
+  if (!forceRefresh && cached && cached.expiresAt > Date.now()) return cached.data;
 
   const accountId = process.env.INSTAGRAM_BUSINESS_ACCOUNT_ID;
   const accessToken = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;

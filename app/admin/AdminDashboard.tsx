@@ -3,7 +3,7 @@
 import type { Session } from "@supabase/supabase-js";
 import Image from "next/image";
 import Link from "next/link";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import type { AdminAnalyticsResponse } from "../../lib/admin-analytics-types";
 import { isAdminEmail } from "../../lib/admin-emails";
 import { featuredRecipes } from "../../lib/recipes";
@@ -73,6 +73,29 @@ const statusStyle: Record<SubmissionStatus, string> = {
   selected: "bg-[#EED8B2] text-[#1C5A50]",
 };
 
+async function adminRequest(path: string, options: RequestInit = {}) {
+  const { data } = await supabase.auth.getSession();
+  let accessToken = data.session?.access_token ?? "";
+  const expiresSoon = data.session?.expires_at
+    ? data.session.expires_at * 1000 - Date.now() < 60_000
+    : false;
+
+  if (expiresSoon) {
+    const { data: refreshed } = await supabase.auth.refreshSession();
+    accessToken = refreshed.session?.access_token ?? accessToken;
+  }
+
+  return fetch(path, {
+    ...options,
+    cache: "no-store",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+      ...options.headers,
+    },
+  });
+}
+
 export default function AdminDashboard({
   initialView = "inbox",
 }: {
@@ -95,6 +118,41 @@ export default function AdminDashboard({
   const [exportingFoundingTable, setExportingFoundingTable] = useState(false);
   const [exportingAnalytics, setExportingAnalytics] = useState(false);
   const [refreshingAnalytics, setRefreshingAnalytics] = useState(false);
+  const analyticsRefreshInFlight = useRef(false);
+
+  const refreshAnalytics = useCallback(async ({
+    forceRefresh = true,
+    silent = false,
+  }: {
+    forceRefresh?: boolean;
+    silent?: boolean;
+  } = {}) => {
+    if (analyticsRefreshInFlight.current) return;
+    analyticsRefreshInFlight.current = true;
+
+    if (!silent) {
+      setRefreshingAnalytics(true);
+      setMessage("");
+    }
+
+    try {
+      const path = forceRefresh ? "/api/admin/analytics?refresh=1" : "/api/admin/analytics";
+      const response = await adminRequest(path);
+      if (response.ok) {
+        setAttributionSummary((await response.json()) as AdminAnalyticsResponse);
+      } else if (!silent) {
+        const payload = await response.json().catch(() => null);
+        setMessage(payload?.error ?? "The analytics dashboard could not be refreshed just now.");
+      }
+    } catch {
+      if (!silent) {
+        setMessage("The analytics dashboard could not be refreshed just now.");
+      }
+    } finally {
+      analyticsRefreshInFlight.current = false;
+      if (!silent) setRefreshingAnalytics(false);
+    }
+  }, []);
 
   useEffect(() => {
     async function checkSession() {
@@ -217,27 +275,41 @@ export default function AdminDashboard({
     void loadAdminData();
   }, [session, checkingAal, mfaPending, totpFactorId, initialView]);
 
-  async function adminRequest(path: string, options: RequestInit = {}) {
-    const { data } = await supabase.auth.getSession();
-    let accessToken = data.session?.access_token ?? "";
-    const expiresSoon = data.session?.expires_at
-      ? data.session.expires_at * 1000 - Date.now() < 60_000
-      : false;
-
-    if (expiresSoon) {
-      const { data: refreshed } = await supabase.auth.refreshSession();
-      accessToken = refreshed.session?.access_token ?? accessToken;
+  useEffect(() => {
+    if (
+      initialView !== "analytics" ||
+      !session ||
+      !isAdminEmail(session.user.email) ||
+      checkingAal ||
+      mfaPending ||
+      !totpFactorId
+    ) {
+      return;
     }
 
-    return fetch(path, {
-      ...options,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-        ...options.headers,
-      },
-    });
-  }
+    const refreshVisibleDashboard = () => {
+      if (document.visibilityState === "visible") {
+        void refreshAnalytics({ forceRefresh: false, silent: true });
+      }
+    };
+    const handleVisibilityChange = () => refreshVisibleDashboard();
+    const intervalId = window.setInterval(refreshVisibleDashboard, 60_000);
+
+    window.addEventListener("focus", refreshVisibleDashboard);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      window.clearInterval(intervalId);
+      window.removeEventListener("focus", refreshVisibleDashboard);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [
+    initialView,
+    session,
+    checkingAal,
+    mfaPending,
+    totpFactorId,
+    refreshAnalytics,
+  ]);
 
   async function sendMagicLink(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -320,23 +392,6 @@ export default function AdminDashboard({
       setMessage("The analytics spreadsheet could not be downloaded.");
     } finally {
       setExportingAnalytics(false);
-    }
-  }
-
-  async function refreshAnalytics() {
-    setRefreshingAnalytics(true);
-    setMessage("");
-
-    try {
-      const response = await adminRequest("/api/admin/analytics");
-      if (response.ok) {
-        setAttributionSummary((await response.json()) as AdminAnalyticsResponse);
-      } else {
-        const payload = await response.json().catch(() => null);
-        setMessage(payload?.error ?? "The analytics dashboard could not be refreshed just now.");
-      }
-    } finally {
-      setRefreshingAnalytics(false);
     }
   }
 
@@ -660,7 +715,7 @@ export default function AdminDashboard({
         exporting={exportingAnalytics}
         refreshing={refreshingAnalytics}
         onDownload={() => void downloadAnalytics()}
-        onRefresh={() => void refreshAnalytics()}
+        onRefresh={() => void refreshAnalytics({ forceRefresh: true })}
         onOpenSecurity={() => setShowSecurityPanel(true)}
         onSignOut={() => void supabase.auth.signOut()}
       />

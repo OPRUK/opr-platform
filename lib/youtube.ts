@@ -43,8 +43,10 @@ function isoDate(date: Date) {
   return date.toISOString().slice(0, 10);
 }
 
-export async function getYouTubeSummary(): Promise<YouTubeSummary | null> {
-  if (cached && cached.expiresAt > Date.now()) return cached.data;
+export async function getYouTubeSummary(
+  { forceRefresh = false }: { forceRefresh?: boolean } = {},
+): Promise<YouTubeSummary | null> {
+  if (!forceRefresh && cached && cached.expiresAt > Date.now()) return cached.data;
 
   const clientId = process.env.YOUTUBE_OAUTH_CLIENT_ID;
   const clientSecret = process.env.YOUTUBE_OAUTH_CLIENT_SECRET;
