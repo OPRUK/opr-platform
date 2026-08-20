@@ -35,6 +35,8 @@ type RecipeOfWeek = {
   recipe_of_week_note: string | null;
 };
 
+const useCuratedRecipeOfWeek = true;
+
 async function getRecipeOfWeek(): Promise<RecipeOfWeek | null> {
   const { data } = await supabase
     .from("recipe_submissions")
@@ -279,6 +281,12 @@ export default async function Home() {
 // page (and the hero poster's preload hint) from streaming to the browser —
 // this section is well below the fold and can arrive a beat later.
 async function RecipeOfWeekSection() {
+  // Keep this editorial selection in place even if an older community
+  // submission is still marked as the weekly recipe.
+  if (useCuratedRecipeOfWeek) {
+    return <RecipeOfWeekFallback />;
+  }
+
   const recipeOfWeek = await getRecipeOfWeek();
   if (!recipeOfWeek) return <RecipeOfWeekFallback />;
 
@@ -328,8 +336,8 @@ function RecipeOfWeekFallback() {
       <div className="mx-auto grid max-w-6xl overflow-hidden rounded-[2rem] bg-[#1C5A50] shadow-2xl md:grid-cols-2">
         <div className="relative min-h-[340px]">
           <Image
-            src="/images/recipes/daves-butter-chicken-feature.webp"
-            alt="Dave's Butter Chicken"
+            src="/images/recipes/gautam-shobha-tandoori-aloo-nazakat-wide.webp"
+            alt="Gautam and Shobha's Tandoori Aloo Nazakat"
             fill
             sizes="(min-width: 768px) 50vw, 100vw"
             className="object-cover"
@@ -341,19 +349,19 @@ function RecipeOfWeekFallback() {
             This week&apos;s story from the OPR cookbook
           </p>
           <h2 className="mt-5 text-4xl font-bold leading-tight md:text-5xl">
-            Dave&apos;s Butter Chicken
+            Gautam &amp; Shobha&apos;s Tandoori Aloo Nazakat
           </h2>
           <p className="mt-3 text-sm uppercase tracking-[0.25em] text-[#FFF3DF]">
-            New Malden, England
+            New Delhi, India
           </p>
           <p className="mt-7 text-lg leading-8 text-[#FFF3DF]">
-            Dave learned this from his Indian mother-in-law, then made it his own with passata for a smoother, richer sauce. He has cooked it in India for family — and even she now says his is better.
+            When Gautam was preparing to open his first restaurant, Martabaan Tales, he turned to his mum, Shobha. Her Tandoori Aloo Nazakat became part of the moment a family lesson turned into the first step of his professional story.
           </p>
           <Link
-            href="/family-cookbook/daves-butter-chicken"
+            href="/family-cookbook/gautam-and-shobhas-tandoori-aloo-nazakat"
             className="mt-9 inline-flex w-fit items-center rounded-full bg-[#DDB765] px-7 py-4 font-medium text-[#08231F] transition hover:scale-105 hover:bg-[#DDB765]"
           >
-            Read Dave&apos;s story →
+            Read Gautam &amp; Shobha&apos;s story →
           </Link>
         </div>
       </div>
