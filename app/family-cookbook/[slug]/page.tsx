@@ -197,15 +197,36 @@ export default async function RecipePage({
 
       <section className="mx-auto max-w-7xl space-y-8 px-6 py-12 md:px-8 md:py-16">
         <article className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-10">
-          <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
-            The story
-          </p>
-          <p className="mt-7 text-2xl leading-relaxed text-[#123C39]">
-            “{recipe.story}”
-          </p>
-          <p className="mt-10 border-t border-[#DDB765] pt-6 text-sm italic text-stone-600">
-            This recipe now belongs to every family who cooks it.
-          </p>
+          <div className={recipe.contributorImage ? "grid items-center gap-8 md:grid-cols-[minmax(0,1fr)_18rem]" : undefined}>
+            <div>
+              <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
+                The story
+              </p>
+              <p className="mt-7 text-2xl leading-relaxed text-[#123C39]">
+                “{recipe.story}”
+              </p>
+              <p className="mt-10 border-t border-[#DDB765] pt-6 text-sm italic text-stone-600">
+                This recipe now belongs to every family who cooks it.
+              </p>
+            </div>
+            {recipe.contributorImage ? (
+              <figure>
+                <Image
+                  src={recipe.contributorImage}
+                  alt={recipe.contributorImageAlt ?? recipe.contributorName ?? "Recipe contributor"}
+                  width={900}
+                  height={1200}
+                  sizes="(min-width: 768px) 288px, 100vw"
+                  className="aspect-[3/4] w-full rounded-2xl object-cover shadow-lg shadow-[#1C5A50]/15"
+                />
+                {recipe.contributorName ? (
+                  <figcaption className="mt-3 text-center text-sm font-medium text-stone-600">
+                    {recipe.contributorName}
+                  </figcaption>
+                ) : null}
+              </figure>
+            ) : null}
+          </div>
         </article>
 
         <aside className="recipe-card-paper w-full p-8 md:p-10">
