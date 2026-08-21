@@ -73,6 +73,21 @@ export default function FilmsPage() {
         </div>
       </section>
 
+      <section className="bg-[#DDB765] px-6 py-8 md:py-9">
+        <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 text-center text-[#08231F] sm:flex-row sm:justify-between sm:text-left">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.3em]">Live cook-along · Sunday 4 October</p>
+            <p className="mt-2 text-xl font-bold leading-snug sm:text-2xl">See Dave cook his butter chicken live, over Zoom.</p>
+          </div>
+          <Link
+            href="/live-with-dave"
+            className="inline-flex shrink-0 rounded-full bg-[#123C39] px-7 py-3.5 font-bold text-[#FFF3DF] transition hover:scale-105 hover:bg-[#08231F]"
+          >
+            Save my spot →
+          </Link>
+        </div>
+      </section>
+
       <section className="mx-auto max-w-6xl px-6 py-20 md:px-8">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {films.map((film) => {
