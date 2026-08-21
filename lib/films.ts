@@ -12,7 +12,6 @@ export type Film = {
   transcript?: string;
   recipeSlug?: string;
   uploadDate?: string;
-  endCardDuration?: number;
 };
 
 export function filmSlug(film: Pick<Film, "title">): string {
@@ -71,7 +70,6 @@ export const films: Film[] = [
     transcript:
       "Dave: “Nominate the family dish everyone should taste.”\nRubble: “Can I nominate butter chicken?”\nDave: “You do. Every week.”",
     uploadDate: "2026-08-21T12:00:00+00:00",
-    endCardDuration: 2.5,
   },
   {
     title: "Dave & Rubble | Dish of the Week: Gautam & Shobha",
@@ -81,7 +79,6 @@ export const films: Film[] = [
       "Dave: “This week’s dish comes from Gautam and his mum, Shobha.”\nRubble: “Did they make one for me?”\nDave: “You can have the story.”",
     recipeSlug: "gautam-and-shobhas-tandoori-aloo-nazakat",
     uploadDate: "2026-08-21T12:00:00+00:00",
-    endCardDuration: 2.5,
   },
   {
     title: "Dave & Rubble | The Longest Two Seconds",
