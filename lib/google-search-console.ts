@@ -6,6 +6,7 @@ const CACHE_MS = 15 * 60 * 1000;
 const REPORT_WINDOW_DAYS = 28;
 
 export type SearchConsoleRow = { label: string; clicks: number; impressions: number };
+export type SearchConsoleDailyRow = SearchConsoleRow & { ctr: number };
 
 export type SearchConsoleSummary = {
   period: string;
@@ -18,6 +19,7 @@ export type SearchConsoleSummary = {
   pages: SearchConsoleRow[];
   countries: SearchConsoleRow[];
   devices: SearchConsoleRow[];
+  daily: SearchConsoleDailyRow[];
   fetchedAt: string;
 };
 
@@ -112,6 +114,56 @@ async function queryDimension(
   }));
 }
 
+function readableDate(value: string): string {
+  const date = new Date(`${value}T00:00:00Z`);
+  return Number.isNaN(date.getTime())
+    ? value
+    : new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short", timeZone: "UTC" }).format(date);
+}
+
+async function queryDaily(
+  accessToken: string,
+  startDate: string,
+  endDate: string,
+): Promise<SearchConsoleDailyRow[]> {
+  const response = await fetch(
+    `https://searchconsole.googleapis.com/webmasters/v3/sites/${encodeURIComponent(SITE_URL)}/searchAnalytics/query`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        startDate,
+        endDate,
+        dimensions: ["date"],
+        dataState: "all",
+        rowLimit: REPORT_WINDOW_DAYS,
+      }),
+    },
+  );
+
+  if (!response.ok) {
+    console.error("OPR Search Console daily query failed", await response.text());
+    return [];
+  }
+
+  const payload = await response.json();
+  const rows = (payload.rows ?? []) as Array<{
+    keys?: string[];
+    clicks?: number;
+    impressions?: number;
+    ctr?: number;
+  }>;
+  return rows.map((row) => ({
+    label: readableDate(row.keys?.[0] ?? "Unknown"),
+    clicks: Math.round(row.clicks ?? 0),
+    impressions: Math.round(row.impressions ?? 0),
+    ctr: row.ctr ?? 0,
+  }));
+}
+
 export async function getSearchConsoleSummary(
   { forceRefresh = false }: { forceRefresh?: boolean } = {},
 ): Promise<SearchConsoleSummary | null> {
@@ -133,7 +185,7 @@ export async function getSearchConsoleSummary(
     const since = isoDate(startDate);
     const until = isoDate(endDate);
 
-    const [response, queries, pages, countries, devices] = await Promise.all([
+    const [response, daily, queries, pages, countries, devices] = await Promise.all([
       fetch(
         `https://searchconsole.googleapis.com/webmasters/v3/sites/${encodeURIComponent(SITE_URL)}/searchAnalytics/query`,
         {
@@ -150,6 +202,7 @@ export async function getSearchConsoleSummary(
           }),
         },
       ),
+      queryDaily(accessToken, since, until),
       queryDimension(accessToken, "query", since, until),
       queryDimension(accessToken, "page", since, until),
       queryDimension(accessToken, "country", since, until),
@@ -177,6 +230,7 @@ export async function getSearchConsoleSummary(
       pages,
       countries,
       devices,
+      daily,
       fetchedAt: new Date().toISOString(),
     };
 

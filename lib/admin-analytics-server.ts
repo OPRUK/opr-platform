@@ -510,6 +510,14 @@ async function withLiveReport(
         if (row.metric === "Indexed pages") return { ...row, value: snapshot.google.indexedPages };
         return row;
       }),
+      daily: searchConsole?.daily.length
+        ? searchConsole.daily.map((row) => ({
+            date: row.label,
+            clicks: row.clicks,
+            impressions: row.impressions,
+            ctr: row.ctr,
+          }))
+        : report.googleSearch.daily,
       queries: searchConsole?.queries.length
         ? searchConsole.queries.map((row) => ({ query: row.label, clicks: row.clicks, impressions: row.impressions }))
         : report.googleSearch.queries,
