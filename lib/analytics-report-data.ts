@@ -1,15 +1,11 @@
 import "server-only";
 import type { AnalyticsReport } from "./analytics-report-types";
 
-// Manually exported from each platform's native dashboard and Google/Vercel
-// tooling, refreshed through 21 August 2026. Regenerate this file the same way next time the
-// report is refreshed (see Sources & Definitions in the source workbook for
-// exactly which dashboard each figure came from) — there is no live API
-// behind most of these numbers yet. The Google Search figures at the top of
-// the admin dashboard are the exception: those come from a live Search
-// Console connection (see lib/google-search-console.ts) and intentionally
-// are NOT read from this file, to avoid showing stale numbers next to a
-// live source.
+// Verified baseline exported from the native platform dashboards and
+// Google/Vercel tooling through 21 August 2026. The admin analytics service
+// hydrates every supported field with live website, Search Console, connected
+// social-platform and PageSpeed data. These values remain the safe fallback
+// for unavailable APIs and for fields the platforms do not expose.
 export const analyticsReport: AnalyticsReport = {
   preparedDate: "2026-08-21",
   executiveSummary: {
@@ -59,20 +55,21 @@ export const analyticsReport: AnalyticsReport = {
       },
       {
         area: "Measurement",
-        evidence: "Only two /links button clicks are logged, both on launch day and possibly QA.",
-        meaning: "The link page is too new to judge and cannot yet identify source platform.",
-        decision: "Give each social a source-coded bio URL and log the source with every click.",
+        evidence: "Privacy-safe source, UTM campaign, site-action and conversion totals are now collected first-party.",
+        meaning: "OPR can compare which links and campaigns turn discovery into participation without storing personal identifiers.",
+        decision: "Use a stable source and campaign code on every social link, then review complete calendar-month totals.",
       },
     ],
     topPriorities: [
-      { priority: "P1", action: "Add source-coded /links URLs and UTMs for every social profile and campaign.", whyNow: "Instagram, TikTok and YouTube referrals are not separately visible in website analytics.", successMeasure: "Every profile/campaign has a distinct source; monthly report reconciles clicks with visits.", owner: "Site + social · this week" },
+      { priority: "P1", action: "Increase Google visibility through richer verified recipe coverage and stronger contextual internal links.", whyNow: "OPR earns clicks when it appears, but broader non-brand recipe discovery remains the constraint.", successMeasure: "Complete-month Search Console reports show growth in non-brand recipe impressions, clicks and indexed recipe pages.", owner: "Content + site · monthly" },
+      { priority: "P1", action: "Keep one clear primary action on every important landing page.", whyNow: "First-party source, campaign, action and conversion totals can now show which journeys turn exploration into participation.", successMeasure: "Each priority page has one named action and its complete-month conversion trend is reviewed.", owner: "Site + content · this month" },
       { priority: "P1", action: "Earn links from contributors, local press, food-history groups and relevant partners.", whyNow: "Only 13 external links are reported—and all are from the sister .com domain.", successMeasure: "10+ new relevant referring domains, each linking to a useful canonical page.", owner: "PR/content · weekly" },
       { priority: "P1", action: "Consolidate /family-cookbook/community/1 into the canonical Sudesh recipe URL.", whyNow: "Google discovered the duplicate but has not indexed it.", successMeasure: "Duplicate removed from coverage; canonical recipe remains indexable.", owner: "Site · this week" },
       { priority: "P1", action: "Create dedicated film watch pages with VideoObject data, transcripts and a video sitemap.", whyNow: "Homepage video is excluded because it is not on a watch page; only two videos are indexed.", successMeasure: "Each priority film has an indexable watch page and valid video data.", owner: "Site/content · 30 days" },
       { priority: "P1", action: "Remove/repost the TikTok caption containing accidental desktop interface text.", whyNow: "The caption is publicly untidy and weakens trust.", successMeasure: "Correct caption live; post checked on mobile and desktop.", owner: "Social · today" },
       { priority: "P2", action: "Improve YouTube titles and thumbnails; test one promise-led creative pattern.", whyNow: "4,000 impressions produced a 1.3% click-through rate.", successMeasure: "CTR moves towards a 3–5% working target without reducing retention.", owner: "Video · fortnightly" },
       { priority: "P2", action: "Turn search interest in bhindi and jollof into richer recipe-page coverage.", whyNow: "These are the clearest visible non-brand query themes.", successMeasure: "More recipe-page impressions and first clicks for non-brand searches.", owner: "Content · 2 articles/month" },
-      { priority: "P2", action: "Enable Vercel Speed Insights; fix contrast and caption-track warnings.", whyNow: "No field performance data exists yet; Lighthouse accessibility is 97 rather than 100.", successMeasure: "Real-user performance starts collecting; accessibility checks pass.", owner: "Site · this week" },
+      { priority: "P2", action: "Review live PageSpeed and Vercel Speed Insights each month; fix any contrast and caption-track warnings.", whyNow: "Performance collection is live, so regressions can now be identified and acted on.", successMeasure: "Core Web Vitals and Lighthouse scores remain healthy; accessibility checks pass.", owner: "Site · monthly" },
     ],
     footnote: "*Social exposures add platform-reported views/impressions and are not deduplicated people. Native platform definitions and date windows differ; use this as an activity indicator, not total audience reach.",
   },
@@ -265,6 +262,7 @@ export const analyticsReport: AnalyticsReport = {
       { platform: "Pinterest", period: "22 Jul–21 Aug", views: 256, viewers: 113, interactions: 11, followers: "Not displayed", profileVisits: "Not reported", outboundClicks: 1, websiteVisitors: "Not separately reported", interactionRate: 0.043 },
       { platform: "YouTube", period: "24 Jul–20 Aug", views: 223, viewers: "Not reported", interactions: "2 Shorts likes", followers: 9, profileVisits: "Not reported", outboundClicks: "Not reported", websiteVisitors: "Not separately reported", interactionRate: 0.009 },
       { platform: "TikTok", period: "Last 28 days to 21 Aug", views: 5300, viewers: "Not reported", interactions: 44, followers: 4, profileVisits: 21, outboundClicks: "Not available", websiteVisitors: "Not separately reported", interactionRate: 0.0083 },
+      { platform: "LinkedIn", period: "21 Jul–19 Aug (manually checked 21 Aug 2026, 09:45)", views: 126, viewers: "Not reported", interactions: 6, followers: 21, profileVisits: "Not reported", outboundClicks: "Not reported", websiteVisitors: "Not separately reported", interactionRate: 0.0476 },
     ],
     diagnosis: [
       { channel: "Instagram", strength: "4,838 views; 72.6% from non-followers; 356 interactions.", constraint: "230 profile visits produced only 2 external-link taps.", nextMove: "Keep the source-coded bio link prominent and strengthen every Reel end card.", workingKpi: "Profile-to-link click rate" },
@@ -272,6 +270,7 @@ export const analyticsReport: AnalyticsReport = {
       { channel: "Pinterest", strength: "256 impressions and 113 total audience; Ada's Jollof Pin leads with 113 impressions.", constraint: "Only 1 outbound click across the period.", nextMove: "Publish vertical, keyworded recipe pins linking to canonical recipes.", workingKpi: "Outbound clicks per 1,000 impressions" },
       { channel: "YouTube", strength: "223 views and subscriber count increased to 9.", constraint: "Only 16.5% of Shorts viewers stayed to watch; likes remain low.", nextMove: "Test stronger titles and a faster first-second hook.", workingKpi: "Stayed-to-watch rate and subscribers" },
       { channel: "TikTok", strength: "5.3K views; 89.8% of recent traffic from For You.", constraint: "Only 21 profile views and 4 total followers; one caption remains corrupted.", nextMove: "Clean the caption, strengthen on-screen CTA and measure bio clicks.", workingKpi: "Profile visit rate and followers per 1K views" },
+      { channel: "LinkedIn", strength: "21 followers, 16 gained in the last 30 days; 126 impressions on posts.", constraint: "Page is brand new — no live API access yet, so this is a manual snapshot.", nextMove: "Keep posting weekly until Community Management API approval lands live data.", workingKpi: "Follower growth rate and post impressions" },
     ],
     note: "Facebook website visitors group facebook.com (32), m.facebook.com (10) and l.facebook.com (7). Referrer host totals are not necessarily deduplicated across hosts. Instagram, TikTok and YouTube in-app visits may appear as Direct when the referrer is stripped.",
   },
@@ -408,14 +407,14 @@ export const analyticsReport: AnalyticsReport = {
       { linkKey: "recipe-of-month", clicks: 1, firstClick: "17 Aug 10:21", lastClick: "17 Aug 10:21", status: "Current", interpretation: "Single launch-day click." },
     ],
     gaps: [
-      { gap: "Social source attribution", currentState: "One shared /links URL and link_key only.", risk: "Platform-specific traffic is hidden.", fix: "Use /links?src=instagram etc.", priority: "P1", owner: "Site", due: "7 days" },
-      { gap: "Campaign attribution", currentState: "Vercel Hobby has no UTM report.", risk: "Campaigns cannot be compared.", fix: "Retain UTMs in destination URLs and log them first-party.", priority: "P1", owner: "Site", due: "14 days" },
-      { gap: "Real-user performance", currentState: "Vercel Speed Insights disabled; GSC has no field CWV.", risk: "Regressions may go unseen.", fix: "Enable Speed Insights.", priority: "P2", owner: "Site", due: "7 days" },
-      { gap: "Conversion events", currentState: "Database actions exist; Web Analytics custom events unavailable on Hobby.", risk: "Traffic-to-action path is incomplete.", fix: "Create privacy-safe server-side event summary.", priority: "P2", owner: "Site", due: "30 days" },
-      { gap: "Cross-platform comparison", currentState: "Different periods and definitions.", risk: "False totals and conclusions.", fix: "Adopt a fixed month-end reporting window.", priority: "P2", owner: "Analytics", due: "Month-end" },
+      { gap: "Social source attribution", currentState: "Implemented for Instagram, TikTok, Facebook, YouTube, Pinterest and LinkedIn.", risk: "Profile URLs must use their matching src parameter.", fix: "Use /links?src=platform on every social profile.", priority: "Closed", owner: "Site + social", due: "Live" },
+      { gap: "Campaign attribution", currentState: "UTMs are retained first-party and grouped in the private dashboard.", risk: "Uncoded campaign links remain unattributed.", fix: "Use a stable utm_campaign value on every campaign link.", priority: "Closed", owner: "Site + social", due: "Live" },
+      { gap: "Real-user performance", currentState: "Vercel Speed Insights collection enabled.", risk: "Field data takes time to accumulate.", fix: "Review route-level Core Web Vitals at each month-end.", priority: "Closed", owner: "Site", due: "Live" },
+      { gap: "Conversion events", currentState: "Privacy-safe server-side conversion totals are live.", risk: "Only explicitly defined success events are counted.", fix: "Review the conversion allow-list when new participation flows launch.", priority: "Closed", owner: "Site", due: "Live" },
+      { gap: "Cross-platform comparison", currentState: "Formal comparisons now use complete calendar months; rolling figures are labelled interim.", risk: "Platforms still define reach and interactions differently.", fix: "Close each report at month-end and compare like-for-like metrics only.", priority: "Closed", owner: "Analytics", due: "Month-end" },
     ],
     deliveryPlan: [
-      { priority: "P1", workstream: "Measurement", action: "Source-code every social bio and campaign link.", baseline: "2 /links clicks; source unknown", goal30d: "All profiles coded", goal90d: "Monthly source-to-site report", owner: "Site/social", timing: "Week 1", status: "Not started" },
+      { priority: "P1", workstream: "Measurement", action: "Keep every social bio and campaign link source-coded.", baseline: "First-party source and UTM capture live", goal30d: "All profiles coded", goal90d: "Monthly source-to-site report", owner: "Site/social", timing: "Ongoing", status: "Live" },
       { priority: "P1", workstream: "Authority", action: "Earn relevant independent backlinks.", baseline: "1 linking domain", goal30d: "Outreach list + 3 pitches/week", goal90d: "10+ new relevant domains", owner: "PR/content", timing: "Weekly", status: "Not started" },
       { priority: "P1", workstream: "Indexing", action: "Consolidate community/1 duplicate and validate.", baseline: "3 discovered/not indexed", goal30d: "Redirect/canonical live", goal90d: "Coverage resolved", owner: "Site", timing: "Week 1", status: "Not started" },
       { priority: "P1", workstream: "Video SEO", action: "Publish dedicated watch pages with VideoObject and transcripts.", baseline: "2 indexed videos; 1 excluded", goal30d: "Priority template live", goal90d: "Priority film library eligible", owner: "Site/content", timing: "30–90 days", status: "Not started" },
@@ -425,7 +424,7 @@ export const analyticsReport: AnalyticsReport = {
       { priority: "P2", workstream: "Instagram", action: "Convert profile visits with /links and pinned CTA.", baseline: "174 profile visits; clicks unavailable", goal30d: "Tracking live", goal90d: "Improving profile-to-link rate", owner: "Social", timing: "Week 1", status: "Not started" },
       { priority: "P2", workstream: "Pinterest", action: "Publish search-led vertical recipe Pins.", baseline: "126 impressions; 1 outbound", goal30d: "2 Pins/recipe", goal90d: "Consistent outbound growth", owner: "Social/content", timing: "Weekly", status: "Not started" },
       { priority: "P2", workstream: "Accessibility", action: "Fix contrast and add caption tracks.", baseline: "Lighthouse accessibility 97", goal30d: "Issues fixed", goal90d: "Score 100 maintained", owner: "Site", timing: "30 days", status: "Not started" },
-      { priority: "P2", workstream: "Performance", action: "Enable Speed Insights.", baseline: "No field data", goal30d: "Collection active", goal90d: "Monthly CWV baseline", owner: "Site", timing: "Week 1", status: "Not started" },
+      { priority: "P2", workstream: "Performance", action: "Review Vercel Speed Insights at month-end.", baseline: "Collection enabled", goal30d: "First field baseline", goal90d: "Monthly CWV baseline", owner: "Site", timing: "Monthly", status: "Live" },
       { priority: "P3", workstream: "Reporting", action: "Repeat this workbook at month-end.", baseline: "First baseline", goal30d: "August close", goal90d: "Three-month trend", owner: "Analytics", timing: "Monthly", status: "Scheduled" },
     ],
     note: "Only two clicks have been recorded since /links launched on 17 August. These may include implementation QA, so they are not yet evidence of audience behaviour. Do not buy bulk backlinks, fabricate reviews/ratings, or add invented nutrition/timing data.",

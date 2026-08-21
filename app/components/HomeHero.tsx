@@ -36,10 +36,25 @@ const CROSSFADE_MS = 500;
 const END_TRIM_SECONDS = 0.2;
 const FINAL_FRAME_HOLD_MS = 250;
 
-// On mobile, waiting for all three intro films to finish before the CTAs
-// appear (~10s+) costs conversions from visitors landing via a social link.
-// Cut the intro short on small screens only; desktop keeps the full sequence.
-const MOBILE_INTRO_MS = 4000;
+// The intro films are landscape (recorded for a widescreen desktop hero).
+// Cropped to fill a tall phone screen, the visible slice ends up as an
+// unflattering close-up rather than a considered shot. Mobile skips the
+// video sequence entirely and goes straight to the photo carousel, which is
+// already composed for a range of aspect ratios.
+function isMobileViewport() {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia("(max-width: 640px)").matches;
+}
+
+function subscribeToViewportChange(onViewportChange: () => void) {
+  const mobileQuery = window.matchMedia("(max-width: 640px)");
+  mobileQuery.addEventListener("change", onViewportChange);
+  return () => mobileQuery.removeEventListener("change", onViewportChange);
+}
+
+function getServerMobileViewport() {
+  return false;
+}
 
 // Visitors who've asked the OS for less motion, or the browser for less
 // data, should land on a static poster rather than have ~3 film downloads
@@ -83,6 +98,11 @@ export default function HomeHero({ children }: HomeHeroProps) {
     prefersStaticHero,
     getServerStaticHeroPreference,
   );
+  const isMobile = useSyncExternalStore(
+    subscribeToViewportChange,
+    isMobileViewport,
+    getServerMobileViewport,
+  );
   const [introductionComplete, setIntroductionComplete] = useState(false);
   const [videosDone, setVideosDone] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
@@ -124,16 +144,6 @@ export default function HomeHero({ children }: HomeHeroProps) {
       }
     };
   }, []);
-
-  useEffect(() => {
-    if (skipAutoplay || !window.matchMedia("(max-width: 640px)").matches) return;
-    const timer = window.setTimeout(() => {
-      setIntroductionComplete(true);
-      videoRefs.current[0]?.pause();
-      videoRefs.current[1]?.pause();
-    }, MOBILE_INTRO_MS);
-    return () => window.clearTimeout(timer);
-  }, [skipAutoplay]);
 
   function toggleSound() {
     const current = videoRefs.current[activeSlot];
@@ -208,13 +218,13 @@ export default function HomeHero({ children }: HomeHeroProps) {
     <section className="relative isolate flex min-h-screen items-center justify-center overflow-hidden bg-[#123C39]">
       <div
         className={`absolute inset-0 transition-opacity duration-1000 ${
-          introductionComplete ? "opacity-100" : "opacity-0"
+          isMobile || introductionComplete ? "opacity-100" : "opacity-0"
         }`}
       >
-        <HeroCarousel paused={skipAutoplay} />
+        <HeroCarousel paused={skipAutoplay} priority={isMobile} />
       </div>
 
-      {!videosDone ? (
+      {!isMobile && !videosDone ? (
         <>
           {([0, 1] as const).map((slot) => {
             const film = introductionFilms[slotFilm[slot]];
@@ -250,7 +260,7 @@ export default function HomeHero({ children }: HomeHeroProps) {
                 onEnded={() => {
                   if (slot === activeSlot) moveToNextFilm();
                 }}
-                className="absolute inset-0 h-full w-full object-contain transition-opacity ease-in-out sm:object-cover"
+                className="absolute inset-0 h-full w-full object-cover transition-opacity ease-in-out"
                 style={{ transitionDuration: `${CROSSFADE_MS}ms`, opacity: isVisible ? 1 : 0 }}
                 aria-label={film.label}
                 aria-hidden={!isVisible}
@@ -265,7 +275,7 @@ export default function HomeHero({ children }: HomeHeroProps) {
       ) : null}
 
       <div className="absolute inset-0 z-[1] bg-[#08231F]/35" />
-      {!introductionComplete && !skipAutoplay ? (
+      {!isMobile && !introductionComplete && !skipAutoplay ? (
         <button
           type="button"
           onClick={toggleSound}

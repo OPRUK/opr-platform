@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { SITE_NAME, SITE_URL, absoluteUrl } from "../lib/site";
@@ -10,12 +11,6 @@ const caveat = localFont({
   src: "./fonts/Caveat-Variable.ttf",
   weight: "400 700",
   variable: "--font-caveat",
-});
-
-const allura = localFont({
-  src: "./fonts/Allura-Regular.ttf",
-  weight: "400",
-  variable: "--font-allura",
 });
 
 export const metadata: Metadata = {
@@ -79,7 +74,7 @@ export default function RootLayout({
       data-text-size="default"
       data-readable-font="false"
       suppressHydrationWarning
-      className={`${caveat.variable} ${allura.variable} h-full antialiased`}
+      className={`${caveat.variable} h-full antialiased`}
     >
       <head>
         <script
@@ -104,6 +99,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

@@ -41,9 +41,13 @@ const SLIDE_HOLD_MS = 6000;
 
 type HeroCarouselProps = {
   paused?: boolean;
+  // True only when this carousel's first slide is the page's actual LCP
+  // element (mobile home hero, which skips the video intro entirely) — see
+  // the sizes/priority comment below for why this defaults to off.
+  priority?: boolean;
 };
 
-export default function HeroCarousel({ paused = false }: HeroCarouselProps) {
+export default function HeroCarousel({ paused = false, priority = false }: HeroCarouselProps) {
   const [activeSlide, setActiveSlide] = useState(0);
   // The slide being faded out. Kept mounted only for the duration of the
   // crossfade so the incoming slide always has something to fade over —
@@ -96,11 +100,13 @@ export default function HeroCarousel({ paused = false }: HeroCarouselProps) {
             alt={index === activeSlide ? slide.alt : ""}
             fill
             quality={65}
-            // This carousel sits behind the intro video (HomeHero renders it
-            // at opacity-0 until the video sequence finishes, several+
-            // seconds in) — eagerly preloading its first slide competed with
-            // the actual LCP-critical video poster for the same bandwidth
-            // during the crucial first paint, for content nobody sees yet.
+            // On desktop/join-our-table this carousel sits behind (or is)
+            // secondary content, so it's never eagerly preloaded by default —
+            // that would compete with the real LCP element for bandwidth.
+            // The one exception is the mobile home hero, which skips the
+            // video intro entirely and hands this its first slide as the
+            // actual LCP image via `priority`.
+            priority={priority && index === activeSlide}
             sizes="100vw"
             className={`object-cover transition-opacity ease-in-out ${
               isOutgoing ? "opacity-0" : "opacity-100"
@@ -133,14 +139,21 @@ export default function HeroCarousel({ paused = false }: HeroCarouselProps) {
               type="button"
               onClick={() => goToSlide(index)}
               disabled={paused || isTransitioning}
-              className={`h-2 rounded-full transition-all ${
-                index === activeSlide
-                  ? "w-7 bg-[#DDB765]"
-                  : "w-2 bg-white/60 hover:bg-white"
-              } disabled:cursor-wait disabled:hover:bg-white/60`}
+              // The visible dot stays small by design; this button is the
+              // full tap target around it (WCAG/Lighthouse want at least
+              // 24x24px, even when the visual indicator is deliberately
+              // tiny) — same pattern as pagination dots on most sites.
+              className="group flex h-6 w-6 shrink-0 items-center justify-center disabled:cursor-wait"
               aria-label={`Show ${slide.alt}`}
               aria-current={index === activeSlide ? "true" : undefined}
-            />
+            >
+              <span
+                aria-hidden="true"
+                className={`block h-2 rounded-full transition-all ${
+                  index === activeSlide ? "w-7 bg-[#DDB765]" : "w-2 bg-white/60 group-hover:bg-white"
+                }`}
+              />
+            </button>
           ))}
         </div>
       </div>

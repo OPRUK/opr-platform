@@ -5,6 +5,10 @@ export type AnalyticsSourceSummary = {
   conversions: number;
 };
 
+export type AnalyticsCampaignSummary = AnalyticsSourceSummary & {
+  campaign: string;
+};
+
 export type AnalyticsParticipationMetric = {
   key: "table" | "recipes" | "votes" | "community";
   label: string;
@@ -28,6 +32,7 @@ export type AnalyticsSnapshotPlatform = {
 };
 
 import type { AnalyticsReport } from "./analytics-report-types";
+import type { PageSpeedSummary } from "./pagespeed-data";
 export type { AnalyticsReport } from "./analytics-report-types";
 
 export type AnalyticsSnapshot = {
@@ -54,6 +59,7 @@ export type AnalyticsSnapshot = {
     fetchedAt: string | null;
   };
   social: AnalyticsSnapshotPlatform[];
+  pageSpeed: PageSpeedSummary | null;
   recommendations: Array<{
     title: string;
     evidence: string;
@@ -68,6 +74,7 @@ export type AdminAnalyticsResponse = {
   ctaClicks: number;
   conversions: number;
   sources: AnalyticsSourceSummary[];
+  campaigns: AnalyticsCampaignSummary[];
   participation: AnalyticsParticipationMetric[];
   snapshot: AnalyticsSnapshot | null;
   // The full dated SEO/social analysis (see lib/analytics-report-data.ts).
