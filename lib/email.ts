@@ -134,6 +134,49 @@ export function foundingTableWelcomeEmail({
   };
 }
 
+export function cookalongSignupWelcomeEmail({
+  name,
+  unsubscribeUrl,
+  marketingOptIn,
+}: {
+  name: string;
+  unsubscribeUrl: string | null;
+  marketingOptIn: boolean;
+}) {
+  return {
+    subject: "You're in for Dave's live butter chicken cook-along",
+    html: `
+      <div style="font-family: 'Gill Sans MT', 'Gill Sans', Avenir, Corbel, Arial, sans-serif; max-width: 620px; margin: 0 auto; color: #4A4232; line-height: 1.65;">
+        <img src="${siteUrl}/images/social/opr-pinterest-profile.png" alt="Other People's Recipes" width="56" height="56" style="display: block; margin: 0 auto 20px; border-radius: 999px;" />
+        <p style="color: #9A622A; letter-spacing: 2px; font-size: 12px; text-transform: uppercase; text-align: center;">Other People's Recipes</p>
+        <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 34px; line-height: 1.2; text-align: center;">You&apos;ve got a spot at Dave&apos;s table.</h1>
+        <p>Hi ${escapeHtml(name)},</p>
+        <p>You&apos;re on the list for Dave&apos;s live butter chicken cook-along on <strong>Sunday 4 October</strong>, over Zoom.</p>
+        <p>We&apos;ll send you the recipe list about a week before, so you can shop and prep, then the Zoom link closer to the day.</p>
+        <p>Can&apos;t make it live? No problem — just keep an eye on your inbox for the details.</p>
+        <p style="margin-top: 32px;">Warmly,<br /><strong>Chaten</strong><br />Founder, Other People&apos;s Recipes</p>
+        ${marketingFooter(unsubscribeUrl)}
+        ${!marketingOptIn ? '<p style="font-size: 13px; color: #6B6254;">You will only hear from us about this cook-along — you did not opt in to other OPR news.</p>' : ""}
+        <p style="font-size: 13px; color: #6B6254;">Every Recipe has a Story.</p>
+      </div>
+    `,
+  };
+}
+
+export function newCookalongSignupEmail({ name, email }: { name: string; email: string }) {
+  return {
+    subject: `New cook-along signup: ${name}`,
+    html: `
+      <div style="font-family: 'Gill Sans MT', 'Gill Sans', Avenir, Corbel, Arial, sans-serif; max-width: 620px; margin: 0 auto; color: #4A4232; line-height: 1.65;">
+        <p style="color: #9A622A; font-size: 12px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase;">Private OPR alert</p>
+        <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 30px;">Someone has joined the cook-along.</h1>
+        <p><strong>${escapeHtml(name)}</strong> signed up to watch Dave&apos;s live butter chicken cook-along.</p>
+        <p>Contact: <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></p>
+      </div>
+    `,
+  };
+}
+
 export function newFoundingTableEmail({ name, email }: { name: string; email: string }) {
   return {
     subject: `New table signup: ${name}`,
