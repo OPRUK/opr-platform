@@ -80,7 +80,7 @@ export default async function FilmWatchPage({ params }: FilmPageProps) {
         </header>
 
         <div className="relative mt-12 overflow-hidden rounded-3xl bg-black shadow-2xl shadow-[#123C39]/25">
-          <FilmEmbed video={film.video} poster={film.poster} captions={film.captions} title={film.title} endCardDuration={film.endCardDuration} className="aspect-video w-full" />
+          <FilmEmbed video={film.video} poster={film.poster} captions={film.captions} title={film.title} className="aspect-video w-full" />
         </div>
 
         <section aria-labelledby="transcript-heading" className="mx-auto mt-12 max-w-3xl rounded-3xl bg-[#FFF3DF] p-7 shadow-lg shadow-[#1C5A50]/10 md:p-10">

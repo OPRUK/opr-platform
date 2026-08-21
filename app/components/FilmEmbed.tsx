@@ -17,14 +17,12 @@ export default function FilmEmbed({
   poster,
   captions,
   title,
-  endCardDuration = 0,
   className = "",
 }: {
   video: string;
   poster?: string;
   captions?: string;
   title: string;
-  endCardDuration?: number;
   className?: string;
 }) {
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -40,8 +38,6 @@ export default function FilmEmbed({
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [autoplayMuted, setAutoplayMuted] = useState(false);
-  const [endCardVisible, setEndCardVisible] = useState(false);
-  const endCardTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   function keepControlsVisible() {
     setControlsVisible(true);
@@ -57,8 +53,6 @@ export default function FilmEmbed({
     setIsPlaying(false);
     setCurrentTime(0);
     setAutoplayMuted(false);
-    setEndCardVisible(false);
-    if (endCardTimer.current) clearTimeout(endCardTimer.current);
     hasSentPlayEvent.current = false;
     window.setTimeout(() => triggerRef.current?.focus(), 0);
   }
@@ -66,7 +60,6 @@ export default function FilmEmbed({
   async function openFilm() {
     setMuted(false);
     setAutoplayMuted(false);
-    setEndCardVisible(false);
     flushSync(() => setOpen(true));
 
     const player = videoRef.current;
@@ -90,7 +83,6 @@ export default function FilmEmbed({
     const player = videoRef.current;
     if (!player) return;
     if (player.paused) {
-      setEndCardVisible(false);
       void player.play();
     }
     else player.pause();
@@ -122,7 +114,6 @@ export default function FilmEmbed({
       window.removeEventListener("keydown", onKeyDown);
       document.body.style.overflow = previousOverflow;
       if (hideControlsTimer.current) clearTimeout(hideControlsTimer.current);
-      if (endCardTimer.current) clearTimeout(endCardTimer.current);
     };
   }, [open]);
 
@@ -178,10 +169,6 @@ export default function FilmEmbed({
             setIsPlaying(false);
             setControlsVisible(true);
             sendAnalyticsEvent("film_watched", video);
-            if (endCardDuration > 0) {
-              setEndCardVisible(true);
-              endCardTimer.current = setTimeout(() => setEndCardVisible(false), endCardDuration * 1000);
-            }
           }}
           onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)}
           onDurationChange={(event) => setDuration(event.currentTarget.duration)}
@@ -190,16 +177,6 @@ export default function FilmEmbed({
           Your browser does not support video playback.
         </video>
         <VideoBrandMark />
-
-        {endCardVisible ? (
-          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-[#123C39] px-8 text-center text-[#FFF3DF]">
-            <div className="flex h-24 w-24 items-center justify-center rounded-full border-2 border-[#DDB765] font-display text-3xl font-bold tracking-wide text-[#DDB765]">
-              OPR
-            </div>
-            <p className="mt-6 text-xl font-bold sm:text-3xl">Every recipe has a story.</p>
-            <p className="mt-2 text-sm tracking-wide text-[#FFF3DF]/85 sm:text-base">otherpeoplesrecipes.co.uk</p>
-          </div>
-        ) : null}
 
         {autoplayMuted ? (
           <button

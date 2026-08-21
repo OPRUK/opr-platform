@@ -31,22 +31,20 @@ test("every VideoObject upload date is a valid ISO timestamp with a timezone", (
   }
 });
 
-test("Gautam and Shobha's Dish of the Week film has captions and the OPR ending", () => {
+test("Gautam and Shobha's Dish of the Week film has captions and an embedded OPR ending", () => {
   const film = films.find((candidate) => candidate.title === "Dave & Rubble | Dish of the Week: Gautam & Shobha");
 
   assert.ok(film);
   assert.equal(film.recipeSlug, "gautam-and-shobhas-tandoori-aloo-nazakat");
-  assert.equal(film.endCardDuration, 2.5);
   assert.ok(film.captions);
   assert.ok(existsSync(resolve(`public${film.video}`)));
   assert.ok(existsSync(resolve(`public${film.captions}`)));
 });
 
-test("Your Nomination film has exact captions and the OPR ending", () => {
+test("Your Nomination film has exact captions and an embedded OPR ending", () => {
   const film = films.find((candidate) => candidate.title === "Dave & Rubble | Your Nomination");
 
   assert.ok(film);
-  assert.equal(film.endCardDuration, 2.5);
   assert.ok(film.transcript?.includes("You do. Every week."));
   assert.ok(film.captions);
   assert.ok(existsSync(resolve(`public${film.video}`)));

@@ -1,5 +1,7 @@
 import "server-only";
 
+import { countryName } from "@/lib/country-names";
+
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { attributionSources } from "./attribution";
 import { getSearchConsoleSummary, type SearchConsoleSummary } from "./google-search-console";
@@ -511,7 +513,11 @@ async function withLiveReport(
         ? searchConsole.pages.map((row) => ({ page: row.label, clicks: row.clicks, impressions: row.impressions }))
         : report.googleSearch.pages,
       countries: searchConsole?.countries.length
-        ? searchConsole.countries.map((row) => ({ country: row.label, clicks: row.clicks, impressions: row.impressions }))
+        ? searchConsole.countries.map((row) => ({
+            country: countryName(row.label),
+            clicks: row.clicks,
+            impressions: row.impressions,
+          }))
         : report.googleSearch.countries,
       devices: searchConsole?.devices.length
         ? searchConsole.devices.map((row) => ({ device: row.label, clicks: row.clicks, impressions: row.impressions }))
