@@ -12,6 +12,8 @@ export type VercelAnalyticsSummary = {
   audienceCountry: VercelAudienceRow[];
   audienceDevice: VercelAudienceRow[];
   audienceOS: VercelAudienceRow[];
+  topPages: VercelAudienceRow[];
+  topReferrers: VercelAudienceRow[];
   fetchedAt: string;
 };
 
@@ -86,11 +88,13 @@ export async function getVercelAnalyticsSummary(
     countUrl.searchParams.set("since", since);
     countUrl.searchParams.set("until", until);
 
-    const [countResponse, countryRows, deviceRows, osRows] = await Promise.all([
+    const [countResponse, countryRows, deviceRows, osRows, pageRows, referrerRows] = await Promise.all([
       fetch(countUrl, { headers: { Authorization: `Bearer ${token}` } }),
       queryAggregate(token, projectId, teamId, "country", since, until),
       queryAggregate(token, projectId, teamId, "deviceType", since, until),
       queryAggregate(token, projectId, teamId, "osName", since, until),
+      queryAggregate(token, projectId, teamId, "path", since, until),
+      queryAggregate(token, projectId, teamId, "referrer", since, until),
     ]);
 
     if (!countResponse.ok) {
@@ -106,6 +110,8 @@ export async function getVercelAnalyticsSummary(
       audienceCountry: toAudienceRows(countryRows, "country"),
       audienceDevice: toAudienceRows(deviceRows, "deviceType"),
       audienceOS: toAudienceRows(osRows, "osName"),
+      topPages: toAudienceRows(pageRows, "path"),
+      topReferrers: toAudienceRows(referrerRows, "referrer"),
       fetchedAt: new Date().toISOString(),
     };
 

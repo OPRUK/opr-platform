@@ -1,15 +1,11 @@
 import "server-only";
 import type { AnalyticsReport } from "./analytics-report-types";
 
-// Manually exported from each platform's native dashboard and Google/Vercel
-// tooling, refreshed through 21 August 2026. Regenerate this file the same way next time the
-// report is refreshed (see Sources & Definitions in the source workbook for
-// exactly which dashboard each figure came from) — there is no live API
-// behind most of these numbers yet. The Google Search figures at the top of
-// the admin dashboard are the exception: those come from a live Search
-// Console connection (see lib/google-search-console.ts) and intentionally
-// are NOT read from this file, to avoid showing stale numbers next to a
-// live source.
+// Verified baseline exported from the native platform dashboards and
+// Google/Vercel tooling through 21 August 2026. The admin analytics service
+// hydrates every supported field with live website, Search Console, connected
+// social-platform and PageSpeed data. These values remain the safe fallback
+// for unavailable APIs and for fields the platforms do not expose.
 export const analyticsReport: AnalyticsReport = {
   preparedDate: "2026-08-21",
   executiveSummary: {
@@ -73,7 +69,7 @@ export const analyticsReport: AnalyticsReport = {
       { priority: "P1", action: "Remove/repost the TikTok caption containing accidental desktop interface text.", whyNow: "The caption is publicly untidy and weakens trust.", successMeasure: "Correct caption live; post checked on mobile and desktop.", owner: "Social · today" },
       { priority: "P2", action: "Improve YouTube titles and thumbnails; test one promise-led creative pattern.", whyNow: "4,000 impressions produced a 1.3% click-through rate.", successMeasure: "CTR moves towards a 3–5% working target without reducing retention.", owner: "Video · fortnightly" },
       { priority: "P2", action: "Turn search interest in bhindi and jollof into richer recipe-page coverage.", whyNow: "These are the clearest visible non-brand query themes.", successMeasure: "More recipe-page impressions and first clicks for non-brand searches.", owner: "Content · 2 articles/month" },
-      { priority: "P2", action: "Enable Vercel Speed Insights; fix contrast and caption-track warnings.", whyNow: "No field performance data exists yet; Lighthouse accessibility is 97 rather than 100.", successMeasure: "Real-user performance starts collecting; accessibility checks pass.", owner: "Site · this week" },
+      { priority: "P2", action: "Review live PageSpeed and Vercel Speed Insights each month; fix any contrast and caption-track warnings.", whyNow: "Performance collection is live, so regressions can now be identified and acted on.", successMeasure: "Core Web Vitals and Lighthouse scores remain healthy; accessibility checks pass.", owner: "Site · monthly" },
     ],
     footnote: "*Social exposures add platform-reported views/impressions and are not deduplicated people. Native platform definitions and date windows differ; use this as an activity indicator, not total audience reach.",
   },

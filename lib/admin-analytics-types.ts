@@ -32,6 +32,7 @@ export type AnalyticsSnapshotPlatform = {
 };
 
 import type { AnalyticsReport } from "./analytics-report-types";
+import type { PageSpeedSummary } from "./pagespeed-data";
 export type { AnalyticsReport } from "./analytics-report-types";
 
 export type AnalyticsSnapshot = {
@@ -58,6 +59,7 @@ export type AnalyticsSnapshot = {
     fetchedAt: string | null;
   };
   social: AnalyticsSnapshotPlatform[];
+  pageSpeed: PageSpeedSummary | null;
   recommendations: Array<{
     title: string;
     evidence: string;
