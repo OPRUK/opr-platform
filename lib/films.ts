@@ -86,7 +86,6 @@ export const films: Film[] = [
     poster: "/images/opr-dave-and-rubble-longest-two-seconds-poster.jpg",
     transcript:
       "Visual description: Dave sets a kitchen timer while Rubble watches closely. They exchange a joke as the final seconds count down before the OPR social card appears.",
-    recipeSlug: "daves-butter-chicken",
     uploadDate: "2026-08-20T12:00:00+00:00",
   },
   {
@@ -104,7 +103,6 @@ export const films: Film[] = [
     poster: "/images/opr-dave-and-rubble-secret-ingredient-poster.jpg",
     transcript:
       "Dave: “It just needs one secret ingredient.”\nRubble: “Chicken?”\nDave: “Apparently.”",
-    recipeSlug: "daves-butter-chicken",
   },
   {
     title: "Dave & Rubble | Quality Control",
@@ -112,7 +110,6 @@ export const films: Film[] = [
     poster: "/images/opr-dave-and-rubble-quality-control-poster.jpg",
     transcript:
       "Dave: “Family recipe. Four generations. Really?”\nRubble: “Quality control.”",
-    recipeSlug: "daves-butter-chicken",
   },
   {
     title: "Dave & Rubble | Dave's Butter Chicken",

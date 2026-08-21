@@ -14,12 +14,28 @@ test("the new Dave and Rubble films have complete website assets", () => {
     const film = films.find((candidate) => candidate.title === title);
 
     assert.ok(film, `${title} should be present in the film collection`);
-    assert.equal(film.recipeSlug, "daves-butter-chicken");
+    if (title === "Dave & Rubble | Butter Chicken Recipe") {
+      assert.equal(film.recipeSlug, "daves-butter-chicken");
+    }
     assert.equal(film.uploadDate, "2026-08-20T12:00:00+00:00");
     assert.ok(film.transcript?.startsWith("Visual description:"));
     assert.ok(film.poster);
     assert.ok(existsSync(resolve(`public${film.video}`)), `${film.video} should exist`);
     assert.ok(existsSync(resolve(`public${film.poster}`)), `${film.poster} should exist`);
+  }
+});
+
+test("unrelated Dave and Rubble films do not link to the Butter Chicken recipe", () => {
+  const titles = [
+    "Dave & Rubble | The Longest Two Seconds",
+    "Dave & Rubble | The Secret Ingredient",
+    "Dave & Rubble | Quality Control",
+  ];
+
+  for (const title of titles) {
+    const film = films.find((candidate) => candidate.title === title);
+    assert.ok(film);
+    assert.equal(film.recipeSlug, undefined);
   }
 });
 
