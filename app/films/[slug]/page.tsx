@@ -3,8 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import Navigation from "../../components/Navigation";
 import TrackedLink from "../../components/TrackedLink";
-import VideoBrandMark from "../../components/VideoBrandMark";
-import { filmSlug, films, getFilmBySlug } from "../../../lib/films";
+import FilmEmbed from "../../components/FilmEmbed";
+import { filmSlug, films, filmUploadDate, getFilmBySlug } from "../../../lib/films";
 import { buildMetadata } from "../../../lib/metadata";
 import { getFeaturedRecipe } from "../../../lib/recipes";
 import { absoluteUrl } from "../../../lib/site";
@@ -45,7 +45,7 @@ export default async function FilmWatchPage({ params }: FilmPageProps) {
     name: film.title,
     description,
     thumbnailUrl: [absoluteUrl(film.poster ?? "/images/recipes/barbaras-beef-casserole-wide.webp")],
-    uploadDate: film.uploadDate ?? "2026-08-01",
+    uploadDate: filmUploadDate(film),
     contentUrl: absoluteUrl(film.video),
     embedUrl: absoluteUrl(`/films/${slug}`),
     transcript: film.transcript,
@@ -80,12 +80,7 @@ export default async function FilmWatchPage({ params }: FilmPageProps) {
         </header>
 
         <div className="relative mt-12 overflow-hidden rounded-3xl bg-black shadow-2xl shadow-[#123C39]/25">
-          <VideoBrandMark />
-          <video className="aspect-video w-full" controls playsInline preload="metadata" poster={film.poster} aria-label={film.title}>
-            <source src={film.video} type="video/mp4" />
-            {film.captions ? <track kind="captions" src={film.captions} srcLang="en" label="English" default /> : null}
-            Your browser does not support embedded video. <a href={film.video}>Open the film directly.</a>
-          </video>
+          <FilmEmbed video={film.video} poster={film.poster} captions={film.captions} title={film.title} endCardDuration={film.endCardDuration} className="aspect-video w-full" />
         </div>
 
         <section aria-labelledby="transcript-heading" className="mx-auto mt-12 max-w-3xl rounded-3xl bg-[#FFF3DF] p-7 shadow-lg shadow-[#1C5A50]/10 md:p-10">

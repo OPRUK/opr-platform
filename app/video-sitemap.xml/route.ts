@@ -1,4 +1,4 @@
-import { filmSlug, films } from "../../lib/films";
+import { filmSlug, films, filmUploadDate } from "../../lib/films";
 import { absoluteUrl } from "../../lib/site";
 
 export const dynamic = "force-static";
@@ -26,7 +26,7 @@ export function GET() {
       <video:description>${xml(description)}</video:description>
       <video:content_loc>${xml(absoluteUrl(film.video))}</video:content_loc>
       <video:player_loc>${xml(watchUrl)}</video:player_loc>
-      <video:publication_date>${xml(film.uploadDate ?? "2026-08-01")}</video:publication_date>
+      <video:publication_date>${xml(filmUploadDate(film))}</video:publication_date>
       <video:family_friendly>yes</video:family_friendly>
     </video:video>
   </url>`;

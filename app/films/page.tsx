@@ -4,7 +4,7 @@ import Navigation from "../components/Navigation";
 import FilmEmbed from "../components/FilmEmbed";
 import VideoBrandMark from "../components/VideoBrandMark";
 import TrackedLink from "../components/TrackedLink";
-import { filmSlug, films } from "../../lib/films";
+import { filmSlug, films, filmUploadDate } from "../../lib/films";
 import { getFeaturedRecipe } from "../../lib/recipes";
 import { absoluteUrl } from "../../lib/site";
 import { buildMetadata } from "../../lib/metadata";
@@ -24,7 +24,7 @@ export default function FilmsPage() {
       name: film.title,
       description: film.title + ", from the OPR Film Collection: short films about food, family and the recipes we choose to pass on.",
       thumbnailUrl: [absoluteUrl(film.poster ?? "/images/recipes/barbaras-beef-casserole-wide.webp")],
-      uploadDate: film.uploadDate ?? "2026-08-01",
+      uploadDate: filmUploadDate(film),
       contentUrl: absoluteUrl(film.video),
       embedUrl: absoluteUrl(`/films/${filmSlug(film)}`),
       transcript: film.transcript,
@@ -85,7 +85,7 @@ export default function FilmsPage() {
                 key={film.video}
                 className="overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/15"
               >
-                <FilmEmbed video={film.video} poster={film.poster} captions={film.captions} title={film.title} className="aspect-video w-full" />
+                <FilmEmbed video={film.video} poster={film.poster} captions={film.captions} title={film.title} endCardDuration={film.endCardDuration} className="aspect-video w-full" />
                 <div className="p-6">
                   <h2 className="text-xl font-bold leading-snug">{film.title}</h2>
                   <Link

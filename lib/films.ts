@@ -12,6 +12,7 @@ export type Film = {
   transcript?: string;
   recipeSlug?: string;
   uploadDate?: string;
+  endCardDuration?: number;
 };
 
 export function filmSlug(film: Pick<Film, "title">): string {
@@ -27,6 +28,15 @@ export function filmSlug(film: Pick<Film, "title">): string {
 
 export function getFilmBySlug(slug: string): Film | null {
   return films.find((candidate) => filmSlug(candidate) === slug) ?? null;
+}
+
+export const defaultFilmUploadDate = "2026-08-01T12:00:00+00:00";
+
+export function filmUploadDate(film: Pick<Film, "uploadDate">): string {
+  if (!film.uploadDate) return defaultFilmUploadDate;
+  return /^\d{4}-\d{2}-\d{2}$/.test(film.uploadDate)
+    ? `${film.uploadDate}T12:00:00+00:00`
+    : film.uploadDate;
 }
 
 function film(
@@ -55,13 +65,32 @@ function film(
 
 export const films: Film[] = [
   {
+    title: "Dave & Rubble | Your Nomination",
+    video: "/videos/opr-dave-and-rubble-your-nomination.mp4",
+    captions: "/captions/opr-dave-and-rubble-your-nomination.vtt",
+    transcript:
+      "Dave: “Nominate the family dish everyone should taste.”\nRubble: “Can I nominate butter chicken?”\nDave: “You do. Every week.”",
+    uploadDate: "2026-08-21T12:00:00+00:00",
+    endCardDuration: 2.5,
+  },
+  {
+    title: "Dave & Rubble | Dish of the Week: Gautam & Shobha",
+    video: "/videos/opr-dave-and-rubble-gautam-shobha-dish-of-the-week.mp4",
+    captions: "/captions/opr-dave-and-rubble-gautam-shobha-dish-of-the-week.vtt",
+    transcript:
+      "Dave: “This week’s dish comes from Gautam and his mum, Shobha.”\nRubble: “Did they make one for me?”\nDave: “You can have the story.”",
+    recipeSlug: "gautam-and-shobhas-tandoori-aloo-nazakat",
+    uploadDate: "2026-08-21T12:00:00+00:00",
+    endCardDuration: 2.5,
+  },
+  {
     title: "Dave & Rubble | The Longest Two Seconds",
     video: "/videos/opr-dave-and-rubble-longest-two-seconds.mp4",
     poster: "/images/opr-dave-and-rubble-longest-two-seconds-poster.jpg",
     transcript:
       "Visual description: Dave sets a kitchen timer while Rubble watches closely. They exchange a joke as the final seconds count down before the OPR social card appears.",
     recipeSlug: "daves-butter-chicken",
-    uploadDate: "2026-08-20",
+    uploadDate: "2026-08-20T12:00:00+00:00",
   },
   {
     title: "Dave & Rubble | Butter Chicken Recipe",
@@ -70,7 +99,7 @@ export const films: Film[] = [
     transcript:
       "Visual description: Dave stirs a steaming pan of butter chicken while Rubble watches beside the hob. They exchange a joke about the recipe before the OPR social card appears.",
     recipeSlug: "daves-butter-chicken",
-    uploadDate: "2026-08-20",
+    uploadDate: "2026-08-20T12:00:00+00:00",
   },
   {
     title: "Dave & Rubble | The Secret Ingredient",
