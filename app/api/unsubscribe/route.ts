@@ -26,6 +26,7 @@ export async function POST(request: Request) {
     const results = await Promise.all([
       supabase.from("founding_table_members").update(changes).eq("email", email),
       supabase.from("recipe_submissions").update(changes).eq("email", email),
+      supabase.from("cookalong_signups").update(changes).eq("email", email),
     ]);
 
     const failure = results.find((result) => result.error)?.error;
