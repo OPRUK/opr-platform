@@ -151,7 +151,7 @@ export function cookalongSignupWelcomeEmail({
         <p style="color: #9A622A; letter-spacing: 2px; font-size: 12px; text-transform: uppercase; text-align: center;">Other People's Recipes</p>
         <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 34px; line-height: 1.2; text-align: center;">You&apos;ve got a spot at Dave&apos;s table.</h1>
         <p>Hi ${escapeHtml(name)},</p>
-        <p>You&apos;re on the list for Dave&apos;s live Butter Chicken cook-along on <strong>Sunday 4 October</strong>, over Zoom.</p>
+        <p>You&apos;re on the list for Dave&apos;s live Butter Chicken cook-along on <strong>Sunday 4 October, 5pm UK time</strong>, over Zoom.</p>
         <p>We&apos;ll send you the recipe list about a week before, so you can shop and prep, then the Zoom link closer to the day.</p>
         <p>Can&apos;t make it live? No problem — just keep an eye on your inbox for the details.</p>
         <p style="margin-top: 32px;">Warmly,<br /><strong>Chaten</strong><br />Founder, Other People&apos;s Recipes</p>

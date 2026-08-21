@@ -76,7 +76,7 @@ export default function FilmsPage() {
       <section className="bg-[#DDB765] px-6 py-8 md:py-9">
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 text-center text-[#08231F] sm:flex-row sm:justify-between sm:text-left">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.3em]">Live cook-along · Sunday 4 October</p>
+            <p className="text-xs font-bold uppercase tracking-[0.3em]">Live cook-along · Sunday 4 October, 5pm UK time</p>
             <p className="mt-2 text-xl font-bold leading-snug sm:text-2xl">See Dave cook his Butter Chicken live, over Zoom.</p>
           </div>
           <Link
