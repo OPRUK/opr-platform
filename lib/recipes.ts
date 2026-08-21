@@ -188,17 +188,17 @@ export const featuredRecipes: FeaturedRecipe[] = [
     ],
     faqs: [
       {
-        question: "Why does Dave use passata in butter chicken?",
+        question: "Why does Dave use passata in Butter Chicken?",
         answer:
           "Dave replaces tinned tomatoes with passata because it gives the sauce a smoother, richer texture.",
       },
       {
-        question: "How do you make the butter chicken sauce thicker?",
+        question: "How do you make the Butter Chicken sauce thicker?",
         answer:
           "Simmer the passata briskly for 20–25 minutes without a lid so the steam can escape. Use a splash guard to control the splashes without trapping moisture.",
       },
       {
-        question: "How can you make this butter chicken milder?",
+        question: "How can you make this Butter Chicken milder?",
         answer:
           "Use fewer whole chillies or remove them before serving, then add the cream to taste. More cream makes the sauce milder and paler.",
       },
@@ -225,7 +225,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
       },
       {
         src: "/images/recipes/daves-butter-chicken-step-7-ai.webp",
-        alt: "Double cream swirling through a deep red butter chicken sauce",
+        alt: "Double cream swirling through a deep red Butter Chicken sauce",
         title: "Finish with cream",
         caption: "Stir the cream through just before serving. Pale ribbons show the moment the sauce turns silkier and the chilli heat begins to soften.",
         step: 7,

@@ -68,7 +68,7 @@ export const films: Film[] = [
     video: "/videos/opr-dave-and-rubble-your-nomination.mp4",
     captions: "/captions/opr-dave-and-rubble-your-nomination.vtt",
     transcript:
-      "Dave: “Nominate the family dish everyone should taste.”\nRubble: “Can I nominate butter chicken?”\nDave: “You do. Every week.”",
+      "Dave: “Nominate the family dish everyone should taste.”\nRubble: “Can I nominate Butter Chicken?”\nDave: “You do. Every week.”",
     uploadDate: "2026-08-21T12:00:00+00:00",
   },
   {
@@ -93,7 +93,7 @@ export const films: Film[] = [
     video: "/videos/opr-dave-and-rubble-butter-chicken-recipe.mp4",
     poster: "/images/opr-dave-and-rubble-butter-chicken-recipe-poster.jpg",
     transcript:
-      "Visual description: Dave stirs a steaming pan of butter chicken while Rubble watches beside the hob. They exchange a joke about the recipe before the OPR social card appears.",
+      "Visual description: Dave stirs a steaming pan of Butter Chicken while Rubble watches beside the hob. They exchange a joke about the recipe before the OPR social card appears.",
     recipeSlug: "daves-butter-chicken",
     uploadDate: "2026-08-20T12:00:00+00:00",
   },
@@ -115,7 +115,7 @@ export const films: Film[] = [
     title: "Dave & Rubble | Dave's Butter Chicken",
     video: "/videos/opr-dave-and-rubble-daves-butter-chicken.mp4",
     transcript:
-      "Dave: “You’ve been watching this pan for ages.”\nRubble: “I’m supervising the butter chicken.”\nDave: “Family recipe. No shortcuts.”",
+      "Dave: “You’ve been watching this pan for ages.”\nRubble: “I’m supervising the Butter Chicken.”\nDave: “Family recipe. No shortcuts.”",
     recipeSlug: "daves-butter-chicken",
   },
   {
