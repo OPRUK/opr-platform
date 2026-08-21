@@ -15,6 +15,19 @@ test("converts Search Console ISO country codes into readable names", () => {
   assert.equal(countryName("nga"), "Nigeria");
 });
 
+test("converts Vercel ISO country codes into readable names", () => {
+  assert.equal(countryName("GB"), "United Kingdom");
+  assert.equal(countryName("US"), "United States");
+  assert.equal(countryName("GR"), "Greece");
+  assert.equal(countryName("IN"), "India");
+  assert.equal(countryName("BR"), "Brazil");
+  assert.equal(countryName("FR"), "France");
+  assert.equal(countryName("IE"), "Ireland");
+  assert.equal(countryName("DE"), "Germany");
+  assert.equal(countryName("AE"), "United Arab Emirates");
+  assert.equal(countryName("PK"), "Pakistan");
+});
+
 test("preserves existing names and unknown values", () => {
   assert.equal(countryName("United Kingdom"), "United Kingdom");
   assert.equal(countryName("Unknown"), "Unknown");

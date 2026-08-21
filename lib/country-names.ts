@@ -59,7 +59,12 @@ const COUNTRY_NAMES: Record<string, string> = {
   zaf: "South Africa",
 };
 
+const regionNames = new Intl.DisplayNames(["en-GB"], { type: "region" });
+
 export function countryName(value: string): string {
   const code = value.trim().toLowerCase();
+  if (/^[a-z]{2}$/.test(code)) {
+    return regionNames.of(code.toUpperCase()) ?? value;
+  }
   return COUNTRY_NAMES[code] ?? value;
 }
