@@ -29,8 +29,7 @@ export default function Navigation() {
               any page, and on the homepage it was competing with the hero
               video's poster (the actual LCP candidate) for bandwidth. */}
           <OprBadge className="h-9 w-9 sm:h-11 sm:w-11" sizes="(min-width: 640px) 44px, 36px" />
-          <span className="sm:hidden" aria-hidden="true">OPR</span>
-          <span className="hidden sm:inline">Other People&apos;s Recipes<sup aria-hidden="true" className="ml-0.5 align-super text-[0.35em]">™</sup></span>
+          <span>Other People&apos;s Recipes<sup aria-hidden="true" className="ml-0.5 align-super text-[0.35em]">™</sup></span>
         </Link>
 
         <div className="flex items-center gap-2 sm:gap-3">
