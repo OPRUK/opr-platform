@@ -90,6 +90,25 @@ function getServerStaticHeroPreference() {
   return false;
 }
 
+// A rejected/ignored play() here previously left the video frozen on its
+// poster forever — nothing in the app ever retried it, and the sound-toggle
+// button only ever touched .muted, not playback. Retry once via `canplay`
+// (covers the case where play() was called a beat before the browser had
+// enough data to honour it) so a stuck hero has a real chance to recover
+// instead of silently sitting there.
+function playWithRecovery(el: HTMLVideoElement) {
+  el.play().catch(() => {
+    const retry = () => {
+      el.removeEventListener("canplay", retry);
+      void el.play().catch(() => {
+        // Still blocked — the click-to-recover handler on the hero section
+        // is the last resort, since a genuine user gesture always succeeds.
+      });
+    };
+    el.addEventListener("canplay", retry);
+  });
+}
+
 export default function HomeHero({ children }: HomeHeroProps) {
   // useSyncExternalStore supplies the same server snapshot during hydration,
   // then updates from browser-only preferences without a markup mismatch.
@@ -129,9 +148,7 @@ export default function HomeHero({ children }: HomeHeroProps) {
     const el = videoRefs.current[activeSlot];
     if (!el) return;
     el.muted = isMuted;
-    void el.play().catch(() => {
-      // If a browser blocks autoplay, the poster stays visible for the visitor to start.
-    });
+    playWithRecovery(el);
     // The film switcher starts subsequent slots itself. This effect only
     // responds when the visitor changes their motion/data preference.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -180,7 +197,7 @@ export default function HomeHero({ children }: HomeHeroProps) {
           el.muted = isMuted;
           el.currentTime = 0;
           el.load();
-          void el.play().catch(() => {});
+          playWithRecovery(el);
         }
         setActiveSlot(nextSlot);
         currentIndexRef.current = nextIndex;
@@ -214,8 +231,19 @@ export default function HomeHero({ children }: HomeHeroProps) {
     }
   }
 
+  // Last-resort recovery: a real click is a genuine user gesture, so
+  // .play() is guaranteed to succeed regardless of whatever autoplay
+  // heuristic blocked the automatic attempts above.
+  function recoverPlaybackOnClick() {
+    const el = videoRefs.current[activeSlot];
+    if (el && el.paused && !introductionComplete) void el.play().catch(() => {});
+  }
+
   return (
-    <section className="relative isolate flex min-h-screen items-center justify-center overflow-hidden bg-[#123C39]">
+    <section
+      onClick={recoverPlaybackOnClick}
+      className="relative isolate flex min-h-screen items-center justify-center overflow-hidden bg-[#123C39]"
+    >
       <div
         className={`absolute inset-0 transition-opacity duration-1000 ${
           isMobile || introductionComplete ? "opacity-100" : "opacity-0"
