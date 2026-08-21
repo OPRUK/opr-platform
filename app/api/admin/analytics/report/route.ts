@@ -113,6 +113,16 @@ export async function GET(request: Request) {
       { header: `Conversions (${analytics.windowDays}d)`, key: "conversions", width: 22 },
     ];
     sources.addRows(analytics.sources);
+
+    const campaigns = workbook.addWorksheet("Campaign attribution");
+    campaigns.columns = [
+      { header: "Campaign", key: "campaign", width: 28 },
+      { header: "Source", key: "source", width: 20 },
+      { header: `Link clicks (${analytics.windowDays}d)`, key: "linkClicks", width: 22 },
+      { header: `Site actions (${analytics.windowDays}d)`, key: "ctaClicks", width: 22 },
+      { header: `Conversions (${analytics.windowDays}d)`, key: "conversions", width: 22 },
+    ];
+    campaigns.addRows(analytics.campaigns);
     styleSheet(sources);
 
     const social = workbook.addWorksheet("Social Latest");

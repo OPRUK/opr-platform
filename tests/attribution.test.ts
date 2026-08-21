@@ -31,6 +31,15 @@ test("normaliseAttribution preserves approved UTM values", () => {
   );
 });
 
+test("normaliseAttribution recognises LinkedIn", () => {
+  assert.deepEqual(normaliseAttribution({ src: "LinkedIn", utm_campaign: "dish_of_week" }), {
+    source: "linkedin",
+    utmSource: "linkedin",
+    utmMedium: "social",
+    utmCampaign: "dish_of_week",
+  });
+});
+
 test("normaliseAttribution rejects unknown sources and unsafe campaign values", () => {
   assert.deepEqual(normaliseAttribution({ src: "newsletter" }), {
     source: null,

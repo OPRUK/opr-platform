@@ -4,6 +4,7 @@ export const attributionSources = [
   "facebook",
   "youtube",
   "pinterest",
+  "linkedin",
 ] as const;
 
 export type AttributionSource = (typeof attributionSources)[number];
