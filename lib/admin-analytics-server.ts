@@ -485,7 +485,11 @@ async function withLiveReport(
           })
         : report.website.topReferrers,
       audienceCountry: live?.audienceCountry.length
-        ? live.audienceCountry.map((row) => ({ country: row.label, share: row.share, visitors: row.visitors }))
+        ? live.audienceCountry.map((row) => ({
+            country: countryName(row.label),
+            share: row.share,
+            visitors: row.visitors,
+          }))
         : report.website.audienceCountry,
       audienceDevice: live?.audienceDevice.length
         ? live.audienceDevice.map((row) => ({ device: row.label, share: row.share }))
