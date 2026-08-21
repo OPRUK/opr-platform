@@ -259,8 +259,8 @@ export const analyticsReport: AnalyticsReport = {
   socialOverview: {
     platforms: [
       { platform: "Instagram", period: "30d to 21 Aug", views: 4838, viewers: 2173, interactions: 356, followers: 68, profileVisits: 230, outboundClicks: 2, websiteVisitors: "Not separately reported", interactionRate: 0.0736 },
-      { platform: "Facebook", period: "24 Jul–20 Aug", views: 6600, viewers: 2428, interactions: 402, followers: 53, profileVisits: 344, outboundClicks: "Not reported", websiteVisitors: "Not separately reported", interactionRate: 0.0609 },
-      { platform: "Pinterest", period: "22 Jul–21 Aug", views: 256, viewers: 113, interactions: 11, followers: "Not displayed", profileVisits: "Not reported", outboundClicks: 1, websiteVisitors: "Not separately reported", interactionRate: 0.043 },
+      { platform: "Facebook", period: "24 Jul–20 Aug 2026", views: 6600, viewers: 2428, interactions: 402, followers: 53, profileVisits: 344, outboundClicks: "Not reported", websiteVisitors: "Not separately reported", interactionRate: 0.0609 },
+      { platform: "Pinterest", period: "22 Jul–21 Aug 2026", views: 256, viewers: 113, interactions: 11, followers: "Not displayed", profileVisits: "Not reported", outboundClicks: 1, websiteVisitors: "Not separately reported", interactionRate: 0.043 },
       { platform: "YouTube", period: "24 Jul–20 Aug", views: 223, viewers: "Not reported", interactions: "2 Shorts likes", followers: 9, profileVisits: "Not reported", outboundClicks: "Not reported", websiteVisitors: "Not separately reported", interactionRate: 0.009 },
       { platform: "TikTok", period: "Last 28 days to 21 Aug", views: 5300, viewers: "Not reported", interactions: 44, followers: 4, profileVisits: 21, outboundClicks: "Not available", websiteVisitors: "Not separately reported", interactionRate: 0.0083 },
       { platform: "LinkedIn", period: "21 Jul–19 Aug (manually checked 21 Aug 2026, 09:45)", views: 126, viewers: "Not reported", interactions: 6, followers: 21, profileVisits: "Not reported", outboundClicks: "Not reported", websiteVisitors: "Not separately reported", interactionRate: 0.0476 },
