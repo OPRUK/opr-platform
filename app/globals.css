@@ -6,7 +6,6 @@
   --font-brand: "Gill Sans MT", "Gill Sans", Avenir, Corbel, Arial, sans-serif;
   --font-display: Didot, "Bodoni MT", Georgia, "Times New Roman", serif;
   --font-founder-hand: var(--font-caveat);
-  --font-founder-signature: var(--font-allura);
   --font-recipe-card: var(--font-caveat), "Bradley Hand", cursive;
 }
 
@@ -25,7 +24,6 @@ html[data-text-size="largest"] {
 html[data-readable-font="true"] {
   --font-display: var(--font-brand);
   --font-founder-hand: var(--font-brand);
-  --font-founder-signature: var(--font-brand);
   --font-recipe-card: var(--font-brand);
 }
 
