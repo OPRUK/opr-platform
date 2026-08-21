@@ -93,6 +93,8 @@ export async function getVercelAnalyticsSummary(
       queryAggregate(token, projectId, teamId, "country", since, until),
       queryAggregate(token, projectId, teamId, "deviceType", since, until),
       queryAggregate(token, projectId, teamId, "osName", since, until),
+      queryAggregate(token, projectId, teamId, "path", since, until),
+      queryAggregate(token, projectId, teamId, "referrer", since, until),
     ]);
 
     if (!countResponse.ok) {
@@ -108,6 +110,8 @@ export async function getVercelAnalyticsSummary(
       audienceCountry: toAudienceRows(countryRows, "country"),
       audienceDevice: toAudienceRows(deviceRows, "deviceType"),
       audienceOS: toAudienceRows(osRows, "osName"),
+      topPages: toAudienceRows(pageRows, "path"),
+      topReferrers: toAudienceRows(referrerRows, "referrer"),
       fetchedAt: new Date().toISOString(),
     };
 
