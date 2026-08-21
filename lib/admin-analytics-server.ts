@@ -16,11 +16,13 @@ import { getPageSpeedSummary, type PageSpeedSummary } from "./pagespeed";
 import { analyticsReport } from "./analytics-report-data";
 import { loadLatestDailySnapshot } from "./analytics-daily-snapshots";
 import { films } from "./films";
+import { matchSocialFilmTitle, pinterestFilmImpressions } from "./social-film-matching";
 import type {
   AdminAnalyticsResponse,
   AnalyticsParticipationMetric,
   AnalyticsCampaignSummary,
   AnalyticsFilmSummary,
+  AnalyticsSocialFilmSummary,
   AnalyticsSnapshot,
   AnalyticsSourceSummary,
 } from "./admin-analytics-types";
@@ -635,6 +637,53 @@ function buildFilmViews(
     .sort((a, b) => b.plays - a.plays || a.title.localeCompare(b.title));
 }
 
+type PlatformFilm = { title: string; views: number };
+
+function socialFilmTotals(rows: readonly PlatformFilm[], platform: string): Map<string, number> {
+  const totals = new Map<string, number>();
+  for (const row of rows) {
+    const title = matchSocialFilmTitle(row.title);
+    if (!title) {
+      console.warn(`OPR ${platform} film title needs matching: ${row.title.slice(0, 100)}`);
+      continue;
+    }
+    totals.set(title, (totals.get(title) ?? 0) + row.views);
+  }
+  return totals;
+}
+
+async function buildSocialFilmViews(website: AnalyticsFilmSummary[]): Promise<AnalyticsSocialFilmSummary[]> {
+  const [facebook, instagram, tiktok, youtube] = await Promise.all([
+    getFacebookSummary(),
+    getInstagramSummary(),
+    getTikTokSummary(),
+    getYouTubeSummary(),
+  ]);
+  const sources = {
+    facebook: socialFilmTotals(facebook?.films ?? [], "Facebook"),
+    instagram: socialFilmTotals(instagram?.films ?? [], "Instagram"),
+    tiktok: socialFilmTotals(tiktok?.films ?? [], "TikTok"),
+    youtube: socialFilmTotals(youtube?.films ?? [], "YouTube"),
+    pinterest: socialFilmTotals(pinterestFilmImpressions, "Pinterest"),
+  };
+  const websiteByTitle = new Map(website.map((row) => [row.title, row]));
+
+  return films.map((film) => {
+    const site = websiteByTitle.get(film.title);
+    return {
+      title: film.title,
+      video: film.video,
+      plays: site?.plays ?? 0,
+      completions: site?.completions ?? 0,
+      facebookViews: sources.facebook.get(film.title) ?? null,
+      instagramViews: sources.instagram.get(film.title) ?? null,
+      tiktokViews: sources.tiktok.get(film.title) ?? null,
+      youtubeViews: sources.youtube.get(film.title) ?? null,
+      pinterestImpressions: sources.pinterest.get(film.title) ?? null,
+    };
+  });
+}
+
 export async function loadAdminAnalytics(
   client: SupabaseClient,
   _options?: { forceRefresh?: boolean },
@@ -738,6 +787,7 @@ export async function loadAdminAnalytics(
   });
 
   const filmViews = buildFilmViews(eventResult.data ?? []);
+  const socialFilmViews = await buildSocialFilmViews(filmViews);
 
   const [snapshot, pageSpeed, searchConsole] = await Promise.all([
     withLiveLinkedIn(
@@ -781,6 +831,7 @@ export async function loadAdminAnalytics(
     campaigns,
     participation,
     filmViews,
+    socialFilmViews,
     snapshot: snapshotWithPageSpeed,
     report: await withLiveReport(analyticsReport, snapshotWithPageSpeed, effectivePageSpeed, searchConsole),
   };

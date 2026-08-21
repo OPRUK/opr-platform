@@ -302,29 +302,35 @@ export default function AdminAnalyticsPanel({
 
             <div className="mt-6 overflow-hidden rounded-3xl border border-[#DDB765]/70 bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/10">
               <div className="border-b border-[#DDB765]/60 px-6 py-5">
-                <h3 className="text-xl font-bold">Film watch counts</h3>
-                <p className="mt-2 text-sm leading-6 text-stone-600">How many times each film on /films has actually been played and watched through to the end, on this site directly — separate from views on YouTube, TikTok or Instagram.</p>
+                <h3 className="text-xl font-bold">Film performance by channel</h3>
+                <p className="mt-2 text-sm leading-6 text-stone-600">Every website film under one consistent name. Social columns show views; Pinterest shows impressions. LinkedIn is omitted because OPR has no LinkedIn videos.</p>
               </div>
               <div className="overflow-x-auto">
-                <table className="w-full min-w-[640px] border-collapse text-left text-sm">
+                <table className="w-full min-w-[1100px] border-collapse text-left text-sm">
                   <thead>
                     <tr className="border-b border-[#DDB765] text-[#6B431E]">
                       <th className="px-6 py-4 font-semibold">Film</th>
-                      <th className="px-4 py-4 font-semibold">Plays</th>
-                      <th className="px-4 py-4 font-semibold">Watched to end</th>
-                      <th className="px-6 py-4 font-semibold">Completion rate</th>
+                      <th className="px-4 py-4 font-semibold">Website plays</th>
+                      <th className="px-4 py-4 font-semibold">Facebook views</th>
+                      <th className="px-4 py-4 font-semibold">Instagram views</th>
+                      <th className="px-4 py-4 font-semibold">TikTok views</th>
+                      <th className="px-4 py-4 font-semibold">YouTube views</th>
+                      <th className="px-6 py-4 font-semibold">Pinterest impressions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {analytics.filmViews.length ? analytics.filmViews.map((film) => (
+                    {analytics.socialFilmViews.length ? analytics.socialFilmViews.map((film) => (
                       <tr key={film.video} className="border-b border-[#DDB765]/40 last:border-0">
                         <th scope="row" className="px-6 py-4 font-semibold">{film.title}</th>
-                        <td className="px-4 py-4">{film.plays}</td>
-                        <td className="px-4 py-4">{film.completions}</td>
-                        <td className="px-6 py-4">{film.plays ? formatPercent(film.completions / film.plays) : "Not reported"}</td>
+                        <td className="px-4 py-4">{formatNumber(film.plays)}</td>
+                        <td className="px-4 py-4">{formatNumber(film.facebookViews)}</td>
+                        <td className="px-4 py-4">{formatNumber(film.instagramViews)}</td>
+                        <td className="px-4 py-4">{formatNumber(film.tiktokViews)}</td>
+                        <td className="px-4 py-4">{formatNumber(film.youtubeViews)}</td>
+                        <td className="px-6 py-4">{formatNumber(film.pinterestImpressions)}</td>
                       </tr>
                     )) : (
-                      <tr><td colSpan={4} className="px-6 py-6 text-stone-600">No film plays have been recorded yet.</td></tr>
+                      <tr><td colSpan={7} className="px-6 py-6 text-stone-600">No film performance has been recorded yet.</td></tr>
                     )}
                   </tbody>
                 </table>

@@ -132,6 +132,12 @@ export const films: Film[] = [
     recipeSlug: "barbaras-beef-casserole",
   },
   {
+    title: "Dave & Rubble | Some Recipes Are Made with a Little Extra Company",
+    video: "/videos/opr-dave-and-rubble-steak-story.mp4",
+    transcript:
+      "Visual description: Dave prepares a steak recipe in the kitchen while Rubble keeps him company.",
+  },
+  {
     title: "Dave & Rubble | Finding an Old Family Recipe",
     video: "/videos/opr-dave-and-rubble-old-family-recipe.mp4",
     transcript:

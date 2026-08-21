@@ -10,6 +10,7 @@ export type FacebookSummary = {
   followers: number;
   profileVisits28d: number;
   fetchedAt: string;
+  films: Array<{ title: string; views: number }>;
 };
 
 function isoDate(date: Date) {
@@ -38,9 +39,15 @@ export async function getFacebookSummary(): Promise<FacebookSummary | null> {
     insightsUrl.searchParams.set("until", isoDate(endDate));
     insightsUrl.searchParams.set("access_token", accessToken);
 
-    const [accountResponse, insightsResponse] = await Promise.all([
+    const videosUrl = new URL(`https://graph.facebook.com/${GRAPH_API_VERSION}/${pageId}/videos`);
+    videosUrl.searchParams.set("fields", "title,description,views");
+    videosUrl.searchParams.set("limit", "100");
+    videosUrl.searchParams.set("access_token", accessToken);
+
+    const [accountResponse, insightsResponse, videosResponse] = await Promise.all([
       fetch(accountUrl),
       fetch(insightsUrl),
+      fetch(videosUrl),
     ]);
     if (!accountResponse.ok || !insightsResponse.ok) {
       console.error("OPR Facebook analytics query failed", await insightsResponse.text());
@@ -49,6 +56,7 @@ export async function getFacebookSummary(): Promise<FacebookSummary | null> {
 
     const account = await accountResponse.json();
     const insights = await insightsResponse.json();
+    const videos = videosResponse.ok ? await videosResponse.json() : { data: [] };
     const totals = new Map<string, number>();
     for (const metric of insights.data ?? []) {
       totals.set(
@@ -64,6 +72,10 @@ export async function getFacebookSummary(): Promise<FacebookSummary | null> {
       followers: Number(account.followers_count ?? account.fan_count ?? 0),
       profileVisits28d: totals.get("page_views_total") ?? 0,
       fetchedAt: new Date().toISOString(),
+      films: (videos.data ?? []).map((video: { title?: string; description?: string; views?: number }) => ({
+        title: video.title || video.description || "Untitled video",
+        views: Number(video.views ?? 0),
+      })),
     };
   } catch (error) {
     console.error("OPR Facebook summary could not be loaded", error);

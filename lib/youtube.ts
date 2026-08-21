@@ -11,6 +11,7 @@ export type YouTubeSummary = {
   views28d: number;
   watchTimeMinutes28d: number;
   fetchedAt: string;
+  films: Array<{ title: string; views: number }>;
 };
 
 // Module-scope cache: best-effort within a warm serverless instance, not a
@@ -60,7 +61,7 @@ export async function getYouTubeSummary(
     const authHeaders = { Authorization: `Bearer ${accessToken}` };
 
     const channelResponse = await fetch(
-      "https://www.googleapis.com/youtube/v3/channels?part=statistics&mine=true",
+      "https://www.googleapis.com/youtube/v3/channels?part=statistics,contentDetails&mine=true",
       { headers: authHeaders },
     );
     if (!channelResponse.ok) {
@@ -71,6 +72,34 @@ export async function getYouTubeSummary(
     const statistics = channelPayload.items?.[0]?.statistics as
       | { subscriberCount?: string; viewCount?: string }
       | undefined;
+    const uploadsPlaylist = channelPayload.items?.[0]?.contentDetails?.relatedPlaylists?.uploads as string | undefined;
+
+    let films: Array<{ title: string; views: number }> = [];
+    if (uploadsPlaylist) {
+      const playlistResponse = await fetch(
+        `https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails&playlistId=${encodeURIComponent(uploadsPlaylist)}&maxResults=50`,
+        { headers: authHeaders },
+      );
+      if (playlistResponse.ok) {
+        const playlistPayload = await playlistResponse.json();
+        const ids = (playlistPayload.items ?? [])
+          .map((item: { contentDetails?: { videoId?: string } }) => item.contentDetails?.videoId)
+          .filter(Boolean);
+        if (ids.length) {
+          const videosResponse = await fetch(
+            `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${ids.join(",")}`,
+            { headers: authHeaders },
+          );
+          if (videosResponse.ok) {
+            const videosPayload = await videosResponse.json();
+            films = (videosPayload.items ?? []).map((item: { snippet?: { title?: string }; statistics?: { viewCount?: string } }) => ({
+              title: item.snippet?.title ?? "Untitled video",
+              views: Number(item.statistics?.viewCount ?? 0),
+            }));
+          }
+        }
+      }
+    }
 
     const endDate = new Date();
     endDate.setUTCDate(endDate.getUTCDate() - REPORT_LAG_DAYS);
@@ -98,6 +127,7 @@ export async function getYouTubeSummary(
       views28d: row?.[0] ?? 0,
       watchTimeMinutes28d: row?.[1] ?? 0,
       fetchedAt: new Date().toISOString(),
+      films,
     };
 
     cached = { data: summary, expiresAt: Date.now() + CACHE_MS };

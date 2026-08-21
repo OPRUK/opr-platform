@@ -13,6 +13,7 @@ export type TikTokSummary = {
   videoCount: number;
   views28d: number;
   fetchedAt: string;
+  films: Array<{ title: string; views: number }>;
 };
 
 // Module-scope cache: best-effort within a warm serverless instance, not a
@@ -47,16 +48,18 @@ async function getAccessToken(clientKey: string, clientSecret: string, refreshTo
 type TikTokVideo = {
   create_time: number;
   view_count: number;
+  title?: string;
+  video_description?: string;
 };
 
-async function fetchRecentViews28d(accessToken: string, since: Date): Promise<number> {
+async function fetchRecentVideos(accessToken: string, since: Date): Promise<TikTokVideo[]> {
   const sinceSeconds = Math.floor(since.getTime() / 1000);
   let cursor: number | undefined;
-  let total = 0;
+  const recent: TikTokVideo[] = [];
 
   for (let page = 0; page < VIDEO_LIST_MAX_PAGES; page += 1) {
     const response = await fetch(
-      "https://open.tiktokapis.com/v2/video/list/?fields=create_time,view_count",
+      "https://open.tiktokapis.com/v2/video/list/?fields=create_time,view_count,title,video_description",
       {
         method: "POST",
         headers: {
@@ -84,14 +87,14 @@ async function fetchRecentViews28d(accessToken: string, since: Date): Promise<nu
         reachedOlderVideo = true;
         continue;
       }
-      total += video.view_count ?? 0;
+      recent.push(video);
     }
 
     if (reachedOlderVideo || !payload.data?.has_more) break;
     cursor = payload.data.cursor;
   }
 
-  return total;
+  return recent;
 }
 
 function isoDate(date: Date) {
@@ -130,7 +133,8 @@ export async function getTikTokSummary(
     const startDate = new Date(endDate);
     startDate.setUTCDate(startDate.getUTCDate() - (REPORT_WINDOW_DAYS - 1));
 
-    const views28d = await fetchRecentViews28d(accessToken, startDate);
+    const recentVideos = await fetchRecentVideos(accessToken, startDate);
+    const views28d = recentVideos.reduce((total, video) => total + (video.view_count ?? 0), 0);
 
     const summary: TikTokSummary = {
       period: `${REPORT_WINDOW_DAYS} days to ${isoDate(endDate)}`,
@@ -139,6 +143,10 @@ export async function getTikTokSummary(
       videoCount: user?.video_count ?? 0,
       views28d,
       fetchedAt: new Date().toISOString(),
+      films: recentVideos.map((video) => ({
+        title: video.title || video.video_description || "Untitled video",
+        views: video.view_count ?? 0,
+      })),
     };
 
     cached = { data: summary, expiresAt: Date.now() + CACHE_MS };
