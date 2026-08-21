@@ -59,13 +59,14 @@ export const analyticsReport: AnalyticsReport = {
       },
       {
         area: "Measurement",
-        evidence: "Only two /links button clicks are logged, both on launch day and possibly QA.",
-        meaning: "The link page is too new to judge and cannot yet identify source platform.",
-        decision: "Give each social a source-coded bio URL and log the source with every click.",
+        evidence: "Privacy-safe source, UTM campaign, site-action and conversion totals are now collected first-party.",
+        meaning: "OPR can compare which links and campaigns turn discovery into participation without storing personal identifiers.",
+        decision: "Use a stable source and campaign code on every social link, then review complete calendar-month totals.",
       },
     ],
     topPriorities: [
-      { priority: "P1", action: "Add source-coded /links URLs and UTMs for every social profile and campaign.", whyNow: "Instagram, TikTok and YouTube referrals are not separately visible in website analytics.", successMeasure: "Every profile/campaign has a distinct source; monthly report reconciles clicks with visits.", owner: "Site + social · this week" },
+      { priority: "P1", action: "Increase Google visibility through richer verified recipe coverage and stronger contextual internal links.", whyNow: "OPR earns clicks when it appears, but broader non-brand recipe discovery remains the constraint.", successMeasure: "Complete-month Search Console reports show growth in non-brand recipe impressions, clicks and indexed recipe pages.", owner: "Content + site · monthly" },
+      { priority: "P1", action: "Keep one clear primary action on every important landing page.", whyNow: "First-party source, campaign, action and conversion totals can now show which journeys turn exploration into participation.", successMeasure: "Each priority page has one named action and its complete-month conversion trend is reviewed.", owner: "Site + content · this month" },
       { priority: "P1", action: "Earn links from contributors, local press, food-history groups and relevant partners.", whyNow: "Only 13 external links are reported—and all are from the sister .com domain.", successMeasure: "10+ new relevant referring domains, each linking to a useful canonical page.", owner: "PR/content · weekly" },
       { priority: "P1", action: "Consolidate /family-cookbook/community/1 into the canonical Sudesh recipe URL.", whyNow: "Google discovered the duplicate but has not indexed it.", successMeasure: "Duplicate removed from coverage; canonical recipe remains indexable.", owner: "Site · this week" },
       { priority: "P1", action: "Create dedicated film watch pages with VideoObject data, transcripts and a video sitemap.", whyNow: "Homepage video is excluded because it is not on a watch page; only two videos are indexed.", successMeasure: "Each priority film has an indexable watch page and valid video data.", owner: "Site/content · 30 days" },
