@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import type { AdminAnalyticsResponse } from "../../lib/admin-analytics-types";
 import type { AnalyticsReport } from "../../lib/analytics-report-types";
 
@@ -22,6 +23,29 @@ function formatNumber(value: number | null, digits = 0) {
     maximumFractionDigits: digits,
     minimumFractionDigits: digits,
   }).format(value);
+}
+
+type FilmChannel = "Facebook" | "Instagram" | "TikTok" | "YouTube";
+
+function socialTotal(film: AdminAnalyticsResponse["socialFilmViews"][number]) {
+  return [film.facebookViews, film.instagramViews, film.tiktokViews, film.youtubeViews]
+    .reduce<number>((total, value) => total + (value ?? 0), 0);
+}
+
+function bestFilmChannel(film: AdminAnalyticsResponse["socialFilmViews"][number]): FilmChannel | null {
+  const channels: Array<[FilmChannel, number | null]> = [
+    ["Facebook", film.facebookViews],
+    ["Instagram", film.instagramViews],
+    ["TikTok", film.tiktokViews],
+    ["YouTube", film.youtubeViews],
+  ];
+  const reported = channels.filter((entry): entry is [FilmChannel, number] => entry[1] !== null);
+  if (!reported.length) return null;
+  return reported.reduce((best, current) => current[1] > best[1] ? current : best)[0];
+}
+
+function filmMetricLabel(value: number | null, unavailableLabel = "Data unavailable") {
+  return value === null ? unavailableLabel : formatNumber(value);
 }
 
 function formatPercent(value: number) {
@@ -121,6 +145,7 @@ export default function AdminAnalyticsPanel({
   onOpenSecurity,
   onSignOut,
 }: AdminAnalyticsPanelProps) {
+  const [filmFilter, setFilmFilter] = useState<"all" | "published" | "missing" | "highest">("all");
   const snapshot = analytics?.snapshot ?? null;
   const report = analytics?.report ?? null;
   const staticUpdateNote = report
@@ -142,6 +167,15 @@ export default function AdminAnalyticsPanel({
     (total, platform) => total + platform.exposures,
     0,
   ) ?? 0;
+  const filmRows = [...(analytics?.socialFilmViews ?? [])]
+    .filter((film) => {
+      const allChannelsReported = [film.facebookViews, film.instagramViews, film.tiktokViews, film.youtubeViews, film.pinterestImpressions]
+        .every((value) => value !== null);
+      if (filmFilter === "published") return allChannelsReported;
+      if (filmFilter === "missing") return !allChannelsReported;
+      return true;
+    })
+    .sort((a, b) => filmFilter === "highest" ? socialTotal(b) - socialTotal(a) : 0);
 
   return (
     <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] px-5 py-8 text-[#123C39] md:px-10 md:py-10">
@@ -304,34 +338,52 @@ export default function AdminAnalyticsPanel({
               <div className="border-b border-[#DDB765]/60 px-6 py-5">
                 <h3 className="text-xl font-bold">Film performance by channel</h3>
                 <p className="mt-2 text-sm leading-6 text-stone-600">Every website film under one consistent name. Social columns show views; Pinterest shows impressions. LinkedIn is omitted because OPR has no LinkedIn videos.</p>
-                <p className="mt-1 text-xs text-stone-500">Social figures audited 21 August 2026 at 18:35 BST; live connected totals replace the audited figures when available.</p>
+                <p className="mt-1 text-xs text-stone-500">Dynamic channels use their live connection, with the 21 August 2026 at 18:35 BST audit as a fallback. Pinterest is a static audited snapshot.</p>
+                <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
+                  <label className="text-sm font-semibold text-[#6B431E]">
+                    Show films
+                    <select value={filmFilter} onChange={(event) => setFilmFilter(event.target.value as typeof filmFilter)} className="ml-3 rounded-full border border-[#DDB765] bg-white px-4 py-2 text-[#123C39]">
+                      <option value="all">All films</option>
+                      <option value="published">Published everywhere</option>
+                      <option value="missing">Missing channel data</option>
+                      <option value="highest">Highest performing</option>
+                    </select>
+                  </label>
+                  <p className="max-w-xl text-xs leading-5 text-stone-500">Pinterest figures are impressions, not video views, and are excluded from total social views and strongest-channel comparisons. Platform view definitions also differ.</p>
+                </div>
               </div>
               <div className="overflow-x-auto">
-                <table className="w-full min-w-[1100px] border-collapse text-left text-sm">
+                <table className="w-full min-w-[1450px] border-collapse text-left text-sm">
                   <thead>
                     <tr className="border-b border-[#DDB765] text-[#6B431E]">
                       <th className="px-6 py-4 font-semibold">Film</th>
-                      <th className="px-4 py-4 font-semibold">Website plays</th>
-                      <th className="px-4 py-4 font-semibold">Facebook views</th>
-                      <th className="px-4 py-4 font-semibold">Instagram views</th>
-                      <th className="px-4 py-4 font-semibold">TikTok views</th>
-                      <th className="px-4 py-4 font-semibold">YouTube views</th>
-                      <th className="px-6 py-4 font-semibold">Pinterest impressions</th>
+                      <th className="px-4 py-4 font-semibold">Website plays <span className="block text-xs font-normal text-[#1C5A50]">Dynamic · {formatDateTime(analytics.generatedAt)}</span></th>
+                      <th className="px-4 py-4 font-semibold">Facebook views <span className="block text-xs font-normal text-[#1C5A50]">Dynamic · {formatDateTime(analytics.generatedAt)}</span></th>
+                      <th className="px-4 py-4 font-semibold">Instagram views <span className="block text-xs font-normal text-[#1C5A50]">Dynamic · {formatDateTime(analytics.generatedAt)}</span></th>
+                      <th className="px-4 py-4 font-semibold">TikTok views <span className="block text-xs font-normal text-[#1C5A50]">Dynamic · {formatDateTime(analytics.generatedAt)}</span></th>
+                      <th className="px-4 py-4 font-semibold">YouTube views <span className="block text-xs font-normal text-[#1C5A50]">Dynamic · {formatDateTime(analytics.generatedAt)}</span></th>
+                      <th className="px-4 py-4 font-semibold">Total social views <span className="block text-xs font-normal text-stone-500">Excludes Pinterest</span></th>
+                      <th className="px-4 py-4 font-semibold">Strongest channel</th>
+                      <th className="px-6 py-4 font-semibold">Pinterest impressions <span className="block text-xs font-normal text-[#9A622A]">Static · 21 Aug 2026, 18:35</span></th>
                     </tr>
                   </thead>
                   <tbody>
-                    {analytics.socialFilmViews.length ? analytics.socialFilmViews.map((film) => (
+                    {filmRows.length ? filmRows.map((film) => {
+                      const bestChannel = bestFilmChannel(film);
+                      return (
                       <tr key={film.video} className="border-b border-[#DDB765]/40 last:border-0">
                         <th scope="row" className="px-6 py-4 font-semibold">{film.title}</th>
                         <td className="px-4 py-4">{formatNumber(film.plays)}</td>
-                        <td className="px-4 py-4">{formatNumber(film.facebookViews)}</td>
-                        <td className="px-4 py-4">{formatNumber(film.instagramViews)}</td>
-                        <td className="px-4 py-4">{formatNumber(film.tiktokViews)}</td>
-                        <td className="px-4 py-4">{formatNumber(film.youtubeViews)}</td>
-                        <td className="px-6 py-4">{formatNumber(film.pinterestImpressions)}</td>
+                        <td className={`px-4 py-4 ${bestChannel === "Facebook" ? "bg-[#DDEBE4] font-bold" : ""}`}>{filmMetricLabel(film.facebookViews)}</td>
+                        <td className={`px-4 py-4 ${bestChannel === "Instagram" ? "bg-[#DDEBE4] font-bold" : ""}`}>{filmMetricLabel(film.instagramViews)}</td>
+                        <td className={`px-4 py-4 ${bestChannel === "TikTok" ? "bg-[#DDEBE4] font-bold" : ""}`}>{filmMetricLabel(film.tiktokViews)}</td>
+                        <td className={`px-4 py-4 ${bestChannel === "YouTube" ? "bg-[#DDEBE4] font-bold" : ""}`}>{filmMetricLabel(film.youtubeViews, "Not published")}</td>
+                        <td className="px-4 py-4 font-bold">{formatNumber(socialTotal(film))}</td>
+                        <td className="px-4 py-4">{bestChannel ?? "Data unavailable"}</td>
+                        <td className="px-6 py-4">{filmMetricLabel(film.pinterestImpressions, "Not published")}</td>
                       </tr>
-                    )) : (
-                      <tr><td colSpan={7} className="px-6 py-6 text-stone-600">No film performance has been recorded yet.</td></tr>
+                    );}) : (
+                      <tr><td colSpan={9} className="px-6 py-6 text-stone-600">No films match this filter.</td></tr>
                     )}
                   </tbody>
                 </table>
