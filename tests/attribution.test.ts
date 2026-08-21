@@ -40,6 +40,14 @@ test("normaliseAttribution recognises LinkedIn", () => {
   });
 });
 
+test("each social bio can retain a distinct campaign code", () => {
+  for (const source of ["instagram", "tiktok", "facebook", "youtube", "pinterest", "linkedin"]) {
+    const attribution = normaliseAttribution({ src: source, utm_campaign: "dish_of_week" });
+    assert.equal(attribution.source, source);
+    assert.equal(attribution.utmCampaign, "dish_of_week");
+  }
+});
+
 test("normaliseAttribution rejects unknown sources and unsafe campaign values", () => {
   assert.deepEqual(normaliseAttribution({ src: "newsletter" }), {
     source: null,

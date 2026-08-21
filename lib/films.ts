@@ -14,6 +14,21 @@ export type Film = {
   uploadDate?: string;
 };
 
+export function filmSlug(film: Pick<Film, "title">): string {
+  return film.title
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/[’']/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+export function getFilmBySlug(slug: string): Film | null {
+  return films.find((candidate) => filmSlug(candidate) === slug) ?? null;
+}
+
 function film(
   title: string,
   file: string,

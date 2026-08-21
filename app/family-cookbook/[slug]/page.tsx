@@ -13,6 +13,7 @@ import { getFeaturedRecipe } from "../../../lib/recipes";
 import { buildFaqPageJsonLd } from "../../../lib/recipe-faqs";
 import { getApprovedCommunityCooks } from "../../../lib/community-cooks";
 import { SITE_NAME, absoluteUrl } from "../../../lib/site";
+import { filmSlug, films } from "../../../lib/films";
 
 export const dynamic = "force-dynamic";
 
@@ -289,9 +290,6 @@ export default async function RecipePage({
         </section>
       ) : null}
 
-      <FamiliesWhoMadeThis cooks={communityCooks} recipeTitle={recipe.title} />
-      <CommunityCookForm recipeSlug={recipe.slug} recipeTitle={recipe.title} />
-
       <RecipeFaqs recipeTitle={recipe.title} faqs={recipe.faqs} />
 
       {relatedRecipes.length ? (
@@ -336,13 +334,17 @@ export default async function RecipePage({
           <p className="text-sm uppercase tracking-[0.35em] text-amber-300">Watch the story</p>
           <h2 className="mx-auto mt-4 max-w-3xl text-3xl font-bold">{relatedFilm}</h2>
           <Link
-            href={"/films#" + encodeURIComponent(relatedFilm)}
+            href={`/films/${filmSlug(films.find((film) => film.title === relatedFilm) ?? { title: relatedFilm })}`}
             className="mt-8 inline-block rounded-full bg-[#FFF3DF] px-8 py-4 font-medium text-[#123C39] transition hover:scale-105"
           >
             Watch this family recipe film
           </Link>
         </section>
       ) : null}
+
+      <FamiliesWhoMadeThis cooks={communityCooks} recipeTitle={recipe.title} />
+      <CommunityCookForm recipeSlug={recipe.slug} recipeTitle={recipe.title} />
+
 
       <section className="px-6 py-8 text-center md:py-10">
         <Link

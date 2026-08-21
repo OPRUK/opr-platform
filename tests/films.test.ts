@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 import test from "node:test";
-import { films } from "../lib/films.ts";
+import { filmSlug, films, getFilmBySlug } from "../lib/films.ts";
 
 const newFilmTitles = [
   "Dave & Rubble | The Longest Two Seconds",
@@ -20,5 +20,15 @@ test("the new Dave and Rubble films have complete website assets", () => {
     assert.ok(film.poster);
     assert.ok(existsSync(resolve(`public${film.video}`)), `${film.video} should exist`);
     assert.ok(existsSync(resolve(`public${film.poster}`)), `${film.poster} should exist`);
+  }
+});
+
+test("every film has a unique, reversible watch-page slug and transcript", () => {
+  const slugs = films.map(filmSlug);
+  assert.equal(new Set(slugs).size, films.length);
+
+  for (const film of films) {
+    assert.ok(film.transcript, `${film.title} should have a transcript`);
+    assert.equal(getFilmBySlug(filmSlug(film)), film);
   }
 });

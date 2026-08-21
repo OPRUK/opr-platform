@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { createClient } from "@supabase/supabase-js";
 import { featuredRecipes } from "../lib/recipes";
+import { filmSlug, films } from "../lib/films";
 import { SITE_URL } from "../lib/site";
 
 const staticRoutes: Array<{ path: string; changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"]; priority: number }> = [
@@ -32,6 +33,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
   }
 
+  for (const film of films) {
+    entries.push({
+      url: `${SITE_URL}/films/${filmSlug(film)}`,
+      lastModified: film.uploadDate ? new Date(film.uploadDate) : siteLaunchDate,
+      changeFrequency: "yearly",
+      priority: 0.7,
+    });
+  }
+
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
@@ -48,6 +58,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .eq("is_published", true);
 
   for (const recipe of communityRecipes ?? []) {
+    if (recipe.id === 1) continue;
     entries.push({
       url: `${SITE_URL}/family-cookbook/community/${recipe.id}`,
       lastModified: recipe.published_at ? new Date(recipe.published_at) : siteLaunchDate,
