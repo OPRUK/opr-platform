@@ -21,7 +21,8 @@ export type AnalyticsEventKey =
   | "film_recipe"
   | "founder_join"
   | "join_table_success"
-  | "recipe_submission_success";
+  | "recipe_submission_success"
+  | "community_cook_success";
 
 const sourceSet = new Set<string>(attributionSources);
 const campaignPattern = /^[a-z0-9][a-z0-9_-]{0,63}$/;

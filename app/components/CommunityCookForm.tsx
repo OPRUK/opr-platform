@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useRef, useState } from "react";
+import { addAttributionToFormData } from "../../lib/attribution-client";
 
 type CommunityCookFormProps = {
   recipeTitle: string;
@@ -22,6 +23,7 @@ export default function CommunityCookForm({ recipeId, recipeSlug, recipeTitle }:
     formData.set("recipeTitle", recipeTitle);
     if (recipeId) formData.set("recipeId", String(recipeId));
     if (recipeSlug) formData.set("recipeSlug", recipeSlug);
+    addAttributionToFormData(formData);
 
     try {
       const response = await fetch("/api/recipe-community-cook", { method: "POST", body: formData });
@@ -43,8 +45,9 @@ export default function CommunityCookForm({ recipeId, recipeSlug, recipeTitle }:
           <p className="text-sm font-bold uppercase tracking-[0.35em] text-[#9A622A]">Families who&apos;ve made this</p>
           <h2 className="mt-4 text-4xl font-bold text-[#123C39]">Add your place at the table.</h2>
           <p className="mt-5 text-lg leading-8 text-stone-700">
-            Cooked {recipeTitle}? Share a photo or a few words for the families who make it next.
-            Every post is checked by OPR before it appears here.
+            Cooked {recipeTitle}? Share a photo or a few words for the families who make it next —
+            and you could be picked for a future OPR live cook-along. Every post is checked by OPR
+            before it appears here.
           </p>
         </div>
         <form ref={formRef} onSubmit={handleSubmit} className="space-y-5">

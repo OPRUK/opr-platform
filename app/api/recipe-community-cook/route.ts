@@ -1,6 +1,8 @@
 import { getSupabaseAdmin } from "../../../lib/supabase/admin";
 import { checkRateLimit } from "../../../lib/rate-limit";
 import { attachmentLimits, extensionFor } from "../../../lib/media-attachments";
+import { normaliseAttribution } from "../../../lib/attribution";
+import { recordAnalyticsEvent } from "../../../lib/analytics-server";
 
 function readText(formData: FormData, field: string, required = false) {
   const value = formData.get(field);
@@ -28,6 +30,12 @@ export async function POST(request: Request) {
     const note = readText(formData, "note");
     const agreementAccepted = readText(formData, "agreementAccepted") === "true";
     const photo = formData.get("photo");
+    const attribution = normaliseAttribution({
+      source: readText(formData, "attributionSource"),
+      utmSource: readText(formData, "utmSource"),
+      utmMedium: readText(formData, "utmMedium"),
+      utmCampaign: readText(formData, "utmCampaign"),
+    });
 
     const isCommunityRecipe = recipeId !== null;
     const isCuratedRecipe = Boolean(recipeSlug);
@@ -83,6 +91,14 @@ export async function POST(request: Request) {
       photo_path: photoPath,
     });
     if (insertError) throw insertError;
+
+    const pagePath = recipeSlug ? `/family-cookbook/${recipeSlug}` : `/family-cookbook/community/${recipeId}`;
+    await recordAnalyticsEvent(supabase, {
+      eventKey: "community_cook_success",
+      pagePath,
+      destination: null,
+      attribution,
+    });
 
     return Response.json({ ok: true });
   } catch (error) {
