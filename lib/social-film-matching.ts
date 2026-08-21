@@ -43,3 +43,59 @@ export const pinterestFilmImpressions = [
   { title: "Quality Control", views: 10 },
   { title: "OPR Dave and Rubble's steak story", views: 9 },
 ] as const;
+
+// Verified directly in each channel's creator dashboard. These figures provide
+// a fallback when an API is unavailable or a post caption does not match the
+// website title. Live API totals override them when available.
+export const socialFilmAuditCapturedAt = "2026-08-21T18:35:00+01:00";
+
+export const facebookFilmViews = [
+  { title: "Dave & Rubble | Your Nomination", views: 27 },
+  { title: "Dave & Rubble | Dish of the Week: Gautam & Shobha", views: 54 },
+  { title: "Dave & Rubble | The Longest Two Seconds", views: 173 },
+  { title: "Dave & Rubble | Butter Chicken Recipe", views: 301 },
+  { title: "Dave & Rubble | Quality Control", views: 137 },
+  { title: "Dave & Rubble | The Secret Ingredient", views: 186 },
+  { title: "Dave & Rubble | Dave's Butter Chicken", views: 332 },
+] as const;
+
+export const instagramFilmViews = [
+  { title: "Dave & Rubble | Your Nomination", views: 41 },
+  { title: "Dave & Rubble | Dish of the Week: Gautam & Shobha", views: 103 },
+  { title: "Dave & Rubble | The Longest Two Seconds", views: 366 },
+  { title: "Dave & Rubble | Butter Chicken Recipe", views: 218 },
+  { title: "Dave & Rubble | Quality Control", views: 314 },
+  { title: "Dave & Rubble | The Secret Ingredient", views: 195 },
+  { title: "Dave & Rubble | Dave's Butter Chicken", views: 424 },
+  { title: "Dave & Rubble | Sam's Soufflé", views: 231 },
+  { title: "Dave & Rubble | Some Recipes Never Leave You", views: 206 },
+  { title: "Mummy Morris & Rubble | Dave’s Mum’s Beef Casserole", views: 215 },
+  { title: "Dave & Rubble | Finding an Old Family Recipe", views: 180 },
+  { title: "Dave & Rubble | A Recipe Worth Passing On", views: 177 },
+  { title: "Dave & Rubble | OPR Recipe of the Month", views: 169 },
+  { title: "Dave & Rubble | Cooking Together", views: 158 },
+  { title: "Dave & Rubble | Some Recipes Are Made with a Little Extra Company", views: 206 },
+] as const;
+
+export const tiktokFilmViews = [
+  { title: "Dave & Rubble | Dave's Butter Chicken", views: 250 },
+  { title: "Dave & Rubble | Quality Control", views: 246 },
+  { title: "Dave & Rubble | Finding an Old Family Recipe", views: 243 },
+  { title: "Dave & Rubble | The Secret Ingredient", views: 241 },
+  { title: "Dave & Rubble | Sam's Soufflé", views: 239 },
+] as const;
+
+export const youtubeFilmViews = [
+  { title: "Dave & Rubble | Your Nomination", views: 0 },
+  { title: "Dave & Rubble | Dish of the Week: Gautam & Shobha", views: 0 },
+  { title: "Dave & Rubble | The Longest Two Seconds", views: 0 },
+  { title: "Dave & Rubble | Butter Chicken Recipe", views: 0 },
+  { title: "Dave & Rubble | Quality Control", views: 0 },
+  { title: "Dave & Rubble | The Secret Ingredient", views: 0 },
+  { title: "Dave & Rubble | Dave's Butter Chicken", views: 1 },
+  { title: "Dave & Rubble | Sam's Soufflé", views: 2 },
+  { title: "Dave & Rubble | Some Recipes Never Leave You", views: 3 },
+  { title: "Dave & Rubble | Finding an Old Family Recipe", views: 0 },
+  { title: "Dave & Rubble | A Recipe Worth Passing On", views: 0 },
+  { title: "Dave & Rubble | OPR Recipe of the Month", views: 0 },
+] as const;

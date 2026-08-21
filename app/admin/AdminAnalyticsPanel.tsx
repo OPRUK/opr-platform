@@ -304,6 +304,7 @@ export default function AdminAnalyticsPanel({
               <div className="border-b border-[#DDB765]/60 px-6 py-5">
                 <h3 className="text-xl font-bold">Film performance by channel</h3>
                 <p className="mt-2 text-sm leading-6 text-stone-600">Every website film under one consistent name. Social columns show views; Pinterest shows impressions. LinkedIn is omitted because OPR has no LinkedIn videos.</p>
+                <p className="mt-1 text-xs text-stone-500">Social figures audited 21 August 2026 at 18:35 BST; live connected totals replace the audited figures when available.</p>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[1100px] border-collapse text-left text-sm">

@@ -16,7 +16,14 @@ import { getPageSpeedSummary, type PageSpeedSummary } from "./pagespeed";
 import { analyticsReport } from "./analytics-report-data";
 import { loadLatestDailySnapshot } from "./analytics-daily-snapshots";
 import { films } from "./films";
-import { matchSocialFilmTitle, pinterestFilmImpressions } from "./social-film-matching";
+import {
+  facebookFilmViews,
+  instagramFilmViews,
+  matchSocialFilmTitle,
+  pinterestFilmImpressions,
+  tiktokFilmViews,
+  youtubeFilmViews,
+} from "./social-film-matching";
 import type {
   AdminAnalyticsResponse,
   AnalyticsParticipationMetric,
@@ -659,11 +666,23 @@ async function buildSocialFilmViews(website: AnalyticsFilmSummary[]): Promise<An
     getTikTokSummary(),
     getYouTubeSummary(),
   ]);
-  const sources = {
+  const auditedSources = {
+    facebook: socialFilmTotals(facebookFilmViews, "Facebook audit"),
+    instagram: socialFilmTotals(instagramFilmViews, "Instagram audit"),
+    tiktok: socialFilmTotals(tiktokFilmViews, "TikTok audit"),
+    youtube: socialFilmTotals(youtubeFilmViews, "YouTube audit"),
+  };
+  const liveSources = {
     facebook: socialFilmTotals(facebook?.films ?? [], "Facebook"),
     instagram: socialFilmTotals(instagram?.films ?? [], "Instagram"),
     tiktok: socialFilmTotals(tiktok?.films ?? [], "TikTok"),
     youtube: socialFilmTotals(youtube?.films ?? [], "YouTube"),
+  };
+  const sources = {
+    facebook: new Map([...auditedSources.facebook, ...liveSources.facebook]),
+    instagram: new Map([...auditedSources.instagram, ...liveSources.instagram]),
+    tiktok: new Map([...auditedSources.tiktok, ...liveSources.tiktok]),
+    youtube: new Map([...auditedSources.youtube, ...liveSources.youtube]),
     pinterest: socialFilmTotals(pinterestFilmImpressions, "Pinterest"),
   };
   const websiteByTitle = new Map(website.map((row) => [row.title, row]));
