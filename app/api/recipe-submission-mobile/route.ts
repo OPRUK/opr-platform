@@ -3,6 +3,7 @@ import { normaliseAttribution } from "../../../lib/attribution";
 import { recordAnalyticsEvent } from "../../../lib/analytics-server";
 import { getSupabaseAdmin } from "../../../lib/supabase/admin";
 import { checkRateLimit } from "../../../lib/rate-limit";
+import { titleCaseDishName } from "../../../lib/text";
 
 // A dedicated, lighter endpoint for the mobile Share screen (title/name/
 // story only — see design_handoff_opr_app). Deliberately separate from
@@ -45,7 +46,7 @@ export async function POST(request: Request) {
 
     const body = await request.json();
     const name = readText(body.name);
-    const title = readText(body.title);
+    const title = titleCaseDishName(readText(body.title));
     const story = readText(body.story);
     const location = readText(body.location) || null;
     const attribution = normaliseAttribution(body.attribution);
