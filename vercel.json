@@ -6,11 +6,3 @@
     }
   ]
 }
-{
-  "crons": [
-    {
-      "path": "/api/cron/analytics-snapshot",
-      "schedule": "15 6 * * *"
-    }
-  ]
-}
