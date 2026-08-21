@@ -77,7 +77,7 @@ export default function FilmsPage() {
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 text-center text-[#08231F] sm:flex-row sm:justify-between sm:text-left">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.3em]">Live cook-along · Sunday 4 October</p>
-            <p className="mt-2 text-xl font-bold leading-snug sm:text-2xl">See Dave cook his butter chicken live, over Zoom.</p>
+            <p className="mt-2 text-xl font-bold leading-snug sm:text-2xl">See Dave cook his Butter Chicken live, over Zoom.</p>
           </div>
           <Link
             href="/live-with-dave"

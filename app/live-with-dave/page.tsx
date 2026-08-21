@@ -8,12 +8,12 @@ import { buildMetadata } from "../../lib/metadata";
 export const metadata: Metadata = buildMetadata({
   title: "Live With Dave: Butter Chicken Cook-Along",
   description:
-    "Join Dave live over Zoom on Sunday 4 October as he cooks his family butter chicken. Free to join — save your spot.",
+    "Join Dave live over Zoom on Sunday 4 October as he cooks his family Butter Chicken. Free to join — save your spot.",
   path: "/live-with-dave",
 });
 
 const whatToExpect = [
-  "Dave cooks his family butter chicken live, start to finish",
+  "Dave cooks his family Butter Chicken live, start to finish",
   "The recipe list lands in your inbox the week before, so you can shop and prep",
   "The Zoom join link follows a few days before the event",
   "Ask Dave anything — this is a live kitchen, not a recording",
@@ -31,7 +31,7 @@ export default function LiveWithDavePage() {
             Live cook-along
           </p>
           <h1 className="font-display mx-auto max-w-4xl text-5xl font-bold leading-tight drop-shadow-2xl md:text-7xl">
-            Cook Dave&apos;s butter chicken with him, live.
+            Cook Dave&apos;s Butter Chicken with him, live.
           </h1>
           <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-[#FFF3DF]">
             Sunday 4 October, over Zoom. Free to join — bring your apron and your questions.
@@ -45,7 +45,7 @@ export default function LiveWithDavePage() {
             Sunday 4 October
           </p>
           <h2 className="mt-5 text-4xl font-bold leading-tight md:text-5xl">
-            The family butter chicken recipe, cooked live in Dave&apos;s kitchen.
+            The family Butter Chicken recipe, cooked live in Dave&apos;s kitchen.
           </h2>
           <p className="mt-7 max-w-xl text-lg leading-8 text-stone-700">
             Four generations, no shortcuts. Save your spot and we will send everything
@@ -60,7 +60,7 @@ export default function LiveWithDavePage() {
             ))}
           </ul>
           <p className="mt-10 text-stone-700">
-            Want a preview first? <Link href="/family-cookbook/daves-butter-chicken" className="font-semibold text-[#9A622A] underline decoration-[#DDB765] underline-offset-4">See Dave&apos;s butter chicken recipe.</Link>
+            Want a preview first? <Link href="/family-cookbook/daves-butter-chicken" className="font-semibold text-[#9A622A] underline decoration-[#DDB765] underline-offset-4">See Dave&apos;s Butter Chicken recipe.</Link>
           </p>
         </div>
 
