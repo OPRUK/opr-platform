@@ -200,6 +200,7 @@ export const analyticsReport: AnalyticsReport = {
       { device: "Recipe rich result", clicks: 0, impressions: 2 },
     ],
     note: "Google withholds or anonymises many query rows for privacy, so visible queries do not reconcile to the 30 total clicks. The 16–18 Aug daily row is an aggregate derived from the change in the verified totals; page, country and device tables remain the latest export available from the detailed report.",
+    fetchedAt: null,
   },
 
   seoTechnical: {

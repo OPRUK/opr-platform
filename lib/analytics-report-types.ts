@@ -64,6 +64,7 @@ export type GoogleSearchReport = {
   countries: Array<{ country: string; clicks: number; impressions: number }>;
   devices: Array<{ device: string; clicks: number; impressions: number }>;
   note: string;
+  fetchedAt: string | null;
 };
 
 export type SeoTechnicalReport = {

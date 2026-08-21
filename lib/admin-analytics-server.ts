@@ -2,7 +2,7 @@ import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { attributionSources } from "./attribution";
-import { getSearchConsoleSummary } from "./google-search-console";
+import { getSearchConsoleSummary, type SearchConsoleSummary } from "./google-search-console";
 import { getYouTubeSummary } from "./youtube";
 import { getInstagramSummary } from "./instagram";
 import { getTikTokSummary } from "./tiktok";
@@ -410,6 +410,7 @@ async function withLiveReport(
   report: AnalyticsReport,
   snapshot: AnalyticsSnapshot | null,
   pageSpeed: PageSpeedSummary | null,
+  searchConsole: SearchConsoleSummary | null,
 ): Promise<AnalyticsReport> {
   const live = await getVercelAnalyticsSummary();
   const pagesPerVisitor = live && live.visitors > 0 ? live.pageviews / live.visitors : snapshot?.website.pagesPerVisitor ?? 0;
@@ -503,6 +504,19 @@ async function withLiveReport(
         if (row.metric === "Indexed pages") return { ...row, value: snapshot.google.indexedPages };
         return row;
       }),
+      queries: searchConsole?.queries.length
+        ? searchConsole.queries.map((row) => ({ query: row.label, clicks: row.clicks, impressions: row.impressions }))
+        : report.googleSearch.queries,
+      pages: searchConsole?.pages.length
+        ? searchConsole.pages.map((row) => ({ page: row.label, clicks: row.clicks, impressions: row.impressions }))
+        : report.googleSearch.pages,
+      countries: searchConsole?.countries.length
+        ? searchConsole.countries.map((row) => ({ country: row.label, clicks: row.clicks, impressions: row.impressions }))
+        : report.googleSearch.countries,
+      devices: searchConsole?.devices.length
+        ? searchConsole.devices.map((row) => ({ device: row.label, clicks: row.clicks, impressions: row.impressions }))
+        : report.googleSearch.devices,
+      fetchedAt: searchConsole?.fetchedAt ?? report.googleSearch.fetchedAt,
     } : report.googleSearch,
     socialOverview: snapshot ? {
       ...report.socialOverview,
@@ -707,7 +721,7 @@ export async function loadAdminAnalytics(
 
   const filmViews = buildFilmViews(eventResult.data ?? []);
 
-  const [snapshot, pageSpeed] = await Promise.all([
+  const [snapshot, pageSpeed, searchConsole] = await Promise.all([
     withLiveLinkedIn(
       await withLiveWebsiteSnapshot(
         await withCurrentPinterest(
@@ -728,6 +742,7 @@ export async function loadAdminAnalytics(
       ),
     ),
     getPageSpeedSummary({ forceRefresh: _options?.forceRefresh ?? false }),
+    getSearchConsoleSummary(),
   ]);
   const effectivePageSpeed = pageSpeed ?? snapshot?.pageSpeed ?? null;
   const snapshotWithPageSpeed = snapshot
@@ -749,6 +764,6 @@ export async function loadAdminAnalytics(
     participation,
     filmViews,
     snapshot: snapshotWithPageSpeed,
-    report: await withLiveReport(analyticsReport, snapshotWithPageSpeed, effectivePageSpeed),
+    report: await withLiveReport(analyticsReport, snapshotWithPageSpeed, effectivePageSpeed, searchConsole),
   };
 }

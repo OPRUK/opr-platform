@@ -579,8 +579,20 @@ export default function AdminAnalyticsPanel({
             </div>
 
             <div className="mt-8 rounded-[1.5rem] bg-[#EED8B2] p-5 text-[#123C39] shadow-inner md:p-7">
-              <SubHeading eyebrow="Google Search" title="Search Console detail" note={report.googleSearch.period} />
-              <p className="mt-2 text-xs leading-5 text-stone-600">The live Google Search tiles higher up this page are the current source of truth. These tables add the query, page, country and device breakdown behind that headline data as of the report date.</p>
+              <SubHeading
+                eyebrow="Google Search"
+                title="Search Console detail"
+                note={
+                  report.googleSearch.fetchedAt
+                    ? `${report.googleSearch.period} · Live, refreshed ${new Intl.DateTimeFormat("en-GB", { timeStyle: "short" }).format(new Date(report.googleSearch.fetchedAt))}`
+                    : report.googleSearch.period
+                }
+              />
+              <p className="mt-2 text-xs leading-5 text-stone-600">
+                {report.googleSearch.fetchedAt
+                  ? "The query, page, country and device breakdowns below now refresh directly from Search Console alongside the live tiles higher up this page."
+                  : "The live Google Search tiles higher up this page are the current source of truth. These tables add the query, page, country and device breakdown behind that headline data as of the report date."}
+              </p>
               <DataTable<(typeof report.googleSearch.kpis)[number]>
                 keyFn={(row) => row.metric}
                 rows={report.googleSearch.kpis}
