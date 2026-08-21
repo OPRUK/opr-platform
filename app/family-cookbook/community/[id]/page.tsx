@@ -345,9 +345,9 @@ export default async function CommunityRecipePage({
           </div>
         </section>
       ) : null}
-      <RecipeFaqs recipeTitle={recipe.title} faqs={faqs} />
       <FamiliesWhoMadeThis cooks={communityCooks} recipeTitle={recipe.title} />
       <CommunityCookForm recipeId={recipe.id} recipeTitle={recipe.title} />
+      <RecipeFaqs recipeTitle={recipe.title} faqs={faqs} />
       <section className="px-6 py-10 text-center md:py-12">
         <Link
           href="/family-cookbook"
