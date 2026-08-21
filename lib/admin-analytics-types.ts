@@ -23,6 +23,14 @@ export type AnalyticsFilmSummary = {
   completions: number;
 };
 
+export type AnalyticsSocialFilmSummary = AnalyticsFilmSummary & {
+  facebookViews: number | null;
+  instagramViews: number | null;
+  tiktokViews: number | null;
+  youtubeViews: number | null;
+  pinterestImpressions: number | null;
+};
+
 export type AnalyticsSnapshotPlatform = {
   platform: string;
   period: string;
@@ -84,6 +92,7 @@ export type AdminAnalyticsResponse = {
   campaigns: AnalyticsCampaignSummary[];
   participation: AnalyticsParticipationMetric[];
   filmViews: AnalyticsFilmSummary[];
+  socialFilmViews: AnalyticsSocialFilmSummary[];
   snapshot: AnalyticsSnapshot | null;
   // The full dated SEO/social analysis (see lib/analytics-report-data.ts).
   // Current headline figures stay in snapshot above; live website figures are
