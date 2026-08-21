@@ -139,14 +139,21 @@ export default function HeroCarousel({ paused = false, priority = false }: HeroC
               type="button"
               onClick={() => goToSlide(index)}
               disabled={paused || isTransitioning}
-              className={`h-2 rounded-full transition-all ${
-                index === activeSlide
-                  ? "w-7 bg-[#DDB765]"
-                  : "w-2 bg-white/60 hover:bg-white"
-              } disabled:cursor-wait disabled:hover:bg-white/60`}
+              // The visible dot stays small by design; this button is the
+              // full tap target around it (WCAG/Lighthouse want at least
+              // 24x24px, even when the visual indicator is deliberately
+              // tiny) — same pattern as pagination dots on most sites.
+              className="group flex h-6 w-6 shrink-0 items-center justify-center disabled:cursor-wait"
               aria-label={`Show ${slide.alt}`}
               aria-current={index === activeSlide ? "true" : undefined}
-            />
+            >
+              <span
+                aria-hidden="true"
+                className={`block h-2 rounded-full transition-all ${
+                  index === activeSlide ? "w-7 bg-[#DDB765]" : "w-2 bg-white/60 group-hover:bg-white"
+                }`}
+              />
+            </button>
           ))}
         </div>
       </div>
