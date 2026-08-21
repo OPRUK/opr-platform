@@ -2,15 +2,16 @@ import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { attributionSources } from "./attribution";
-import { getSearchConsoleSummary, type SearchConsoleSummary } from "./google-search-console";
-import { getYouTubeSummary, type YouTubeSummary } from "./youtube";
-import { getInstagramSummary, type InstagramSummary } from "./instagram";
-import { getTikTokSummary, type TikTokSummary } from "./tiktok";
-import { getPinterestSummary, type PinterestSummary } from "./pinterest";
-import { getLinkedInSummary, type LinkedInSummary } from "./linkedin";
-import { getVercelAnalyticsSummary, type VercelAnalyticsSummary } from "./vercel-analytics";
-import { getPageSpeedSummary, type PageSpeedSummary } from "./pagespeed";
+import { getSearchConsoleSummary } from "./google-search-console";
+import { getYouTubeSummary } from "./youtube";
+import { getInstagramSummary } from "./instagram";
+import { getTikTokSummary } from "./tiktok";
+import { getPinterestSummary } from "./pinterest";
+import { getLinkedInSummary } from "./linkedin";
+import { getFacebookSummary } from "./facebook";
+import { getVercelAnalyticsSummary } from "./vercel-analytics";
 import { analyticsReport } from "./analytics-report-data";
+import { loadLatestDailySnapshot } from "./analytics-daily-snapshots";
 import type {
   AdminAnalyticsResponse,
   AnalyticsParticipationMetric,
@@ -35,34 +36,10 @@ const participationTables: Array<{
   { key: "community", label: "Community cooks", table: "recipe_community_cooks" },
 ];
 
-const analyticsPageSize = 1_000;
+async function getSnapshot(client: SupabaseClient): Promise<AnalyticsSnapshot | null> {
+  const savedSnapshot = await loadLatestDailySnapshot(client);
+  if (savedSnapshot) return savedSnapshot;
 
-async function loadAnalyticsRows<T extends Record<string, unknown>>(
-  client: SupabaseClient,
-  table: "link_clicks" | "site_events",
-  columns: string,
-  since: string,
-): Promise<{ data: T[]; error: unknown | null }> {
-  const data: T[] = [];
-
-  for (let from = 0; ; from += analyticsPageSize) {
-    const result = await client
-      .from(table)
-      .select(columns)
-      .gte("created_at", since)
-      .order("created_at", { ascending: true })
-      .range(from, from + analyticsPageSize - 1);
-
-    if (result.error) return { data, error: result.error };
-    const page = (result.data ?? []) as unknown as T[];
-    data.push(...page);
-    if (page.length < analyticsPageSize) break;
-  }
-
-  return { data, error: null };
-}
-
-function getSnapshot(): AnalyticsSnapshot | null {
   const encoded = process.env.OPR_ANALYTICS_SNAPSHOT;
   if (!encoded) return null;
 
@@ -84,7 +61,7 @@ function getSnapshot(): AnalyticsSnapshot | null {
     return {
       ...snapshot,
       website: { ...snapshot.website, fetchedAt: null },
-      google: { ...snapshot.google, fetchedAt: null, provisionalFrom: null },
+      google: { ...snapshot.google, fetchedAt: null },
       social: snapshot.social.map((platform) => ({ ...platform, fetchedAt: null })),
     } as AnalyticsSnapshot;
   } catch (error) {
@@ -93,11 +70,10 @@ function getSnapshot(): AnalyticsSnapshot | null {
   }
 }
 
-function withLiveSearchConsole(
-  snapshot: AnalyticsSnapshot | null,
-  live: SearchConsoleSummary | null,
-): AnalyticsSnapshot | null {
+async function withLiveSearchConsole(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
   if (!snapshot) return snapshot;
+
+  const live = await getSearchConsoleSummary();
   if (!live) return snapshot;
 
   return {
@@ -109,17 +85,15 @@ function withLiveSearchConsole(
       impressions: live.impressions,
       ctr: live.ctr,
       averagePosition: live.averagePosition,
-      provisionalFrom: live.provisionalFrom,
       fetchedAt: live.fetchedAt,
     },
   };
 }
 
-function withLiveYouTube(
-  snapshot: AnalyticsSnapshot | null,
-  live: YouTubeSummary | null,
-): AnalyticsSnapshot | null {
+async function withLiveYouTube(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
   if (!snapshot) return snapshot;
+
+  const live = await getYouTubeSummary();
   if (!live) return snapshot;
 
   return {
@@ -139,11 +113,10 @@ function withLiveYouTube(
   };
 }
 
-function withLiveInstagram(
-  snapshot: AnalyticsSnapshot | null,
-  live: InstagramSummary | null,
-): AnalyticsSnapshot | null {
+async function withLiveInstagram(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
   if (!snapshot) return snapshot;
+
+  const live = await getInstagramSummary();
   if (!live) return snapshot;
 
   return {
@@ -164,11 +137,10 @@ function withLiveInstagram(
   };
 }
 
-function withLiveTikTok(
-  snapshot: AnalyticsSnapshot | null,
-  live: TikTokSummary | null,
-): AnalyticsSnapshot | null {
+async function withLiveTikTok(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
   if (!snapshot) return snapshot;
+
+  const live = await getTikTokSummary();
   if (!live) return snapshot;
 
   return {
@@ -188,11 +160,10 @@ function withLiveTikTok(
   };
 }
 
-function withLivePinterest(
-  snapshot: AnalyticsSnapshot | null,
-  live: PinterestSummary | null,
-): AnalyticsSnapshot | null {
+async function withLivePinterest(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
   if (!snapshot) return snapshot;
+
+  const live = await getPinterestSummary();
   if (!live) return snapshot;
 
   return {
@@ -213,11 +184,155 @@ function withLivePinterest(
   };
 }
 
-function withLiveLinkedIn(
-  snapshot: AnalyticsSnapshot | null,
-  live: LinkedInSummary | null,
-): AnalyticsSnapshot | null {
+function withLatestPinterestSnapshot(snapshot: AnalyticsSnapshot | null): AnalyticsSnapshot | null {
   if (!snapshot) return snapshot;
+
+  return {
+    ...snapshot,
+    social: snapshot.social.map((platform) =>
+      platform.platform.toLowerCase() === "pinterest"
+        ? {
+            ...platform,
+            period: "22 Jul–21 Aug 2026",
+            exposureLabel: "Impressions",
+            exposures: 256,
+            interactions: 11,
+            followers: null,
+            profileVisits: null,
+            outboundClicks: 1,
+            fetchedAt: null,
+          }
+        : platform,
+    ),
+  };
+}
+
+async function withCurrentPinterest(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
+  // Pinterest returns null until the app's trial access is approved. Once the
+  // credentials work, the live figures take over automatically.
+  return withLivePinterest(withLatestPinterestSnapshot(snapshot));
+}
+
+function withLatestFacebookSnapshot(snapshot: AnalyticsSnapshot | null): AnalyticsSnapshot | null {
+  if (!snapshot) return snapshot;
+
+  return {
+    ...snapshot,
+    social: snapshot.social.map((platform) =>
+      platform.platform.toLowerCase() === "facebook"
+        ? {
+            ...platform,
+            period: "24 Jul–20 Aug 2026",
+            exposureLabel: "Views",
+            exposures: 6600,
+            interactions: 402,
+            followers: 53,
+            profileVisits: 344,
+            outboundClicks: null,
+            fetchedAt: null,
+          }
+        : platform,
+    ),
+  };
+}
+
+async function withLiveFacebook(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
+  if (!snapshot) return snapshot;
+  const live = await getFacebookSummary();
+  if (!live) return snapshot;
+
+  return {
+    ...snapshot,
+    social: snapshot.social.map((platform) =>
+      platform.platform.toLowerCase() === "facebook"
+        ? {
+            ...platform,
+            period: live.period,
+            exposureLabel: "Views",
+            exposures: live.views28d,
+            interactions: live.interactions28d,
+            followers: live.followers,
+            profileVisits: live.profileVisits28d,
+            fetchedAt: live.fetchedAt,
+          }
+        : platform,
+    ),
+  };
+}
+
+function withLatestYouTubeSnapshot(snapshot: AnalyticsSnapshot | null): AnalyticsSnapshot | null {
+  if (!snapshot) return snapshot;
+
+  return {
+    ...snapshot,
+    social: snapshot.social.map((platform) =>
+      platform.platform.toLowerCase() === "youtube"
+        ? {
+            ...platform,
+            period: "24 Jul–20 Aug 2026",
+            exposureLabel: "Views",
+            exposures: 223,
+            interactions: 2,
+            followers: 9,
+            profileVisits: null,
+            outboundClicks: null,
+            fetchedAt: null,
+          }
+        : platform,
+    ),
+  };
+}
+
+function withLatestInstagramSnapshot(snapshot: AnalyticsSnapshot | null): AnalyticsSnapshot | null {
+  if (!snapshot) return snapshot;
+
+  return {
+    ...snapshot,
+    social: snapshot.social.map((platform) =>
+      platform.platform.toLowerCase() === "instagram"
+        ? {
+            ...platform,
+            period: "Last 30 days to 21 Aug 2026",
+            exposureLabel: "Views",
+            exposures: 4838,
+            interactions: 356,
+            followers: 68,
+            profileVisits: 230,
+            outboundClicks: 2,
+            fetchedAt: null,
+          }
+        : platform,
+    ),
+  };
+}
+
+function withLatestTikTokSnapshot(snapshot: AnalyticsSnapshot | null): AnalyticsSnapshot | null {
+  if (!snapshot) return snapshot;
+
+  return {
+    ...snapshot,
+    social: snapshot.social.map((platform) =>
+      platform.platform.toLowerCase() === "tiktok"
+        ? {
+            ...platform,
+            period: "Last 28 days to 21 Aug 2026",
+            exposureLabel: "Views",
+            exposures: 5300,
+            interactions: 44,
+            followers: 4,
+            profileVisits: 21,
+            outboundClicks: null,
+            fetchedAt: null,
+          }
+        : platform,
+    ),
+  };
+}
+
+async function withLiveLinkedIn(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
+  if (!snapshot) return snapshot;
+
+  const live = await getLinkedInSummary();
   if (!live) return snapshot;
 
   const hasLinkedIn = snapshot.social.some((platform) => platform.platform.toLowerCase() === "linkedin");
@@ -245,11 +360,10 @@ function withLiveLinkedIn(
   };
 }
 
-function withLiveWebsiteSnapshot(
-  snapshot: AnalyticsSnapshot | null,
-  live: VercelAnalyticsSummary | null,
-): AnalyticsSnapshot | null {
+async function withLiveWebsiteSnapshot(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
   if (!snapshot) return snapshot;
+
+  const live = await getVercelAnalyticsSummary();
   if (!live) return snapshot;
 
   return {
@@ -265,16 +379,22 @@ function withLiveWebsiteSnapshot(
   };
 }
 
-function withLiveWebsiteReport(
-  report: AnalyticsReport,
-  live: VercelAnalyticsSummary | null,
-): AnalyticsReport {
+async function withLiveWebsiteReport(report: AnalyticsReport): Promise<AnalyticsReport> {
+  const live = await getVercelAnalyticsSummary();
   if (!live) return report;
 
   const pagesPerVisitor = live.visitors > 0 ? live.pageviews / live.visitors : 0;
 
   return {
     ...report,
+    executiveSummary: {
+      ...report.executiveSummary,
+      kpis: report.executiveSummary.kpis.map((row) => {
+        if (row.label === "Website visitors · 30d") return { ...row, value: live.visitors.toLocaleString("en-GB") };
+        if (row.label === "Page views · 30d") return { ...row, value: live.pageviews.toLocaleString("en-GB") };
+        return row;
+      }),
+    },
     website: {
       ...report.website,
       period: live.period,
@@ -294,27 +414,6 @@ function withLiveWebsiteReport(
         ? live.audienceOS.map((row) => ({ os: row.label, share: row.share, visitors: row.visitors }))
         : report.website.audienceOS,
       fetchedAt: live.fetchedAt,
-    },
-  };
-}
-
-function withLivePageSpeedReport(
-  report: AnalyticsReport,
-  live: PageSpeedSummary | null,
-): AnalyticsReport {
-  if (!live) return report;
-
-  return {
-    ...report,
-    seoTechnical: {
-      ...report.seoTechnical,
-      pageSpeed: live.metrics,
-      pageSpeedMeta: {
-        testedUrl: live.testedUrl,
-        strategy: live.strategy,
-        fetchedAt: live.fetchedAt,
-        lighthouseVersion: live.lighthouseVersion,
-      },
     },
   };
 }
@@ -352,48 +451,25 @@ async function loadParticipation(
 
 export async function loadAdminAnalytics(
   client: SupabaseClient,
-  { forceRefresh = false }: { forceRefresh?: boolean } = {},
+  _options?: { forceRefresh?: boolean },
 ): Promise<AdminAnalyticsResponse> {
   const since90Days = new Date();
   since90Days.setUTCDate(since90Days.getUTCDate() - 90);
   const since30Days = new Date();
   since30Days.setUTCDate(since30Days.getUTCDate() - 30);
 
-  const liveOptions = { forceRefresh };
-  const [
-    clickResult,
-    eventResult,
-    participation,
-    searchConsole,
-    youtube,
-    instagram,
-    tiktok,
-    pinterest,
-    linkedin,
-    vercel,
-    pageSpeed,
-  ] = await Promise.all([
-    loadAnalyticsRows<{ source: string | null; link_key: string }>(
-      client,
-      "link_clicks",
-      "source, link_key",
-      since90Days.toISOString(),
-    ),
-    loadAnalyticsRows<{ source: string | null; event_key: string }>(
-      client,
-      "site_events",
-      "source, event_key",
-      since90Days.toISOString(),
-    ),
+  const [clickResult, eventResult, participation] = await Promise.all([
+    client
+      .from("link_clicks")
+      .select("source, link_key")
+      .gte("created_at", since90Days.toISOString())
+      .limit(10_000),
+    client
+      .from("site_events")
+      .select("source, event_key")
+      .gte("created_at", since90Days.toISOString())
+      .limit(10_000),
     loadParticipation(client, since30Days.toISOString()),
-    getSearchConsoleSummary(liveOptions),
-    getYouTubeSummary(liveOptions),
-    getInstagramSummary(liveOptions),
-    getTikTokSummary(liveOptions),
-    getPinterestSummary(liveOptions),
-    getLinkedInSummary(liveOptions),
-    getVercelAnalyticsSummary(liveOptions),
-    getPageSpeedSummary(liveOptions),
   ]);
 
   if (clickResult.error || eventResult.error) {
@@ -440,23 +516,6 @@ export async function loadAdminAnalytics(
       return bTotal - aTotal || a.source.localeCompare(b.source);
     });
 
-  const snapshot = withLiveLinkedIn(
-    withLiveWebsiteSnapshot(
-      withLivePinterest(
-        withLiveTikTok(
-          withLiveInstagram(
-            withLiveYouTube(withLiveSearchConsole(getSnapshot(), searchConsole), youtube),
-            instagram,
-          ),
-          tiktok,
-        ),
-        pinterest,
-      ),
-      vercel,
-    ),
-    linkedin,
-  );
-
   return {
     generatedAt: new Date().toISOString(),
     windowDays: 90,
@@ -469,10 +528,25 @@ export async function loadAdminAnalytics(
     ).length,
     sources,
     participation,
-    snapshot,
-    report: withLivePageSpeedReport(
-      withLiveWebsiteReport(analyticsReport, vercel),
-      pageSpeed,
+    snapshot: await withLiveLinkedIn(
+      await withLiveWebsiteSnapshot(
+        await withCurrentPinterest(
+          await withLiveFacebook(withLatestFacebookSnapshot(
+            await withLiveTikTok(
+              withLatestTikTokSnapshot(
+                await withLiveInstagram(
+                  withLatestInstagramSnapshot(
+                    await withLiveYouTube(
+                      withLatestYouTubeSnapshot(await withLiveSearchConsole(await getSnapshot(client))),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          )),
+        ),
+      ),
     ),
+    report: await withLiveWebsiteReport(analyticsReport),
   };
 }
