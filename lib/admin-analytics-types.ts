@@ -16,6 +16,13 @@ export type AnalyticsParticipationMetric = {
   last30Days: number | null;
 };
 
+export type AnalyticsFilmSummary = {
+  title: string;
+  video: string;
+  plays: number;
+  completions: number;
+};
+
 export type AnalyticsSnapshotPlatform = {
   platform: string;
   period: string;
@@ -76,6 +83,7 @@ export type AdminAnalyticsResponse = {
   sources: AnalyticsSourceSummary[];
   campaigns: AnalyticsCampaignSummary[];
   participation: AnalyticsParticipationMetric[];
+  filmViews: AnalyticsFilmSummary[];
   snapshot: AnalyticsSnapshot | null;
   // The full dated SEO/social analysis (see lib/analytics-report-data.ts).
   // Current headline figures stay in snapshot above; live website figures are

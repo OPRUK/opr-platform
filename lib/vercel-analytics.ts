@@ -9,11 +9,11 @@ export type VercelAnalyticsSummary = {
   period: string;
   visitors: number;
   pageviews: number;
+  topPages: VercelAudienceRow[];
+  topReferrers: VercelAudienceRow[];
   audienceCountry: VercelAudienceRow[];
   audienceDevice: VercelAudienceRow[];
   audienceOS: VercelAudienceRow[];
-  topPages: VercelAudienceRow[];
-  topReferrers: VercelAudienceRow[];
   fetchedAt: string;
 };
 
@@ -88,13 +88,13 @@ export async function getVercelAnalyticsSummary(
     countUrl.searchParams.set("since", since);
     countUrl.searchParams.set("until", until);
 
-    const [countResponse, countryRows, deviceRows, osRows, pageRows, referrerRows] = await Promise.all([
+    const [countResponse, pageRows, referrerRows, countryRows, deviceRows, osRows] = await Promise.all([
       fetch(countUrl, { headers: { Authorization: `Bearer ${token}` } }),
+      queryAggregate(token, projectId, teamId, "requestPath", since, until),
+      queryAggregate(token, projectId, teamId, "referrerHostname", since, until),
       queryAggregate(token, projectId, teamId, "country", since, until),
       queryAggregate(token, projectId, teamId, "deviceType", since, until),
       queryAggregate(token, projectId, teamId, "osName", since, until),
-      queryAggregate(token, projectId, teamId, "path", since, until),
-      queryAggregate(token, projectId, teamId, "referrer", since, until),
     ]);
 
     if (!countResponse.ok) {
@@ -107,11 +107,11 @@ export async function getVercelAnalyticsSummary(
       period: `${REPORT_WINDOW_DAYS} days to ${until}`,
       visitors: count.data?.visitors ?? 0,
       pageviews: count.data?.pageviews ?? 0,
+      topPages: toAudienceRows(pageRows, "requestPath"),
+      topReferrers: toAudienceRows(referrerRows, "referrerHostname"),
       audienceCountry: toAudienceRows(countryRows, "country"),
       audienceDevice: toAudienceRows(deviceRows, "deviceType"),
       audienceOS: toAudienceRows(osRows, "osName"),
-      topPages: toAudienceRows(pageRows, "path"),
-      topReferrers: toAudienceRows(referrerRows, "referrer"),
       fetchedAt: new Date().toISOString(),
     };
 

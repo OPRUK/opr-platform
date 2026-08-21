@@ -13,10 +13,12 @@ import { getVercelAnalyticsSummary } from "./vercel-analytics";
 import { getPageSpeedSummary, type PageSpeedSummary } from "./pagespeed";
 import { analyticsReport } from "./analytics-report-data";
 import { loadLatestDailySnapshot } from "./analytics-daily-snapshots";
+import { films } from "./films";
 import type {
   AdminAnalyticsResponse,
   AnalyticsParticipationMetric,
   AnalyticsCampaignSummary,
+  AnalyticsFilmSummary,
   AnalyticsSnapshot,
   AnalyticsSourceSummary,
 } from "./admin-analytics-types";
@@ -574,6 +576,33 @@ async function loadParticipation(
   );
 }
 
+const filmTitleByVideo = new Map(films.map((film) => [film.video, film.title]));
+
+function buildFilmViews(
+  events: Array<{ event_key: string; destination: string | null }>,
+): AnalyticsFilmSummary[] {
+  const counts = new Map<string, { plays: number; completions: number }>();
+
+  for (const event of events) {
+    if (event.event_key !== "film_play" && event.event_key !== "film_watched") continue;
+    if (!event.destination || !filmTitleByVideo.has(event.destination)) continue;
+
+    const existing = counts.get(event.destination) ?? { plays: 0, completions: 0 };
+    if (event.event_key === "film_play") existing.plays += 1;
+    else existing.completions += 1;
+    counts.set(event.destination, existing);
+  }
+
+  return Array.from(counts.entries())
+    .map(([video, { plays, completions }]) => ({
+      title: filmTitleByVideo.get(video) ?? video,
+      video,
+      plays,
+      completions,
+    }))
+    .sort((a, b) => b.plays - a.plays || a.title.localeCompare(b.title));
+}
+
 export async function loadAdminAnalytics(
   client: SupabaseClient,
   _options?: { forceRefresh?: boolean },
@@ -591,7 +620,7 @@ export async function loadAdminAnalytics(
       .limit(10_000),
     client
       .from("site_events")
-      .select("source, event_key, utm_campaign")
+      .select("source, event_key, utm_campaign, destination")
       .gte("created_at", since90Days.toISOString())
       .limit(10_000),
     loadParticipation(client, since30Days.toISOString()),
@@ -676,6 +705,8 @@ export async function loadAdminAnalytics(
     return bTotal - aTotal || a.campaign.localeCompare(b.campaign);
   });
 
+  const filmViews = buildFilmViews(eventResult.data ?? []);
+
   const [snapshot, pageSpeed] = await Promise.all([
     withLiveLinkedIn(
       await withLiveWebsiteSnapshot(
@@ -716,6 +747,7 @@ export async function loadAdminAnalytics(
     sources,
     campaigns,
     participation,
+    filmViews,
     snapshot: snapshotWithPageSpeed,
     report: await withLiveReport(analyticsReport, snapshotWithPageSpeed, effectivePageSpeed),
   };

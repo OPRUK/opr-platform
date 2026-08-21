@@ -1,6 +1,7 @@
 import { normaliseAttribution, type AnalyticsEventKey } from "../../../../lib/attribution";
 import { recordAnalyticsEvent } from "../../../../lib/analytics-server";
 import { featuredRecipes } from "../../../../lib/recipes";
+import { films } from "../../../../lib/films";
 import { getSupabaseAdmin } from "../../../../lib/supabase/admin";
 
 export const runtime = "nodejs";
@@ -14,6 +15,9 @@ const fixedEvents: Partial<Record<AnalyticsEventKey, { pagePath: string; destina
 const recipeDestinations = new Set(
   featuredRecipes.map((recipe) => `/family-cookbook/${recipe.slug}`),
 );
+
+const filmDestinations = new Set(films.map((film) => film.video));
+const filmEventKeys = new Set<AnalyticsEventKey>(["film_play", "film_watched"]);
 
 export async function POST(request: Request) {
   let body: unknown;
@@ -38,6 +42,12 @@ export async function POST(request: Request) {
   let destination: string;
   if (eventKey === "film_recipe") {
     if (typeof submittedDestination !== "string" || !recipeDestinations.has(submittedDestination)) {
+      return new Response(null, { status: 400 });
+    }
+    pagePath = "/films";
+    destination = submittedDestination;
+  } else if (filmEventKeys.has(eventKey as AnalyticsEventKey)) {
+    if (typeof submittedDestination !== "string" || !filmDestinations.has(submittedDestination)) {
       return new Response(null, { status: 400 });
     }
     pagePath = "/films";

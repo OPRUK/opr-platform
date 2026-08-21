@@ -289,6 +289,37 @@ export default function AdminAnalyticsPanel({
                 </table>
               </div>
             </div>
+
+            <div className="mt-6 overflow-hidden rounded-3xl border border-[#DDB765]/70 bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/10">
+              <div className="border-b border-[#DDB765]/60 px-6 py-5">
+                <h3 className="text-xl font-bold">Film watch counts</h3>
+                <p className="mt-2 text-sm leading-6 text-stone-600">How many times each film on /films has actually been played and watched through to the end, on this site directly — separate from views on YouTube, TikTok or Instagram.</p>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[640px] border-collapse text-left text-sm">
+                  <thead>
+                    <tr className="border-b border-[#DDB765] text-[#6B431E]">
+                      <th className="px-6 py-4 font-semibold">Film</th>
+                      <th className="px-4 py-4 font-semibold">Plays</th>
+                      <th className="px-4 py-4 font-semibold">Watched to end</th>
+                      <th className="px-6 py-4 font-semibold">Completion rate</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {analytics.filmViews.length ? analytics.filmViews.map((film) => (
+                      <tr key={film.video} className="border-b border-[#DDB765]/40 last:border-0">
+                        <th scope="row" className="px-6 py-4 font-semibold">{film.title}</th>
+                        <td className="px-4 py-4">{film.plays}</td>
+                        <td className="px-4 py-4">{film.completions}</td>
+                        <td className="px-6 py-4">{film.plays ? formatPercent(film.completions / film.plays) : "Not reported"}</td>
+                      </tr>
+                    )) : (
+                      <tr><td colSpan={4} className="px-6 py-6 text-stone-600">No film plays have been recorded yet.</td></tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </section>
 
           <section aria-labelledby="participation-heading" className="mx-auto mt-12 max-w-7xl">
