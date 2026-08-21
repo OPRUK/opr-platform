@@ -113,6 +113,21 @@ export default async function Home() {
         </div>
       </HomeHero>
 
+      <section className="bg-[#123C39] px-6 py-8 md:py-9">
+        <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 text-center text-[#FFF3DF] sm:flex-row sm:justify-between sm:text-left">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#DDB765]">Live cook-along · Sunday 4 October</p>
+            <p className="mt-2 text-xl font-bold leading-snug sm:text-2xl">Cook Dave&apos;s butter chicken with him, live over Zoom.</p>
+          </div>
+          <Link
+            href="/live-with-dave"
+            className="inline-flex shrink-0 rounded-full bg-[#DDB765] px-7 py-3.5 font-bold text-[#08231F] transition hover:scale-105 hover:bg-[#DDB765]"
+          >
+            Save my spot →
+          </Link>
+        </div>
+      </section>
+
       <section className="bg-[#EED8B2] px-6 py-10 md:py-14">
         <div className="mx-auto max-w-6xl overflow-hidden rounded-[2rem] border-2 border-[#DDB765] bg-[#123C39] shadow-2xl shadow-[#08231F]/25">
           <div className="grid items-stretch md:grid-cols-[0.7fr_1.7fr]">

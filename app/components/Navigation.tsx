@@ -13,6 +13,7 @@ export default function Navigation() {
     { href: "/founder", label: "Founder" },
     { href: "/family-cookbook", label: "Living Cookbook" },
     { href: "/films", label: "Films" },
+    { href: "/live-with-dave", label: "Live With Dave" },
     { href: "/join-our-table", label: "Join Our Table" },
     { href: "/share", label: "Share" },
   ];
