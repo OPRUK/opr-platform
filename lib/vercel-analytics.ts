@@ -56,8 +56,13 @@ function toAudienceRows(rows: Array<Record<string, unknown>>, dimension: string)
   return rows
     .map((row) => {
       const visitors = Number(row.visitors) || 0;
+      const rawLabel = row[dimension];
+      // Vercel returns an empty string (not null/undefined) for visits where
+      // this dimension couldn't be detected, so a plain `?? "Unknown"` still
+      // lets a blank label through — check for that explicitly.
+      const label = typeof rawLabel === "string" && rawLabel.trim().length > 0 ? rawLabel : "Unknown";
       return {
-        label: String(row[dimension] ?? "Unknown"),
+        label,
         visitors,
         share: totalVisitors > 0 ? visitors / totalVisitors : 0,
       };
