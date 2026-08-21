@@ -4,6 +4,7 @@ import { recordAnalyticsEvent } from "../../../lib/analytics-server";
 import { getSupabaseAdmin } from "../../../lib/supabase/admin";
 import { checkRateLimit } from "../../../lib/rate-limit";
 import { attachmentLimits, extensionFor } from "../../../lib/media-attachments";
+import { titleCaseDishName } from "../../../lib/text";
 
 const adminEmail = "chaten@otherpeoplesrecipes.co.uk";
 
@@ -38,7 +39,7 @@ export async function POST(request: Request) {
     const formData = await request.formData();
     const name = readText(formData, "name", true);
     const email = readText(formData, "email", true);
-    const title = readText(formData, "title", true);
+    const title = titleCaseDishName(readText(formData, "title", true));
     const category = readText(formData, "category", true);
     const story = readText(formData, "story", true);
     const ingredients = readText(formData, "ingredients", true);
