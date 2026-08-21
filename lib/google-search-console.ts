@@ -1,7 +1,7 @@
 import "server-only";
 import { createSign } from "node:crypto";
 
-const SITE_URL = "https://otherpeoplesrecipes.co.uk/";
+const SITE_URL = "sc-domain:otherpeoplesrecipes.co.uk";
 const CACHE_MS = 15 * 60 * 1000;
 const REPORT_WINDOW_DAYS = 28;
 
