@@ -12,6 +12,8 @@ export type VercelAnalyticsSummary = {
   audienceCountry: VercelAudienceRow[];
   audienceDevice: VercelAudienceRow[];
   audienceOS: VercelAudienceRow[];
+  topPages: VercelAudienceRow[];
+  topReferrers: VercelAudienceRow[];
   fetchedAt: string;
 };
 
@@ -63,10 +65,8 @@ function toAudienceRows(rows: Array<Record<string, unknown>>, dimension: string)
     .sort((a, b) => b.visitors - a.visitors);
 }
 
-export async function getVercelAnalyticsSummary(
-  { forceRefresh = false }: { forceRefresh?: boolean } = {},
-): Promise<VercelAnalyticsSummary | null> {
-  if (!forceRefresh && cached && cached.expiresAt > Date.now()) return cached.data;
+export async function getVercelAnalyticsSummary(): Promise<VercelAnalyticsSummary | null> {
+  if (cached && cached.expiresAt > Date.now()) return cached.data;
 
   const token = process.env.VERCEL_ANALYTICS_TOKEN;
   const projectId = process.env.VERCEL_ANALYTICS_PROJECT_ID;
@@ -86,11 +86,13 @@ export async function getVercelAnalyticsSummary(
     countUrl.searchParams.set("since", since);
     countUrl.searchParams.set("until", until);
 
-    const [countResponse, countryRows, deviceRows, osRows] = await Promise.all([
+    const [countResponse, countryRows, deviceRows, osRows, pageRows, referrerRows] = await Promise.all([
       fetch(countUrl, { headers: { Authorization: `Bearer ${token}` } }),
       queryAggregate(token, projectId, teamId, "country", since, until),
       queryAggregate(token, projectId, teamId, "deviceType", since, until),
       queryAggregate(token, projectId, teamId, "osName", since, until),
+      queryAggregate(token, projectId, teamId, "path", since, until),
+      queryAggregate(token, projectId, teamId, "referrer", since, until),
     ]);
 
     if (!countResponse.ok) {
@@ -106,6 +108,8 @@ export async function getVercelAnalyticsSummary(
       audienceCountry: toAudienceRows(countryRows, "country"),
       audienceDevice: toAudienceRows(deviceRows, "deviceType"),
       audienceOS: toAudienceRows(osRows, "osName"),
+      topPages: toAudienceRows(pageRows, "path"),
+      topReferrers: toAudienceRows(referrerRows, "referrer"),
       fetchedAt: new Date().toISOString(),
     };
 

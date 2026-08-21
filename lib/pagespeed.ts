@@ -1,89 +1,93 @@
 import "server-only";
 
-import {
-  parsePageSpeedResponse,
-  type PageSpeedApiResponse,
-  type PageSpeedSummary,
-} from "./pagespeed-data";
+type Category = { score?: number | null };
+type Audit = { numericValue?: number | null };
 
-export type { PageSpeedSummary } from "./pagespeed-data";
+type PageSpeedPayload = {
+  lighthouseResult?: {
+    fetchTime?: string;
+    lighthouseVersion?: string;
+    categories?: Record<string, Category>;
+    audits?: Record<string, Audit>;
+  };
+  loadingExperience?: { overall_category?: string };
+  originLoadingExperience?: { overall_category?: string };
+};
 
-const CACHE_MS = 15 * 60 * 1000;
-const REQUEST_TIMEOUT_MS = 45_000;
-const DEFAULT_TEST_URL = "https://otherpeoplesrecipes.co.uk/";
+export type PageSpeedSummary = {
+  fetchedAt: string;
+  lighthouseVersion: string | null;
+  strategy: "mobile";
+  testedUrl: string;
+  fieldCategory: string | null;
+  metrics: Array<{ metric: string; value: number; unit: string; context: string }>;
+};
 
-let cached: { data: PageSpeedSummary; expiresAt: number } | null = null;
+const testedUrl = "https://otherpeoplesrecipes.co.uk/";
 
-export async function getPageSpeedSummary(
-  { forceRefresh = false }: { forceRefresh?: boolean } = {},
-): Promise<PageSpeedSummary | null> {
-  if (!forceRefresh && cached && cached.expiresAt > Date.now()) return cached.data;
+function score(category: Category | undefined) {
+  return Math.round((category?.score ?? 0) * 100);
+}
 
-  const targetUrl = process.env.PAGESPEED_TEST_URL ?? DEFAULT_TEST_URL;
-  const apiKey = process.env.PAGESPEED_API_KEY;
-  // Google's anonymous PageSpeed quota is not reliable for automated use.
-  // Keep the dated report visible until a project-owned API key is supplied.
-  if (!apiKey) return null;
+function milliseconds(audit: Audit | undefined) {
+  return Number((audit?.numericValue ?? 0).toFixed(0));
+}
 
-  const apiUrl = new URL("https://pagespeedonline.googleapis.com/pagespeedonline/v5/runPagespeed");
-  apiUrl.searchParams.set("url", targetUrl);
-  apiUrl.searchParams.set("strategy", "mobile");
-  apiUrl.searchParams.set("locale", "en_GB");
+function seconds(audit: Audit | undefined) {
+  return Number(((audit?.numericValue ?? 0) / 1000).toFixed(2));
+}
+
+export async function getPageSpeedSummary(forceRefresh = false): Promise<PageSpeedSummary | null> {
+  const url = new URL("https://www.googleapis.com/pagespeedonline/v5/runPagespeed");
+  url.searchParams.set("url", testedUrl);
+  url.searchParams.set("strategy", "mobile");
   for (const category of ["performance", "accessibility", "best-practices", "seo"]) {
-    apiUrl.searchParams.append("category", category);
+    url.searchParams.append("category", category);
+  }
+  if (process.env.GOOGLE_PAGESPEED_API_KEY) {
+    url.searchParams.set("key", process.env.GOOGLE_PAGESPEED_API_KEY);
   }
 
-  apiUrl.searchParams.set("key", apiKey);
-
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
-  const startedAt = Date.now();
-
   try {
-    const response = await fetch(apiUrl, {
-      cache: "no-store",
-      headers: { Accept: "application/json" },
-      signal: controller.signal,
+    const response = await fetch(url, {
+      signal: AbortSignal.timeout(45_000),
+      ...(forceRefresh ? { cache: "no-store" as const } : { next: { revalidate: 21_600 } }),
     });
-
     if (!response.ok) {
-      console.error(JSON.stringify({
-        level: "error",
-        message: "PageSpeed Insights request failed",
-        status: response.status,
-        durationMs: Date.now() - startedAt,
-      }));
+      console.warn("OPR PageSpeed query failed", response.status);
       return null;
     }
 
-    const payload = (await response.json()) as PageSpeedApiResponse;
-    const summary = parsePageSpeedResponse(payload, targetUrl);
-    if (!summary) {
-      console.error(JSON.stringify({
-        level: "error",
-        message: "PageSpeed Insights response was incomplete",
-        durationMs: Date.now() - startedAt,
-      }));
-      return null;
-    }
+    const payload = await response.json() as PageSpeedPayload;
+    const lighthouse = payload.lighthouseResult;
+    if (!lighthouse?.categories || !lighthouse.audits) return null;
 
-    cached = { data: summary, expiresAt: Date.now() + CACHE_MS };
-    console.log(JSON.stringify({
-      level: "info",
-      message: "PageSpeed Insights request completed",
-      strategy: summary.strategy,
-      durationMs: Date.now() - startedAt,
-    }));
-    return summary;
+    const categories = lighthouse.categories;
+    const audits = lighthouse.audits;
+    const fieldCategory = payload.loadingExperience?.overall_category
+      ?? payload.originLoadingExperience?.overall_category
+      ?? null;
+
+    return {
+      fetchedAt: lighthouse.fetchTime ?? new Date().toISOString(),
+      lighthouseVersion: lighthouse.lighthouseVersion ?? null,
+      strategy: "mobile",
+      testedUrl,
+      fieldCategory,
+      metrics: [
+        { metric: "Performance", value: score(categories.performance), unit: "score", context: "Live mobile Lighthouse lab score." },
+        { metric: "Accessibility", value: score(categories.accessibility), unit: "score", context: "Live mobile Lighthouse accessibility score." },
+        { metric: "Best Practices", value: score(categories["best-practices"]), unit: "score", context: "Live mobile Lighthouse best-practices score." },
+        { metric: "SEO", value: score(categories.seo), unit: "score", context: "Live mobile Lighthouse SEO score." },
+        { metric: "First Contentful Paint", value: seconds(audits["first-contentful-paint"]), unit: "seconds", context: "Live mobile lab result." },
+        { metric: "Largest Contentful Paint", value: seconds(audits["largest-contentful-paint"]), unit: "seconds", context: "Live mobile lab result." },
+        { metric: "Total Blocking Time", value: milliseconds(audits["total-blocking-time"]), unit: "milliseconds", context: "Live mobile lab result." },
+        { metric: "Cumulative Layout Shift", value: Number((audits["cumulative-layout-shift"]?.numericValue ?? 0).toFixed(3)), unit: "score", context: "Live mobile lab result." },
+        { metric: "Speed Index", value: seconds(audits["speed-index"]), unit: "seconds", context: "Live mobile lab result." },
+      ],
+    };
   } catch (error) {
-    console.error(JSON.stringify({
-      level: "error",
-      message: "PageSpeed Insights request could not be completed",
-      error: error instanceof Error ? error.message : String(error),
-      durationMs: Date.now() - startedAt,
-    }));
+    console.warn("OPR PageSpeed query could not complete", error);
     return null;
-  } finally {
-    clearTimeout(timeout);
   }
 }

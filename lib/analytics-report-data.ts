@@ -1,15 +1,11 @@
 import "server-only";
 import type { AnalyticsReport } from "./analytics-report-types";
 
-// Manually exported from each platform's native dashboard and Google/Vercel
-// tooling, refreshed through 21 August 2026. Regenerate this file the same way next time the
-// report is refreshed (see Sources & Definitions in the source workbook for
-// exactly which dashboard each figure came from) — there is no live API
-// behind most of these numbers yet. The Google Search figures at the top of
-// the admin dashboard are the exception: those come from a live Search
-// Console connection (see lib/google-search-console.ts) and intentionally
-// are NOT read from this file, to avoid showing stale numbers next to a
-// live source.
+// Verified baseline exported from the native platform dashboards and
+// Google/Vercel tooling through 21 August 2026. The admin analytics service
+// hydrates every supported field with live website, Search Console, connected
+// social-platform and PageSpeed data. These values remain the safe fallback
+// for unavailable APIs and for fields the platforms do not expose.
 export const analyticsReport: AnalyticsReport = {
   preparedDate: "2026-08-21",
   executiveSummary: {
@@ -73,7 +69,7 @@ export const analyticsReport: AnalyticsReport = {
       { priority: "P1", action: "Remove/repost the TikTok caption containing accidental desktop interface text.", whyNow: "The caption is publicly untidy and weakens trust.", successMeasure: "Correct caption live; post checked on mobile and desktop.", owner: "Social · today" },
       { priority: "P2", action: "Improve YouTube titles and thumbnails; test one promise-led creative pattern.", whyNow: "4,000 impressions produced a 1.3% click-through rate.", successMeasure: "CTR moves towards a 3–5% working target without reducing retention.", owner: "Video · fortnightly" },
       { priority: "P2", action: "Turn search interest in bhindi and jollof into richer recipe-page coverage.", whyNow: "These are the clearest visible non-brand query themes.", successMeasure: "More recipe-page impressions and first clicks for non-brand searches.", owner: "Content · 2 articles/month" },
-      { priority: "P2", action: "Enable Vercel Speed Insights; fix contrast and caption-track warnings.", whyNow: "No field performance data exists yet; Lighthouse accessibility is 97 rather than 100.", successMeasure: "Real-user performance starts collecting; accessibility checks pass.", owner: "Site · this week" },
+      { priority: "P2", action: "Review live PageSpeed and Vercel Speed Insights each month; fix any contrast and caption-track warnings.", whyNow: "Performance collection is live, so regressions can now be identified and acted on.", successMeasure: "Core Web Vitals and Lighthouse scores remain healthy; accessibility checks pass.", owner: "Site · monthly" },
     ],
     footnote: "*Social exposures add platform-reported views/impressions and are not deduplicated people. Native platform definitions and date windows differ; use this as an activity indicator, not total audience reach.",
   },
@@ -266,7 +262,6 @@ export const analyticsReport: AnalyticsReport = {
       { platform: "Pinterest", period: "22 Jul–21 Aug", views: 256, viewers: 113, interactions: 11, followers: "Not displayed", profileVisits: "Not reported", outboundClicks: 1, websiteVisitors: "Not separately reported", interactionRate: 0.043 },
       { platform: "YouTube", period: "24 Jul–20 Aug", views: 223, viewers: "Not reported", interactions: "2 Shorts likes", followers: 9, profileVisits: "Not reported", outboundClicks: "Not reported", websiteVisitors: "Not separately reported", interactionRate: 0.009 },
       { platform: "TikTok", period: "Last 28 days to 21 Aug", views: 5300, viewers: "Not reported", interactions: 44, followers: 4, profileVisits: 21, outboundClicks: "Not available", websiteVisitors: "Not separately reported", interactionRate: 0.0083 },
-      { platform: "LinkedIn", period: "21 Jul–19 Aug (manually checked 21 Aug 2026, 09:45)", views: 126, viewers: "Not reported", interactions: 6, followers: 21, profileVisits: "Not reported", outboundClicks: "Not reported", websiteVisitors: "Not separately reported", interactionRate: 0.0476 },
     ],
     diagnosis: [
       { channel: "Instagram", strength: "4,838 views; 72.6% from non-followers; 356 interactions.", constraint: "230 profile visits produced only 2 external-link taps.", nextMove: "Keep the source-coded bio link prominent and strengthen every Reel end card.", workingKpi: "Profile-to-link click rate" },
@@ -274,7 +269,6 @@ export const analyticsReport: AnalyticsReport = {
       { channel: "Pinterest", strength: "256 impressions and 113 total audience; Ada's Jollof Pin leads with 113 impressions.", constraint: "Only 1 outbound click across the period.", nextMove: "Publish vertical, keyworded recipe pins linking to canonical recipes.", workingKpi: "Outbound clicks per 1,000 impressions" },
       { channel: "YouTube", strength: "223 views and subscriber count increased to 9.", constraint: "Only 16.5% of Shorts viewers stayed to watch; likes remain low.", nextMove: "Test stronger titles and a faster first-second hook.", workingKpi: "Stayed-to-watch rate and subscribers" },
       { channel: "TikTok", strength: "5.3K views; 89.8% of recent traffic from For You.", constraint: "Only 21 profile views and 4 total followers; one caption remains corrupted.", nextMove: "Clean the caption, strengthen on-screen CTA and measure bio clicks.", workingKpi: "Profile visit rate and followers per 1K views" },
-      { channel: "LinkedIn", strength: "21 followers, 16 gained in the last 30 days; 126 impressions on posts.", constraint: "Page is brand new — no live API access yet, so this is a manual snapshot.", nextMove: "Keep posting weekly until Community Management API approval lands live data.", workingKpi: "Follower growth rate and post impressions" },
     ],
     note: "Facebook website visitors group facebook.com (32), m.facebook.com (10) and l.facebook.com (7). Referrer host totals are not necessarily deduplicated across hosts. Instagram, TikTok and YouTube in-app visits may appear as Direct when the referrer is stripped.",
   },
