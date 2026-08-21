@@ -451,6 +451,7 @@ async function loadParticipation(
 
 export async function loadAdminAnalytics(
   client: SupabaseClient,
+  _options?: { forceRefresh?: boolean },
 ): Promise<AdminAnalyticsResponse> {
   const since90Days = new Date();
   since90Days.setUTCDate(since90Days.getUTCDate() - 90);
