@@ -26,14 +26,13 @@ export type AnalyticsSnapshotPlatform = {
   profileVisits: number | null;
   outboundClicks: number | null;
   websiteVisitors: number | null;
-  // Set only when these figures came from a live API call this request
-  // (currently only the YouTube row can be live — see lib/youtube.ts).
-  // Null means it's still the manually-pasted OPR_ANALYTICS_SNAPSHOT baseline.
+  // Set when these figures came from a connected platform API. Null means
+  // this row is still the dated OPR_ANALYTICS_SNAPSHOT fallback.
   fetchedAt: string | null;
 };
 
 import type { AnalyticsReport } from "./analytics-report-types";
-import type { PageSpeedSummary } from "./pagespeed";
+import type { PageSpeedSummary } from "./pagespeed-data";
 export type { AnalyticsReport } from "./analytics-report-types";
 
 export type AnalyticsSnapshot = {
@@ -54,18 +53,18 @@ export type AnalyticsSnapshot = {
     ctr: number;
     averagePosition: number;
     indexedPages: number;
-    // Set only when these figures came from a live Search Console API call
-    // this request (see lib/google-search-console.ts). Null means they're
-    // still the manually-pasted OPR_ANALYTICS_SNAPSHOT baseline.
+    provisionalFrom: string | null;
+    // Set when these figures came from the Search Console API. Null means
+    // they are still the dated OPR_ANALYTICS_SNAPSHOT fallback.
     fetchedAt: string | null;
   };
   social: AnalyticsSnapshotPlatform[];
+  pageSpeed: PageSpeedSummary | null;
   recommendations: Array<{
     title: string;
     evidence: string;
     action: string;
   }>;
-  pageSpeed: PageSpeedSummary | null;
 };
 
 export type AdminAnalyticsResponse = {
@@ -78,8 +77,8 @@ export type AdminAnalyticsResponse = {
   campaigns: AnalyticsCampaignSummary[];
   participation: AnalyticsParticipationMetric[];
   snapshot: AnalyticsSnapshot | null;
-  // The full manually-compiled SEO/social report (see lib/analytics-report-data.ts).
-  // Its Google Search figures are historical, not live — the live numbers stay
-  // in snapshot.google above so the two never contradict each other on screen.
+  // The full dated SEO/social analysis (see lib/analytics-report-data.ts).
+  // Current headline figures stay in snapshot above; live website figures are
+  // also overlaid on the report where matching fields are available.
   report: AnalyticsReport;
 };

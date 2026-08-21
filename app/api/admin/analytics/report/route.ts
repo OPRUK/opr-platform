@@ -37,6 +37,15 @@ function styleSheet(worksheet: ExcelJS.Worksheet) {
 }
 
 export async function GET(request: Request) {
+  const startedAt = Date.now();
+  const requestId = request.headers.get("x-vercel-id");
+  console.log(JSON.stringify({
+    level: "info",
+    message: "Admin analytics spreadsheet request started",
+    route: "/api/admin/analytics/report",
+    requestId,
+  }));
+
   const { client, error: accessError } = await requireAdmin(request);
   if (!client) {
     return Response.json(
@@ -46,7 +55,9 @@ export async function GET(request: Request) {
   }
 
   try {
-    const analytics = await loadAdminAnalytics(client);
+    // A download is an explicit request for a report, so bypass the short
+    // connector caches and use each platform's latest available figures.
+    const analytics = await loadAdminAnalytics(client, { forceRefresh: true });
     const workbook = new ExcelJS.Workbook();
     workbook.creator = "Other People's Recipes";
     workbook.created = new Date();
@@ -57,19 +68,28 @@ export async function GET(request: Request) {
       { header: "Value", key: "value", width: 18 },
       { header: "Period", key: "period", width: 30 },
       { header: "Source", key: "source", width: 28 },
+      { header: "Data status", key: "status", width: 22 },
+      { header: "Source refreshed", key: "refreshedAt", width: 25 },
     ];
 
     if (analytics.snapshot) {
+      const websiteLive = Boolean(analytics.snapshot.website.fetchedAt);
+      const googleLive = Boolean(analytics.snapshot.google.fetchedAt);
+      const googleStatus = googleLive
+        ? analytics.snapshot.google.provisionalFrom
+          ? `Latest API data; provisional from ${analytics.snapshot.google.provisionalFrom}`
+          : "Latest available via API"
+        : "Historical snapshot";
       overview.addRows([
-        { metric: "Website visitors", value: analytics.snapshot.website.visitors, period: analytics.snapshot.website.period, source: "Vercel Web Analytics" },
-        { metric: "Website page views", value: analytics.snapshot.website.pageViews, period: analytics.snapshot.website.period, source: "Vercel Web Analytics" },
-        { metric: "Pages per visitor", value: analytics.snapshot.website.pagesPerVisitor, period: analytics.snapshot.website.period, source: "Vercel Web Analytics" },
-        { metric: "Bounce rate", value: analytics.snapshot.website.bounceRate, period: analytics.snapshot.website.period, source: "Vercel Web Analytics" },
-        { metric: "Google clicks", value: analytics.snapshot.google.clicks, period: analytics.snapshot.google.period, source: "Google Search Console" },
-        { metric: "Google impressions", value: analytics.snapshot.google.impressions, period: analytics.snapshot.google.period, source: "Google Search Console" },
-        { metric: "Google CTR", value: analytics.snapshot.google.ctr, period: analytics.snapshot.google.period, source: "Google Search Console" },
-        { metric: "Google average position", value: analytics.snapshot.google.averagePosition, period: analytics.snapshot.google.period, source: "Google Search Console" },
-        { metric: "Indexed pages", value: analytics.snapshot.google.indexedPages, period: analytics.snapshot.google.period, source: "Google Search Console" },
+        { metric: "Website visitors", value: analytics.snapshot.website.visitors, period: analytics.snapshot.website.period, source: "Vercel Web Analytics", status: websiteLive ? "Latest available via API" : "Historical snapshot", refreshedAt: analytics.snapshot.website.fetchedAt ?? analytics.snapshot.capturedAt },
+        { metric: "Website page views", value: analytics.snapshot.website.pageViews, period: analytics.snapshot.website.period, source: "Vercel Web Analytics", status: websiteLive ? "Latest available via API" : "Historical snapshot", refreshedAt: analytics.snapshot.website.fetchedAt ?? analytics.snapshot.capturedAt },
+        { metric: "Pages per visitor", value: analytics.snapshot.website.pagesPerVisitor, period: analytics.snapshot.website.period, source: "Vercel Web Analytics", status: websiteLive ? "Calculated from live API" : "Historical snapshot", refreshedAt: analytics.snapshot.website.fetchedAt ?? analytics.snapshot.capturedAt },
+        { metric: "Bounce rate", value: analytics.snapshot.website.bounceRate, period: analytics.snapshot.website.period, source: "Vercel Web Analytics", status: "Historical snapshot", refreshedAt: analytics.snapshot.capturedAt },
+        { metric: "Google clicks", value: analytics.snapshot.google.clicks, period: analytics.snapshot.google.period, source: "Google Search Console", status: googleStatus, refreshedAt: analytics.snapshot.google.fetchedAt ?? analytics.snapshot.capturedAt },
+        { metric: "Google impressions", value: analytics.snapshot.google.impressions, period: analytics.snapshot.google.period, source: "Google Search Console", status: googleStatus, refreshedAt: analytics.snapshot.google.fetchedAt ?? analytics.snapshot.capturedAt },
+        { metric: "Google CTR", value: analytics.snapshot.google.ctr, period: analytics.snapshot.google.period, source: "Google Search Console", status: googleStatus, refreshedAt: analytics.snapshot.google.fetchedAt ?? analytics.snapshot.capturedAt },
+        { metric: "Google average position", value: analytics.snapshot.google.averagePosition, period: analytics.snapshot.google.period, source: "Google Search Console", status: googleStatus, refreshedAt: analytics.snapshot.google.fetchedAt ?? analytics.snapshot.capturedAt },
+        { metric: "Indexed pages", value: analytics.snapshot.google.indexedPages, period: analytics.snapshot.google.period, source: "Google Search Console", status: "Historical snapshot", refreshedAt: analytics.snapshot.capturedAt },
       ]);
       overview.getCell("B5").numFmt = "0.0%";
       overview.getCell("B8").numFmt = "0.0%";
@@ -105,7 +125,7 @@ export async function GET(request: Request) {
     campaigns.addRows(analytics.campaigns);
     styleSheet(sources);
 
-    const social = workbook.addWorksheet("Social Baseline");
+    const social = workbook.addWorksheet("Social Latest");
     social.columns = [
       { header: "Platform", key: "platform", width: 20 },
       { header: "Period", key: "period", width: 27 },
@@ -116,9 +136,43 @@ export async function GET(request: Request) {
       { header: "Profile visits", key: "profileVisits", width: 16 },
       { header: "Outbound clicks", key: "outboundClicks", width: 18 },
       { header: "Website visitors", key: "websiteVisitors", width: 18 },
+      { header: "Data status", key: "status", width: 22 },
+      { header: "Source refreshed", key: "refreshedAt", width: 25 },
     ];
-    if (analytics.snapshot) social.addRows(analytics.snapshot.social);
+    if (analytics.snapshot) {
+      social.addRows(analytics.snapshot.social.map((platform) => ({
+        ...platform,
+        status: platform.fetchedAt ? "Latest available via API" : "Historical snapshot",
+        refreshedAt: platform.fetchedAt ?? analytics.snapshot?.capturedAt,
+      })));
+    }
     styleSheet(social);
+
+    const pageSpeed = workbook.addWorksheet("PageSpeed Lab");
+    pageSpeed.columns = [
+      { header: "Metric", key: "metric", width: 30 },
+      { header: "Value", key: "value", width: 14 },
+      { header: "Unit", key: "unit", width: 16 },
+      { header: "Context", key: "context", width: 70 },
+      { header: "Strategy", key: "strategy", width: 14 },
+      { header: "Tested URL", key: "testedUrl", width: 45 },
+      { header: "Data status", key: "status", width: 24 },
+      { header: "Source refreshed", key: "refreshedAt", width: 25 },
+    ];
+    pageSpeed.addRows(analytics.report.seoTechnical.pageSpeed.map((metric) => ({
+      ...metric,
+      strategy: analytics.report.seoTechnical.pageSpeedMeta.strategy,
+      testedUrl: analytics.report.seoTechnical.pageSpeedMeta.testedUrl,
+      status: analytics.report.seoTechnical.pageSpeedMeta.fetchedAt
+        ? "Latest Google Lighthouse lab run"
+        : "Historical snapshot",
+      refreshedAt: analytics.report.seoTechnical.pageSpeedMeta.fetchedAt
+        ?? analytics.report.seoTechnical.asOf,
+    })));
+    pageSpeed.eachRow((row) => {
+      row.alignment = { vertical: "top", wrapText: true };
+    });
+    styleSheet(pageSpeed);
 
     const actions = workbook.addWorksheet("Recommended Actions");
     actions.columns = [
@@ -135,6 +189,13 @@ export async function GET(request: Request) {
     const buffer = await workbook.xlsx.writeBuffer();
     const date = new Date().toISOString().slice(0, 10);
 
+    console.log(JSON.stringify({
+      level: "info",
+      message: "Admin analytics spreadsheet request completed",
+      route: "/api/admin/analytics/report",
+      requestId,
+      durationMs: Date.now() - startedAt,
+    }));
     return new Response(new Uint8Array(buffer), {
       headers: {
         "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -143,7 +204,14 @@ export async function GET(request: Request) {
       },
     });
   } catch (error) {
-    console.error("OPR analytics spreadsheet could not be generated", error);
+    console.error(JSON.stringify({
+      level: "error",
+      message: "Admin analytics spreadsheet request failed",
+      route: "/api/admin/analytics/report",
+      requestId,
+      durationMs: Date.now() - startedAt,
+      error: error instanceof Error ? error.message : String(error),
+    }));
     return Response.json({ error: "The analytics spreadsheet could not be prepared." }, { status: 400 });
   }
 }

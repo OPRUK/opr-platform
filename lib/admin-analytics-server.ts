@@ -535,9 +535,7 @@ async function withLiveReport(
       structuredData: report.seoTechnical.structuredData.map((row) => row.area === "Core Web Vitals"
         ? {
             ...row,
-            finding: pageSpeed.fieldCategory
-              ? `Google field-data category: ${pageSpeed.fieldCategory.toLowerCase()}.`
-              : "No Google field data yet; live Lighthouse lab data is refreshed daily.",
+            finding: "Live mobile Lighthouse lab data is refreshed automatically when the PageSpeed connection is available.",
             action: "Review Vercel Speed Insights and the daily Lighthouse trend at each month-end.",
           }
         : row),
@@ -698,7 +696,7 @@ export async function loadAdminAnalytics(
         ),
       ),
     ),
-    getPageSpeedSummary(_options?.forceRefresh ?? false),
+    getPageSpeedSummary({ forceRefresh: _options?.forceRefresh ?? false }),
   ]);
   const effectivePageSpeed = pageSpeed ?? snapshot?.pageSpeed ?? null;
   const snapshotWithPageSpeed = snapshot
