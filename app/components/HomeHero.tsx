@@ -250,7 +250,7 @@ export default function HomeHero({ children }: HomeHeroProps) {
                 onEnded={() => {
                   if (slot === activeSlot) moveToNextFilm();
                 }}
-                className="absolute inset-0 h-full w-full object-contain transition-opacity ease-in-out sm:object-cover"
+                className="absolute inset-0 h-full w-full object-cover transition-opacity ease-in-out"
                 style={{ transitionDuration: `${CROSSFADE_MS}ms`, opacity: isVisible ? 1 : 0 }}
                 aria-label={film.label}
                 aria-hidden={!isVisible}
