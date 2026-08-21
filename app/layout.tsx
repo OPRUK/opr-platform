@@ -12,12 +12,6 @@ const caveat = localFont({
   variable: "--font-caveat",
 });
 
-const allura = localFont({
-  src: "./fonts/Allura-Regular.ttf",
-  weight: "400",
-  variable: "--font-allura",
-});
-
 export const metadata: Metadata = {
   title: {
     default: SITE_NAME,
@@ -79,7 +73,7 @@ export default function RootLayout({
       data-text-size="default"
       data-readable-font="false"
       suppressHydrationWarning
-      className={`${caveat.variable} ${allura.variable} h-full antialiased`}
+      className={`${caveat.variable} h-full antialiased`}
     >
       <head>
         <script
