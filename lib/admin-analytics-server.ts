@@ -15,6 +15,7 @@ import { loadLatestDailySnapshot } from "./analytics-daily-snapshots";
 import type {
   AdminAnalyticsResponse,
   AnalyticsParticipationMetric,
+  AnalyticsCampaignSummary,
   AnalyticsSnapshot,
   AnalyticsSourceSummary,
 } from "./admin-analytics-types";
@@ -461,12 +462,12 @@ export async function loadAdminAnalytics(
   const [clickResult, eventResult, participation] = await Promise.all([
     client
       .from("link_clicks")
-      .select("source, link_key")
+      .select("source, link_key, utm_campaign")
       .gte("created_at", since90Days.toISOString())
       .limit(10_000),
     client
       .from("site_events")
-      .select("source, event_key")
+      .select("source, event_key, utm_campaign")
       .gte("created_at", since90Days.toISOString())
       .limit(10_000),
     loadParticipation(client, since30Days.toISOString()),
@@ -516,6 +517,41 @@ export async function loadAdminAnalytics(
       return bTotal - aTotal || a.source.localeCompare(b.source);
     });
 
+  const campaignSummaries = new Map<string, AnalyticsCampaignSummary>();
+  const ensureCampaign = (campaign: string | null, source: string | null) => {
+    const campaignLabel = campaign ?? "unattributed";
+    const sourceLabel = source ?? "unattributed";
+    const key = `${sourceLabel}:${campaignLabel}`;
+    const existing = campaignSummaries.get(key);
+    if (existing) return existing;
+
+    const summary = {
+      campaign: campaignLabel,
+      source: sourceLabel,
+      linkClicks: 0,
+      ctaClicks: 0,
+      conversions: 0,
+    };
+    campaignSummaries.set(key, summary);
+    return summary;
+  };
+
+  for (const click of clickResult.data ?? []) {
+    ensureCampaign(click.utm_campaign, click.source).linkClicks += 1;
+  }
+
+  for (const event of eventResult.data ?? []) {
+    const summary = ensureCampaign(event.utm_campaign, event.source);
+    if (conversionEvents.has(event.event_key)) summary.conversions += 1;
+    else summary.ctaClicks += 1;
+  }
+
+  const campaigns = Array.from(campaignSummaries.values()).sort((a, b) => {
+    const bTotal = b.linkClicks + b.ctaClicks + b.conversions;
+    const aTotal = a.linkClicks + a.ctaClicks + a.conversions;
+    return bTotal - aTotal || a.campaign.localeCompare(b.campaign);
+  });
+
   return {
     generatedAt: new Date().toISOString(),
     windowDays: 90,
@@ -527,6 +563,7 @@ export async function loadAdminAnalytics(
       conversionEvents.has(event.event_key),
     ).length,
     sources,
+    campaigns,
     participation,
     snapshot: await withLiveLinkedIn(
       await withLiveWebsiteSnapshot(
