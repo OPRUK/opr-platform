@@ -8,7 +8,7 @@ import { buildMetadata } from "../../lib/metadata";
 export const metadata: Metadata = buildMetadata({
   title: "Live With Dave: Butter Chicken Cook-Along",
   description:
-    "Join Dave live over Zoom on Sunday 4 October as he cooks his family Butter Chicken. Free to join — save your spot.",
+    "Join Dave live over Zoom on Sunday 4 October at 5pm UK time as he cooks his family Butter Chicken. Free to join — save your spot.",
   path: "/live-with-dave",
 });
 
@@ -34,7 +34,7 @@ export default function LiveWithDavePage() {
             Cook Dave&apos;s Butter Chicken with him, live.
           </h1>
           <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-[#FFF3DF]">
-            Sunday 4 October, over Zoom. Free to join — bring your apron and your questions.
+            Sunday 4 October, 5pm UK time, over Zoom. Free to join — bring your apron and your questions.
           </p>
         </div>
       </section>
@@ -42,7 +42,7 @@ export default function LiveWithDavePage() {
       <section className="mx-auto grid max-w-6xl gap-12 px-6 py-20 md:grid-cols-[1.05fr_0.95fr] md:px-8">
         <div>
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
-            Sunday 4 October
+            Sunday 4 October · 5pm UK time
           </p>
           <h2 className="mt-5 text-4xl font-bold leading-tight md:text-5xl">
             The family Butter Chicken recipe, cooked live in Dave&apos;s kitchen.
