@@ -5,6 +5,10 @@ export type AnalyticsSourceSummary = {
   conversions: number;
 };
 
+export type AnalyticsCampaignSummary = AnalyticsSourceSummary & {
+  campaign: string;
+};
+
 export type AnalyticsParticipationMetric = {
   key: "table" | "recipes" | "votes" | "community";
   label: string;
@@ -68,6 +72,7 @@ export type AdminAnalyticsResponse = {
   ctaClicks: number;
   conversions: number;
   sources: AnalyticsSourceSummary[];
+  campaigns: AnalyticsCampaignSummary[];
   participation: AnalyticsParticipationMetric[];
   snapshot: AnalyticsSnapshot | null;
   // The full dated SEO/social analysis (see lib/analytics-report-data.ts).
