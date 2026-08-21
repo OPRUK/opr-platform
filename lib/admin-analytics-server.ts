@@ -24,6 +24,8 @@ const conversionEvents = new Set([
   "recipe_submission_success",
 ]);
 
+const pinterestTrialAccessApproved = false;
+
 const participationTables: Array<{
   key: AnalyticsParticipationMetric["key"];
   label: string;
@@ -207,6 +209,60 @@ function withLivePinterest(
             followers: live.followers,
             outboundClicks: live.outboundClicks28d,
             fetchedAt: live.fetchedAt,
+          }
+        : platform,
+    ),
+  };
+}
+
+function withLatestPinterestSnapshot(snapshot: AnalyticsSnapshot | null): AnalyticsSnapshot | null {
+  if (!snapshot) return snapshot;
+
+  return {
+    ...snapshot,
+    social: snapshot.social.map((platform) =>
+      platform.platform.toLowerCase() === "pinterest"
+        ? {
+            ...platform,
+            period: "22 Jul–21 Aug 2026",
+            exposureLabel: "Impressions",
+            exposures: 256,
+            interactions: 11,
+            followers: null,
+            profileVisits: null,
+            outboundClicks: 1,
+            fetchedAt: null,
+          }
+        : platform,
+    ),
+  };
+}
+
+function withCurrentPinterest(
+  snapshot: AnalyticsSnapshot | null,
+  live: PinterestSummary | null,
+): AnalyticsSnapshot | null {
+  if (!pinterestTrialAccessApproved) return withLatestPinterestSnapshot(snapshot);
+  return withLivePinterest(snapshot, live);
+}
+
+function withLatestFacebookSnapshot(snapshot: AnalyticsSnapshot | null): AnalyticsSnapshot | null {
+  if (!snapshot) return snapshot;
+
+  return {
+    ...snapshot,
+    social: snapshot.social.map((platform) =>
+      platform.platform.toLowerCase() === "facebook"
+        ? {
+            ...platform,
+            period: "24 Jul–20 Aug 2026",
+            exposureLabel: "Views",
+            exposures: 6600,
+            interactions: 402,
+            followers: 53,
+            profileVisits: 344,
+            outboundClicks: null,
+            fetchedAt: null,
           }
         : platform,
     ),
@@ -442,13 +498,15 @@ export async function loadAdminAnalytics(
 
   const snapshot = withLiveLinkedIn(
     withLiveWebsiteSnapshot(
-      withLivePinterest(
-        withLiveTikTok(
-          withLiveInstagram(
-            withLiveYouTube(withLiveSearchConsole(getSnapshot(), searchConsole), youtube),
-            instagram,
+      withCurrentPinterest(
+        withLatestFacebookSnapshot(
+          withLiveTikTok(
+            withLiveInstagram(
+              withLiveYouTube(withLiveSearchConsole(getSnapshot(), searchConsole), youtube),
+              instagram,
+            ),
+            tiktok,
           ),
-          tiktok,
         ),
         pinterest,
       ),
