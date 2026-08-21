@@ -122,6 +122,12 @@ export default function AdminAnalyticsPanel({
       (source) => source.linkClicks + source.ctaClicks + source.conversions,
     ) ?? []),
   );
+  const campaignMaximum = Math.max(
+    1,
+    ...(analytics?.campaigns.map(
+      (campaign) => campaign.linkClicks + campaign.ctaClicks + campaign.conversions,
+    ) ?? []),
+  );
   const socialExposures = snapshot?.social.reduce(
     (total, platform) => total + platform.exposures,
     0,
@@ -237,6 +243,48 @@ export default function AdminAnalyticsPanel({
                         </tr>
                       );
                     })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="mt-6 overflow-hidden rounded-3xl border border-[#DDB765]/70 bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/10">
+              <div className="border-b border-[#DDB765]/60 px-6 py-5">
+                <h3 className="text-xl font-bold">Campaign comparison</h3>
+                <p className="mt-2 text-sm leading-6 text-stone-600">First-party UTM campaign totals, grouped with their source and containing no personal data.</p>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[760px] border-collapse text-left text-sm">
+                  <thead>
+                    <tr className="border-b border-[#DDB765] text-[#6B431E]">
+                      <th className="px-6 py-4 font-semibold">Campaign</th>
+                      <th className="px-4 py-4 font-semibold">Source</th>
+                      <th className="px-4 py-4 font-semibold">Link clicks</th>
+                      <th className="px-4 py-4 font-semibold">Site actions</th>
+                      <th className="px-4 py-4 font-semibold">Conversions</th>
+                      <th className="px-6 py-4 font-semibold">Relative activity</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {analytics.campaigns.length ? analytics.campaigns.map((campaign) => {
+                      const total = campaign.linkClicks + campaign.ctaClicks + campaign.conversions;
+                      return (
+                        <tr key={`${campaign.source}:${campaign.campaign}`} className="border-b border-[#DDB765]/40 last:border-0">
+                          <th scope="row" className="px-6 py-4 font-semibold">{campaign.campaign}</th>
+                          <td className="px-4 py-4">{readableSource(campaign.source)}</td>
+                          <td className="px-4 py-4">{campaign.linkClicks}</td>
+                          <td className="px-4 py-4">{campaign.ctaClicks}</td>
+                          <td className="px-4 py-4">{campaign.conversions}</td>
+                          <td className="px-6 py-4">
+                            <div className="h-2.5 w-full overflow-hidden rounded-full bg-[#EED8B2]" aria-label={`${total} total recorded actions`}>
+                              <div className="h-full rounded-full bg-[#9A622A]" style={{ width: `${Math.max(total ? 7 : 0, (total / campaignMaximum) * 100)}%` }} />
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    }) : (
+                      <tr><td colSpan={6} className="px-6 py-6 text-stone-600">No campaign-coded activity has been recorded yet.</td></tr>
+                    )}
                   </tbody>
                 </table>
               </div>
