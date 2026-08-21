@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal, flushSync } from "react-dom";
 import VideoBrandMark from "./VideoBrandMark";
+import { sendAnalyticsEvent } from "../../lib/attribution-client";
 
 function formatTime(seconds: number) {
   if (!Number.isFinite(seconds)) return "0:00";
@@ -27,6 +28,9 @@ export default function FilmEmbed({
   const triggerRef = useRef<HTMLButtonElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const hideControlsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Guards against onPlay firing a "film_play" event every time a visitor
+  // pauses and resumes — only the first play of a viewing session counts.
+  const hasSentPlayEvent = useRef(false);
   const [open, setOpen] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [muted, setMuted] = useState(false);
@@ -49,6 +53,7 @@ export default function FilmEmbed({
     setIsPlaying(false);
     setCurrentTime(0);
     setAutoplayMuted(false);
+    hasSentPlayEvent.current = false;
     window.setTimeout(() => triggerRef.current?.focus(), 0);
   }
 
@@ -147,7 +152,13 @@ export default function FilmEmbed({
           controls={false}
           controlsList="nodownload noremoteplayback"
           disablePictureInPicture
-          onPlay={() => setIsPlaying(true)}
+          onPlay={() => {
+            setIsPlaying(true);
+            if (!hasSentPlayEvent.current) {
+              hasSentPlayEvent.current = true;
+              sendAnalyticsEvent("film_play", video);
+            }
+          }}
           onPause={() => {
             setIsPlaying(false);
             setControlsVisible(true);
@@ -155,6 +166,7 @@ export default function FilmEmbed({
           onEnded={() => {
             setIsPlaying(false);
             setControlsVisible(true);
+            sendAnalyticsEvent("film_watched", video);
           }}
           onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)}
           onDurationChange={(event) => setDuration(event.currentTarget.duration)}

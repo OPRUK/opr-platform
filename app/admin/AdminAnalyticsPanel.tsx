@@ -289,6 +289,37 @@ export default function AdminAnalyticsPanel({
                 </table>
               </div>
             </div>
+
+            <div className="mt-6 overflow-hidden rounded-3xl border border-[#DDB765]/70 bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/10">
+              <div className="border-b border-[#DDB765]/60 px-6 py-5">
+                <h3 className="text-xl font-bold">Film watch counts</h3>
+                <p className="mt-2 text-sm leading-6 text-stone-600">How many times each film on /films has actually been played and watched through to the end, on this site directly — separate from views on YouTube, TikTok or Instagram.</p>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[640px] border-collapse text-left text-sm">
+                  <thead>
+                    <tr className="border-b border-[#DDB765] text-[#6B431E]">
+                      <th className="px-6 py-4 font-semibold">Film</th>
+                      <th className="px-4 py-4 font-semibold">Plays</th>
+                      <th className="px-4 py-4 font-semibold">Watched to end</th>
+                      <th className="px-6 py-4 font-semibold">Completion rate</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {analytics.filmViews.length ? analytics.filmViews.map((film) => (
+                      <tr key={film.video} className="border-b border-[#DDB765]/40 last:border-0">
+                        <th scope="row" className="px-6 py-4 font-semibold">{film.title}</th>
+                        <td className="px-4 py-4">{film.plays}</td>
+                        <td className="px-4 py-4">{film.completions}</td>
+                        <td className="px-6 py-4">{film.plays ? formatPercent(film.completions / film.plays) : "Not reported"}</td>
+                      </tr>
+                    )) : (
+                      <tr><td colSpan={4} className="px-6 py-6 text-stone-600">No film plays have been recorded yet.</td></tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </section>
 
           <section aria-labelledby="participation-heading" className="mx-auto mt-12 max-w-7xl">
@@ -429,7 +460,7 @@ export default function AdminAnalyticsPanel({
             <p className="text-sm font-bold uppercase tracking-[0.3em] text-[#DDB765]">Full report</p>
             <h2 id="full-report-heading" className="mt-3 text-3xl font-bold text-white">SEO &amp; social traffic report</h2>
             <p className="mt-3 max-w-3xl text-sm leading-6 text-[#EED8B2]">
-              Prepared {new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(new Date(`${report.preparedDate}T12:00:00Z`))} from Vercel Web Analytics, Google Search Console and each platform&apos;s native dashboard. This is a periodic manual export—it updates when the report is re-run, not when you click Refresh dashboard above.
+              Baseline prepared {new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(new Date(`${report.preparedDate}T12:00:00Z`))}. Website, Google, connected social-platform and PageSpeed fields now refresh automatically; unavailable platform details retain their latest verified snapshot.
             </p>
 
             <div className="mt-8 rounded-[1.5rem] bg-[#EED8B2] p-5 text-[#123C39] shadow-inner md:p-7">
@@ -654,6 +685,11 @@ export default function AdminAnalyticsPanel({
               />
 
               <SubHeading eyebrow="Technical SEO" title="PageSpeed (lab data)" />
+              <p className="mt-3 text-sm leading-6 text-stone-600">
+                {report.seoTechnical.pageSpeedMeta.fetchedAt
+                  ? `Live mobile Lighthouse run: ${new Intl.DateTimeFormat("en-GB", { dateStyle: "medium", timeStyle: "short" }).format(new Date(report.seoTechnical.pageSpeedMeta.fetchedAt))}${report.seoTechnical.pageSpeedMeta.lighthouseVersion ? ` · Lighthouse ${report.seoTechnical.pageSpeedMeta.lighthouseVersion}` : ""}`
+                  : "Latest verified PageSpeed snapshot; live refresh is temporarily unavailable."}
+              </p>
               <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {report.seoTechnical.pageSpeed.map((metric) => (
                   <div key={metric.metric} className="rounded-2xl border border-[#DDB765]/60 bg-[#FFF3DF] px-4 py-3 shadow shadow-[#1C5A50]/10">
