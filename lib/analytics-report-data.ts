@@ -8,6 +8,7 @@ import type { AnalyticsReport } from "./analytics-report-types";
 // for unavailable APIs and for fields the platforms do not expose.
 export const analyticsReport: AnalyticsReport = {
   preparedDate: "2026-08-21",
+  staticDataUpdatedAt: "2026-08-21T17:45:39+01:00",
   executiveSummary: {
     preparedDate: "2026-08-21",
     kpis: [

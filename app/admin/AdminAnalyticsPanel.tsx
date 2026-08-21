@@ -31,6 +31,13 @@ function formatPercent(value: number) {
   }).format(value);
 }
 
+function formatDateTime(value: string) {
+  return new Intl.DateTimeFormat("en-GB", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(new Date(value));
+}
+
 function readableSource(source: string) {
   if (source === "unattributed") return "No source recorded";
   return source.charAt(0).toUpperCase() + source.slice(1);
@@ -116,6 +123,9 @@ export default function AdminAnalyticsPanel({
 }: AdminAnalyticsPanelProps) {
   const snapshot = analytics?.snapshot ?? null;
   const report = analytics?.report ?? null;
+  const staticUpdateNote = report
+    ? `Static data · Last updated ${formatDateTime(report.staticDataUpdatedAt)}`
+    : null;
   const sourceMaximum = Math.max(
     1,
     ...(analytics?.sources.map(
@@ -348,7 +358,7 @@ export default function AdminAnalyticsPanel({
                   <p className="text-sm text-stone-600">
                     {snapshot.website.fetchedAt
                       ? `Website visitors: live from Vercel Web Analytics, refreshed ${new Intl.DateTimeFormat("en-GB", { timeStyle: "short" }).format(new Date(snapshot.website.fetchedAt))}`
-                      : `Website visitors: manual snapshot—captured ${new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(new Date(`${snapshot.capturedAt}T12:00:00Z`))}, not refreshed by the button above`}
+                      : `Website visitors: manual snapshot · ${staticUpdateNote ?? `Captured ${new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(new Date(`${snapshot.capturedAt}T12:00:00Z`))}`}`}
                   </p>
                 </div>
                 <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -415,6 +425,8 @@ export default function AdminAnalyticsPanel({
                             {platform.period}
                             {platform.fetchedAt ? (
                               <span className="block text-xs text-stone-500">Refreshed {new Intl.DateTimeFormat("en-GB", { timeStyle: "short" }).format(new Date(platform.fetchedAt))}</span>
+                            ) : staticUpdateNote ? (
+                              <span className="block text-xs text-stone-500">{staticUpdateNote}</span>
                             ) : null}
                           </td>
                           <td className="px-4 py-4"><span className="font-semibold">{formatNumber(platform.exposures)}</span><span className="block text-xs text-stone-500">{platform.exposureLabel}</span></td>
@@ -432,6 +444,7 @@ export default function AdminAnalyticsPanel({
               <section aria-labelledby="recommendations-heading" className="mx-auto mt-12 max-w-7xl">
                 <p className="text-sm font-bold uppercase tracking-[0.3em] text-[#9A622A]">Recommended next moves</p>
                 <h2 id="recommendations-heading" className="mt-3 text-3xl font-bold">Turn discovery into a seat at the table</h2>
+                {staticUpdateNote ? <p className="mt-2 text-sm text-stone-600">{staticUpdateNote}</p> : null}
                 <div className="mt-6 grid gap-5 lg:grid-cols-3">
                   {snapshot.recommendations.map((recommendation, index) => (
                     <article key={recommendation.title} className="rounded-3xl border border-[#DDB765]/70 bg-[#FFF3DF] p-6 shadow-lg shadow-[#1C5A50]/10">
@@ -461,10 +474,11 @@ export default function AdminAnalyticsPanel({
             <h2 id="full-report-heading" className="mt-3 text-3xl font-bold text-white">SEO &amp; social traffic report</h2>
             <p className="mt-3 max-w-3xl text-sm leading-6 text-[#EED8B2]">
               Baseline prepared {new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(new Date(`${report.preparedDate}T12:00:00Z`))}. Website, Google, connected social-platform and PageSpeed fields now refresh automatically; unavailable platform details retain their latest verified snapshot.
+              <span className="mt-1 block font-medium text-white">Static data last updated {formatDateTime(report.staticDataUpdatedAt)}.</span>
             </p>
 
             <div className="mt-8 rounded-[1.5rem] bg-[#EED8B2] p-5 text-[#123C39] shadow-inner md:p-7">
-              <SubHeading eyebrow="Executive summary" title="Headline KPIs" />
+              <SubHeading eyebrow="Executive summary" title="Headline KPIs" note={staticUpdateNote ?? undefined} />
               <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
                 {report.executiveSummary.kpis.map((kpi) => (
                   <div key={kpi.label} className="rounded-2xl border border-[#DDB765]/60 bg-[#FFF3DF] px-4 py-3 shadow shadow-[#1C5A50]/10">
@@ -507,7 +521,7 @@ export default function AdminAnalyticsPanel({
                 note={
                   report.website.fetchedAt
                     ? `${report.website.period} · Live, refreshed ${new Intl.DateTimeFormat("en-GB", { timeStyle: "short" }).format(new Date(report.website.fetchedAt))}`
-                    : report.website.period
+                    : `${report.website.period} · ${staticUpdateNote}`
                 }
               />
               <DataTable<(typeof report.website.core)[number]>
@@ -585,7 +599,7 @@ export default function AdminAnalyticsPanel({
                 note={
                   report.googleSearch.fetchedAt
                     ? `${report.googleSearch.period} · Live, refreshed ${new Intl.DateTimeFormat("en-GB", { timeStyle: "short" }).format(new Date(report.googleSearch.fetchedAt))}`
-                    : report.googleSearch.period
+                    : `${report.googleSearch.period} · ${staticUpdateNote}`
                 }
               />
               <p className="mt-2 text-xs leading-5 text-stone-600">
@@ -670,7 +684,7 @@ export default function AdminAnalyticsPanel({
             </div>
 
             <div className="mt-8 rounded-[1.5rem] bg-[#EED8B2] p-5 text-[#123C39] shadow-inner md:p-7">
-              <SubHeading eyebrow="Technical SEO" title="Site health" note={`As of ${new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(new Date(`${report.seoTechnical.asOf}T12:00:00Z`))}`} />
+              <SubHeading eyebrow="Technical SEO" title="Site health" note={`As of ${new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(new Date(`${report.seoTechnical.asOf}T12:00:00Z`))} · ${staticUpdateNote}`} />
               <DataTable<(typeof report.seoTechnical.indexing)[number]>
                 keyFn={(row) => row.measure}
                 rows={report.seoTechnical.indexing}
@@ -700,7 +714,7 @@ export default function AdminAnalyticsPanel({
               <p className="mt-3 text-sm leading-6 text-stone-600">
                 {report.seoTechnical.pageSpeedMeta.fetchedAt
                   ? `Live mobile Lighthouse run: ${new Intl.DateTimeFormat("en-GB", { dateStyle: "medium", timeStyle: "short" }).format(new Date(report.seoTechnical.pageSpeedMeta.fetchedAt))}${report.seoTechnical.pageSpeedMeta.lighthouseVersion ? ` · Lighthouse ${report.seoTechnical.pageSpeedMeta.lighthouseVersion}` : ""}`
-                  : "Latest verified PageSpeed snapshot; live refresh is temporarily unavailable."}
+                  : `Latest verified PageSpeed snapshot; live refresh is temporarily unavailable. ${staticUpdateNote}`}
               </p>
               <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {report.seoTechnical.pageSpeed.map((metric) => (
@@ -741,7 +755,7 @@ export default function AdminAnalyticsPanel({
             </div>
 
             <div className="mt-8 rounded-[1.5rem] bg-[#EED8B2] p-5 text-[#123C39] shadow-inner md:p-7">
-              <SubHeading eyebrow="Social" title="Platform overview" />
+              <SubHeading eyebrow="Social" title="Platform overview" note={staticUpdateNote ?? undefined} />
               <DataTable<(typeof report.socialOverview.platforms)[number]>
                 keyFn={(row) => row.platform}
                 rows={report.socialOverview.platforms}
@@ -777,7 +791,7 @@ export default function AdminAnalyticsPanel({
               const platform = report.platforms[key];
               return (
                 <div key={key} className="mt-8 rounded-[1.5rem] bg-[#EED8B2] p-5 text-[#123C39] shadow-inner md:p-7">
-                  <SubHeading eyebrow="Social platform" title={`${label} · ${platform.handle}`} note={platform.period} />
+                  <SubHeading eyebrow="Social platform" title={`${label} · ${platform.handle}`} note={`${platform.period} · ${staticUpdateNote}`} />
                   <DataTable<(typeof platform.metrics)[number]>
                     keyFn={(row) => row.metric}
                     rows={platform.metrics}
@@ -828,7 +842,7 @@ export default function AdminAnalyticsPanel({
             })}
 
             <div className="mt-8 rounded-[1.5rem] bg-[#EED8B2] p-5 text-[#123C39] shadow-inner md:p-7">
-              <SubHeading eyebrow="Measurement" title="Link clicks" />
+              <SubHeading eyebrow="Measurement" title="Link clicks" note={staticUpdateNote ?? undefined} />
               <DataTable<(typeof report.measurementActions.linkClicks)[number]>
                 keyFn={(row) => row.linkKey}
                 rows={report.measurementActions.linkClicks}

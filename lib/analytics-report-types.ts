@@ -200,6 +200,7 @@ export type MeasurementActionsReport = {
 
 export type AnalyticsReport = {
   preparedDate: string;
+  staticDataUpdatedAt: string;
   executiveSummary: ExecutiveSummary;
   website: WebsiteTrafficReport;
   googleSearch: GoogleSearchReport;
