@@ -51,20 +51,32 @@ async function getRecipeOfWeek(): Promise<RecipeOfWeek | null> {
 export default async function Home() {
   return (
     <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] text-[#123C39]">
-      {/* The hero's first video poster is the LCP element, but HomeHero is a
-          client component — without this hint the browser only discovers the
-          poster after JS hydrates, well after the preload scanner has moved
-          on. Rendered directly (rather than via react-dom's preload() call)
-          because the imperative API stopped flushing once a Suspense
-          boundary was introduced below — a literal <link> is hoisted to
-          <head> by React regardless of where it sits in the tree, so it
-          isn't affected by the streaming boundary. Must match the exact URL
-          HomeHero requests or this preload goes to waste. */}
+      {/* The hero's LCP element differs by device: desktop still plays the
+          intro film (first video poster), but mobile skips the video
+          entirely and shows the photo carousel's first slide instead (a
+          landscape video frame cropped to fill a tall phone screen looked
+          like a bad accidental close-up). HomeHero is a client component —
+          without these hints the browser only discovers the LCP image after
+          JS hydrates, well after the preload scanner has moved on. Rendered
+          directly (rather than via react-dom's preload() call) because the
+          imperative API stopped flushing once a Suspense boundary was
+          introduced below — a literal <link> is hoisted to <head> by React
+          regardless of where it sits in the tree, so it isn't affected by
+          the streaming boundary. Each href must match the exact URL the
+          matching component requests or the preload goes to waste. */}
       <link
         rel="preload"
         href={optimizedPoster("/images/opr-add-your-recipe-promo-poster.jpg")}
         as="image"
         fetchPriority="high"
+        media="(min-width: 641px)"
+      />
+      <link
+        rel="preload"
+        href={optimizedPoster("/images/hero-kitchen-wide.webp", 828, 65)}
+        as="image"
+        fetchPriority="high"
+        media="(max-width: 640px)"
       />
       <Navigation />
 
