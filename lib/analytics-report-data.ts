@@ -265,6 +265,7 @@ export const analyticsReport: AnalyticsReport = {
       { platform: "Pinterest", period: "22 Jul–21 Aug", views: 256, viewers: 113, interactions: 11, followers: "Not displayed", profileVisits: "Not reported", outboundClicks: 1, websiteVisitors: "Not separately reported", interactionRate: 0.043 },
       { platform: "YouTube", period: "24 Jul–20 Aug", views: 223, viewers: "Not reported", interactions: "2 Shorts likes", followers: 9, profileVisits: "Not reported", outboundClicks: "Not reported", websiteVisitors: "Not separately reported", interactionRate: 0.009 },
       { platform: "TikTok", period: "Last 28 days to 21 Aug", views: 5300, viewers: "Not reported", interactions: 44, followers: 4, profileVisits: 21, outboundClicks: "Not available", websiteVisitors: "Not separately reported", interactionRate: 0.0083 },
+      { platform: "LinkedIn", period: "21 Jul–19 Aug (manually checked 21 Aug 2026, 09:45)", views: 126, viewers: "Not reported", interactions: 6, followers: 21, profileVisits: "Not reported", outboundClicks: "Not reported", websiteVisitors: "Not separately reported", interactionRate: 0.0476 },
     ],
     diagnosis: [
       { channel: "Instagram", strength: "4,838 views; 72.6% from non-followers; 356 interactions.", constraint: "230 profile visits produced only 2 external-link taps.", nextMove: "Keep the source-coded bio link prominent and strengthen every Reel end card.", workingKpi: "Profile-to-link click rate" },
@@ -272,6 +273,7 @@ export const analyticsReport: AnalyticsReport = {
       { channel: "Pinterest", strength: "256 impressions and 113 total audience; Ada's Jollof Pin leads with 113 impressions.", constraint: "Only 1 outbound click across the period.", nextMove: "Publish vertical, keyworded recipe pins linking to canonical recipes.", workingKpi: "Outbound clicks per 1,000 impressions" },
       { channel: "YouTube", strength: "223 views and subscriber count increased to 9.", constraint: "Only 16.5% of Shorts viewers stayed to watch; likes remain low.", nextMove: "Test stronger titles and a faster first-second hook.", workingKpi: "Stayed-to-watch rate and subscribers" },
       { channel: "TikTok", strength: "5.3K views; 89.8% of recent traffic from For You.", constraint: "Only 21 profile views and 4 total followers; one caption remains corrupted.", nextMove: "Clean the caption, strengthen on-screen CTA and measure bio clicks.", workingKpi: "Profile visit rate and followers per 1K views" },
+      { channel: "LinkedIn", strength: "21 followers, 16 gained in the last 30 days; 126 impressions on posts.", constraint: "Page is brand new — no live API access yet, so this is a manual snapshot.", nextMove: "Keep posting weekly until Community Management API approval lands live data.", workingKpi: "Follower growth rate and post impressions" },
     ],
     note: "Facebook website visitors group facebook.com (32), m.facebook.com (10) and l.facebook.com (7). Referrer host totals are not necessarily deduplicated across hosts. Instagram, TikTok and YouTube in-app visits may appear as Direct when the referrer is stripped.",
   },
