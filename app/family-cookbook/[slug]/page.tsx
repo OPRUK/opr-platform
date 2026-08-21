@@ -289,6 +289,9 @@ export default async function RecipePage({
         </section>
       ) : null}
 
+      <FamiliesWhoMadeThis cooks={communityCooks} recipeTitle={recipe.title} />
+      <CommunityCookForm recipeSlug={recipe.slug} recipeTitle={recipe.title} />
+
       <RecipeFaqs recipeTitle={recipe.title} faqs={recipe.faqs} />
 
       {relatedRecipes.length ? (
@@ -340,10 +343,6 @@ export default async function RecipePage({
           </Link>
         </section>
       ) : null}
-
-      <FamiliesWhoMadeThis cooks={communityCooks} recipeTitle={recipe.title} />
-      <CommunityCookForm recipeSlug={recipe.slug} recipeTitle={recipe.title} />
-
 
       <section className="px-6 py-8 text-center md:py-10">
         <Link
