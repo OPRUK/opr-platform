@@ -64,6 +64,24 @@ function film(
 
 export const films: Film[] = [
   {
+    title: "Dave & Rubble | Patience Is the Secret Ingredient",
+    video: "/videos/opr-dave-and-rubble-patience-is-the-secret-ingredient.mp4",
+    poster: "/images/opr-dave-and-rubble-patience-is-the-secret-ingredient-poster.jpg",
+    captions: "/captions/opr-dave-and-rubble-patience-is-the-secret-ingredient.vtt",
+    transcript:
+      "Dave: “Every recipe has a secret ingredient.”\nRubble: “Is it chicken?”\nDave: “It’s patience.”\nRubble: “I preferred chicken.”",
+    uploadDate: "2026-08-22T12:00:00+01:00",
+  },
+  {
+    title: "Dave & Rubble | The Chicken Nomination",
+    video: "/videos/opr-dave-and-rubble-the-chicken-nomination.mp4",
+    poster: "/images/opr-dave-and-rubble-the-chicken-nomination-poster.jpg",
+    captions: "/captions/opr-dave-and-rubble-the-chicken-nomination.vtt",
+    transcript:
+      "Dave: “Which dish should we cook next?”\nRubble: “The one with chicken.”\nDave: “That isn’t a nomination.”\nRubble: “It is now.”",
+    uploadDate: "2026-08-22T12:00:00+01:00",
+  },
+  {
     title: "Dave & Rubble | Your Nomination",
     video: "/videos/opr-dave-and-rubble-your-nomination.mp4",
     captions: "/captions/opr-dave-and-rubble-your-nomination.vtt",
