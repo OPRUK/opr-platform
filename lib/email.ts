@@ -163,6 +163,66 @@ export function cookalongSignupWelcomeEmail({
   };
 }
 
+export function cookalongRecipeListEmail({
+  name,
+  ingredients,
+}: {
+  name: string;
+  ingredients: string[];
+}) {
+  return {
+    subject: "Dave's Butter Chicken — the recipe list for Sunday",
+    html: `
+      <div style="font-family: 'Gill Sans MT', 'Gill Sans', Avenir, Corbel, Arial, sans-serif; max-width: 620px; margin: 0 auto; color: #4A4232; line-height: 1.65;">
+        <img src="${siteUrl}/images/social/opr-pinterest-profile.png" alt="Other People's Recipes" width="56" height="56" style="display: block; margin: 0 auto 20px; border-radius: 999px;" />
+        <p style="color: #9A622A; letter-spacing: 2px; font-size: 12px; text-transform: uppercase; text-align: center;">Other People's Recipes</p>
+        <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 34px; line-height: 1.2; text-align: center;">Time to go shopping.</h1>
+        <p>Hi ${escapeHtml(name)},</p>
+        <p>Dave's cooking his family Butter Chicken live this <strong>Sunday 4 October, 5pm UK time</strong>, over Zoom — here's everything you need to shop and prep before then, so you can cook right alongside him.</p>
+        <p style="margin-top: 28px; font-weight: bold; color: #123C39;">What you'll need:</p>
+        <ul style="padding-left: 20px; margin: 12px 0;">
+          ${ingredients.map((item) => `<li style="margin-bottom: 6px;">${escapeHtml(item)}</li>`).join("\n          ")}
+        </ul>
+        <p><a href="${siteUrl}/family-cookbook/daves-butter-chicken" style="display: inline-block; background: #1C5A50; color: #FFF3DF; padding: 12px 18px; border-radius: 999px; text-decoration: none;">See the full recipe and method</a></p>
+        <p style="margin-top: 24px;">We'll send the Zoom link separately, closer to the day.</p>
+        <p style="margin-top: 32px;">See you Sunday,<br /><strong>Chaten</strong><br />Founder, Other People&apos;s Recipes</p>
+        <p style="border-top: 1px solid #DDB765; padding-top: 18px; margin-top: 36px; font-size: 13px; color: #6B6254;">You're receiving this because you signed up for Dave's live cook-along.</p>
+      </div>
+    `,
+  };
+}
+
+export function cookalongZoomLinkEmail({
+  name,
+  zoomLink,
+}: {
+  name: string;
+  zoomLink: string;
+}) {
+  return {
+    subject: "Your Zoom link for Dave's cook-along on Sunday",
+    html: `
+      <div style="font-family: 'Gill Sans MT', 'Gill Sans', Avenir, Corbel, Arial, sans-serif; max-width: 620px; margin: 0 auto; color: #4A4232; line-height: 1.65;">
+        <img src="${siteUrl}/images/social/opr-pinterest-profile.png" alt="Other People's Recipes" width="56" height="56" style="display: block; margin: 0 auto 20px; border-radius: 999px;" />
+        <p style="color: #9A622A; letter-spacing: 2px; font-size: 12px; text-transform: uppercase; text-align: center;">Other People's Recipes</p>
+        <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 34px; line-height: 1.2; text-align: center;">See you in the kitchen.</h1>
+        <p>Hi ${escapeHtml(name)},</p>
+        <p>Dave's live Butter Chicken cook-along starts <strong>Sunday 4 October, 5pm UK time</strong>. Here's your link to join:</p>
+        <p style="text-align: center; margin: 28px 0;"><a href="${escapeHtml(zoomLink)}" style="display: inline-block; background: #1C5A50; color: #FFF3DF; padding: 14px 26px; border-radius: 999px; text-decoration: none; font-weight: bold;">Join the Zoom cook-along</a></p>
+        <p>A few things that help:</p>
+        <ul style="padding-left: 20px; margin: 12px 0;">
+          <li style="margin-bottom: 6px;">Have your ingredients prepped and within reach — Dave keeps moving.</li>
+          <li style="margin-bottom: 6px;">Join a few minutes early to get set up.</li>
+          <li style="margin-bottom: 6px;">Bring your questions — this is a live kitchen, not a recording.</li>
+        </ul>
+        <p>This link is just for you — please don't share it on.</p>
+        <p style="margin-top: 32px;">See you Sunday,<br /><strong>Chaten</strong><br />Founder, Other People&apos;s Recipes</p>
+        <p style="border-top: 1px solid #DDB765; padding-top: 18px; margin-top: 36px; font-size: 13px; color: #6B6254;">You're receiving this because you signed up for Dave's live cook-along.</p>
+      </div>
+    `,
+  };
+}
+
 export function newCookalongSignupEmail({ name, email }: { name: string; email: string }) {
   return {
     subject: `New cook-along signup: ${name}`,

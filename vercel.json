@@ -3,6 +3,14 @@
     {
       "path": "/api/cron/analytics-snapshot",
       "schedule": "15 6 * * *"
+    },
+    {
+      "path": "/api/cron/cookalong-recipe-email",
+      "schedule": "0 9 27 9 *"
+    },
+    {
+      "path": "/api/cron/cookalong-zoom-link-email",
+      "schedule": "0 9 3 10 *"
     }
   ]
 }
