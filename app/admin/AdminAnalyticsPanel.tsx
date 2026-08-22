@@ -87,7 +87,26 @@ type Column<T> = { header: string; render: (row: T) => React.ReactNode; classNam
 
 function DataTable<T>({ columns, rows, keyFn }: { columns: Column<T>[]; rows: T[]; keyFn: (row: T, index: number) => string }) {
   return (
-    <div className="mt-4 overflow-x-auto rounded-3xl border border-[#DDB765]/70 bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/10">
+    <div className="mt-4 overflow-hidden rounded-3xl border border-[#DDB765]/70 bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/10">
+      <div className="divide-y divide-[#DDB765]/50 md:hidden">
+        {rows.map((row, index) => (
+          <article key={keyFn(row, index)} className="px-5 py-5">
+            {columns.map((column, columnIndex) => (
+              <div key={column.header} className={columnIndex === 0 ? "mb-4" : "grid grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] gap-3 border-t border-[#DDB765]/30 py-2.5 first:border-0"}>
+                {columnIndex === 0 ? (
+                  <p className="break-words text-base font-bold leading-6 text-[#123C39]">{column.render(row)}</p>
+                ) : (
+                  <>
+                    <p className="text-xs font-semibold leading-5 text-[#6B431E]">{column.header}</p>
+                    <div className="break-words text-right text-sm leading-5 text-[#123C39]">{column.render(row)}</div>
+                  </>
+                )}
+              </div>
+            ))}
+          </article>
+        ))}
+      </div>
+      <div className="hidden overflow-x-auto md:block">
       <table className="w-full min-w-[640px] border-collapse text-left text-sm">
         <thead>
           <tr className="border-b border-[#DDB765] text-[#6B431E]">
@@ -110,6 +129,7 @@ function DataTable<T>({ columns, rows, keyFn }: { columns: Column<T>[]; rows: T[
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }
@@ -178,16 +198,16 @@ export default function AdminAnalyticsPanel({
     .sort((a, b) => filmFilter === "highest" ? socialTotal(b) - socialTotal(a) : 0);
 
   return (
-    <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] px-5 py-8 text-[#123C39] md:px-10 md:py-10">
+    <main id="main-content" tabIndex={-1} className="min-h-screen overflow-x-hidden bg-[#EED8B2] px-4 py-6 text-[#123C39] sm:px-5 sm:py-8 md:px-10 md:py-10">
       <header className="mx-auto flex max-w-7xl flex-col justify-between gap-6 md:flex-row md:items-end">
         <div>
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">Private OPR area</p>
-          <h1 className="mt-4 text-4xl font-bold md:text-5xl">Analytics dashboard</h1>
-          <p className="mt-4 max-w-3xl text-lg leading-8 text-stone-700">
+          <h1 className="mt-4 text-3xl font-bold sm:text-4xl md:text-5xl">Analytics dashboard</h1>
+          <p className="mt-4 max-w-3xl text-base leading-7 text-stone-700 sm:text-lg sm:leading-8">
             A private view of website discovery, social reach and the actions people take around the OPR table.
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-3 self-start md:justify-end md:self-auto">
+        <div className="flex w-full flex-wrap items-center gap-3 self-start md:w-auto md:justify-end md:self-auto">
           <Link href="/admin" className="text-sm font-medium underline underline-offset-4">
             Recipe inbox
           </Link>
@@ -198,7 +218,7 @@ export default function AdminAnalyticsPanel({
             type="button"
             onClick={onRefresh}
             disabled={refreshing || loading}
-            className="rounded-full border border-[#123C39] px-5 py-2.5 text-sm font-medium transition hover:bg-[#123C39] hover:text-white disabled:cursor-wait disabled:opacity-60"
+            className="w-full rounded-full border border-[#123C39] px-5 py-2.5 text-sm font-medium transition hover:bg-[#123C39] hover:text-white disabled:cursor-wait disabled:opacity-60 sm:w-auto"
           >
             {refreshing ? "Refreshing…" : "Refresh dashboard"}
           </button>
@@ -206,14 +226,14 @@ export default function AdminAnalyticsPanel({
             type="button"
             onClick={onDownload}
             disabled={exporting || !analytics}
-            className="rounded-full bg-[#123C39] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#08231F] disabled:cursor-wait disabled:opacity-60"
+            className="w-full rounded-full bg-[#123C39] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#08231F] disabled:cursor-wait disabled:opacity-60 sm:w-auto"
           >
             {exporting ? "Preparing spreadsheet…" : "Download analytics (.xlsx)"}
           </button>
           <button
             type="button"
             onClick={onSignOut}
-            className="rounded-full border border-[#123C39] px-5 py-2.5 text-sm font-medium transition hover:bg-[#123C39] hover:text-white"
+            className="w-full rounded-full border border-[#123C39] px-5 py-2.5 text-sm font-medium transition hover:bg-[#123C39] hover:text-white sm:w-auto"
           >
             Sign out
           </button>
@@ -259,7 +279,25 @@ export default function AdminAnalyticsPanel({
                 <h3 className="text-xl font-bold">Source comparison</h3>
                 <p className="mt-2 text-sm leading-6 text-stone-600">The separate source links now show which social channels produce measurable visits and actions.</p>
               </div>
-              <div className="overflow-x-auto">
+              <div className="divide-y divide-[#DDB765]/50 md:hidden">
+                {analytics.sources.map((source) => {
+                  const total = source.linkClicks + source.ctaClicks + source.conversions;
+                  return (
+                    <article key={source.source} className="px-5 py-5">
+                      <h4 className="text-base font-bold text-[#123C39]">{readableSource(source.source)}</h4>
+                      <div className="mt-4 grid grid-cols-3 gap-2 text-center">
+                        <div><p className="text-[10px] uppercase text-[#6B431E]">Clicks</p><p className="mt-1 text-lg font-bold">{source.linkClicks}</p></div>
+                        <div><p className="text-[10px] uppercase text-[#6B431E]">Actions</p><p className="mt-1 text-lg font-bold">{source.ctaClicks}</p></div>
+                        <div><p className="text-[10px] uppercase text-[#6B431E]">Conversions</p><p className="mt-1 text-lg font-bold">{source.conversions}</p></div>
+                      </div>
+                      <div className="mt-4 h-2.5 w-full overflow-hidden rounded-full bg-[#EED8B2]" aria-label={`${total} total recorded actions`}>
+                        <div className="h-full rounded-full bg-[#1C5A50]" style={{ width: `${Math.max(total ? 7 : 0, (total / sourceMaximum) * 100)}%` }} />
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+              <div className="hidden overflow-x-auto md:block">
                 <table className="w-full min-w-[680px] border-collapse text-left text-sm">
                   <thead>
                     <tr className="border-b border-[#DDB765] text-[#6B431E]">
@@ -297,7 +335,26 @@ export default function AdminAnalyticsPanel({
                 <h3 className="text-xl font-bold">Campaign comparison</h3>
                 <p className="mt-2 text-sm leading-6 text-stone-600">First-party UTM campaign totals, grouped with their source and containing no personal data.</p>
               </div>
-              <div className="overflow-x-auto">
+              <div className="divide-y divide-[#DDB765]/50 md:hidden">
+                {analytics.campaigns.length ? analytics.campaigns.map((campaign) => {
+                  const total = campaign.linkClicks + campaign.ctaClicks + campaign.conversions;
+                  return (
+                    <article key={`${campaign.source}:${campaign.campaign}`} className="px-5 py-5">
+                      <h4 className="break-words text-base font-bold text-[#123C39]">{campaign.campaign}</h4>
+                      <p className="mt-1 text-xs text-stone-600">{readableSource(campaign.source)}</p>
+                      <div className="mt-4 grid grid-cols-3 gap-2 text-center">
+                        <div><p className="text-[10px] uppercase text-[#6B431E]">Clicks</p><p className="mt-1 text-lg font-bold">{campaign.linkClicks}</p></div>
+                        <div><p className="text-[10px] uppercase text-[#6B431E]">Actions</p><p className="mt-1 text-lg font-bold">{campaign.ctaClicks}</p></div>
+                        <div><p className="text-[10px] uppercase text-[#6B431E]">Conversions</p><p className="mt-1 text-lg font-bold">{campaign.conversions}</p></div>
+                      </div>
+                      <div className="mt-4 h-2.5 w-full overflow-hidden rounded-full bg-[#EED8B2]" aria-label={`${total} total recorded actions`}>
+                        <div className="h-full rounded-full bg-[#9A622A]" style={{ width: `${Math.max(total ? 7 : 0, (total / campaignMaximum) * 100)}%` }} />
+                      </div>
+                    </article>
+                  );
+                }) : <p className="px-5 py-6 text-sm text-stone-600">No campaign-coded activity has been recorded yet.</p>}
+              </div>
+              <div className="hidden overflow-x-auto md:block">
                 <table className="w-full min-w-[760px] border-collapse text-left text-sm">
                   <thead>
                     <tr className="border-b border-[#DDB765] text-[#6B431E]">
@@ -338,11 +395,11 @@ export default function AdminAnalyticsPanel({
               <div className="border-b border-[#DDB765]/60 px-6 py-5">
                 <h3 className="text-xl font-bold">Film performance by channel</h3>
                 <p className="mt-2 text-sm leading-6 text-stone-600">Every website film under one consistent name. Social columns show views; Pinterest shows impressions. LinkedIn is omitted because OPR has no LinkedIn videos.</p>
-                <p className="mt-1 text-xs text-stone-500">Dynamic channels use their live connection, with the 21 August 2026 at 18:35 BST audit as a fallback. Pinterest is a static audited snapshot.</p>
+                <p className="mt-1 text-xs text-stone-500">Dynamic channels refreshed {formatDateTime(analytics.generatedAt)}, with the 21 August 2026 at 18:35 BST audit as a fallback. Pinterest is a static audited snapshot.</p>
                 <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
-                  <label className="text-sm font-semibold text-[#6B431E]">
-                    Show films
-                    <select value={filmFilter} onChange={(event) => setFilmFilter(event.target.value as typeof filmFilter)} className="ml-3 rounded-full border border-[#DDB765] bg-white px-4 py-2 text-[#123C39]">
+                  <label className="w-full text-sm font-semibold text-[#6B431E] sm:w-auto">
+                    <span className="block sm:inline">Show films</span>
+                    <select value={filmFilter} onChange={(event) => setFilmFilter(event.target.value as typeof filmFilter)} className="mt-2 w-full rounded-full border border-[#DDB765] bg-white px-4 py-2 text-[#123C39] sm:ml-3 sm:mt-0 sm:w-auto">
                       <option value="all">All films</option>
                       <option value="published">Published everywhere</option>
                       <option value="missing">Missing channel data</option>
@@ -352,19 +409,68 @@ export default function AdminAnalyticsPanel({
                   <p className="max-w-xl text-xs leading-5 text-stone-500">Pinterest figures are impressions, not video views, and are excluded from total social views and strongest-channel comparisons. Platform view definitions also differ.</p>
                 </div>
               </div>
-              <div className="overflow-x-auto">
-                <table className="w-full min-w-[1450px] border-collapse text-left text-sm">
+              <div className="divide-y divide-[#DDB765]/50 md:hidden">
+                {filmRows.length ? filmRows.map((film) => {
+                  const bestChannel = bestFilmChannel(film);
+                  const mobileMetrics = [
+                    { label: "Website plays", value: formatNumber(film.plays), status: "Dynamic" },
+                    { label: "Facebook", value: filmMetricLabel(film.facebookViews), status: "Dynamic" },
+                    { label: "Instagram", value: filmMetricLabel(film.instagramViews), status: "Dynamic" },
+                    { label: "TikTok", value: filmMetricLabel(film.tiktokViews), status: "Dynamic" },
+                    { label: "YouTube", value: filmMetricLabel(film.youtubeViews, "Not published"), status: "Dynamic" },
+                    { label: "Pinterest", value: filmMetricLabel(film.pinterestImpressions, "Not published"), status: "Static · impressions" },
+                  ];
+                  return (
+                    <article key={film.video} className="px-5 py-6">
+                      <h4 className="text-base font-bold leading-6 text-[#123C39]">{film.title}</h4>
+                      <div className="mt-4 grid grid-cols-2 gap-3">
+                        {mobileMetrics.map((metric) => (
+                          <div key={metric.label} className="min-w-0 rounded-2xl border border-[#DDB765]/60 bg-white/55 p-3">
+                            <p className="break-words text-[10px] font-semibold uppercase tracking-[0.06em] text-[#6B431E]">{metric.label}</p>
+                            <p className="mt-1 break-words text-base font-bold text-[#123C39]">{metric.value}</p>
+                            <p className={`mt-1 text-[10px] ${metric.status.startsWith("Static") ? "text-[#9A622A]" : "text-[#1C5A50]"}`}>{metric.status}</p>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="mt-3 grid grid-cols-2 gap-3 rounded-2xl bg-[#123C39] p-4 text-[#FFF3DF]">
+                        <div className="min-w-0">
+                          <p className="text-[10px] uppercase tracking-[0.06em] text-[#DDB765]">Total social views</p>
+                          <p className="mt-1 text-xl font-bold text-white">{formatNumber(socialTotal(film))}</p>
+                          <p className="text-[10px] text-[#EED8B2]">Excludes Pinterest</p>
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-[10px] uppercase tracking-[0.06em] text-[#DDB765]">Strongest channel</p>
+                          <p className="mt-1 break-words text-sm font-bold text-white">{bestChannel ?? "Data unavailable"}</p>
+                        </div>
+                      </div>
+                    </article>
+                  );
+                }) : <p className="px-5 py-6 text-sm text-stone-600">No films match this filter.</p>}
+              </div>
+              <div className="hidden overflow-x-auto md:block">
+                <table className="w-full min-w-[1120px] table-fixed border-collapse text-left text-xs xl:text-sm">
+                  <colgroup>
+                    <col className="w-[24%]" />
+                    <col className="w-[8%]" />
+                    <col className="w-[8%]" />
+                    <col className="w-[8%]" />
+                    <col className="w-[8%]" />
+                    <col className="w-[8%]" />
+                    <col className="w-[10%]" />
+                    <col className="w-[11%]" />
+                    <col className="w-[15%]" />
+                  </colgroup>
                   <thead>
                     <tr className="border-b border-[#DDB765] text-[#6B431E]">
-                      <th className="px-6 py-4 font-semibold">Film</th>
-                      <th className="px-4 py-4 font-semibold">Website plays <span className="block text-xs font-normal text-[#1C5A50]">Dynamic · {formatDateTime(analytics.generatedAt)}</span></th>
-                      <th className="px-4 py-4 font-semibold">Facebook views <span className="block text-xs font-normal text-[#1C5A50]">Dynamic · {formatDateTime(analytics.generatedAt)}</span></th>
-                      <th className="px-4 py-4 font-semibold">Instagram views <span className="block text-xs font-normal text-[#1C5A50]">Dynamic · {formatDateTime(analytics.generatedAt)}</span></th>
-                      <th className="px-4 py-4 font-semibold">TikTok views <span className="block text-xs font-normal text-[#1C5A50]">Dynamic · {formatDateTime(analytics.generatedAt)}</span></th>
-                      <th className="px-4 py-4 font-semibold">YouTube views <span className="block text-xs font-normal text-[#1C5A50]">Dynamic · {formatDateTime(analytics.generatedAt)}</span></th>
-                      <th className="px-4 py-4 font-semibold">Total social views <span className="block text-xs font-normal text-stone-500">Excludes Pinterest</span></th>
-                      <th className="px-4 py-4 font-semibold">Strongest channel</th>
-                      <th className="px-6 py-4 font-semibold">Pinterest impressions <span className="block text-xs font-normal text-[#9A622A]">Static · 21 Aug 2026, 18:35</span></th>
+                      <th className="px-5 py-4 font-semibold">Film</th>
+                      <th className="px-2 py-4 font-semibold leading-5">Website<br />plays <span className="block font-normal text-[#1C5A50]">Dynamic</span></th>
+                      <th className="px-2 py-4 font-semibold leading-5">Facebook<br />views <span className="block font-normal text-[#1C5A50]">Dynamic</span></th>
+                      <th className="px-2 py-4 font-semibold leading-5">Instagram<br />views <span className="block font-normal text-[#1C5A50]">Dynamic</span></th>
+                      <th className="px-2 py-4 font-semibold leading-5">TikTok<br />views <span className="block font-normal text-[#1C5A50]">Dynamic</span></th>
+                      <th className="px-2 py-4 font-semibold leading-5">YouTube<br />views <span className="block font-normal text-[#1C5A50]">Dynamic</span></th>
+                      <th className="px-2 py-4 font-semibold leading-5">Total social<br />views <span className="block font-normal text-stone-500">No Pinterest</span></th>
+                      <th className="px-2 py-4 font-semibold leading-5">Strongest<br />channel</th>
+                      <th className="px-3 py-4 font-semibold leading-5">Pinterest<br />impressions <span className="block font-normal text-[#9A622A]">Static · 21 Aug</span></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -372,15 +478,15 @@ export default function AdminAnalyticsPanel({
                       const bestChannel = bestFilmChannel(film);
                       return (
                       <tr key={film.video} className="border-b border-[#DDB765]/40 last:border-0">
-                        <th scope="row" className="px-6 py-4 font-semibold">{film.title}</th>
-                        <td className="px-4 py-4">{formatNumber(film.plays)}</td>
-                        <td className={`px-4 py-4 ${bestChannel === "Facebook" ? "bg-[#DDEBE4] font-bold" : ""}`}>{filmMetricLabel(film.facebookViews)}</td>
-                        <td className={`px-4 py-4 ${bestChannel === "Instagram" ? "bg-[#DDEBE4] font-bold" : ""}`}>{filmMetricLabel(film.instagramViews)}</td>
-                        <td className={`px-4 py-4 ${bestChannel === "TikTok" ? "bg-[#DDEBE4] font-bold" : ""}`}>{filmMetricLabel(film.tiktokViews)}</td>
-                        <td className={`px-4 py-4 ${bestChannel === "YouTube" ? "bg-[#DDEBE4] font-bold" : ""}`}>{filmMetricLabel(film.youtubeViews, "Not published")}</td>
-                        <td className="px-4 py-4 font-bold">{formatNumber(socialTotal(film))}</td>
-                        <td className="px-4 py-4">{bestChannel ?? "Data unavailable"}</td>
-                        <td className="px-6 py-4">{filmMetricLabel(film.pinterestImpressions, "Not published")}</td>
+                        <th scope="row" className="px-5 py-4 font-semibold leading-5">{film.title}</th>
+                        <td className="px-2 py-4">{formatNumber(film.plays)}</td>
+                        <td className={`px-2 py-4 ${bestChannel === "Facebook" ? "bg-[#DDEBE4] font-bold" : ""}`}>{filmMetricLabel(film.facebookViews)}</td>
+                        <td className={`px-2 py-4 ${bestChannel === "Instagram" ? "bg-[#DDEBE4] font-bold" : ""}`}>{filmMetricLabel(film.instagramViews)}</td>
+                        <td className={`px-2 py-4 ${bestChannel === "TikTok" ? "bg-[#DDEBE4] font-bold" : ""}`}>{filmMetricLabel(film.tiktokViews)}</td>
+                        <td className={`px-2 py-4 ${bestChannel === "YouTube" ? "bg-[#DDEBE4] font-bold" : ""}`}>{filmMetricLabel(film.youtubeViews, "Not published")}</td>
+                        <td className="px-2 py-4 font-bold">{formatNumber(socialTotal(film))}</td>
+                        <td className="px-2 py-4 break-words">{bestChannel ?? "Data unavailable"}</td>
+                        <td className="px-3 py-4">{filmMetricLabel(film.pinterestImpressions, "Not published")}</td>
                       </tr>
                     );}) : (
                       <tr><td colSpan={9} className="px-6 py-6 text-stone-600">No films match this filter.</td></tr>
@@ -458,7 +564,43 @@ export default function AdminAnalyticsPanel({
                     {formatNumber(socialExposures)} combined platform-reported exposures. Periods and platform definitions differ, so this is an activity indicator—not deduplicated reach.
                   </p>
                 </div>
-                <div className="mt-6 overflow-x-auto rounded-3xl border border-[#DDB765]/70 bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/10">
+                <div className="mt-6 overflow-hidden rounded-3xl border border-[#DDB765]/70 bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/10">
+                  <div className="divide-y divide-[#DDB765]/50 md:hidden">
+                    {snapshot.social.map((platform) => (
+                      <article key={platform.platform} className="px-5 py-5">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <h3 className="text-lg font-bold">{platform.platform}</h3>
+                          <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white ${platform.fetchedAt ? "bg-[#1C5A50]" : "bg-[#9A622A]"}`}>
+                            {platform.fetchedAt ? "Automatic" : "Static"}
+                          </span>
+                        </div>
+                        <p className="mt-1 text-xs leading-5 text-stone-600">{platform.period}</p>
+                        <div className="mt-4 rounded-2xl bg-[#123C39] p-4 text-[#FFF3DF]">
+                          <p className="text-[10px] uppercase tracking-[0.08em] text-[#DDB765]">{platform.exposureLabel}</p>
+                          <p className="mt-1 text-3xl font-bold text-white">{formatNumber(platform.exposures)}</p>
+                        </div>
+                        <dl className="mt-3 grid grid-cols-2 gap-3">
+                          {[
+                            ["Interactions", platform.interactions],
+                            ["Followers", platform.followers],
+                            ["Profile visits", platform.profileVisits],
+                            ["Outbound clicks", platform.outboundClicks],
+                          ].map(([label, value]) => (
+                            <div key={String(label)} className="rounded-2xl border border-[#DDB765]/50 bg-white/50 p-3">
+                              <dt className="text-[10px] uppercase tracking-[0.06em] text-[#6B431E]">{label}</dt>
+                              <dd className="mt-1 text-lg font-bold">{formatNumber(value as number | null)}</dd>
+                            </div>
+                          ))}
+                        </dl>
+                        <p className="mt-3 text-[11px] text-stone-500">
+                          {platform.fetchedAt
+                            ? `Refreshed ${new Intl.DateTimeFormat("en-GB", { timeStyle: "short" }).format(new Date(platform.fetchedAt))}`
+                            : staticUpdateNote}
+                        </p>
+                      </article>
+                    ))}
+                  </div>
+                  <div className="hidden overflow-x-auto md:block">
                   <table className="w-full min-w-[880px] border-collapse text-left text-sm">
                     <thead>
                       <tr className="border-b border-[#DDB765] text-[#6B431E]">
@@ -497,6 +639,7 @@ export default function AdminAnalyticsPanel({
                       ))}
                     </tbody>
                   </table>
+                  </div>
                 </div>
               </section>
 
