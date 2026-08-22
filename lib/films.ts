@@ -64,6 +64,33 @@ function film(
 
 export const films: Film[] = [
   {
+    title: "Dave & Rubble | The Handwritten Recipe",
+    video: "/videos/opr-dave-and-rubble-the-handwritten-recipe.mp4",
+    poster: "/images/opr-dave-and-rubble-the-handwritten-recipe-poster.jpg",
+    captions: "/captions/opr-dave-and-rubble-the-handwritten-recipe.vtt",
+    transcript:
+      "Dave: “Some recipes are too important to lose.”\nRubble: “Does it mention chicken?”\nDave: “It’s your first question every time.”\nRubble: “It’s an important question.”",
+    uploadDate: "2026-08-22T18:00:00+01:00",
+  },
+  {
+    title: "Dave & Rubble | The Story Behind It",
+    video: "/videos/opr-dave-and-rubble-the-story-behind-it.mp4",
+    poster: "/images/opr-dave-and-rubble-the-story-behind-it-poster.jpg",
+    captions: "/captions/opr-dave-and-rubble-the-story-behind-it.vtt",
+    transcript:
+      "Dave: “The recipe tells you what to cook.”\nRubble: “What tells you why?”\nDave: “The story behind it.”\nRubble: “And whether there’s chicken.”",
+    uploadDate: "2026-08-22T18:00:00+01:00",
+  },
+  {
+    title: "Dave & Rubble | Just a Taste",
+    video: "/videos/opr-dave-and-rubble-just-a-taste.mp4",
+    poster: "/images/opr-dave-and-rubble-just-a-taste-poster.jpg",
+    captions: "/captions/opr-dave-and-rubble-just-a-taste.vtt",
+    transcript:
+      "Dave: “That’s ready for the table.”\nRubble: “I should test it first.”\nDave: “That isn’t your job.”\nRubble: “It could be.”",
+    uploadDate: "2026-08-22T18:00:00+01:00",
+  },
+  {
     title: "Dave & Rubble | Patience Is the Secret Ingredient",
     video: "/videos/opr-dave-and-rubble-patience-is-the-secret-ingredient.mp4",
     poster: "/images/opr-dave-and-rubble-patience-is-the-secret-ingredient-poster.jpg",
