@@ -5,6 +5,7 @@ export const attributionSources = [
   "youtube",
   "pinterest",
   "linkedin",
+  "email",
 ] as const;
 
 export type AttributionSource = (typeof attributionSources)[number];
@@ -12,7 +13,7 @@ export type AttributionSource = (typeof attributionSources)[number];
 export type Attribution = {
   source: AttributionSource | null;
   utmSource: AttributionSource | null;
-  utmMedium: "social" | null;
+  utmMedium: "social" | "email" | null;
   utmCampaign: string | null;
 };
 
@@ -55,12 +56,20 @@ function normaliseCampaign(value: string | null): string | null {
   return campaignPattern.test(campaign) ? campaign : null;
 }
 
+function normaliseMedium(value: string | null, source: AttributionSource | null): "social" | "email" | null {
+  if (!source) return null;
+  const medium = value?.trim().toLowerCase() ?? "";
+  if (medium === "social" || medium === "email") return medium;
+  // No explicit medium given — infer a sensible default from the source
+  // itself, rather than always assuming "social".
+  return source === "email" ? "email" : "social";
+}
+
 export function normaliseAttribution(input: unknown): Attribution {
   const values = input && typeof input === "object" ? input as Record<string, unknown> : {};
   const source = normaliseSource(readField(values, "source", "src"));
   const utmSource = normaliseSource(readField(values, "utmSource", "utm_source")) ?? source;
-  const medium = readField(values, "utmMedium", "utm_medium")?.trim().toLowerCase();
-  const utmMedium = source && (!medium || medium === "social") ? "social" : null;
+  const utmMedium = normaliseMedium(readField(values, "utmMedium", "utm_medium"), source);
   const utmCampaign = source
     ? normaliseCampaign(readField(values, "utmCampaign", "utm_campaign")) ?? "bio"
     : null;
