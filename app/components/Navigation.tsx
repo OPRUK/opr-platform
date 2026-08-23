@@ -52,11 +52,19 @@ export default function Navigation() {
           <button
             type="button"
             onClick={() => setMenuOpen((open) => !open)}
-            className="min-h-11 min-w-11 rounded-lg px-3 py-2 text-2xl leading-none text-[#123C39] transition hover:bg-[#EED8B2] focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#9A622A] lg:hidden"
+            className="flex min-h-11 min-w-11 items-center justify-center rounded-lg px-2 py-2 text-[#123C39] transition hover:bg-[#EED8B2] focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#9A622A] lg:hidden"
             aria-label="Toggle navigation menu"
             aria-expanded={menuOpen}
           >
-            {menuOpen ? "×" : "☰"}
+            {menuOpen ? (
+              <svg aria-hidden="true" viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
+                <path d="M5 5l14 14M19 5 5 19" />
+              </svg>
+            ) : (
+              <svg aria-hidden="true" viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
+                <path d="M4 6.5h16M4 12h16M4 17.5h16" />
+              </svg>
+            )}
           </button>
         </div>
       </nav>
