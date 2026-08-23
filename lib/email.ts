@@ -244,7 +244,7 @@ export function welcomeNewsletterEmail({
   const shareLink = `${siteUrl}/share?${emailAttribution}&utm_campaign=newsletter`;
 
   return {
-    subject: "Welcome to our table — our very first newsletter",
+    subject: "Welcome to our table: our very first newsletter",
     html: emailShell(`
       <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 32px; line-height: 1.2; text-align: center; color: #123C39; margin: 0 0 22px;">Every recipe has a story.</h1>
 
@@ -253,7 +253,7 @@ export function welcomeNewsletterEmail({
       <p>I&apos;ve been carrying the idea for Other People&apos;s Recipes with me since 2000.</p>
       <p>It began with a simple thought: some of the most important recipes in our lives are never written down properly. They live in someone&apos;s hands, in a familiar voice saying &ldquo;just a little more,&rdquo; or on a piece of paper tucked inside an old cookbook.</p>
       <p>When we lose those recipes, we risk losing part of the person and the story behind them too.</p>
-      <p>I wanted to create a place where those dishes could be recorded, cooked and shared — not simply as lists of ingredients, but as part of our family histories.</p>
+      <p>I wanted to create a place where those dishes could be recorded, cooked and shared, not simply as lists of ingredients, but as part of our family histories.</p>
       <p>This is our very first newsletter, so if you&apos;re reading it, you are here at the beginning. Thank you for joining us and for believing that an ordinary family recipe can be worth preserving.</p>
       <p>I hope something you discover here reminds you of someone, makes you want to cook, or encourages you to share a story of your own.</p>
       <p>Welcome to our table.</p>
@@ -263,7 +263,7 @@ export function welcomeNewsletterEmail({
         <p style="font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: #9A622A; margin: 0 0 12px;">Dish of the week</p>
         <h2 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 26px; color: #123C39; margin: 0 0 18px;">Gautam &amp; Shobha&apos;s Tandoori Aloo Nazakat</h2>
         <img src="${siteUrl}/images/email/newsletter-gautam-shobha-portrait.jpg" alt="Gautam and Shobha together" width="200" style="display: block; border-radius: 10px; margin: 0 0 18px;" />
-        <p>When Gautam Arora decided to open his first restaurant, Martabaan Tales, he turned to his mum, Shobha. She taught him to make delicately charred potatoes filled with spiced paneer — and helped him take his first steps into the restaurant world.</p>
+        <p>When Gautam Arora decided to open his first restaurant, Martabaan Tales, he turned to his mum, Shobha. She taught him to make delicately charred potatoes filled with spiced paneer, and helped him take his first steps into the restaurant world.</p>
         <img src="${siteUrl}/images/email/newsletter-tandoori-aloo-nazakat.jpg" alt="Tandoori Aloo Nazakat, plated" width="100%" style="display: block; width: 100%; height: auto; border-radius: 10px; margin: 18px 0 22px;" />
         <a href="${dishOfWeekLink}" style="display: inline-block; background: #1C5A50; color: #FFF3DF; padding: 12px 22px; border-radius: 999px; text-decoration: none; font-weight: bold;">Read Gautam and Shobha&apos;s story</a>
       </div>
@@ -274,7 +274,7 @@ export function welcomeNewsletterEmail({
       </div>
 
       <div style="margin-top: 4px; background: #123C39; border-radius: 14px; padding: 26px 24px; color: #FFF3DF;">
-        <p style="margin: 0 0 14px;"><strong style="color: #DDB765;">Dave:</strong> I grew up with recipes that were passed down through four generations — not always written clearly, but remembered through repetition, instinct and the occasional family disagreement.</p>
+        <p style="margin: 0 0 14px;"><strong style="color: #DDB765;">Dave:</strong> I grew up with recipes that were passed down through four generations, not always written clearly, but remembered through repetition, instinct and the occasional family disagreement.</p>
         <p style="margin: 0 0 14px;">Butter Chicken is one of those recipes. I&apos;m looking forward to cooking it with you live and sharing the story behind it.</p>
         <p style="margin: 0 0 14px;"><strong style="color: #DDB765;">Rubble:</strong> Dave says it has been passed down through four generations.</p>
         <p style="margin: 0 0 14px;">I say four generations is more than enough time to learn that the dog should get a portion.</p>
@@ -283,9 +283,9 @@ export function welcomeNewsletterEmail({
       </div>
 
       <div style="margin-top: 24px;">
-        <p style="color: #9A622A; letter-spacing: 1.5px; font-size: 12px; text-transform: uppercase; margin: 0 0 12px;">Cook with Dave — live</p>
+        <p style="color: #9A622A; letter-spacing: 1.5px; font-size: 12px; text-transform: uppercase; margin: 0 0 12px;">Cook with Dave, live</p>
         <h2 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 26px; color: #123C39; margin: 0 0 14px;">Dave&apos;s Butter Chicken cook-along</h2>
-        <p style="margin: 0 0 20px;">Join Dave — and a closely supervised Rubble — for a free live cook-along over Zoom. Same recipe, four generations, no shortcuts — except this time, you&apos;re invited into the kitchen with them.</p>
+        <p style="margin: 0 0 20px;">Join Dave (and a closely supervised Rubble) for a free live cook-along over Zoom. Same recipe, four generations, no shortcuts, except this time, you&apos;re invited into the kitchen with them.</p>
         <p style="font-weight: bold; color: #123C39; margin: 0 0 4px;">Sunday 4 October 2026</p>
         <p style="font-weight: bold; color: #123C39; margin: 0 0 4px;">5pm UK time</p>
         <p style="font-weight: bold; color: #123C39; margin: 0 0 20px;">Free to attend on Zoom</p>
@@ -295,13 +295,14 @@ export function welcomeNewsletterEmail({
 
       <div style="margin-top: 34px; border-top: 1px solid #DDB765; padding-top: 20px;">
         <p style="font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: #9A622A; margin: 0 0 12px;">Meet Dave &amp; Rubble</p>
-        <p style="margin: 0 0 12px;">Dave cooks. Rubble supervises. Watch their short films about family recipes, handwritten instructions, secret ingredients — and whether a small taste really counts.</p>
+        <p style="margin: 0 0 12px;">Dave cooks. Rubble supervises. Watch their short films about family recipes, handwritten instructions, secret ingredients, and whether a small taste really counts.</p>
         <a href="${filmsLink}" style="color: #1C5A50; font-weight: bold;">Watch the films →</a>
       </div>
 
       <div style="margin-top: 30px; border-top: 1px solid #DDB765; padding-top: 20px;">
         <p style="font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: #9A622A; margin: 0 0 12px;">What&apos;s your recipe?</p>
         <p style="margin: 0 0 12px;">It could be something your mum taught you, a dish written on a fading piece of paper or a recipe you have made so many times that you no longer need to measure anything. We would love to hear the story behind it.</p>
+        <p style="margin: 0 0 12px;">Submit yours and it could be chosen as OPR&apos;s Recipe of the Month.</p>
         <a href="${shareLink}" style="color: #1C5A50; font-weight: bold;">Share your recipe →</a>
       </div>
 
