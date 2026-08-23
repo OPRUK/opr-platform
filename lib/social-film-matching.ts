@@ -16,6 +16,8 @@ const aliases: Record<string, string> = {
   "just a taste": "Dave & Rubble | Just a Taste",
   "every recipe has a secret ingredient": "Dave & Rubble | Patience Is the Secret Ingredient",
   "patience is the secret ingredient": "Dave & Rubble | Patience Is the Secret Ingredient",
+  "which dish should dave and rubble cook next": "Dave & Rubble | The Chicken Nomination",
+  "the chicken nomination": "Dave & Rubble | The Chicken Nomination",
   "opr dave and rubble your nomination": "Dave & Rubble | Your Nomination",
   "what is the one family dish you think everyone should taste": "Dave & Rubble | Your Nomination",
   "opr dave and rubble gautam shobha dish of the week": "Dave & Rubble | Dish of the Week: Gautam & Shobha",
