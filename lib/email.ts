@@ -225,6 +225,63 @@ export function cookalongZoomLinkEmail({
   };
 }
 
+// The OPR newsletter. Deliberately one hero call to action rather than
+// several competing ones — everything else (this week's dish, the films,
+// sharing a recipe) sits in a lighter "More from OPR" strip so it doesn't
+// dilute the main ask. See the review notes from the first issue for why:
+// that one asked for five different things in a single email.
+export function welcomeNewsletterEmail({
+  name,
+  unsubscribeUrl,
+}: {
+  name: string;
+  unsubscribeUrl: string | null;
+}) {
+  const emailAttribution = "src=email&utm_source=email&utm_medium=email";
+  const cookalongLink = `${siteUrl}/live-with-dave?${emailAttribution}&utm_campaign=dave-cookalong`;
+  const dishOfWeekLink = `${siteUrl}/family-cookbook/gautam-and-shobhas-tandoori-aloo-nazakat?${emailAttribution}&utm_campaign=newsletter`;
+  const filmsLink = `${siteUrl}/films?${emailAttribution}&utm_campaign=newsletter`;
+  const shareLink = `${siteUrl}/share?${emailAttribution}&utm_campaign=newsletter`;
+
+  return {
+    subject: "Welcome to our table — our very first newsletter",
+    html: emailShell(`
+      <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 32px; line-height: 1.2; text-align: center; color: #123C39; margin: 0 0 22px;">A note from the founder.</h1>
+      <p>Hi ${escapeHtml(name)},</p>
+      <p>I&apos;ve been carrying the idea for Other People&apos;s Recipes with me since 2000 — a simple thought that the most important recipes in our lives are never written down properly. They live in someone&apos;s hands, in a familiar voice saying &ldquo;just a little more,&rdquo; or on a piece of paper tucked inside an old cookbook. When we lose those recipes, we risk losing part of the person behind them too.</p>
+      <p>This is our very first newsletter, so if you&apos;re reading it, you&apos;re here at the beginning. I hope something here reminds you of someone, makes you want to cook, or encourages you to share a story of your own.</p>
+      <p>Welcome to our table.</p>
+      ${signatureBlock("Warmly,")}
+
+      <div style="margin-top: 34px; background: #123C39; border-radius: 14px; padding: 26px 24px; color: #FFF3DF;">
+        <p style="margin: 0 0 14px;"><strong style="color: #DDB765;">Dave:</strong> I grew up with recipes passed down through four generations — not always written clearly, but remembered through repetition, instinct and the occasional family disagreement. Butter Chicken is one of those recipes. I&apos;m looking forward to cooking it with you live and sharing the story behind it.</p>
+        <p style="margin: 0 0 14px;"><strong style="color: #DDB765;">Rubble:</strong> Dave says it&apos;s been passed down through four generations. I say that&apos;s more than enough time to learn the dog should get a portion.</p>
+        <p style="margin: 0 0 14px;"><strong style="color: #DDB765;">Dave:</strong> You&apos;re not having Butter Chicken.</p>
+        <p style="margin: 0;"><strong style="color: #DDB765;">Rubble:</strong> Then I&apos;ll attend in my capacity as quality control.</p>
+      </div>
+
+      <div style="margin-top: 24px; text-align: center;">
+        <p style="color: #9A622A; letter-spacing: 1.5px; font-size: 12px; text-transform: uppercase; margin: 0 0 10px;">Cook with Dave — live</p>
+        <h2 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 26px; color: #123C39; margin: 0 0 14px;">Dave&apos;s Butter Chicken cook-along</h2>
+        <p style="margin: 0 0 6px;">Join Dave — and a closely supervised Rubble — for a free live cook-along over Zoom. Same recipe, four generations, no shortcuts — except this time, you&apos;re invited into the kitchen with them.</p>
+        <p style="font-weight: bold; color: #123C39; margin: 16px 0 4px;">Sunday 4 October 2026, 5pm UK time</p>
+        <p style="margin: 0 0 20px; color: #6B6254;">We&apos;ll send the recipe list the week before so you can shop and prep, then the Zoom link closer to the day.</p>
+        <a href="${cookalongLink}" style="display: inline-block; background: #1C5A50; color: #FFF3DF; padding: 14px 26px; border-radius: 999px; text-decoration: none; font-weight: bold;">Reserve your place</a>
+        <p style="margin: 16px 0 0; font-size: 13px; color: #6B6254;">Rubble&apos;s responsibilities will remain strictly observational.</p>
+      </div>
+
+      <div style="margin-top: 34px; border-top: 1px solid #DDB765; padding-top: 20px;">
+        <p style="font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: #9A622A; margin: 0 0 12px;">More from OPR</p>
+        <p style="margin: 0 0 8px;"><a href="${dishOfWeekLink}" style="color: #1C5A50;">This week&apos;s story: Gautam &amp; Shobha&apos;s Tandoori Aloo Nazakat →</a></p>
+        <p style="margin: 0 0 8px;"><a href="${filmsLink}" style="color: #1C5A50;">Watch the films →</a></p>
+        <p style="margin: 0;"><a href="${shareLink}" style="color: #1C5A50;">Share your recipe →</a></p>
+      </div>
+
+      ${marketingFooter(unsubscribeUrl)}
+    `),
+  };
+}
+
 export function newCookalongSignupEmail({ name, email }: { name: string; email: string }) {
   return {
     subject: `New cook-along signup: ${name}`,
