@@ -6,6 +6,16 @@ function normalise(value: string): string {
 }
 
 const aliases: Record<string, string> = {
+  "some recipes are too important to lose": "Dave & Rubble | The Handwritten Recipe",
+  "the handwritten recipe": "Dave & Rubble | The Handwritten Recipe",
+  "a recipe tells you what to cook": "Dave & Rubble | The Story Behind It",
+  "the recipe tells you what to cook": "Dave & Rubble | The Story Behind It",
+  "the story behind it": "Dave & Rubble | The Story Behind It",
+  "every kitchen needs a taste tester": "Dave & Rubble | Just a Taste",
+  "thats ready for the table": "Dave & Rubble | Just a Taste",
+  "just a taste": "Dave & Rubble | Just a Taste",
+  "every recipe has a secret ingredient": "Dave & Rubble | Patience Is the Secret Ingredient",
+  "patience is the secret ingredient": "Dave & Rubble | Patience Is the Secret Ingredient",
   "opr dave and rubble your nomination": "Dave & Rubble | Your Nomination",
   "what is the one family dish you think everyone should taste": "Dave & Rubble | Your Nomination",
   "opr dave and rubble gautam shobha dish of the week": "Dave & Rubble | Dish of the Week: Gautam & Shobha",
@@ -35,6 +45,26 @@ const aliases: Record<string, string> = {
   "opr dave and rubble recipe of the month": "Dave & Rubble | OPR Recipe of the Month",
   "daves in the kitchen rubbles keeping watch": "Dave & Rubble | Cooking Together",
 };
+
+type SocialPlatform = "facebook" | "instagram" | "tiktok" | "youtube";
+
+// Stable IDs are the primary match when supplied. This optional JSON map lets
+// OPR add IDs without a code release, for example:
+// {"youtube:MkSF7Ky8Ybc":"Dave & Rubble | The Handwritten Recipe"}
+function configuredIdAliases(): Record<string, string> {
+  try {
+    return JSON.parse(process.env.OPR_SOCIAL_FILM_IDS ?? "{}") as Record<string, string>;
+  } catch {
+    console.warn("OPR_SOCIAL_FILM_IDS is not valid JSON");
+    return {};
+  }
+}
+
+export function matchSocialFilmId(platform: SocialPlatform, id: string | undefined): string | null {
+  if (!id) return null;
+  const matched = configuredIdAliases()[`${platform}:${id}`];
+  return matched && films.some((film) => film.title === matched) ? matched : null;
+}
 
 export function matchSocialFilmTitle(rawTitle: string): string | null {
   const title = normalise(rawTitle.split("\n")[0] ?? rawTitle);

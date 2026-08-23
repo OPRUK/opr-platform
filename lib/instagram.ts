@@ -12,7 +12,7 @@ export type InstagramSummary = {
   views28d: number;
   profileViews28d: number;
   fetchedAt: string;
-  films: Array<{ title: string; views: number }>;
+  films: Array<{ id: string; title: string; views: number }>;
 };
 
 // Module-scope cache: best-effort within a warm serverless instance, not a
@@ -69,7 +69,7 @@ export async function getInstagramSummary(
       console.error("OPR Instagram insights query failed", await insightsResponse.text());
     }
 
-    let films: Array<{ title: string; views: number }> = [];
+    let films: Array<{ id: string; title: string; views: number }> = [];
     if (mediaResponse.ok) {
       const mediaPayload = await mediaResponse.json();
       const videos = (mediaPayload.data ?? []).filter((item: { media_type?: string; media_product_type?: string }) =>
@@ -79,9 +79,10 @@ export async function getInstagramSummary(
         const response = await fetch(
           `https://graph.facebook.com/${GRAPH_API_VERSION}/${item.id}/insights?metric=views&access_token=${accessToken}`,
         );
-        if (!response.ok) return { title: item.caption ?? "Untitled video", views: 0 };
+        if (!response.ok) return { id: item.id, title: item.caption ?? "Untitled video", views: 0 };
         const payload = await response.json();
         return {
+          id: item.id,
           title: item.caption ?? "Untitled video",
           views: Number(payload.data?.[0]?.values?.[0]?.value ?? payload.data?.[0]?.total_value?.value ?? 0),
         };

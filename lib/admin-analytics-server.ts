@@ -19,6 +19,7 @@ import { films } from "./films";
 import {
   facebookFilmViews,
   instagramFilmViews,
+  matchSocialFilmId,
   matchSocialFilmTitle,
   pinterestFilmImpressions,
   tiktokFilmViews,
@@ -644,12 +645,13 @@ function buildFilmViews(
     .sort((a, b) => b.plays - a.plays || a.title.localeCompare(b.title));
 }
 
-type PlatformFilm = { title: string; views: number };
+type SocialPlatform = "facebook" | "instagram" | "tiktok" | "youtube";
+type PlatformFilm = { id?: string; title: string; views: number };
 
-function socialFilmTotals(rows: readonly PlatformFilm[], platform: string): Map<string, number> {
+function socialFilmTotals(rows: readonly PlatformFilm[], platform: string, stablePlatform?: SocialPlatform): Map<string, number> {
   const totals = new Map<string, number>();
   for (const row of rows) {
-    const title = matchSocialFilmTitle(row.title);
+    const title = (stablePlatform ? matchSocialFilmId(stablePlatform, row.id) : null) ?? matchSocialFilmTitle(row.title);
     if (!title) {
       console.warn(`OPR ${platform} film title needs matching: ${row.title.slice(0, 100)}`);
       continue;
@@ -673,10 +675,10 @@ async function buildSocialFilmViews(website: AnalyticsFilmSummary[]): Promise<An
     youtube: socialFilmTotals(youtubeFilmViews, "YouTube audit"),
   };
   const liveSources = {
-    facebook: socialFilmTotals(facebook?.films ?? [], "Facebook"),
-    instagram: socialFilmTotals(instagram?.films ?? [], "Instagram"),
-    tiktok: socialFilmTotals(tiktok?.films ?? [], "TikTok"),
-    youtube: socialFilmTotals(youtube?.films ?? [], "YouTube"),
+    facebook: socialFilmTotals(facebook?.films ?? [], "Facebook", "facebook"),
+    instagram: socialFilmTotals(instagram?.films ?? [], "Instagram", "instagram"),
+    tiktok: socialFilmTotals(tiktok?.films ?? [], "TikTok", "tiktok"),
+    youtube: socialFilmTotals(youtube?.films ?? [], "YouTube", "youtube"),
   };
   const sources = {
     facebook: new Map([...auditedSources.facebook, ...liveSources.facebook]),

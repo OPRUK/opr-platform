@@ -13,7 +13,7 @@ export type TikTokSummary = {
   videoCount: number;
   views28d: number;
   fetchedAt: string;
-  films: Array<{ title: string; views: number }>;
+  films: Array<{ id: string; title: string; views: number }>;
 };
 
 // Module-scope cache: best-effort within a warm serverless instance, not a
@@ -46,6 +46,7 @@ async function getAccessToken(clientKey: string, clientSecret: string, refreshTo
 }
 
 type TikTokVideo = {
+  id: string;
   create_time: number;
   view_count: number;
   title?: string;
@@ -59,7 +60,7 @@ async function fetchRecentVideos(accessToken: string, since: Date): Promise<TikT
 
   for (let page = 0; page < VIDEO_LIST_MAX_PAGES; page += 1) {
     const response = await fetch(
-      "https://open.tiktokapis.com/v2/video/list/?fields=create_time,view_count,title,video_description",
+      "https://open.tiktokapis.com/v2/video/list/?fields=id,create_time,view_count,title,video_description",
       {
         method: "POST",
         headers: {
@@ -144,6 +145,7 @@ export async function getTikTokSummary(
       views28d,
       fetchedAt: new Date().toISOString(),
       films: recentVideos.map((video) => ({
+        id: video.id,
         title: video.title || video.video_description || "Untitled video",
         views: video.view_count ?? 0,
       })),

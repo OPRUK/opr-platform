@@ -39,12 +39,12 @@ function bestFilmChannel(film: AdminAnalyticsResponse["socialFilmViews"][number]
     ["TikTok", film.tiktokViews],
     ["YouTube", film.youtubeViews],
   ];
-  const reported = channels.filter((entry): entry is [FilmChannel, number] => entry[1] !== null);
+  const reported = channels.filter((entry): entry is [FilmChannel, number] => entry[1] !== null && entry[1] > 0);
   if (!reported.length) return null;
   return reported.reduce((best, current) => current[1] > best[1] ? current : best)[0];
 }
 
-function filmMetricLabel(value: number | null, unavailableLabel = "Data unavailable") {
+function filmMetricLabel(value: number | null, unavailableLabel = "Post not matched") {
   return value === null ? unavailableLabel : formatNumber(value);
 }
 
@@ -440,7 +440,7 @@ export default function AdminAnalyticsPanel({
                         </div>
                         <div className="min-w-0">
                           <p className="text-[10px] uppercase tracking-[0.06em] text-[#DDB765]">Strongest channel</p>
-                          <p className="mt-1 break-words text-sm font-bold text-white">{bestChannel ?? "Data unavailable"}</p>
+                          <p className="mt-1 break-words text-sm font-bold text-white">{bestChannel ?? "—"}</p>
                         </div>
                       </div>
                     </article>
@@ -485,7 +485,7 @@ export default function AdminAnalyticsPanel({
                         <td className={`px-2 py-4 ${bestChannel === "TikTok" ? "bg-[#DDEBE4] font-bold" : ""}`}>{filmMetricLabel(film.tiktokViews)}</td>
                         <td className={`px-2 py-4 ${bestChannel === "YouTube" ? "bg-[#DDEBE4] font-bold" : ""}`}>{filmMetricLabel(film.youtubeViews, "Not published")}</td>
                         <td className="px-2 py-4 font-bold">{formatNumber(socialTotal(film))}</td>
-                        <td className="px-2 py-4 break-words">{bestChannel ?? "Data unavailable"}</td>
+                        <td className="px-2 py-4 break-words">{bestChannel ?? "—"}</td>
                         <td className="px-3 py-4">{filmMetricLabel(film.pinterestImpressions, "Not published")}</td>
                       </tr>
                     );}) : (
