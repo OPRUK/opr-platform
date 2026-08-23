@@ -44,6 +44,7 @@ test("matches the new Dave and Rubble films from their social caption openings",
   assert.equal(matchSocialFilmTitle("Every kitchen needs a taste tester."), "Dave & Rubble | Just a Taste");
   assert.equal(matchSocialFilmTitle("That’s ready for the table."), "Dave & Rubble | Just a Taste");
   assert.equal(matchSocialFilmTitle("Every recipe has a secret ingredient."), "Dave & Rubble | Patience Is the Secret Ingredient");
+  assert.equal(matchSocialFilmTitle("Which dish should Dave and Rubble cook next?"), "Dave & Rubble | The Chicken Nomination");
 });
 
 test("stable platform IDs override inconsistent post titles", () => {
