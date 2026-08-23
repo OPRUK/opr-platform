@@ -3,13 +3,13 @@ import { createUnsubscribeLink } from "../../../../lib/unsubscribe";
 
 export const runtime = "nodejs";
 
-// Manually triggered, not scheduled — no vercel.json cron entry. Lives here
-// only to reuse the static-secret auth pattern the other /api/cron routes
-// already use, since curl can't hold an admin session token.
+// Manually triggered, not scheduled — no vercel.json cron entry. Uses its
+// own secret (NEWSLETTER_TEST_SEND_SECRET) rather than CRON_SECRET so it
+// stays independent of the actual scheduled cron jobs.
 const TEST_RECIPIENT = "chaten@otherpeoplesrecipes.co.uk";
 
 function isAuthorised(request: Request): boolean {
-  const secret = process.env.CRON_SECRET;
+  const secret = process.env.NEWSLETTER_TEST_SEND_SECRET;
   return Boolean(secret && request.headers.get("authorization") === `Bearer ${secret}`);
 }
 
