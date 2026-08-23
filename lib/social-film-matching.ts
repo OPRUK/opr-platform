@@ -94,6 +94,13 @@ export const pinterestFilmImpressions = [
   { title: "Dave and Rubble Butter Chicken Recipe", views: 1 },
   { title: "Quality Control", views: 10 },
   { title: "OPR Dave and Rubble's steak story", views: 9 },
+  { title: "Dave & Rubble | Just a Taste", views: 0 },
+  { title: "Dave & Rubble | The Story Behind It", views: 0 },
+  { title: "Dave & Rubble | The Handwritten Recipe", views: 0 },
+  { title: "Dave & Rubble | The Chicken Nomination", views: 0 },
+  { title: "Dave & Rubble | Patience Is the Secret Ingredient", views: 0 },
+  { title: "Dave & Rubble | Your Nomination", views: 0 },
+  { title: "Dave & Rubble | Dish of the Week: Gautam & Shobha", views: 0 },
 ] as const;
 
 // Verified directly in each channel's creator dashboard. These figures provide

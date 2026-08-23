@@ -48,11 +48,12 @@ const organizationJsonLd = {
   url: SITE_URL,
   logo: absoluteUrl("/icon"),
   sameAs: [
+    "https://www.tiktok.com/@opr_uk",
     "https://www.instagram.com/opr_uk/",
     "https://www.facebook.com/otherpeoplesrecipesuk/",
-    "https://www.pinterest.com/otherpeoplesrecipes/",
     "https://www.youtube.com/channel/UCdRQdldwQPFPoMr5N-FwIkQ",
-    "https://www.tiktok.com/@opr_uk",
+    "https://www.pinterest.com/otherpeoplesrecipes/",
+    "https://www.linkedin.com/company/opr-uk/",
   ],
 };
 

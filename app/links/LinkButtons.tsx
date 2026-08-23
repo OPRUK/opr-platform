@@ -16,7 +16,8 @@ type LinkKey =
   | "facebook"
   | "pinterest"
   | "youtube"
-  | "tiktok";
+  | "tiktok"
+  | "linkedin";
 
 function logClick(key: LinkKey, attribution: Attribution) {
   try {
@@ -40,6 +41,17 @@ const primaryLinks: Array<{ key: LinkKey; label: string; href: string; external?
 ];
 
 const socialLinks: Array<{ key: LinkKey; label: string; href: string; icon: React.ReactNode }> = [
+  {
+    key: "tiktok",
+    label: "TikTok",
+    href: "https://www.tiktok.com/@opr_uk",
+    icon: (
+      <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M14 4v10.5a3.5 3.5 0 1 1-3.5-3.5" />
+        <path d="M14 4c.3 2.3 2 4 4.5 4.2" />
+      </svg>
+    ),
+  },
   {
     key: "instagram",
     label: "Instagram",
@@ -66,17 +78,6 @@ const socialLinks: Array<{ key: LinkKey; label: string; href: string; icon: Reac
     ),
   },
   {
-    key: "pinterest",
-    label: "Pinterest",
-    href: "https://www.pinterest.com/otherpeoplesrecipes/",
-    icon: (
-      <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 21s7-7.7 7-12.5A7 7 0 0 0 5 8.5C5 13.3 12 21 12 21Z" />
-        <circle cx="12" cy="8.5" r="2.3" />
-      </svg>
-    ),
-  },
-  {
     key: "youtube",
     label: "YouTube",
     href: "https://www.youtube.com/channel/UCdRQdldwQPFPoMr5N-FwIkQ",
@@ -88,13 +89,27 @@ const socialLinks: Array<{ key: LinkKey; label: string; href: string; icon: Reac
     ),
   },
   {
-    key: "tiktok",
-    label: "TikTok",
-    href: "https://www.tiktok.com/@opr_uk",
+    key: "pinterest",
+    label: "Pinterest",
+    href: "https://www.pinterest.com/otherpeoplesrecipes/",
     icon: (
       <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M14 4v10.5a3.5 3.5 0 1 1-3.5-3.5" />
-        <path d="M14 4c.3 2.3 2 4 4.5 4.2" />
+        <path d="M12 21s7-7.7 7-12.5A7 7 0 0 0 5 8.5C5 13.3 12 21 12 21Z" />
+        <circle cx="12" cy="8.5" r="2.3" />
+      </svg>
+    ),
+  },
+  {
+    key: "linkedin",
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/company/opr-uk/",
+    icon: (
+      <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3.5" y="3.5" width="17" height="17" rx="3" />
+        <line x1="7.5" y1="10" x2="7.5" y2="16.5" />
+        <circle cx="7.5" cy="7" r="0.9" fill="currentColor" stroke="none" />
+        <path d="M11.5 16.5V10" />
+        <path d="M11.5 12.8c0-1.5 1-2.8 2.5-2.8s2.5 1.3 2.5 2.8v3.7" />
       </svg>
     ),
   },
