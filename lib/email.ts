@@ -8,10 +8,10 @@ const from = process.env.EMAIL_FROM || "Other People's Recipes <onboarding@resen
 function emailShell(bodyHtml: string) {
   return `
     <div style="background: #EED8B2; padding: 32px 12px; font-family: 'Gill Sans MT', 'Gill Sans', Avenir, Corbel, Arial, sans-serif;">
-      <div style="max-width: 620px; margin: 0 auto; background-image: url('${siteUrl}/images/email/opr-paper-background.jpg'); background-size: cover; background-position: center; background-color: #EAD09B; border-radius: 18px; border: 1px solid #9B6935; padding: 34px 22px 26px;">
+      <div style="max-width: 720px; margin: 0 auto; background-image: url('${siteUrl}/images/email/opr-paper-background.jpg'); background-size: cover; background-position: center; background-color: #EAD09B; border-radius: 18px; border: 1px solid #9B6935; padding: 34px 32px 26px;">
         <img src="${siteUrl}/images/email/opr-logo-badge.png" alt="Other People's Recipes" width="64" height="64" style="display: block; margin: 0 auto 14px; border-radius: 999px;" />
         <p style="color: #9A622A; letter-spacing: 2px; font-size: 12px; text-transform: uppercase; text-align: center; margin: 0 0 22px;">Other People&apos;s Recipes</p>
-        <div style="background: #FFF9EE; border-radius: 14px; padding: 30px 26px; color: #4A4232; font-size: 19px; line-height: 1.65; box-shadow: 0 12px 26px rgba(74, 42, 14, 0.16);">
+        <div style="background: #FFF9EE; border-radius: 14px; padding: 34px 38px; color: #4A4232; font-size: 19px; line-height: 1.65; box-shadow: 0 12px 26px rgba(74, 42, 14, 0.16);">
           ${bodyHtml}
         </div>
         <p style="text-align: center; font-size: 11px; letter-spacing: 1px; color: #6B5637; margin: 18px 0 0;">Every Recipe has a Story.</p>
