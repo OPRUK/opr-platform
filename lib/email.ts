@@ -364,9 +364,9 @@ export function firstNewsletterEmail({
 }) {
   const safeName = escapeHtml(name || "there");
   return {
-    subject: "Welcome to our table — our very first newsletter",
+    subject: "Welcome to our table, our very first newsletter",
     html: `
-      <div style="display:none;max-height:0;overflow:hidden;opacity:0;">A personal note from Chaten, our Dish of the Week and an invitation to cook with Dave — closely supervised by Rubble.</div>
+      <div style="display:none;max-height:0;overflow:hidden;opacity:0;">A personal note from Chaten, our Dish of the Week and an invitation to cook with Dave, closely supervised by Rubble.</div>
       <div background="${parchmentUrl}" style="font-family: 'Gill Sans MT', 'Gill Sans', Avenir, Corbel, Arial, sans-serif; width: calc(100% - 24px); max-width: 900px; box-sizing: border-box; margin: 0 auto; color: #3E372C; font-size: 18px; line-height: 1.7; background-color: #E8D09B; background-image: url('${parchmentUrl}'); background-repeat: repeat-y; background-position: center top; background-size: 100% auto; padding: 36px; border: 1px solid #C99A4B; border-radius: 22px;">
         <img src="${logoUrl}" alt="Other People's Recipes" width="64" height="64" style="display: block; margin: 0 auto 18px; border-radius: 999px;" />
         <p style="color: #9A622A; letter-spacing: 2px; font-size: 14px; font-weight:bold; text-transform: uppercase; text-align: center;">Other People's Recipes</p>
@@ -378,17 +378,17 @@ export function firstNewsletterEmail({
           <p>I’ve been carrying the idea for Other People’s Recipes with me since 2000.</p>
           <p>It began with a simple thought: some of the most important recipes in our lives are never written down properly. They live in someone’s hands, in a familiar voice saying “just a little more,” or on a piece of paper tucked inside an old cookbook.</p>
           <p>When we lose those recipes, we risk losing part of the person and the story behind them too.</p>
-          <p>I wanted to create a place where those dishes could be recorded, cooked and shared — not simply as lists of ingredients, but as part of our family histories.</p>
+          <p>I wanted to create a place where those dishes could be recorded, cooked and shared, not simply as lists of ingredients, but as part of our family histories.</p>
           <p>This is our very first newsletter, so if you’re reading it, you are here at the beginning. Thank you for joining us and for believing that an ordinary family recipe can be worth preserving.</p>
           <p>I hope something you discover here reminds you of someone, makes you want to cook, or encourages you to share a story of your own.</p>
-          <p style="margin-bottom:0;">Welcome to our table.<br /><br />Warmly,<br /><strong>Chaten</strong><br />Founder, Other People’s Recipes</p>
+          ${signatureBlock("Welcome to our table.<br /><br />Warmly,")}
         </div>
 
         <div style="border-top: 1px solid #DDB765; margin-top: 30px; padding-top: 24px;">
           <p style="color: #9A622A; font-weight: bold; letter-spacing: 1.5px; font-size: 14px; text-transform: uppercase;">Dish of the week</p>
           <h2 style="font-family: Didot, 'Bodoni MT', Georgia, serif; color: #123C39; font-size: 32px; line-height: 1.25;">Gautam &amp; Shobha’s Tandoori Aloo Nazakat</h2>
           <img src="${gautamShobhaUrl}" alt="Gautam and his mum, Shobha" width="414" style="display:block; width:50%; max-width:414px; min-width:260px; height:auto; border-radius:16px; margin:20px auto;" />
-          <p>When Gautam Arora decided to open his first restaurant, Martabaan Tales, he turned to his mum, Shobha. She taught him to make delicately charred potatoes filled with spiced paneer — and helped him take his first steps into the restaurant world.</p>
+          <p>When Gautam Arora decided to open his first restaurant, Martabaan Tales, he turned to his mum, Shobha. She taught him to make delicately charred potatoes filled with spiced paneer and helped him take his first steps into the restaurant world.</p>
           <img src="${tandooriAlooUrl}" alt="Tandoori Aloo Nazakat" width="414" style="display:block; width:50%; max-width:414px; min-width:260px; height:auto; border-radius:16px; margin:20px auto;" />
           <p><a href="${siteUrl}/family-cookbook/gautam-and-shobhas-tandoori-aloo-nazakat?utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=welcome-newsletter" style="display: inline-block; background: #1C5A50; color: #FFF3DF; font-size:17px; font-weight:bold; padding: 14px 20px; border-radius: 999px; text-decoration: none;">Read Gautam and Shobha’s story</a></p>
         </div>
@@ -397,16 +397,16 @@ export function firstNewsletterEmail({
           <p style="color: #9A622A; font-weight: bold; letter-spacing: 1.5px; font-size: 14px; text-transform: uppercase;">A note from Dave &amp; Rubble</p>
           <img src="${daveRubbleUrl}" alt="Dave and Rubble" width="414" style="display:block; width:50%; max-width:414px; min-width:260px; height:auto; border-radius:16px; margin:20px auto;" />
           <div style="background:#123C39; color:#FFF3DF; border-radius:14px; padding:22px; margin:18px 0;">
-            <p><strong style="color:#DDB765;">DAVE:</strong><br />I grew up with recipes that were passed down through four generations — not always written clearly, but remembered through repetition, instinct and the occasional family disagreement.</p>
+            <p><strong style="color:#DDB765;">DAVE:</strong><br />I grew up with recipes that were passed down through four generations, not always written clearly, but remembered through repetition, instinct and the occasional family disagreement.</p>
             <p>Butter Chicken is one of those recipes. I’m looking forward to cooking it with you live and sharing the story behind it.</p>
             <p><strong style="color:#DDB765;">RUBBLE:</strong><br />Dave says it has been passed down through four generations.</p>
             <p>I say four generations is more than enough time to learn that the dog should get a portion.</p>
             <p><strong style="color:#DDB765;">DAVE:</strong><br />You’re not having Butter Chicken.</p>
             <p style="margin-bottom:0;"><strong style="color:#DDB765;">RUBBLE:</strong><br />Then I will attend in my capacity as quality control.</p>
           </div>
-          <p style="color: #9A622A; font-weight: bold; letter-spacing: 1.5px; font-size: 14px; text-transform: uppercase; margin-top:28px;">Cook with Dave — live</p>
-          <h2 style="font-family: Didot, 'Bodoni MT', Georgia, serif; color: #123C39; font-size: 32px; line-height: 1.25;">Dave’s Butter Chicken cook-along</h2>
-          <p>Join Dave — and a closely supervised Rubble — for a free live cook-along over Zoom. Same recipe, four generations, no shortcuts — except this time, you’re invited into the kitchen with them.</p>
+          <p style="color: #9A622A; font-weight: bold; letter-spacing: 1.5px; font-size: 14px; text-transform: uppercase; margin-top:28px;">Cook with Dave live</p>
+          <h2 style="font-family: Didot, 'Bodoni MT', Georgia, serif; color: #123C39; font-size: 32px; line-height: 1.25;">Dave’s Butter Chicken cook along</h2>
+          <p>Join Dave and a closely supervised Rubble for a free live cook along over Zoom. Same recipe, four generations, no shortcuts. This time, you’re invited into the kitchen with them.</p>
           <p><strong>Sunday 4 October 2026<br />5pm UK time<br />Free to attend on Zoom</strong></p>
           <p><a href="${siteUrl}/live-with-dave?utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=dave-cookalong" style="display: inline-block; background: #1C5A50; color: #FFF3DF; font-size:17px; font-weight:bold; padding: 14px 20px; border-radius: 999px; text-decoration: none;">Reserve your place</a></p>
           <p style="font-size:16px; color:#6B6254;">Rubble’s responsibilities will remain strictly observational.</p>
@@ -414,7 +414,7 @@ export function firstNewsletterEmail({
 
         <div style="border-top: 1px solid #DDB765; margin-top: 30px; padding-top: 24px;">
           <p style="color: #9A622A; font-weight: bold; letter-spacing: 1.5px; font-size: 14px; text-transform: uppercase;">Meet Dave &amp; Rubble</p>
-          <p>Dave cooks. Rubble supervises. Watch their short films about family recipes, handwritten instructions, secret ingredients — and whether a small taste really counts.</p>
+          <p>Dave cooks. Rubble supervises. Watch their short films about family recipes, handwritten instructions, secret ingredients and whether a small taste really counts.</p>
           <p><a href="${siteUrl}/films?utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=welcome-newsletter" style="color: #1C5A50; font-weight: bold;">Watch the films →</a></p>
         </div>
 
