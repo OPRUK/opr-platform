@@ -38,6 +38,17 @@ export default function Footer() {
             <li><a href="mailto:info@otherpeoplesrecipes.co.uk" className="transition hover:text-[#DDB765]">Contact OPR</a></li>
             <li className="flex flex-wrap items-center gap-4 pt-2">
               <a
+                href="https://www.tiktok.com/@opr_uk"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Follow Other People's Recipes on TikTok"
+                className="rounded-full border border-[#9A622A] p-2.5 text-[#FFF3DF] transition hover:-translate-y-0.5 hover:border-[#DDB765] hover:bg-[#DDB765] hover:text-[#08231F]"
+              >
+                <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 fill-current">
+                  <path d="M16.7 3c.4 2.7 1.9 4.3 4.3 4.5v3.1c-1.6.1-3-.4-4.2-1.2v6.8c0 4.3-4.7 6.8-8.2 4.6-2.1-1.3-2.9-4.3-1.8-6.6 1.1-2.3 3.9-3.3 6.2-2.4v3.2c-.9-.4-2-.1-2.5.7-.5.8-.3 1.9.5 2.5 1 .8 2.7.1 2.7-1.3V3h3Z" />
+                </svg>
+              </a>
+              <a
                 href="https://www.instagram.com/opr_uk/"
                 target="_blank"
                 rel="noreferrer"
@@ -62,17 +73,6 @@ export default function Footer() {
                 </svg>
               </a>
               <a
-                href="https://www.pinterest.com/otherpeoplesrecipes/"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Follow Other People's Recipes on Pinterest"
-                className="rounded-full border border-[#9A622A] p-2.5 text-[#FFF3DF] transition hover:-translate-y-0.5 hover:border-[#DDB765] hover:bg-[#DDB765] hover:text-[#08231F]"
-              >
-                <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 fill-current">
-                  <path d="M12 2.2a9.8 9.8 0 0 0-3.6 18.9c-.1-1.6 0-3.5.4-5.2l1.1-4.6s-.3-.7-.3-1.8c0-1.7 1-3 2.2-3 1 0 1.5.8 1.5 1.7 0 1-.7 2.6-1.1 4-.3 1.2.6 2.1 1.8 2.1 2.2 0 3.7-2.8 3.7-6.1 0-2.5-1.7-4.3-4.8-4.3-3.5 0-5.6 2.6-5.6 5.5 0 1 .3 1.8.9 2.4.2.2.2.3.1.6l-.3 1.1c-.1.4-.4.5-.7.4-2-.8-2.9-3-2.9-5.4 0-4 3.3-8.8 9.8-8.8 5.2 0 8.6 3.8 8.6 7.8 0 5.3-2.9 9.3-7.2 9.3-1.4 0-2.8-.8-3.2-1.6l-.9 3.4c-.3 1.3-1 2.7-1.6 3.7.9.3 1.9.5 2.9.5A9.8 9.8 0 0 0 12 2.2Z" />
-                </svg>
-              </a>
-              <a
                 href="https://www.youtube.com/channel/UCdRQdldwQPFPoMr5N-FwIkQ"
                 target="_blank"
                 rel="noreferrer"
@@ -84,14 +84,25 @@ export default function Footer() {
                 </svg>
               </a>
               <a
-                href="https://www.tiktok.com/@opr_uk"
+                href="https://www.pinterest.com/otherpeoplesrecipes/"
                 target="_blank"
                 rel="noreferrer"
-                aria-label="Follow Other People's Recipes on TikTok"
+                aria-label="Follow Other People's Recipes on Pinterest"
                 className="rounded-full border border-[#9A622A] p-2.5 text-[#FFF3DF] transition hover:-translate-y-0.5 hover:border-[#DDB765] hover:bg-[#DDB765] hover:text-[#08231F]"
               >
                 <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 fill-current">
-                  <path d="M16.7 3c.4 2.7 1.9 4.3 4.3 4.5v3.1c-1.6.1-3-.4-4.2-1.2v6.8c0 4.3-4.7 6.8-8.2 4.6-2.1-1.3-2.9-4.3-1.8-6.6 1.1-2.3 3.9-3.3 6.2-2.4v3.2c-.9-.4-2-.1-2.5.7-.5.8-.3 1.9.5 2.5 1 .8 2.7.1 2.7-1.3V3h3Z" />
+                  <path d="M12 2.2a9.8 9.8 0 0 0-3.6 18.9c-.1-1.6 0-3.5.4-5.2l1.1-4.6s-.3-.7-.3-1.8c0-1.7 1-3 2.2-3 1 0 1.5.8 1.5 1.7 0 1-.7 2.6-1.1 4-.3 1.2.6 2.1 1.8 2.1 2.2 0 3.7-2.8 3.7-6.1 0-2.5-1.7-4.3-4.8-4.3-3.5 0-5.6 2.6-5.6 5.5 0 1 .3 1.8.9 2.4.2.2.2.3.1.6l-.3 1.1c-.1.4-.4.5-.7.4-2-.8-2.9-3-2.9-5.4 0-4 3.3-8.8 9.8-8.8 5.2 0 8.6 3.8 8.6 7.8 0 5.3-2.9 9.3-7.2 9.3-1.4 0-2.8-.8-3.2-1.6l-.9 3.4c-.3 1.3-1 2.7-1.6 3.7.9.3 1.9.5 2.9.5A9.8 9.8 0 0 0 12 2.2Z" />
+                </svg>
+              </a>
+              <a
+                href="https://www.linkedin.com/company/opr-uk/"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Follow Other People's Recipes on LinkedIn"
+                className="rounded-full border border-[#9A622A] p-2.5 text-[#FFF3DF] transition hover:-translate-y-0.5 hover:border-[#DDB765] hover:bg-[#DDB765] hover:text-[#08231F]"
+              >
+                <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 fill-current">
+                  <path d="M4.98 3.5a2 2 0 1 1 0 4 2 2 0 0 1 0-4ZM3 9h4v12H3V9Zm7 0h3.6v1.7h.05c.5-.9 1.7-1.85 3.5-1.85 3.75 0 4.45 2.4 4.45 5.5V21h-4v-5.7c0-1.35-.03-3.1-1.9-3.1-1.9 0-2.2 1.45-2.2 3v5.8h-4V9Z" />
                 </svg>
               </a>
             </li>
