@@ -549,7 +549,7 @@ export default function AdminDashboard({
     setMessage("");
 
     if (!submission.is_published) {
-      setMessage("Publish this recipe to the cookbook before making it Recipe of the Week.");
+      setMessage("Publish this recipe to the cookbook before making it Recipe of the Month.");
       return;
     }
 
@@ -565,7 +565,7 @@ export default function AdminDashboard({
       }),
     });
     if (!response.ok) {
-      setMessage("We could not update Recipe of the Week just now. Please try again.");
+      setMessage("We could not update Recipe of the Month just now. Please try again.");
       return;
     }
 
@@ -945,10 +945,10 @@ export default function AdminDashboard({
                 <div className="md:flex md:items-start md:justify-between md:gap-6">
                   <div>
                     <h3 className="font-bold">
-                      {selectedSubmission.is_recipe_of_week ? "This is Recipe of the Week" : "Feature this recipe on the homepage"}
+                      {selectedSubmission.is_recipe_of_week ? "This is Recipe of the Month" : "Feature this recipe on the homepage"}
                     </h3>
                     <p className="mt-1 text-sm leading-6 text-stone-700">
-                      Choose one published recipe at a time. It will become the homepage&apos;s weekly story.
+                      Choose one published recipe at a time. It will become the homepage&apos;s monthly story.
                     </p>
                   </div>
                   <button
@@ -956,11 +956,11 @@ export default function AdminDashboard({
                     onClick={() => void toggleRecipeOfWeek(selectedSubmission)}
                     className="mt-4 rounded-full bg-[#9A622A] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#6B431E] md:mt-0"
                   >
-                    {selectedSubmission.is_recipe_of_week ? "Remove as Recipe of the Week" : "Make Recipe of the Week"}
+                    {selectedSubmission.is_recipe_of_week ? "Remove as Recipe of the Month" : "Make Recipe of the Month"}
                   </button>
                 </div>
                 <label className="mt-5 block text-sm font-medium">
-                  Why this recipe this week? <span className="font-normal text-stone-500">(optional)</span>
+                  Why this recipe this month? <span className="font-normal text-stone-500">(optional)</span>
                   <textarea
                     value={selectedSubmission.recipe_of_week_note ?? ""}
                     onChange={(event) => updateRecipeOfWeekNote(event.target.value)}
