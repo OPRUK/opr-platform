@@ -109,6 +109,69 @@ export const films: Film[] = [
     uploadDate: "2026-08-22T12:00:00+01:00",
   },
   {
+    title: "Dave & Rubble | Five Generations",
+    video: "/videos/opr-dave-and-rubble-five-generations.mp4",
+    poster: "/images/opr-dave-and-rubble-five-generations-poster.jpg",
+    captions: "/captions/opr-dave-and-rubble-five-generations.vtt",
+    transcript:
+      "Dave: “This recipe goes back five generations.”\nRubble: “Which generation invented gravy?”\nDave: “That’s not how family trees work.”",
+    uploadDate: "2026-08-24T12:00:00+01:00",
+  },
+  {
+    title: "Dave & Rubble | Before Your Time",
+    video: "/videos/opr-dave-and-rubble-before-your-time.mp4",
+    poster: "/images/opr-dave-and-rubble-before-your-time-poster.jpg",
+    captions: "/captions/opr-dave-and-rubble-before-your-time.vtt",
+    transcript:
+      "Dave: “That’s the whole family at Sunday lunch.”\nRubble: “I don’t see myself.”\nDave: “This was taken before you were born.”",
+    uploadDate: "2026-08-24T12:00:00+01:00",
+  },
+  {
+    title: "Dave & Rubble | The Measuring Spoon",
+    video: "/videos/opr-dave-and-rubble-the-measuring-spoon.mp4",
+    poster: "/images/opr-dave-and-rubble-the-measuring-spoon-poster.jpg",
+    captions: "/captions/opr-dave-and-rubble-the-measuring-spoon.vtt",
+    transcript:
+      "Dave: “Recipe says one level teaspoon.”\nRubble: “My professional measurement is one heaped spoon of chicken.”\nDave: “That’s not a measurement, that’s a preference.”",
+    uploadDate: "2026-08-24T12:00:00+01:00",
+  },
+  {
+    title: "Dave & Rubble | The Family Vote",
+    video: "/videos/opr-dave-and-rubble-the-family-vote.mp4",
+    poster: "/images/opr-dave-and-rubble-the-family-vote-poster.jpg",
+    captions: "/captions/opr-dave-and-rubble-the-family-vote.vtt",
+    transcript:
+      "Dave: “Which one should we cook tonight?”\nRubble: “Whichever one smells more like chicken.”\nDave: “You haven’t smelled either of them.”",
+    uploadDate: "2026-08-24T12:00:00+01:00",
+  },
+  {
+    title: "Dave & Rubble | Ten Out of Ten",
+    video: "/videos/opr-dave-and-rubble-ten-out-of-ten.mp4",
+    poster: "/images/opr-dave-and-rubble-ten-out-of-ten-poster.jpg",
+    captions: "/captions/opr-dave-and-rubble-ten-out-of-ten.vtt",
+    transcript:
+      "Dave: “Rate this recipe out of ten.”\nRubble: “Does it contain chicken?”\nDave: “No.”\nRubble: “One.”",
+    uploadDate: "2026-08-24T12:00:00+01:00",
+  },
+  {
+    title: "Dave & Rubble | The Substitution",
+    video: "/videos/opr-dave-and-rubble-the-substitution.mp4",
+    poster: "/images/opr-dave-and-rubble-the-substitution-poster.jpg",
+    captions: "/captions/opr-dave-and-rubble-the-substitution.vtt",
+    transcript:
+      "Dave: “This recipe calls for butter.”\nRubble: “Might I suggest chicken instead.”\nDave: “It’s a dessert, Rubble.”",
+    uploadDate: "2026-08-24T12:00:00+01:00",
+  },
+  {
+    title: "Dave & Rubble | Room at the Table",
+    video: "/videos/opr-dave-and-rubble-room-at-the-table.mp4",
+    poster: "/images/opr-dave-and-rubble-room-at-the-table-poster.jpg",
+    captions: "/captions/opr-dave-and-rubble-room-at-the-table.vtt",
+    transcript:
+      "Dave: “There’s always a seat for another story.”\nRubble: “Does the seat come with dinner?”\nDave: “It comes with listening.”\nRubble: “I’ll wait.”",
+    uploadDate: "2026-08-24T12:00:00+01:00",
+  },
+  {
     title: "Dave & Rubble | Your Nomination",
     video: "/videos/opr-dave-and-rubble-your-nomination.mp4",
     captions: "/captions/opr-dave-and-rubble-your-nomination.vtt",
