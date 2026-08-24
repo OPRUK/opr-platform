@@ -1,8 +1,6 @@
 import { requireAdmin } from "../../../../lib/admin-auth";
 import { firstNewsletterEmail, sendEmail } from "../../../../lib/email";
 import { createUnsubscribeLink } from "../../../../lib/unsubscribe";
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
 
 export const runtime = "nodejs";
 
@@ -80,19 +78,6 @@ export async function POST(request: Request) {
 
   let sent = 0;
   const failed: string[] = [];
-  const embeddedImages = await Promise.all(
-    [
-      ["opr-parchment.jpg", "opr-parchment"],
-      ["opr-logo.png", "opr-logo"],
-      ["gautam-shobha-portrait.jpg", "gautam-shobha"],
-      ["tandoori-aloo-nazakat.jpg", "tandoori-aloo"],
-      ["dave-and-rubble.jpg", "dave-and-rubble"],
-    ].map(async ([filename, contentId]) => ({
-      content: (await readFile(join(process.cwd(), "public/images/email", filename))).toString("base64"),
-      filename,
-      content_id: contentId,
-    })),
-  );
   for (const subscriber of audience) {
     const unsubscribeUrl = createUnsubscribeLink(subscriber.email);
     if (!unsubscribeUrl) {
@@ -102,16 +87,7 @@ export async function POST(request: Request) {
     const result = await sendEmail({
       to: subscriber.email,
       idempotencyKey: `welcome-newsletter-1-${Buffer.from(subscriber.email).toString("base64url")}`,
-      ...firstNewsletterEmail({
-        name: subscriber.name,
-        unsubscribeUrl,
-        parchmentUrl: "cid:opr-parchment",
-        logoUrl: "cid:opr-logo",
-        gautamShobhaUrl: "cid:gautam-shobha",
-        tandooriAlooUrl: "cid:tandoori-aloo",
-        daveRubbleUrl: "cid:dave-and-rubble",
-      }),
-      attachments: embeddedImages,
+      ...firstNewsletterEmail({ name: subscriber.name, unsubscribeUrl }),
     });
     if (result.sent) sent += 1;
     else failed.push(subscriber.email);

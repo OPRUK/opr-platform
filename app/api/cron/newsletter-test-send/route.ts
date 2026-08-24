@@ -1,7 +1,5 @@
 import { firstNewsletterEmail, sendEmail } from "../../../../lib/email";
 import { createUnsubscribeLink } from "../../../../lib/unsubscribe";
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
 
 export const runtime = "nodejs";
 
@@ -25,32 +23,9 @@ export async function GET(request: Request) {
     return Response.json({ error: "Unsubscribe signing is not configured." }, { status: 500 });
   }
 
-  const attachments = await Promise.all(
-    [
-      ["opr-parchment.jpg", "opr-parchment"],
-      ["opr-logo.png", "opr-logo"],
-      ["gautam-shobha-portrait.jpg", "gautam-shobha"],
-      ["tandoori-aloo-nazakat.jpg", "tandoori-aloo"],
-      ["dave-and-rubble.jpg", "dave-and-rubble"],
-    ].map(async ([filename, contentId]) => ({
-      content: (await readFile(join(process.cwd(), "public/images/email", filename))).toString("base64"),
-      filename,
-      content_id: contentId,
-    })),
-  );
-
   const { sent } = await sendEmail({
     to: TEST_RECIPIENT,
-    ...firstNewsletterEmail({
-      name: "Chaten",
-      unsubscribeUrl,
-      parchmentUrl: "cid:opr-parchment",
-      logoUrl: "cid:opr-logo",
-      gautamShobhaUrl: "cid:gautam-shobha",
-      tandooriAlooUrl: "cid:tandoori-aloo",
-      daveRubbleUrl: "cid:dave-and-rubble",
-    }),
-    attachments,
+    ...firstNewsletterEmail({ name: "Chaten", unsubscribeUrl }),
   });
 
   return Response.json({ ok: sent, to: TEST_RECIPIENT });
