@@ -62,7 +62,7 @@ function film(
   };
 }
 
-export const films: Film[] = [
+const filmsUnordered: Film[] = [
   {
     title: "Dave & Rubble | The Handwritten Recipe",
     video: "/videos/opr-dave-and-rubble-the-handwritten-recipe.mp4",
@@ -328,3 +328,10 @@ export const films: Film[] = [
       "Narrator: “What if the best recipes in Britain weren’t written by chefs? At OPR, Other People’s Recipes, the public writes the menu. Real restaurant that never stops changing.”",
   }),
 ];
+
+// Newest first — actual publish order, not the order entries happen to sit
+// in the array above. Every page that lists films relies on this ordering
+// rather than sorting itself.
+export const films: Film[] = [...filmsUnordered].sort(
+  (a, b) => new Date(filmUploadDate(b)).getTime() - new Date(filmUploadDate(a)).getTime(),
+);
