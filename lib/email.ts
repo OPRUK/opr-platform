@@ -327,13 +327,13 @@ export function firstNewsletterEmail({
         </div>
 
         <div style="border-top: 1px solid #DDB765; margin-top: 30px; padding-top: 24px;">
-          <p style="color: #9A622A; font-weight: bold; letter-spacing: 1.5px; font-size: 14px; text-transform: uppercase;">Meet Dave &amp; Rubble</p>
+          <p style="color: #1C5A50; font-weight: bold; letter-spacing: 1.5px; font-size: 14px; text-transform: uppercase;">Meet Dave &amp; Rubble</p>
           <p>Dave cooks. Rubble supervises. Watch their short films about family recipes, handwritten instructions, secret ingredients and whether a small taste really counts.</p>
           <p><a href="${siteUrl}/films?utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=welcome-newsletter" style="color: #1C5A50; font-weight: bold;">Watch the films →</a></p>
         </div>
 
         <div style="border-top: 1px solid #DDB765; margin-top: 30px; padding-top: 24px;">
-          <p style="color: #9A622A; font-weight: bold; letter-spacing: 1.5px; font-size: 14px; text-transform: uppercase;">What’s your recipe?</p>
+          <p style="color: #1C5A50; font-weight: bold; letter-spacing: 1.5px; font-size: 14px; text-transform: uppercase;">What’s your recipe?</p>
           <p>It could be something your mum taught you, a dish written on a fading piece of paper or a recipe you have made so many times that you no longer need to measure anything. We would love to hear the story behind it.</p>
           <p><a href="${siteUrl}/share?utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=welcome-newsletter" style="color: #1C5A50; font-weight: bold;">Share your recipe →</a></p>
         </div>
