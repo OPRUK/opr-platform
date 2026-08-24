@@ -118,6 +118,12 @@ export default function AdminDashboard({
   const [exportingFoundingTable, setExportingFoundingTable] = useState(false);
   const [exportingAnalytics, setExportingAnalytics] = useState(false);
   const [refreshingAnalytics, setRefreshingAnalytics] = useState(false);
+  const [showNewsletterPanel, setShowNewsletterPanel] = useState(false);
+  const [newsletterRecipients, setNewsletterRecipients] = useState<number | null>(null);
+  const [loadingNewsletterRecipients, setLoadingNewsletterRecipients] = useState(false);
+  const [newsletterConfirmation, setNewsletterConfirmation] = useState("");
+  const [sendingNewsletter, setSendingNewsletter] = useState(false);
+  const [newsletterResult, setNewsletterResult] = useState<string | null>(null);
   const analyticsRefreshInFlight = useRef(false);
 
   const refreshAnalytics = useCallback(async ({
@@ -333,6 +339,43 @@ export default function AdminDashboard({
         ? "We could not send the sign-in email. Please try again."
         : "Check your inbox for your secure OPR sign-in link.",
     );
+  }
+
+  async function openNewsletterPanel() {
+    setNewsletterResult(null);
+    setNewsletterConfirmation("");
+    setShowNewsletterPanel(true);
+    setLoadingNewsletterRecipients(true);
+    try {
+      const response = await adminRequest("/api/admin/newsletter");
+      const payload = await response.json().catch(() => null);
+      setNewsletterRecipients(response.ok ? (payload?.recipients ?? 0) : null);
+      if (!response.ok) {
+        setNewsletterResult(payload?.error ?? "The newsletter audience could not be loaded.");
+      }
+    } finally {
+      setLoadingNewsletterRecipients(false);
+    }
+  }
+
+  async function sendNewsletter() {
+    setSendingNewsletter(true);
+    setNewsletterResult(null);
+    try {
+      const response = await adminRequest("/api/admin/newsletter", {
+        method: "POST",
+        body: JSON.stringify({ confirmation: newsletterConfirmation }),
+      });
+      const payload = await response.json().catch(() => null);
+      if (!response.ok) {
+        setNewsletterResult(payload?.error ?? "The newsletter was not sent.");
+        return;
+      }
+      setNewsletterResult(`Sent to ${payload.sent} of ${payload.recipients} recipients.${payload.failed ? ` ${payload.failed} failed.` : ""}`);
+      setNewsletterConfirmation("");
+    } finally {
+      setSendingNewsletter(false);
+    }
   }
 
   async function downloadFoundingTable() {
@@ -706,6 +749,59 @@ export default function AdminDashboard({
     );
   }
 
+  if (showNewsletterPanel) {
+    const confirmationMatches = newsletterConfirmation === "SEND OPR NEWSLETTER 1";
+    return (
+      <main className="min-h-screen bg-[#EED8B2] px-6 py-10 text-[#123C39] md:px-10">
+        <div className="mx-auto max-w-2xl rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-10">
+          <p className="text-sm uppercase tracking-[0.3em] text-[#9A622A]">Newsletter</p>
+          <h1 className="mt-3 text-3xl font-bold">Send the welcome newsletter</h1>
+          <p className="mt-4 text-stone-700">
+            {loadingNewsletterRecipients
+              ? "Counting recipients…"
+              : newsletterRecipients === null
+                ? "The recipient count could not be loaded."
+                : `This will send to ${newsletterRecipients} ${newsletterRecipients === 1 ? "person" : "people"} — everyone who opted into marketing across the Founding Table, recipe submissions, and cook-along signups.`}
+          </p>
+
+          <label className="mt-6 block text-sm font-medium">
+            Type <span className="font-mono">SEND OPR NEWSLETTER 1</span> to confirm
+            <input
+              type="text"
+              value={newsletterConfirmation}
+              onChange={(event) => setNewsletterConfirmation(event.target.value)}
+              className="mt-2 w-full rounded-xl border border-[#DDB765] bg-white px-4 py-3 font-mono outline-none transition focus:border-[#123C39] focus:ring-2 focus:ring-[#DDB765]/60"
+              placeholder="SEND OPR NEWSLETTER 1"
+              disabled={sendingNewsletter}
+            />
+          </label>
+
+          {newsletterResult ? (
+            <p role="status" aria-live="polite" className="mt-4 text-sm text-[#1C5A50]">{newsletterResult}</p>
+          ) : null}
+
+          <div className="mt-6 flex flex-wrap items-center gap-4">
+            <button
+              type="button"
+              onClick={() => void sendNewsletter()}
+              disabled={!confirmationMatches || sendingNewsletter || !newsletterRecipients}
+              className="rounded-full bg-[#123C39] px-6 py-3 text-sm font-medium text-white transition hover:bg-[#08231F] disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              {sendingNewsletter ? "Sending…" : "Send newsletter"}
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowNewsletterPanel(false)}
+              className="text-sm font-medium underline"
+            >
+              Back to {initialView === "analytics" ? "analytics dashboard" : "recipe inbox"}
+            </button>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
   if (initialView === "analytics") {
     return (
       <AdminAnalyticsPanel
@@ -760,6 +856,13 @@ export default function AdminDashboard({
             className="rounded-full bg-[#123C39] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#08231F] disabled:cursor-wait disabled:opacity-60"
           >
             {exportingFoundingTable ? "Preparing spreadsheet…" : "Download Table Signups (.xlsx)"}
+          </button>
+          <button
+            type="button"
+            onClick={() => void openNewsletterPanel()}
+            className="rounded-full border border-[#123C39] px-5 py-2.5 text-sm font-medium transition hover:bg-[#123C39] hover:text-white"
+          >
+            Newsletter
           </button>
           <button
             type="button"
