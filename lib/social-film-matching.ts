@@ -46,6 +46,20 @@ const aliases: Record<string, string> = {
   "dave and rubble finding an old family recipe": "Dave & Rubble | Finding an Old Family Recipe",
   "opr dave and rubble recipe of the month": "Dave & Rubble | OPR Recipe of the Month",
   "daves in the kitchen rubbles keeping watch": "Dave & Rubble | Cooking Together",
+  "this recipe goes back five generations": "Dave & Rubble | Five Generations",
+  "five generations": "Dave & Rubble | Five Generations",
+  "thats the whole family at sunday lunch": "Dave & Rubble | Before Your Time",
+  "before your time": "Dave & Rubble | Before Your Time",
+  "recipe says one level teaspoon": "Dave & Rubble | The Measuring Spoon",
+  "the measuring spoon": "Dave & Rubble | The Measuring Spoon",
+  "which one should we cook tonight": "Dave & Rubble | The Family Vote",
+  "the family vote": "Dave & Rubble | The Family Vote",
+  "rate this recipe out of ten": "Dave & Rubble | Ten Out of Ten",
+  "ten out of ten": "Dave & Rubble | Ten Out of Ten",
+  "this recipe calls for butter": "Dave & Rubble | The Substitution",
+  "the substitution": "Dave & Rubble | The Substitution",
+  "theres always a seat for another story": "Dave & Rubble | Room at the Table",
+  "room at the table": "Dave & Rubble | Room at the Table",
 };
 
 type SocialPlatform = "facebook" | "instagram" | "tiktok" | "youtube";
