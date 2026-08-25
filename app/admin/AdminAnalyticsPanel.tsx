@@ -62,6 +62,10 @@ function formatDateTime(value: string) {
   }).format(new Date(value));
 }
 
+function formatShortDate(value: string) {
+  return new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short" }).format(new Date(value));
+}
+
 function readableSource(source: string) {
   if (source === "unattributed") return "No source recorded";
   return source.charAt(0).toUpperCase() + source.slice(1);
@@ -395,7 +399,7 @@ export default function AdminAnalyticsPanel({
               <div className="border-b border-[#DDB765]/60 px-6 py-5">
                 <h3 className="text-xl font-bold">Film performance by channel</h3>
                 <p className="mt-2 text-sm leading-6 text-stone-600">Every website film under one consistent name. Social columns show views; Pinterest shows impressions. LinkedIn is omitted because OPR has no LinkedIn videos.</p>
-                <p className="mt-1 text-xs text-stone-500">Dynamic channels refreshed {formatDateTime(analytics.generatedAt)}, with the 21 August 2026 at 18:35 BST audit as a fallback. Pinterest is a static audited snapshot.</p>
+                <p className="mt-1 text-xs text-stone-500">Dynamic channels refreshed {formatDateTime(analytics.generatedAt)}, with the {formatDateTime(analytics.pinterestAuditCapturedAt)} audit as a fallback. Pinterest is a static audited snapshot.</p>
                 <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
                   <label className="w-full text-sm font-semibold text-[#6B431E] sm:w-auto">
                     <span className="block sm:inline">Show films</span>
@@ -473,7 +477,7 @@ export default function AdminAnalyticsPanel({
                       <th className="px-2 py-4 font-semibold leading-5">YouTube<br />views <span className="block font-normal text-[#1C5A50]">Dynamic</span></th>
                       <th className="px-2 py-4 font-semibold leading-5">Total social<br />views <span className="block font-normal text-stone-500">No Pinterest</span></th>
                       <th className="px-2 py-4 font-semibold leading-5">Strongest<br />channel</th>
-                      <th className="px-3 py-4 font-semibold leading-5">Pinterest<br />impressions <span className="block font-normal text-[#9A622A]">Static · 21 Aug</span></th>
+                      <th className="px-3 py-4 font-semibold leading-5">Pinterest<br />impressions <span className="block font-normal text-[#9A622A]">Static · {formatShortDate(analytics.pinterestAuditCapturedAt)}</span></th>
                     </tr>
                   </thead>
                   <tbody>

@@ -86,6 +86,7 @@ export type AnalyticsSnapshot = {
 
 export type AdminAnalyticsResponse = {
   generatedAt: string;
+  pinterestAuditCapturedAt: string;
   windowDays: number;
   linkClicks: number;
   ctaClicks: number;
