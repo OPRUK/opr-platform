@@ -15,7 +15,7 @@ import { getVercelAnalyticsSummary } from "./vercel-analytics";
 import { getPageSpeedSummary, type PageSpeedSummary } from "./pagespeed";
 import { analyticsReport } from "./analytics-report-data";
 import { loadLatestDailySnapshot } from "./analytics-daily-snapshots";
-import { films } from "./films";
+import { films, filmUploadDate } from "./films";
 import {
   facebookFilmViews,
   instagramFilmViews,
@@ -691,6 +691,11 @@ async function buildSocialFilmViews(website: AnalyticsFilmSummary[]): Promise<An
 
   return films.map((film) => {
     const site = websiteByTitle.get(film.title);
+    const uploadDate = filmUploadDate(film);
+    const daysOnline = Math.max(
+      0,
+      Math.floor((Date.now() - new Date(uploadDate).getTime()) / (1000 * 60 * 60 * 24)),
+    );
     return {
       title: film.title,
       video: film.video,
@@ -701,6 +706,8 @@ async function buildSocialFilmViews(website: AnalyticsFilmSummary[]): Promise<An
       tiktokViews: sources.tiktok.get(film.title) ?? null,
       youtubeViews: sources.youtube.get(film.title) ?? null,
       pinterestImpressions: sources.pinterest.get(film.title) ?? null,
+      uploadDate,
+      daysOnline,
     };
   });
 }
