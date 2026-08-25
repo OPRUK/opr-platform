@@ -8,7 +8,7 @@ import { getSearchConsoleSummary, type SearchConsoleSummary } from "./google-sea
 import { getYouTubeSummary } from "./youtube";
 import { getInstagramSummary } from "./instagram";
 import { getTikTokSummary } from "./tiktok";
-import { getPinterestSummary } from "./pinterest";
+import { getPinterestFilmViews, getPinterestSummary } from "./pinterest";
 import { getLinkedInSummary } from "./linkedin";
 import { getFacebookSummary } from "./facebook";
 import { getVercelAnalyticsSummary } from "./vercel-analytics";
@@ -646,7 +646,7 @@ function buildFilmViews(
     .sort((a, b) => b.plays - a.plays || a.title.localeCompare(b.title));
 }
 
-type SocialPlatform = "facebook" | "instagram" | "tiktok" | "youtube";
+type SocialPlatform = "facebook" | "instagram" | "tiktok" | "youtube" | "pinterest";
 type PlatformFilm = { id?: string; title: string; views: number };
 
 function socialFilmTotals(rows: readonly PlatformFilm[], platform: string, stablePlatform?: SocialPlatform): Map<string, number> {
@@ -662,41 +662,62 @@ function socialFilmTotals(rows: readonly PlatformFilm[], platform: string, stabl
   return totals;
 }
 
+// A film with no explicit uploadDate falls back to the earliest date we can
+// verify it went live anywhere, rather than a shared placeholder — showing a
+// fabricated-looking specific date for films we don't actually have one for
+// is worse than admitting the date is unknown.
+function earliestPublishedByTitle(rows: ReadonlyArray<{ id?: string; title: string; publishedAt?: string }>): Map<string, string> {
+  const earliest = new Map<string, string>();
+  for (const row of rows) {
+    if (!row.publishedAt) continue;
+    const title = matchSocialFilmId("youtube", row.id) ?? matchSocialFilmTitle(row.title);
+    if (!title) continue;
+    const existing = earliest.get(title);
+    if (!existing || new Date(row.publishedAt).getTime() < new Date(existing).getTime()) {
+      earliest.set(title, row.publishedAt);
+    }
+  }
+  return earliest;
+}
+
 async function buildSocialFilmViews(website: AnalyticsFilmSummary[]): Promise<AnalyticsSocialFilmSummary[]> {
-  const [facebook, instagram, tiktok, youtube] = await Promise.all([
+  const [facebook, instagram, tiktok, youtube, pinterest] = await Promise.all([
     getFacebookSummary(),
     getInstagramSummary(),
     getTikTokSummary(),
     getYouTubeSummary(),
+    getPinterestFilmViews(),
   ]);
   const auditedSources = {
     facebook: socialFilmTotals(facebookFilmViews, "Facebook audit"),
     instagram: socialFilmTotals(instagramFilmViews, "Instagram audit"),
     tiktok: socialFilmTotals(tiktokFilmViews, "TikTok audit"),
     youtube: socialFilmTotals(youtubeFilmViews, "YouTube audit"),
+    pinterest: socialFilmTotals(pinterestFilmImpressions, "Pinterest audit"),
   };
   const liveSources = {
     facebook: socialFilmTotals(facebook?.films ?? [], "Facebook", "facebook"),
     instagram: socialFilmTotals(instagram?.films ?? [], "Instagram", "instagram"),
     tiktok: socialFilmTotals(tiktok?.films ?? [], "TikTok", "tiktok"),
     youtube: socialFilmTotals(youtube?.films ?? [], "YouTube", "youtube"),
+    pinterest: socialFilmTotals(pinterest?.films ?? [], "Pinterest", "pinterest"),
   };
   const sources = {
     facebook: new Map([...auditedSources.facebook, ...liveSources.facebook]),
     instagram: new Map([...auditedSources.instagram, ...liveSources.instagram]),
     tiktok: new Map([...auditedSources.tiktok, ...liveSources.tiktok]),
     youtube: new Map([...auditedSources.youtube, ...liveSources.youtube]),
-    pinterest: socialFilmTotals(pinterestFilmImpressions, "Pinterest"),
+    pinterest: new Map([...auditedSources.pinterest, ...liveSources.pinterest]),
   };
   const websiteByTitle = new Map(website.map((row) => [row.title, row]));
+  const youtubePublishedByTitle = earliestPublishedByTitle(youtube?.films ?? []);
 
   return films.map((film) => {
     const site = websiteByTitle.get(film.title);
-    const uploadDate = filmUploadDate(film);
-    const daysOnline = Math.max(
-      0,
-      Math.floor((Date.now() - new Date(uploadDate).getTime()) / (1000 * 60 * 60 * 24)),
-    );
+    const uploadDate = film.uploadDate ? filmUploadDate(film) : (youtubePublishedByTitle.get(film.title) ?? null);
+    const daysOnline = uploadDate
+      ? Math.max(0, Math.floor((Date.now() - new Date(uploadDate).getTime()) / (1000 * 60 * 60 * 24)))
+      : null;
     return {
       title: film.title,
       video: film.video,

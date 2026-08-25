@@ -11,7 +11,7 @@ export type YouTubeSummary = {
   views28d: number;
   watchTimeMinutes28d: number;
   fetchedAt: string;
-  films: Array<{ id: string; title: string; views: number }>;
+  films: Array<{ id: string; title: string; views: number; publishedAt?: string }>;
 };
 
 // Module-scope cache: best-effort within a warm serverless instance, not a
@@ -92,10 +92,11 @@ export async function getYouTubeSummary(
           );
           if (videosResponse.ok) {
             const videosPayload = await videosResponse.json();
-            films = (videosPayload.items ?? []).map((item: { id?: string; snippet?: { title?: string }; statistics?: { viewCount?: string } }) => ({
+            films = (videosPayload.items ?? []).map((item: { id?: string; snippet?: { title?: string; publishedAt?: string }; statistics?: { viewCount?: string } }) => ({
               id: item.id ?? "",
               title: item.snippet?.title ?? "Untitled video",
               views: Number(item.statistics?.viewCount ?? 0),
+              publishedAt: item.snippet?.publishedAt,
             }));
           }
         }

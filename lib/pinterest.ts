@@ -112,3 +112,68 @@ export async function getPinterestSummary(
     return null;
   }
 }
+
+export type PinterestFilmViews = {
+  fetchedAt: string;
+  films: Array<{ id: string; title: string; views: number }>;
+};
+
+const PIN_PAGE_SIZE = 100;
+const MAX_PIN_PAGES = 5;
+
+let cachedFilmViews: { data: PinterestFilmViews; expiresAt: number } | null = null;
+
+// Per-pin metrics come inline from List Pins (pin_metrics=true) rather than a
+// separate call per pin — Pinterest's batch analytics endpoint is beta-gated
+// and not available to all apps, so this is the reliable path.
+export async function getPinterestFilmViews(): Promise<PinterestFilmViews | null> {
+  if (cachedFilmViews && cachedFilmViews.expiresAt > Date.now()) return cachedFilmViews.data;
+
+  const clientId = process.env.PINTEREST_CLIENT_ID;
+  const clientSecret = process.env.PINTEREST_CLIENT_SECRET;
+  const refreshToken = process.env.PINTEREST_REFRESH_TOKEN;
+  if (!clientId || !clientSecret || !refreshToken) return null;
+
+  try {
+    const accessToken = await getAccessToken(clientId, clientSecret, refreshToken);
+    if (!accessToken) return null;
+
+    const authHeaders = { Authorization: `Bearer ${accessToken}` };
+    const films: Array<{ id: string; title: string; views: number }> = [];
+    let bookmark: string | undefined;
+    let page = 0;
+
+    do {
+      const pinsUrl = new URL("https://api.pinterest.com/v5/pins");
+      pinsUrl.searchParams.set("page_size", String(PIN_PAGE_SIZE));
+      pinsUrl.searchParams.set("pin_metrics", "true");
+      if (bookmark) pinsUrl.searchParams.set("bookmark", bookmark);
+
+      const response = await fetch(pinsUrl, { headers: authHeaders });
+      if (!response.ok) {
+        console.error("OPR Pinterest pins list failed", await response.text());
+        break;
+      }
+
+      const payload = await response.json();
+      for (const pin of payload.items ?? []) {
+        const impressions = pin.pin_metrics?.["90d"]?.impression;
+        films.push({
+          id: pin.id ?? "",
+          title: pin.title || pin.description || "Untitled pin",
+          views: Number(impressions ?? 0),
+        });
+      }
+
+      bookmark = typeof payload.bookmark === "string" ? payload.bookmark : undefined;
+      page += 1;
+    } while (bookmark && page < MAX_PIN_PAGES);
+
+    const data: PinterestFilmViews = { fetchedAt: new Date().toISOString(), films };
+    cachedFilmViews = { data, expiresAt: Date.now() + CACHE_MS };
+    return data;
+  } catch (error) {
+    console.error("OPR Pinterest film views could not be loaded", error);
+    return null;
+  }
+}
