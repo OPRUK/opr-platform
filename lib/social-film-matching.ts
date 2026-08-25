@@ -63,7 +63,7 @@ const aliases: Record<string, string> = {
   "room at the table": "Dave & Rubble | Room at the Table",
 };
 
-type SocialPlatform = "facebook" | "instagram" | "tiktok" | "youtube";
+type SocialPlatform = "facebook" | "instagram" | "tiktok" | "youtube" | "pinterest";
 
 // Stable IDs are the primary match when supplied. This optional JSON map lets
 // OPR add IDs without a code release, for example:
