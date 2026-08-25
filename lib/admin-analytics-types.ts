@@ -29,6 +29,8 @@ export type AnalyticsSocialFilmSummary = AnalyticsFilmSummary & {
   tiktokViews: number | null;
   youtubeViews: number | null;
   pinterestImpressions: number | null;
+  uploadDate: string;
+  daysOnline: number;
 };
 
 export type AnalyticsSnapshotPlatform = {

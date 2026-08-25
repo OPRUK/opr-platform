@@ -413,6 +413,7 @@ export default function AdminAnalyticsPanel({
                 {filmRows.length ? filmRows.map((film) => {
                   const bestChannel = bestFilmChannel(film);
                   const mobileMetrics = [
+                    { label: "Days online", value: `${film.daysOnline}d`, status: "Dynamic" },
                     { label: "Website plays", value: formatNumber(film.plays), status: "Dynamic" },
                     { label: "Facebook", value: filmMetricLabel(film.facebookViews), status: "Dynamic" },
                     { label: "Instagram", value: filmMetricLabel(film.instagramViews), status: "Dynamic" },
@@ -450,7 +451,8 @@ export default function AdminAnalyticsPanel({
               <div className="hidden overflow-x-auto md:block">
                 <table className="w-full min-w-[1120px] table-fixed border-collapse text-left text-xs xl:text-sm">
                   <colgroup>
-                    <col className="w-[24%]" />
+                    <col className="w-[21%]" />
+                    <col className="w-[7%]" />
                     <col className="w-[8%]" />
                     <col className="w-[8%]" />
                     <col className="w-[8%]" />
@@ -458,11 +460,12 @@ export default function AdminAnalyticsPanel({
                     <col className="w-[8%]" />
                     <col className="w-[10%]" />
                     <col className="w-[11%]" />
-                    <col className="w-[15%]" />
+                    <col className="w-[11%]" />
                   </colgroup>
                   <thead>
                     <tr className="border-b border-[#DDB765] text-[#6B431E]">
                       <th className="px-5 py-4 font-semibold">Film</th>
+                      <th className="px-2 py-4 font-semibold leading-5">Days<br />online</th>
                       <th className="px-2 py-4 font-semibold leading-5">Website<br />plays <span className="block font-normal text-[#1C5A50]">Dynamic</span></th>
                       <th className="px-2 py-4 font-semibold leading-5">Facebook<br />views <span className="block font-normal text-[#1C5A50]">Dynamic</span></th>
                       <th className="px-2 py-4 font-semibold leading-5">Instagram<br />views <span className="block font-normal text-[#1C5A50]">Dynamic</span></th>
@@ -479,6 +482,7 @@ export default function AdminAnalyticsPanel({
                       return (
                       <tr key={film.video} className="border-b border-[#DDB765]/40 last:border-0">
                         <th scope="row" className="px-5 py-4 font-semibold leading-5">{film.title}</th>
+                        <td className="px-2 py-4">{film.daysOnline}d</td>
                         <td className="px-2 py-4">{formatNumber(film.plays)}</td>
                         <td className={`px-2 py-4 ${bestChannel === "Facebook" ? "bg-[#DDEBE4] font-bold" : ""}`}>{filmMetricLabel(film.facebookViews)}</td>
                         <td className={`px-2 py-4 ${bestChannel === "Instagram" ? "bg-[#DDEBE4] font-bold" : ""}`}>{filmMetricLabel(film.instagramViews)}</td>
@@ -489,7 +493,7 @@ export default function AdminAnalyticsPanel({
                         <td className="px-3 py-4">{filmMetricLabel(film.pinterestImpressions, "No data yet")}</td>
                       </tr>
                     );}) : (
-                      <tr><td colSpan={9} className="px-6 py-6 text-stone-600">No films match this filter.</td></tr>
+                      <tr><td colSpan={10} className="px-6 py-6 text-stone-600">No films match this filter.</td></tr>
                     )}
                   </tbody>
                 </table>

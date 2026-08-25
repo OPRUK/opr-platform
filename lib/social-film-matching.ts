@@ -131,6 +131,9 @@ export const pinterestFilmImpressions = [
 export const socialFilmAuditCapturedAt = "2026-08-25T13:45:00+01:00";
 
 export const facebookFilmViews = [
+  { title: "Sam & Nadine’s Shepherd’s Pie | A Recipe Worth Passing On", views: 293 },
+  { title: "Krishna Anand’s Baingan Ka Bharta | From the Kitchen Drawer", views: 53 },
+  { title: "Krishna Anand’s Baingan ka Bharta | A Family Recipe", views: 575 },
   { title: "Dave & Rubble | Your Nomination", views: 27 },
   { title: "Dave & Rubble | Dish of the Week: Gautam & Shobha", views: 54 },
   { title: "Dave & Rubble | The Longest Two Seconds", views: 173 },
@@ -148,6 +151,7 @@ export const facebookFilmViews = [
 ] as const;
 
 export const instagramFilmViews = [
+  { title: "Krishna Anand’s Baingan ka Bharta | A Family Recipe", views: 179 },
   { title: "Dave & Rubble | Your Nomination", views: 41 },
   { title: "Dave & Rubble | Dish of the Week: Gautam & Shobha", views: 103 },
   { title: "Dave & Rubble | The Longest Two Seconds", views: 366 },
