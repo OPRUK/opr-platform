@@ -890,8 +890,8 @@ export const featuredRecipes: FeaturedRecipe[] = [
     ],
   },
   {
-    slug: "auntie-maricas-pineapple-jerk-chicken",
-    title: "Auntie Marica's Pineapple-Infused Jamaican Jerk Chicken",
+    slug: "auntie-marcias-pineapple-jerk-chicken",
+    title: "Auntie Marcia's Pineapple-Infused Jamaican Jerk Chicken",
     place: "Birmingham, England",
     story:
       "Auntie Marcia made her Jamaican Jerk Chicken with that sweet and sour sauce that was finger lickin' good.",
@@ -921,7 +921,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
       "To oven-bake instead: heat the oven to 200°C. Place the chicken on a wire rack over a foil-lined tray and bake for 45–50 minutes, until the internal temperature reaches 74°C, then finish under the grill for 3–5 minutes to blacken and crisp the skin.",
       "Rest the chicken for 5–10 minutes before serving.",
     ],
-    image: "/images/recipes/auntie-maricas-pineapple-jerk-chicken-wide.webp",
+    image: "/images/recipes/auntie-marcias-pineapple-jerk-chicken-wide.webp",
     category: "Main",
     number: "10",
     prepTime: "PT15M",
@@ -957,7 +957,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
         answer: "Fresh pineapple contains an enzyme called bromelain that breaks meat down too aggressively over a long marinade, turning the texture mushy. Canned juice is pasteurised, so it's safe for an overnight soak.",
       },
       {
-        question: "How spicy is Auntie Marica's jerk chicken?",
+        question: "How spicy is Auntie Marcia's jerk chicken?",
         answer: "It's built around 2–3 Scotch bonnet peppers, which are genuinely hot. Leave the seeds in for maximum fire, or remove them for a milder result.",
       },
       {
