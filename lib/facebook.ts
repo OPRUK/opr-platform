@@ -33,7 +33,7 @@ export async function getFacebookSummary(): Promise<FacebookSummary | null> {
     accountUrl.searchParams.set("access_token", accessToken);
 
     const insightsUrl = new URL(`https://graph.facebook.com/${GRAPH_API_VERSION}/${pageId}/insights`);
-    insightsUrl.searchParams.set("metric", "page_impressions,page_post_engagements,page_views_total");
+    insightsUrl.searchParams.set("metric", "page_media_view,page_post_engagements,page_views_total");
     insightsUrl.searchParams.set("period", "day");
     insightsUrl.searchParams.set("since", isoDate(startDate));
     insightsUrl.searchParams.set("until", isoDate(endDate));
@@ -71,7 +71,7 @@ export async function getFacebookSummary(): Promise<FacebookSummary | null> {
 
     return {
       period: `${REPORT_WINDOW_DAYS} days to ${isoDate(endDate)}`,
-      views28d: totals.get("page_impressions") ?? 0,
+      views28d: totals.get("page_media_view") ?? 0,
       interactions28d: totals.get("page_post_engagements") ?? 0,
       followers: Number(account.followers_count ?? account.fan_count ?? 0),
       profileVisits28d: totals.get("page_views_total") ?? 0,
