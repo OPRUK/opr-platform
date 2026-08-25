@@ -211,6 +211,7 @@ const filmsUnordered: Film[] = [
     poster: "/images/opr-dave-and-rubble-secret-ingredient-poster.jpg",
     transcript:
       "Dave: “It just needs one secret ingredient.”\nRubble: “Chicken?”\nDave: “Apparently.”",
+    uploadDate: "2026-08-17T12:00:00+01:00",
   },
   {
     title: "Dave & Rubble | Quality Control",
@@ -231,6 +232,7 @@ const filmsUnordered: Film[] = [
     video: "/videos/opr-dave-and-rubble-sams-souffle.mp4",
     transcript:
       "Dave: “Sam says we mustn’t let it fall.”\nRubble: “Then stop talking to it.”\nDave: “Sam doesn’t need to know.”",
+    uploadDate: "2026-08-14T12:00:00+01:00",
   },
   {
     title: "Dave & Rubble | Some Recipes Never Leave You",
@@ -257,6 +259,7 @@ const filmsUnordered: Film[] = [
     transcript:
       "Mummy Morris: “This is my generation’s special beef casserole.”\nRubble: “Can I have some?”\nMummy Morris: “No, but I will make you some dental sticks that I found on Other People’s Recipes.”",
     recipeSlug: "barbaras-beef-casserole",
+    uploadDate: "2026-08-13T12:00:00+01:00",
   },
   {
     title: "Dave & Rubble | A Recipe Worth Passing On",
@@ -275,6 +278,7 @@ const filmsUnordered: Film[] = [
     poster: "/images/opr-dave-and-rubble-kitchen-story-poster.jpg",
     transcript:
       "Rubble: “All right, Dave, pay attention. We are making dental sticks.”\nDave: “Okay, I am listening.”\nRubble: “Go to OPR if you want to make it.”",
+    uploadDate: "2026-08-07T12:00:00+01:00",
   },
   film("Three Recipes, Three Stories | The OPR Cookbook", "three-recipes-three-stories", {
     transcript:
