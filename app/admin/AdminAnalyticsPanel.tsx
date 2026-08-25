@@ -417,8 +417,8 @@ export default function AdminAnalyticsPanel({
                     { label: "Facebook", value: filmMetricLabel(film.facebookViews), status: "Dynamic" },
                     { label: "Instagram", value: filmMetricLabel(film.instagramViews), status: "Dynamic" },
                     { label: "TikTok", value: filmMetricLabel(film.tiktokViews), status: "Dynamic" },
-                    { label: "YouTube", value: filmMetricLabel(film.youtubeViews, "Not published"), status: "Dynamic" },
-                    { label: "Pinterest", value: filmMetricLabel(film.pinterestImpressions, "Not published"), status: "Static · impressions" },
+                    { label: "YouTube", value: filmMetricLabel(film.youtubeViews, "No data yet"), status: "Dynamic" },
+                    { label: "Pinterest", value: filmMetricLabel(film.pinterestImpressions, "No data yet"), status: "Static · impressions" },
                   ];
                   return (
                     <article key={film.video} className="px-5 py-6">
@@ -483,10 +483,10 @@ export default function AdminAnalyticsPanel({
                         <td className={`px-2 py-4 ${bestChannel === "Facebook" ? "bg-[#DDEBE4] font-bold" : ""}`}>{filmMetricLabel(film.facebookViews)}</td>
                         <td className={`px-2 py-4 ${bestChannel === "Instagram" ? "bg-[#DDEBE4] font-bold" : ""}`}>{filmMetricLabel(film.instagramViews)}</td>
                         <td className={`px-2 py-4 ${bestChannel === "TikTok" ? "bg-[#DDEBE4] font-bold" : ""}`}>{filmMetricLabel(film.tiktokViews)}</td>
-                        <td className={`px-2 py-4 ${bestChannel === "YouTube" ? "bg-[#DDEBE4] font-bold" : ""}`}>{filmMetricLabel(film.youtubeViews, "Not published")}</td>
+                        <td className={`px-2 py-4 ${bestChannel === "YouTube" ? "bg-[#DDEBE4] font-bold" : ""}`}>{filmMetricLabel(film.youtubeViews, "No data yet")}</td>
                         <td className="px-2 py-4 font-bold">{formatNumber(socialTotal(film))}</td>
                         <td className="px-2 py-4 break-words">{bestChannel ?? "—"}</td>
-                        <td className="px-3 py-4">{filmMetricLabel(film.pinterestImpressions, "Not published")}</td>
+                        <td className="px-3 py-4">{filmMetricLabel(film.pinterestImpressions, "No data yet")}</td>
                       </tr>
                     );}) : (
                       <tr><td colSpan={9} className="px-6 py-6 text-stone-600">No films match this filter.</td></tr>
