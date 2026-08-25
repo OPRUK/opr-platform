@@ -233,7 +233,7 @@ function withLatestPinterestSnapshot(snapshot: AnalyticsSnapshot | null): Analyt
       platform.platform.toLowerCase() === "pinterest"
         ? {
             ...platform,
-            period: "22 Jul–21 Aug 2026",
+            period: "1 Aug–25 Aug 2026",
             exposureLabel: "Impressions",
             exposures: 256,
             interactions: 11,
