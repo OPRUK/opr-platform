@@ -889,6 +889,87 @@ export const featuredRecipes: FeaturedRecipe[] = [
       },
     ],
   },
+  {
+    slug: "auntie-maricas-pineapple-jerk-chicken",
+    title: "Auntie Marica's Pineapple-Infused Jamaican Jerk Chicken",
+    place: "Birmingham, England",
+    story:
+      "Auntie Marcia made her Jamaican Jerk Chicken with that sweet and sour sauce that was finger lickin' good.",
+    ingredients: [
+      "1.4–1.8kg chicken, bone-in and skin-on (thighs and drumsticks recommended)",
+      "60ml canned pineapple juice (canned holds up better than fresh for a long marinade — see notes)",
+      "2–3 Scotch bonnet peppers, stemmed (seeds in for real heat, seeds out for milder)",
+      "1 tablespoon ground allspice (pimento)",
+      "4 scallions (spring onions), roughly chopped",
+      "1 medium yellow onion, roughly chopped",
+      "4 garlic cloves, peeled",
+      "1 thumb-sized piece of ginger, peeled",
+      "2 tablespoons fresh thyme leaves",
+      "1 teaspoon ground nutmeg",
+      "1 teaspoon ground cinnamon",
+      "60ml soy sauce",
+      "2 tablespoons dark brown sugar",
+      "2 tablespoons vegetable oil",
+      "Juice of 2 limes",
+      "1 tablespoon salt and 1 teaspoon black pepper",
+    ],
+    method: [
+      "Blend the pineapple juice, Scotch bonnet peppers, allspice, scallions, onion, garlic, ginger, thyme, nutmeg, cinnamon, soy sauce, brown sugar, oil, lime juice, salt and pepper into a coarse marinade paste.",
+      "Pat the chicken pieces dry, then use a fork or small knife to poke a few holes or shallow slashes into the meat so the marinade can penetrate deeply.",
+      "Pour the marinade over the chicken. Wearing gloves, rub it generously all over the pieces and underneath the skin. Cover tightly and refrigerate for at least 4 hours, ideally overnight (12–24 hours) for the best flavour.",
+      "To grill: set up a two-zone barbecue with one hot side and one cooler side. Place the chicken over indirect heat on the cooler side and cook for 40–50 minutes, turning occasionally, then move to the hot side for the final 5–10 minutes to caramelise the sugars and get a proper char.",
+      "To oven-bake instead: heat the oven to 200°C. Place the chicken on a wire rack over a foil-lined tray and bake for 45–50 minutes, until the internal temperature reaches 74°C, then finish under the grill for 3–5 minutes to blacken and crisp the skin.",
+      "Rest the chicken for 5–10 minutes before serving.",
+    ],
+    image: "/images/recipes/auntie-maricas-pineapple-jerk-chicken-wide.webp",
+    category: "Main",
+    number: "10",
+    prepTime: "PT15M",
+    cookTime: "PT45M",
+    serves: "4 to 6 people",
+    cuisine: "Jamaican",
+    contributorName: "Sonia Brown",
+    notes: [
+      {
+        title: "Why canned pineapple juice",
+        text: "Fresh pineapple contains bromelain, an enzyme that will turn the chicken to mush if it marinates for more than a few hours. Canned juice is pasteurised, so it's safe for an overnight marinade.",
+      },
+      {
+        title: "Protect your hands",
+        text: "Scotch bonnet oils linger on skin and burn painfully if they reach your eyes. Wear disposable gloves when rubbing the marinade onto the chicken.",
+      },
+      {
+        title: "Save some marinade for a glaze",
+        text: "Set aside a few tablespoons of marinade before it touches the raw chicken. Boil it briefly, mix with a little extra pineapple juice or ketchup, and brush it on during the final few minutes of cooking, or serve it as a dipping sauce.",
+      },
+      {
+        title: "Get that authentic smoke",
+        text: "Traditional jerk is smoked over pimento wood. If grilling, soak pimento wood chips, or substitute hickory or applewood, and add them to the coals.",
+      },
+      {
+        title: "Balance the heat",
+        text: "Serve alongside cooling sides like Jamaican rice and peas, sweet fried plantain, or a fresh mango and pineapple salsa if the chicken is too spicy for some guests.",
+      },
+    ],
+    faqs: [
+      {
+        question: "Why does this recipe use canned pineapple juice instead of fresh?",
+        answer: "Fresh pineapple contains an enzyme called bromelain that breaks meat down too aggressively over a long marinade, turning the texture mushy. Canned juice is pasteurised, so it's safe for an overnight soak.",
+      },
+      {
+        question: "How spicy is Auntie Marica's jerk chicken?",
+        answer: "It's built around 2–3 Scotch bonnet peppers, which are genuinely hot. Leave the seeds in for maximum fire, or remove them for a milder result.",
+      },
+      {
+        question: "Can I make this in the oven instead of on a grill?",
+        answer: "Yes. Bake at 200°C on a wire rack over a foil-lined tray for 45–50 minutes, then finish under the grill for 3–5 minutes to crisp and blacken the skin.",
+      },
+      {
+        question: "How long should the chicken marinate?",
+        answer: "At least 4 hours, but overnight (12–24 hours) gives the best flavour.",
+      },
+    ],
+  },
 ];
 
 export function getFeaturedRecipe(slug: string): FeaturedRecipe | undefined {
