@@ -22,6 +22,7 @@ import {
   matchSocialFilmId,
   matchSocialFilmTitle,
   pinterestFilmImpressions,
+  socialFilmAuditCapturedAt,
   tiktokFilmViews,
   youtubeFilmViews,
 } from "./social-film-matching";
@@ -847,6 +848,7 @@ export async function loadAdminAnalytics(
 
   return {
     generatedAt: new Date().toISOString(),
+    pinterestAuditCapturedAt: socialFilmAuditCapturedAt,
     windowDays: 90,
     linkClicks: clickResult.data?.length ?? 0,
     ctaClicks: (eventResult.data ?? []).filter(
