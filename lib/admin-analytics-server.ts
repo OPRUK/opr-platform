@@ -18,6 +18,7 @@ import { loadLatestDailySnapshot } from "./analytics-daily-snapshots";
 import { films, filmUploadDate } from "./films";
 import { featuredRecipes } from "./recipes";
 import { buildDashboardPriorities } from "./dashboard-priorities";
+import { buildSubmissionFunnel } from "./submission-funnel";
 import {
   facebookFilmViews,
   instagramFilmViews,
@@ -42,6 +43,12 @@ import type { AnalyticsReport } from "./analytics-report-types";
 const conversionEvents = new Set([
   "join_table_success",
   "recipe_submission_success",
+]);
+
+const submissionFunnelEvents = new Set([
+  "recipe_submission_started",
+  "recipe_submission_progress",
+  "recipe_submission_attempt",
 ]);
 
 const participationTables: Array<{
@@ -731,7 +738,7 @@ export async function loadAdminAnalytics(
       .limit(10_000),
     client
       .from("site_events")
-      .select("source, event_key, utm_campaign, destination")
+      .select("source, event_key, utm_campaign, destination, page_path")
       .gte("created_at", since90Days.toISOString())
       .limit(10_000),
     loadParticipation(client, since30Days.toISOString()),
@@ -766,7 +773,7 @@ export async function loadAdminAnalytics(
   for (const event of eventResult.data ?? []) {
     const summary = ensureSource(event.source);
     if (conversionEvents.has(event.event_key)) summary.conversions += 1;
-    else summary.ctaClicks += 1;
+    else if (!submissionFunnelEvents.has(event.event_key)) summary.ctaClicks += 1;
   }
 
   const sources = Array.from(summaries.values())
@@ -807,7 +814,7 @@ export async function loadAdminAnalytics(
   for (const event of eventResult.data ?? []) {
     const summary = ensureCampaign(event.utm_campaign, event.source);
     if (conversionEvents.has(event.event_key)) summary.conversions += 1;
-    else summary.ctaClicks += 1;
+    else if (!submissionFunnelEvents.has(event.event_key)) summary.ctaClicks += 1;
   }
 
   const campaigns = Array.from(campaignSummaries.values()).sort((a, b) => {
@@ -817,6 +824,7 @@ export async function loadAdminAnalytics(
   });
 
   const filmViews = buildFilmViews(eventResult.data ?? []);
+  const submissionFunnel = buildSubmissionFunnel(eventResult.data ?? []);
   const socialFilmViews = await buildSocialFilmViews(filmViews);
 
   const [snapshot, pageSpeed, searchConsole] = await Promise.all([
@@ -858,7 +866,7 @@ export async function loadAdminAnalytics(
     now: generatedAt,
     linkClicks: clickResult.data?.length ?? 0,
     ctaClicks: (eventResult.data ?? []).filter(
-      (event) => !conversionEvents.has(event.event_key),
+      (event) => !conversionEvents.has(event.event_key) && !submissionFunnelEvents.has(event.event_key),
     ).length,
     conversions: (eventResult.data ?? []).filter((event) =>
       conversionEvents.has(event.event_key),
@@ -880,7 +888,7 @@ export async function loadAdminAnalytics(
     windowDays: 90,
     linkClicks: clickResult.data?.length ?? 0,
     ctaClicks: (eventResult.data ?? []).filter(
-      (event) => !conversionEvents.has(event.event_key),
+      (event) => !conversionEvents.has(event.event_key) && !submissionFunnelEvents.has(event.event_key),
     ).length,
     conversions: (eventResult.data ?? []).filter((event) =>
       conversionEvents.has(event.event_key),
@@ -888,6 +896,7 @@ export async function loadAdminAnalytics(
     sources,
     campaigns,
     participation,
+    submissionFunnel,
     filmViews,
     socialFilmViews,
     snapshot: snapshotWithPageSpeed,

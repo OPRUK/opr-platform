@@ -105,6 +105,21 @@ export async function GET(request: Request) {
     participation.addRows(analytics.participation);
     styleSheet(participation);
 
+    const submissionFunnel = workbook.addWorksheet("Submission Funnel");
+    submissionFunnel.columns = [
+      { header: "Stage", key: "stage", width: 32 },
+      { header: `Count (${analytics.windowDays}d)`, key: "count", width: 22 },
+    ];
+    submissionFunnel.addRows([
+      { stage: "Started", count: analytics.submissionFunnel.started },
+      { stage: "Recipe details ready", count: analytics.submissionFunnel.recipeReady },
+      { stage: "Submit attempted", count: analytics.submissionFunnel.attempted },
+      { stage: "Completed", count: analytics.submissionFunnel.completed },
+      { stage: "Estimated drop-off before submit", count: analytics.submissionFunnel.abandonedBeforeAttempt },
+      { stage: "Attempt did not complete", count: analytics.submissionFunnel.unsuccessfulAttempts },
+    ]);
+    styleSheet(submissionFunnel);
+
     const sources = workbook.addWorksheet("Traffic Sources");
     sources.columns = [
       { header: "Source", key: "source", width: 24 },

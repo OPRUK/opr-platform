@@ -3,7 +3,7 @@
 import Link from "next/link";
 import NextImage from "next/image";
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { addAttributionToFormData } from "../../lib/attribution-client";
+import { addAttributionToFormData, sendAnalyticsEvent } from "../../lib/attribution-client";
 
 // Bump this whenever the submission licence wording on /terms changes, so we
 // always know exactly which version of the terms a contributor agreed to.
@@ -83,6 +83,21 @@ const initialValues: RecipeFormValues = {
 };
 
 const recipeDraftKey = "opr-recipe-submission-draft";
+const funnelEventStoragePrefix = "opr-recipe-funnel-";
+
+function sendFunnelEventOnce(
+  eventKey: "recipe_submission_started" | "recipe_submission_progress" | "recipe_submission_attempt",
+  destination: string,
+) {
+  try {
+    const storageKey = `${funnelEventStoragePrefix}${eventKey}`;
+    if (window.sessionStorage.getItem(storageKey)) return;
+    window.sessionStorage.setItem(storageKey, "1");
+    sendAnalyticsEvent(eventKey, destination);
+  } catch {
+    // Funnel measurement must never interfere with completing the form.
+  }
+}
 
 function getInitialValues(): RecipeFormValues {
   if (typeof window === "undefined") {
@@ -124,10 +139,19 @@ export default function RecipeForm() {
   const [submissionError, setSubmissionError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [instagramCopied, setInstagramCopied] = useState(false);
+  const hasStarted = [values.name, values.email, values.title, values.story, values.ingredients, values.method]
+    .some((value) => value.trim().length > 0);
+  const recipeIsReady = [values.title, values.story, values.ingredients, values.method]
+    .every((value) => value.trim().length > 0);
 
   useEffect(() => {
     window.sessionStorage.setItem(recipeDraftKey, JSON.stringify(values));
   }, [values]);
+
+  useEffect(() => {
+    if (hasStarted) sendFunnelEventOnce("recipe_submission_started", "/share#started");
+    if (recipeIsReady) sendFunnelEventOnce("recipe_submission_progress", "/share#recipe-ready");
+  }, [hasStarted, recipeIsReady]);
 
   function updateValue(field: keyof RecipeFormValues, value: string | boolean) {
     setValues((current) => ({ ...current, [field]: value }));
@@ -376,6 +400,7 @@ export default function RecipeForm() {
 
   async function submitRecipe(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    sendFunnelEventOnce("recipe_submission_attempt", "/share#submit");
     setIsSubmitting(true);
     setSubmissionError("");
 

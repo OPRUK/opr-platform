@@ -16,6 +16,9 @@ export type AnalyticsParticipationMetric = {
   last30Days: number | null;
 };
 
+import type { SubmissionFunnel } from "./submission-funnel";
+export type { SubmissionFunnel } from "./submission-funnel";
+
 export type AnalyticsFilmSummary = {
   title: string;
   video: string;
@@ -104,6 +107,7 @@ export type AdminAnalyticsResponse = {
   sources: AnalyticsSourceSummary[];
   campaigns: AnalyticsCampaignSummary[];
   participation: AnalyticsParticipationMetric[];
+  submissionFunnel: SubmissionFunnel;
   filmViews: AnalyticsFilmSummary[];
   socialFilmViews: AnalyticsSocialFilmSummary[];
   snapshot: AnalyticsSnapshot | null;

@@ -283,6 +283,25 @@ export default function AdminAnalyticsPanel({
               <MetricCard label="Conversions" value={formatNumber(analytics.conversions)} note="Completed table sign-ups and recipe submissions." />
             </div>
 
+            <div className="mt-6 rounded-3xl border border-[#DDB765]/70 bg-[#FFF3DF] p-6 shadow-lg shadow-[#1C5A50]/10">
+              <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+                <div>
+                  <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#9A622A]">Recipe submission funnel</p>
+                  <h3 className="mt-2 text-2xl font-bold">From first field to shared recipe</h3>
+                </div>
+                <p className="text-sm text-stone-600">Once-per-session event counts for the last {analytics.windowDays} days.</p>
+              </div>
+              <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <MetricCard label="Started" value={formatNumber(analytics.submissionFunnel.started)} note="Entered at least one core form field." />
+                <MetricCard label="Recipe ready" value={formatNumber(analytics.submissionFunnel.recipeReady)} note="Added a title, story, ingredients and method." />
+                <MetricCard label="Submit attempts" value={formatNumber(analytics.submissionFunnel.attempted)} note="Pressed the final share button." />
+                <MetricCard label="Completed" value={formatNumber(analytics.submissionFunnel.completed)} note={`${analytics.submissionFunnel.startToCompletionRate === null ? "No starts measured yet" : `${formatPercent(analytics.submissionFunnel.startToCompletionRate)} of starts`} completed successfully.`} />
+              </div>
+              <p className="mt-5 text-sm leading-6 text-stone-600">
+                Estimated drop-off: {formatNumber(analytics.submissionFunnel.abandonedBeforeAttempt)} starts did not reach submit and {formatNumber(analytics.submissionFunnel.unsuccessfulAttempts)} attempts did not complete. These are aggregate event differences, not identified visitors.
+              </p>
+            </div>
+
             <div className="mt-6 overflow-hidden rounded-3xl border border-[#DDB765]/70 bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/10">
               <div className="border-b border-[#DDB765]/60 px-6 py-5">
                 <h3 className="text-xl font-bold">Source comparison</h3>

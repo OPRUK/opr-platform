@@ -10,6 +10,9 @@ const fixedEvents: Partial<Record<AnalyticsEventKey, { pagePath: string; destina
   home_cookbook: { pagePath: "/", destination: "/family-cookbook" },
   cookbook_share: { pagePath: "/family-cookbook", destination: "/share" },
   founder_join: { pagePath: "/founder", destination: "/join-our-table" },
+  recipe_submission_started: { pagePath: "/share", destination: "/share#started" },
+  recipe_submission_progress: { pagePath: "/share", destination: "/share#recipe-ready" },
+  recipe_submission_attempt: { pagePath: "/share", destination: "/share#submit" },
 };
 
 const recipeDestinations = new Set(
