@@ -1,4 +1,5 @@
 import "server-only";
+import { getSocialRefreshToken } from "./social-connections";
 
 const CACHE_MS = 15 * 60 * 1000;
 const REPORT_LAG_DAYS = 1;
@@ -51,7 +52,7 @@ export async function getPinterestSummary(
 
   const clientId = process.env.PINTEREST_CLIENT_ID;
   const clientSecret = process.env.PINTEREST_CLIENT_SECRET;
-  const refreshToken = process.env.PINTEREST_REFRESH_TOKEN;
+  const refreshToken = (await getSocialRefreshToken("pinterest")) ?? process.env.PINTEREST_REFRESH_TOKEN;
   if (!clientId || !clientSecret || !refreshToken) return null;
 
   try {
@@ -131,7 +132,7 @@ export async function getPinterestFilmViews(): Promise<PinterestFilmViews | null
 
   const clientId = process.env.PINTEREST_CLIENT_ID;
   const clientSecret = process.env.PINTEREST_CLIENT_SECRET;
-  const refreshToken = process.env.PINTEREST_REFRESH_TOKEN;
+  const refreshToken = (await getSocialRefreshToken("pinterest")) ?? process.env.PINTEREST_REFRESH_TOKEN;
   if (!clientId || !clientSecret || !refreshToken) return null;
 
   try {

@@ -356,6 +356,20 @@ export default function AdminDashboard({
     return true;
   }
 
+  async function reconnectSocial(platform: "youtube" | "pinterest") {
+    setMessage("");
+    const response = await adminRequest("/api/admin/social-connect", {
+      method: "POST",
+      body: JSON.stringify({ platform }),
+    });
+    const payload = await response.json().catch(() => null);
+    if (!response.ok || typeof payload?.url !== "string") {
+      setMessage(payload?.error ?? `The ${platform} reconnect could not be started.`);
+      return;
+    }
+    window.location.assign(payload.url);
+  }
+
   async function openNewsletterPanel() {
     setNewsletterResult(null);
     setNewsletterConfirmation("");
@@ -828,6 +842,7 @@ export default function AdminDashboard({
         onDownload={() => void downloadAnalytics()}
         onRefresh={() => void refreshAnalytics({ forceRefresh: true })}
         onMapSocialPost={mapSocialPost}
+        onReconnectSocial={reconnectSocial}
         onOpenSecurity={() => setShowSecurityPanel(true)}
         onSignOut={() => void supabase.auth.signOut()}
       />

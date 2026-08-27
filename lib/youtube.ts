@@ -1,4 +1,5 @@
 import "server-only";
+import { getSocialRefreshToken } from "./social-connections";
 
 const CACHE_MS = 15 * 60 * 1000;
 const REPORT_LAG_DAYS = 1;
@@ -51,7 +52,7 @@ export async function getYouTubeSummary(
 
   const clientId = process.env.YOUTUBE_OAUTH_CLIENT_ID;
   const clientSecret = process.env.YOUTUBE_OAUTH_CLIENT_SECRET;
-  const refreshToken = process.env.YOUTUBE_OAUTH_REFRESH_TOKEN;
+  const refreshToken = (await getSocialRefreshToken("youtube")) ?? process.env.YOUTUBE_OAUTH_REFRESH_TOKEN;
   if (!clientId || !clientSecret || !refreshToken) return null;
 
   try {

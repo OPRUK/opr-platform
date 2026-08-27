@@ -14,6 +14,7 @@ type AdminAnalyticsPanelProps = {
   onDownload: () => void;
   onRefresh: () => void;
   onMapSocialPost: (platform: string, postId: string, filmVideo: string | null) => Promise<boolean>;
+  onReconnectSocial: (platform: "youtube" | "pinterest") => Promise<void>;
   onOpenSecurity: () => void;
   onSignOut: () => void;
 };
@@ -173,12 +174,14 @@ export default function AdminAnalyticsPanel({
   onDownload,
   onRefresh,
   onMapSocialPost,
+  onReconnectSocial,
   onOpenSecurity,
   onSignOut,
 }: AdminAnalyticsPanelProps) {
   const [filmFilter, setFilmFilter] = useState<"all" | "published" | "missing" | "highest">("all");
   const [postMatches, setPostMatches] = useState<Record<string, string>>({});
   const [savingPost, setSavingPost] = useState("");
+  const [connectingPlatform, setConnectingPlatform] = useState("");
   const snapshot = analytics?.snapshot ?? null;
   const report = analytics?.report ?? null;
   const staticUpdateNote = report
@@ -376,6 +379,20 @@ export default function AdminAnalyticsPanel({
                     <p className="font-bold capitalize">{connection.platform}</p>
                     <p className="mt-2 text-sm">{connection.connected ? `${connection.matchedPosts} posts matched` : "Connection needs attention"}</p>
                     <p className="mt-1 text-xs text-stone-600">{connection.unresolvedPosts} unresolved</p>
+                    {(connection.platform === "youtube" || connection.platform === "pinterest") ? (
+                      <button
+                        type="button"
+                        disabled={connectingPlatform === connection.platform}
+                        onClick={async () => {
+                          setConnectingPlatform(connection.platform);
+                          await onReconnectSocial(connection.platform as "youtube" | "pinterest");
+                          setConnectingPlatform("");
+                        }}
+                        className="mt-3 rounded-full border border-[#123C39] px-3 py-1.5 text-xs font-bold disabled:opacity-50"
+                      >
+                        {connectingPlatform === connection.platform ? "Connecting…" : connection.connected ? "Reconnect" : "Connect"}
+                      </button>
+                    ) : null}
                   </article>
                 ))}
               </div>
