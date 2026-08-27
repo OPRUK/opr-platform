@@ -404,13 +404,13 @@ export default function AdminAnalyticsPanel({
               <div className="border-b border-[#DDB765]/60 px-6 py-5">
                 <h3 className="text-xl font-bold">Film performance by channel</h3>
                 <p className="mt-2 text-sm leading-6 text-stone-600">Every website film under one consistent name. Social columns show views; Pinterest shows impressions. LinkedIn is omitted because OPR has no LinkedIn videos.</p>
-                <p className="mt-1 text-xs text-stone-500">Dynamic channels refreshed {formatDateTime(analytics.generatedAt)}, with the {formatDateTime(analytics.pinterestAuditCapturedAt)} audit as a fallback for any pin the live API can't match.</p>
+                <p className="mt-1 text-xs text-stone-500">Dynamic channels refreshed {formatDateTime(analytics.generatedAt)}, with the {formatDateTime(analytics.pinterestAuditCapturedAt)} audit as a fallback for any pin the live API can&apos;t match.</p>
                 <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
                   <label className="w-full text-sm font-semibold text-[#6B431E] sm:w-auto">
                     <span className="block sm:inline">Show films</span>
                     <select value={filmFilter} onChange={(event) => setFilmFilter(event.target.value as typeof filmFilter)} className="mt-2 w-full rounded-full border border-[#DDB765] bg-white px-4 py-2 text-[#123C39] sm:ml-3 sm:mt-0 sm:w-auto">
                       <option value="all">All films</option>
-                      <option value="published">Published everywhere</option>
+                      <option value="published">Data on every channel</option>
                       <option value="missing">Missing channel data</option>
                       <option value="highest">Highest performing</option>
                     </select>
@@ -537,7 +537,7 @@ export default function AdminAnalyticsPanel({
                   </div>
                   <p className="text-sm text-stone-600">
                     {snapshot.website.fetchedAt
-                      ? `Website visitors: live from Vercel Web Analytics, refreshed ${new Intl.DateTimeFormat("en-GB", { timeStyle: "short" }).format(new Date(snapshot.website.fetchedAt))}`
+                      ? `Website visitors: live from Vercel Web Analytics, refreshed ${formatDateTime(snapshot.website.fetchedAt)}`
                       : `Website visitors: manual snapshot · ${staticUpdateNote ?? `Captured ${new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(new Date(`${snapshot.capturedAt}T12:00:00Z`))}`}`}
                   </p>
                 </div>
@@ -557,7 +557,7 @@ export default function AdminAnalyticsPanel({
                     value={formatNumber(snapshot.google.clicks)}
                     note={
                       snapshot.google.fetchedAt
-                        ? `${formatNumber(snapshot.google.impressions)} impressions · Live, refreshed ${new Intl.DateTimeFormat("en-GB", { timeStyle: "short" }).format(new Date(snapshot.google.fetchedAt))}`
+                        ? `${formatNumber(snapshot.google.impressions)} impressions · Live, refreshed ${formatDateTime(snapshot.google.fetchedAt)}`
                         : `${formatNumber(snapshot.google.impressions)} search impressions · Manual snapshot`
                     }
                   />
@@ -609,7 +609,7 @@ export default function AdminAnalyticsPanel({
                         </dl>
                         <p className="mt-3 text-[11px] text-stone-500">
                           {platform.fetchedAt
-                            ? `Refreshed ${new Intl.DateTimeFormat("en-GB", { timeStyle: "short" }).format(new Date(platform.fetchedAt))}`
+                            ? `Refreshed ${formatDateTime(platform.fetchedAt)}`
                             : staticUpdateNote}
                         </p>
                       </article>
@@ -640,7 +640,7 @@ export default function AdminAnalyticsPanel({
                           <td className="px-4 py-4 text-stone-600">
                             {platform.period}
                             {platform.fetchedAt ? (
-                              <span className="block text-xs text-stone-500">Refreshed {new Intl.DateTimeFormat("en-GB", { timeStyle: "short" }).format(new Date(platform.fetchedAt))}</span>
+                              <span className="block text-xs text-stone-500">Refreshed {formatDateTime(platform.fetchedAt)}</span>
                             ) : staticUpdateNote ? (
                               <span className="block text-xs text-stone-500">{staticUpdateNote}</span>
                             ) : null}
@@ -737,7 +737,7 @@ export default function AdminAnalyticsPanel({
                 title="Traffic detail"
                 note={
                   report.website.fetchedAt
-                    ? `${report.website.period} · Live, refreshed ${new Intl.DateTimeFormat("en-GB", { timeStyle: "short" }).format(new Date(report.website.fetchedAt))}`
+                    ? `${report.website.period} · Live, refreshed ${formatDateTime(report.website.fetchedAt)}`
                     : `${report.website.period} · ${staticUpdateNote}`
                 }
               />
@@ -815,7 +815,7 @@ export default function AdminAnalyticsPanel({
                 title="Search Console detail"
                 note={
                   report.googleSearch.fetchedAt
-                    ? `${report.googleSearch.period} · Live, refreshed ${new Intl.DateTimeFormat("en-GB", { timeStyle: "short" }).format(new Date(report.googleSearch.fetchedAt))}`
+                    ? `${report.googleSearch.period} · Live, refreshed ${formatDateTime(report.googleSearch.fetchedAt)}`
                     : `${report.googleSearch.period} · ${staticUpdateNote}`
                 }
               />
