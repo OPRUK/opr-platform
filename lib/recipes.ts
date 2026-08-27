@@ -969,6 +969,29 @@ export const featuredRecipes: FeaturedRecipe[] = [
         answer: "At least 4 hours, but overnight (12–24 hours) gives the best flavour.",
       },
     ],
+    methodPhotos: [
+      {
+        src: "/images/recipes/auntie-marcias-pineapple-jerk-chicken-step-1-ai.webp",
+        alt: "Raw bone-in chicken thighs and drumsticks coated in a coarse jerk marinade with visible scallion, thyme and chilli",
+        title: "Blend and coat with the jerk marinade",
+        caption: "Blend the aromatics, spices, pineapple juice, soy, lime, sugar and oil into a coarse paste, then work it over and beneath the chicken skin.",
+        step: 1,
+      },
+      {
+        src: "/images/recipes/auntie-marcias-pineapple-jerk-chicken-step-4-ai.webp",
+        alt: "Marinated jerk chicken cooking on the cooler side of a charcoal barbecue with the glowing coals banked to the other side",
+        title: "Cook gently over indirect heat",
+        caption: "Keep the chicken on the cooler side of a two-zone barbecue for most of the cooking time so it cooks through before the sugary marinade is charred.",
+        step: 4,
+      },
+      {
+        src: "/images/recipes/auntie-marcias-pineapple-jerk-chicken-step-6-ai.webp",
+        alt: "Finished Jamaican jerk chicken with glossy caramelised skin, blackened edges, lime wedges and fresh thyme",
+        title: "Rest after the final char",
+        caption: "Once the chicken reaches 74°C and the skin has crisp, blackened edges, rest it for 5–10 minutes before serving.",
+        step: 6,
+      },
+    ],
   },
   {
     slug: "badepapas-pindi-cholley",
@@ -1045,6 +1068,33 @@ export const featuredRecipes: FeaturedRecipe[] = [
       {
         question: "When should the paneer go in?",
         answer: "Pan-fry it separately until golden, then fold it into the curry for only the final 5–8 minutes of the slow cook. Adding it earlier risks the paneer turning rubbery.",
+      },
+      {
+        question: "How do you know when Pindi Cholley is ready?",
+        answer: "Cook it uncovered until the reserved broth has reduced and the dark masala clings closely to the chickpeas, leaving almost no loose gravy in the kadai.",
+      },
+    ],
+    methodPhotos: [
+      {
+        src: "/images/recipes/badepapas-pindi-cholley-step-3-ai.webp",
+        alt: "Tender deep-brown chickpeas in an open pressure cooker beside removed black tea bags and a bay leaf",
+        title: "Cook until tender and tea-darkened",
+        caption: "Pressure-cook the soaked chickpeas with black tea, salt and bay until tender, then remove the tea and reserve about 100ml of the cooking liquid.",
+        step: 3,
+      },
+      {
+        src: "/images/recipes/badepapas-pindi-cholley-step-6-ai.webp",
+        alt: "Cumin, ajwain and ground Pindi Cholley spices blooming briefly in hot ghee in a dark iron kadai",
+        title: "Bloom the dry spices briefly",
+        caption: "Lower the heat before adding the ground spices and Badepapa's chunky chaat masala; 15–20 seconds is enough to release their aroma without scorching them.",
+        step: 6,
+      },
+      {
+        src: "/images/recipes/badepapas-pindi-cholley-step-9-ai.webp",
+        alt: "Finished dark Pindi Cholley with masala-coated chickpeas, golden paneer, ginger, green chilli, coriander and lemon",
+        title: "Finish with a dry, clinging masala",
+        caption: "Reduce until the masala coats every chickpea, warm the seared paneer through at the end, then finish with ginger, chilli, coriander and lemon.",
+        step: 9,
       },
     ],
   },
