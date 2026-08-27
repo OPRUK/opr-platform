@@ -46,7 +46,7 @@ function bestFilmChannel(film: AdminAnalyticsResponse["socialFilmViews"][number]
   return reported.reduce((best, current) => current[1] > best[1] ? current : best)[0];
 }
 
-function filmMetricLabel(value: number | null, unavailableLabel = "Post not matched") {
+function filmMetricLabel(value: number | null, unavailableLabel = "Not published") {
   return value === null ? unavailableLabel : formatNumber(value);
 }
 
@@ -212,6 +212,11 @@ export default function AdminAnalyticsPanel({
       return true;
     })
     .sort((a, b) => filmFilter === "highest" ? socialTotal(b) - socialTotal(a) : 0);
+  const connectionByPlatform = new Map(
+    (analytics?.socialConnectionStatus ?? []).map((connection) => [connection.platform, connection.connected]),
+  );
+  const youtubeUnavailableLabel = connectionByPlatform.get("youtube") ? "Not published" : "Awaiting connection";
+  const pinterestUnavailableLabel = connectionByPlatform.get("pinterest") ? "Not published" : "Awaiting approval";
 
   return (
     <main id="main-content" tabIndex={-1} className="min-h-screen overflow-x-hidden bg-[#EED8B2] px-4 py-6 text-[#123C39] sm:px-5 sm:py-8 md:px-10 md:py-10">
@@ -536,8 +541,8 @@ export default function AdminAnalyticsPanel({
                     { label: "Facebook", value: filmMetricLabel(film.facebookViews), status: "Dynamic" },
                     { label: "Instagram", value: filmMetricLabel(film.instagramViews), status: "Dynamic" },
                     { label: "TikTok", value: filmMetricLabel(film.tiktokViews), status: "Dynamic" },
-                    { label: "YouTube", value: filmMetricLabel(film.youtubeViews, "No data yet"), status: "Dynamic" },
-                    { label: "Pinterest", value: filmMetricLabel(film.pinterestImpressions, "No data yet"), status: "Dynamic · impressions" },
+                    { label: "YouTube", value: filmMetricLabel(film.youtubeViews, youtubeUnavailableLabel), status: "Dynamic" },
+                    { label: "Pinterest", value: filmMetricLabel(film.pinterestImpressions, pinterestUnavailableLabel), status: "Dynamic · impressions" },
                   ];
                   return (
                     <article key={film.video} className="px-5 py-6">
@@ -606,10 +611,10 @@ export default function AdminAnalyticsPanel({
                         <td className={`px-2 py-4 ${bestChannel === "Facebook" ? "bg-[#DDEBE4] font-bold" : ""}`}>{filmMetricLabel(film.facebookViews)}</td>
                         <td className={`px-2 py-4 ${bestChannel === "Instagram" ? "bg-[#DDEBE4] font-bold" : ""}`}>{filmMetricLabel(film.instagramViews)}</td>
                         <td className={`px-2 py-4 ${bestChannel === "TikTok" ? "bg-[#DDEBE4] font-bold" : ""}`}>{filmMetricLabel(film.tiktokViews)}</td>
-                        <td className={`px-2 py-4 ${bestChannel === "YouTube" ? "bg-[#DDEBE4] font-bold" : ""}`}>{filmMetricLabel(film.youtubeViews, "No data yet")}</td>
+                        <td className={`px-2 py-4 ${bestChannel === "YouTube" ? "bg-[#DDEBE4] font-bold" : ""}`}>{filmMetricLabel(film.youtubeViews, youtubeUnavailableLabel)}</td>
                         <td className="px-2 py-4 font-bold">{formatNumber(socialTotal(film))}</td>
                         <td className="px-2 py-4 break-words">{bestChannel ?? "—"}</td>
-                        <td className="px-3 py-4">{filmMetricLabel(film.pinterestImpressions, "No data yet")}</td>
+                        <td className="px-3 py-4">{filmMetricLabel(film.pinterestImpressions, pinterestUnavailableLabel)}</td>
                       </tr>
                     );}) : (
                       <tr><td colSpan={10} className="px-6 py-6 text-stone-600">No films match this filter.</td></tr>
