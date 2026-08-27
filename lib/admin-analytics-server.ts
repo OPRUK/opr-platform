@@ -16,6 +16,8 @@ import { getPageSpeedSummary, type PageSpeedSummary } from "./pagespeed";
 import { analyticsReport } from "./analytics-report-data";
 import { loadLatestDailySnapshot } from "./analytics-daily-snapshots";
 import { films, filmUploadDate } from "./films";
+import { featuredRecipes } from "./recipes";
+import { buildDashboardPriorities } from "./dashboard-priorities";
 import {
   facebookFilmViews,
   instagramFilmViews,
@@ -41,28 +43,6 @@ const conversionEvents = new Set([
   "join_table_success",
   "recipe_submission_success",
 ]);
-
-const currentRecommendations: AnalyticsSnapshot["recommendations"] = [
-  {
-    title: "Increase Google visibility",
-    evidence: "OPR earns clicks when its recipes appear in search; the continuing constraint is broader non-brand discovery, not a site redesign.",
-    action: "Expand verified recipe coverage, strengthen contextual links between related stories and earn relevant links directly to individual recipe pages.",
-  },
-  {
-    title: "Turn exploration into action",
-    evidence: "Visitors explore several pages, and first-party source, campaign and conversion reporting can now show what happens next.",
-    action: "Keep one clear primary action on each important page and compare its source, campaign and conversion totals at every complete calendar-month close.",
-  },
-  {
-    title: "Build independent authority",
-    evidence: "The original Search Console baseline showed a very thin independent backlink profile despite healthy technical SEO and encouraging engagement.",
-    action: "Give contributors, local press, food-history organisations and community groups a relevant recipe URL and a simple request to link to it.",
-  },
-];
-
-function withCurrentRecommendations(snapshot: AnalyticsSnapshot | null): AnalyticsSnapshot | null {
-  return snapshot ? { ...snapshot, recommendations: currentRecommendations } : snapshot;
-}
 
 const participationTables: Array<{
   key: AnalyticsParticipationMetric["key"];
@@ -849,7 +829,7 @@ export async function loadAdminAnalytics(
                 await withLiveInstagram(
                   withLatestInstagramSnapshot(
                     await withLiveYouTube(
-                      withLatestYouTubeSnapshot(await withLiveSearchConsole(withCurrentRecommendations(await getSnapshot(client)))),
+                      withLatestYouTubeSnapshot(await withLiveSearchConsole(await getSnapshot(client))),
                     ),
                   ),
                 ),
@@ -867,8 +847,35 @@ export async function loadAdminAnalytics(
     ? { ...snapshot, pageSpeed: effectivePageSpeed }
     : snapshot;
 
+  const generatedAt = new Date().toISOString();
+  const report = await withLiveReport(
+    analyticsReport,
+    snapshotWithPageSpeed,
+    effectivePageSpeed,
+    searchConsole,
+  );
+  const priorities = buildDashboardPriorities({
+    now: generatedAt,
+    linkClicks: clickResult.data?.length ?? 0,
+    ctaClicks: (eventResult.data ?? []).filter(
+      (event) => !conversionEvents.has(event.event_key),
+    ).length,
+    conversions: (eventResult.data ?? []).filter((event) =>
+      conversionEvents.has(event.event_key),
+    ).length,
+    campaigns: campaigns.length,
+    snapshot: snapshotWithPageSpeed,
+    report,
+    films: socialFilmViews,
+    recipes: featuredRecipes.map((recipe) => ({
+      title: recipe.title,
+      faqCount: recipe.faqs.length,
+      visualCount: recipe.methodPhotos?.length ?? 0,
+    })),
+  });
+
   return {
-    generatedAt: new Date().toISOString(),
+    generatedAt,
     pinterestAuditCapturedAt: socialFilmAuditCapturedAt,
     windowDays: 90,
     linkClicks: clickResult.data?.length ?? 0,
@@ -884,6 +891,7 @@ export async function loadAdminAnalytics(
     filmViews,
     socialFilmViews,
     snapshot: snapshotWithPageSpeed,
-    report: await withLiveReport(analyticsReport, snapshotWithPageSpeed, effectivePageSpeed, searchConsole),
+    priorities,
+    report,
   };
 }

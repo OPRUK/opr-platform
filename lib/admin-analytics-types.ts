@@ -84,6 +84,16 @@ export type AnalyticsSnapshot = {
   }>;
 };
 
+export type DashboardPriority = {
+  id: string;
+  priority: "P1" | "P2";
+  area: string;
+  title: string;
+  evidence: string;
+  action: string;
+  source: "live data" | "site audit";
+};
+
 export type AdminAnalyticsResponse = {
   generatedAt: string;
   pinterestAuditCapturedAt: string;
@@ -97,6 +107,7 @@ export type AdminAnalyticsResponse = {
   filmViews: AnalyticsFilmSummary[];
   socialFilmViews: AnalyticsSocialFilmSummary[];
   snapshot: AnalyticsSnapshot | null;
+  priorities: DashboardPriority[];
   // The full dated SEO/social analysis (see lib/analytics-report-data.ts).
   // Current headline figures stay in snapshot above; live website figures are
   // also overlaid on the report where matching fields are available.

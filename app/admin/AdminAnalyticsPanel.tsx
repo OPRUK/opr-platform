@@ -527,6 +527,40 @@ export default function AdminAnalyticsPanel({
             </div>
           </section>
 
+          <section aria-labelledby="priorities-heading" className="mx-auto mt-12 max-w-7xl">
+            <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+              <div>
+                <p className="text-sm font-bold uppercase tracking-[0.3em] text-[#9A622A]">Dynamic action queue</p>
+                <h2 id="priorities-heading" className="mt-3 text-3xl font-bold">What needs attention next</h2>
+              </div>
+              <p className="max-w-xl text-sm leading-6 text-stone-700">
+                Recalculated whenever the dashboard loads from current measurement coverage, performance, conversions and a structural audit of the published site.
+              </p>
+            </div>
+            {analytics.priorities.length ? (
+              <div className="mt-6 grid gap-5 lg:grid-cols-2">
+                {analytics.priorities.map((priority) => (
+                  <article key={priority.id} className="overflow-hidden rounded-3xl border border-[#DDB765]/70 bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/10">
+                    <div className={`flex items-center justify-between gap-4 px-6 py-3 text-sm font-bold uppercase tracking-[0.16em] ${priority.priority === "P1" ? "bg-[#7A2E2E] text-white" : "bg-[#DDB765] text-[#123C39]"}`}>
+                      <span>{priority.priority} · {priority.area}</span>
+                      <span className="text-xs font-medium normal-case tracking-normal">{priority.source}</span>
+                    </div>
+                    <div className="p-6">
+                      <h3 className="text-2xl font-bold">{priority.title}</h3>
+                      <p className="mt-4 leading-7 text-stone-700">{priority.evidence}</p>
+                      <p className="mt-5 border-t border-[#DDB765]/60 pt-5 font-medium leading-7 text-[#123C39]">{priority.action}</p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <div className="mt-6 rounded-3xl border border-[#8CB9A8] bg-[#E6F1EB] p-6 text-[#123C39]">
+                <h3 className="text-xl font-bold">No current P1 or P2 findings</h3>
+                <p className="mt-2 leading-7">The automated checks found no urgent measurement, conversion, performance or content-completeness gaps.</p>
+              </div>
+            )}
+          </section>
+
           {snapshot ? (
             <>
               <section aria-labelledby="baseline-heading" className="mx-auto mt-12 max-w-7xl rounded-[2rem] bg-[#FFF3DF] p-6 shadow-xl shadow-[#1C5A50]/10 md:p-9">
@@ -658,21 +692,6 @@ export default function AdminAnalyticsPanel({
                 </div>
               </section>
 
-              <section aria-labelledby="recommendations-heading" className="mx-auto mt-12 max-w-7xl">
-                <p className="text-sm font-bold uppercase tracking-[0.3em] text-[#9A622A]">Recommended next moves</p>
-                <h2 id="recommendations-heading" className="mt-3 text-3xl font-bold">Turn discovery into a seat at the table</h2>
-                {staticUpdateNote ? <p className="mt-2 text-sm text-stone-600">{staticUpdateNote}</p> : null}
-                <div className="mt-6 grid gap-5 lg:grid-cols-3">
-                  {snapshot.recommendations.map((recommendation, index) => (
-                    <article key={recommendation.title} className="rounded-3xl border border-[#DDB765]/70 bg-[#FFF3DF] p-6 shadow-lg shadow-[#1C5A50]/10">
-                      <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#9A622A]">Priority {index + 1}</p>
-                      <h3 className="mt-3 text-2xl font-bold">{recommendation.title}</h3>
-                      <p className="mt-4 leading-7 text-stone-700">{recommendation.evidence}</p>
-                      <p className="mt-5 border-t border-[#DDB765]/60 pt-5 font-medium leading-7 text-[#123C39]">{recommendation.action}</p>
-                    </article>
-                  ))}
-                </div>
-              </section>
             </>
           ) : (
             <section className="mx-auto mt-12 max-w-7xl rounded-3xl border border-[#DDB765] bg-[#FFF3DF] p-7">
