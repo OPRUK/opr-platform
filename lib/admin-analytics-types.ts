@@ -36,6 +36,21 @@ export type AnalyticsSocialFilmSummary = AnalyticsFilmSummary & {
   daysOnline: number | null;
 };
 
+export type UnmatchedSocialPost = {
+  platform: "facebook" | "instagram" | "tiktok" | "youtube" | "pinterest";
+  postId: string;
+  title: string;
+  metricValue: number;
+};
+
+export type SocialConnectionStatus = {
+  platform: "facebook" | "instagram" | "tiktok" | "youtube" | "pinterest";
+  connected: boolean;
+  fetchedAt: string | null;
+  matchedPosts: number;
+  unresolvedPosts: number;
+};
+
 export type AnalyticsSnapshotPlatform = {
   platform: string;
   period: string;
@@ -110,6 +125,8 @@ export type AdminAnalyticsResponse = {
   submissionFunnel: SubmissionFunnel;
   filmViews: AnalyticsFilmSummary[];
   socialFilmViews: AnalyticsSocialFilmSummary[];
+  unmatchedSocialPosts: UnmatchedSocialPost[];
+  socialConnectionStatus: SocialConnectionStatus[];
   snapshot: AnalyticsSnapshot | null;
   priorities: DashboardPriority[];
   // The full dated SEO/social analysis (see lib/analytics-report-data.ts).

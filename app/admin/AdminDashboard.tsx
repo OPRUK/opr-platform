@@ -341,6 +341,21 @@ export default function AdminDashboard({
     );
   }
 
+  async function mapSocialPost(platform: string, postId: string, filmVideo: string | null) {
+    setMessage("");
+    const response = await adminRequest("/api/admin/social-film-match", {
+      method: "PATCH",
+      body: JSON.stringify({ platform, postId, filmVideo, ignored: filmVideo === null }),
+    });
+    if (!response.ok) {
+      const payload = await response.json().catch(() => null);
+      setMessage(payload?.error ?? "The social post match could not be saved.");
+      return false;
+    }
+    await refreshAnalytics({ forceRefresh: false, silent: true });
+    return true;
+  }
+
   async function openNewsletterPanel() {
     setNewsletterResult(null);
     setNewsletterConfirmation("");
@@ -812,6 +827,7 @@ export default function AdminDashboard({
         refreshing={refreshingAnalytics}
         onDownload={() => void downloadAnalytics()}
         onRefresh={() => void refreshAnalytics({ forceRefresh: true })}
+        onMapSocialPost={mapSocialPost}
         onOpenSecurity={() => setShowSecurityPanel(true)}
         onSignOut={() => void supabase.auth.signOut()}
       />

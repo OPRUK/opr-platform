@@ -35,6 +35,8 @@ import type {
   AnalyticsCampaignSummary,
   AnalyticsFilmSummary,
   AnalyticsSocialFilmSummary,
+  SocialConnectionStatus,
+  UnmatchedSocialPost,
   AnalyticsSnapshot,
   AnalyticsSourceSummary,
 } from "./admin-analytics-types";
@@ -634,12 +636,28 @@ function buildFilmViews(
 }
 
 type SocialPlatform = "facebook" | "instagram" | "tiktok" | "youtube" | "pinterest";
-type PlatformFilm = { id?: string; title: string; views: number };
+type PlatformFilm = { id?: string; title: string; views: number; publishedAt?: string };
+type SavedSocialPost = {
+  platform: SocialPlatform;
+  post_id: string;
+  film_video: string | null;
+  post_title: string;
+  metric_value: number;
+  published_at: string | null;
+  ignored: boolean;
+};
 
-function socialFilmTotals(rows: readonly PlatformFilm[], platform: string, stablePlatform?: SocialPlatform): Map<string, number> {
+function socialFilmTotals(
+  rows: readonly PlatformFilm[],
+  platform: string,
+  stablePlatform?: SocialPlatform,
+  savedMatches: Map<string, string> = new Map(),
+): Map<string, number> {
   const totals = new Map<string, number>();
   for (const row of rows) {
-    const title = (stablePlatform ? matchSocialFilmId(stablePlatform, row.id) : null) ?? matchSocialFilmTitle(row.title);
+    const title = (stablePlatform && row.id ? savedMatches.get(`${stablePlatform}:${row.id}`) : null)
+      ?? (stablePlatform ? matchSocialFilmId(stablePlatform, row.id) : null)
+      ?? matchSocialFilmTitle(row.title);
     if (!title) {
       console.warn(`OPR ${platform} film title needs matching: ${row.title.slice(0, 100)}`);
       continue;
@@ -667,7 +685,14 @@ function earliestPublishedByTitle(rows: ReadonlyArray<{ id?: string; title: stri
   return earliest;
 }
 
-async function buildSocialFilmViews(website: AnalyticsFilmSummary[]): Promise<AnalyticsSocialFilmSummary[]> {
+async function buildSocialFilmViews(
+  client: SupabaseClient,
+  website: AnalyticsFilmSummary[],
+): Promise<{
+  films: AnalyticsSocialFilmSummary[];
+  unmatched: UnmatchedSocialPost[];
+  connections: SocialConnectionStatus[];
+}> {
   const [facebook, instagram, tiktok, youtube, pinterest] = await Promise.all([
     getFacebookSummary(),
     getInstagramSummary(),
@@ -675,6 +700,21 @@ async function buildSocialFilmViews(website: AnalyticsFilmSummary[]): Promise<An
     getYouTubeSummary(),
     getPinterestFilmViews(),
   ]);
+  const savedResult = await client
+    .from("social_film_posts")
+    .select("platform, post_id, film_video, post_title, metric_value, published_at, ignored");
+  const savedPosts = savedResult.error ? [] : (savedResult.data ?? []) as SavedSocialPost[];
+  if (savedResult.error) console.error("OPR saved social-film mappings could not load", savedResult.error);
+  const filmTitleByVideoPath = new Map(films.map((film) => [film.video, film.title]));
+  const savedMatches = new Map(
+    savedPosts.flatMap((row) => {
+      const title = row.film_video ? filmTitleByVideoPath.get(row.film_video) : null;
+      return title ? [[`${row.platform}:${row.post_id}`, title] as const] : [];
+    }),
+  );
+  const ignoredPostIds = new Set(
+    savedPosts.filter((row) => row.ignored).map((row) => `${row.platform}:${row.post_id}`),
+  );
   const auditedSources = {
     facebook: socialFilmTotals(facebookFilmViews, "Facebook audit"),
     instagram: socialFilmTotals(instagramFilmViews, "Instagram audit"),
@@ -683,23 +723,72 @@ async function buildSocialFilmViews(website: AnalyticsFilmSummary[]): Promise<An
     pinterest: socialFilmTotals(pinterestFilmImpressions, "Pinterest audit"),
   };
   const liveSources = {
-    facebook: socialFilmTotals(facebook?.films ?? [], "Facebook", "facebook"),
-    instagram: socialFilmTotals(instagram?.films ?? [], "Instagram", "instagram"),
-    tiktok: socialFilmTotals(tiktok?.films ?? [], "TikTok", "tiktok"),
-    youtube: socialFilmTotals(youtube?.films ?? [], "YouTube", "youtube"),
-    pinterest: socialFilmTotals(pinterest?.films ?? [], "Pinterest", "pinterest"),
+    facebook: socialFilmTotals(facebook?.films ?? [], "Facebook", "facebook", savedMatches),
+    instagram: socialFilmTotals(instagram?.films ?? [], "Instagram", "instagram", savedMatches),
+    tiktok: socialFilmTotals(tiktok?.films ?? [], "TikTok", "tiktok", savedMatches),
+    youtube: socialFilmTotals(youtube?.films ?? [], "YouTube", "youtube", savedMatches),
+    pinterest: socialFilmTotals(pinterest?.films ?? [], "Pinterest", "pinterest", savedMatches),
   };
+  const savedSources = Object.fromEntries(
+    (["facebook", "instagram", "tiktok", "youtube", "pinterest"] as const).map((platform) => [
+      platform,
+      socialFilmTotals(
+        savedPosts.filter((row) => row.platform === platform && row.film_video).map((row) => ({
+          id: row.post_id,
+          title: row.post_title,
+          views: Number(row.metric_value),
+        })),
+        `${platform} saved actuals`,
+        platform,
+        savedMatches,
+      ),
+    ]),
+  ) as Record<SocialPlatform, Map<string, number>>;
   const sources = {
-    facebook: new Map([...auditedSources.facebook, ...liveSources.facebook]),
-    instagram: new Map([...auditedSources.instagram, ...liveSources.instagram]),
-    tiktok: new Map([...auditedSources.tiktok, ...liveSources.tiktok]),
-    youtube: new Map([...auditedSources.youtube, ...liveSources.youtube]),
-    pinterest: new Map([...auditedSources.pinterest, ...liveSources.pinterest]),
+    facebook: new Map([...auditedSources.facebook, ...savedSources.facebook, ...liveSources.facebook]),
+    instagram: new Map([...auditedSources.instagram, ...savedSources.instagram, ...liveSources.instagram]),
+    tiktok: new Map([...auditedSources.tiktok, ...savedSources.tiktok, ...liveSources.tiktok]),
+    youtube: new Map([...auditedSources.youtube, ...savedSources.youtube, ...liveSources.youtube]),
+    pinterest: new Map([...auditedSources.pinterest, ...savedSources.pinterest, ...liveSources.pinterest]),
   };
+  const liveByPlatform: Record<SocialPlatform, PlatformFilm[]> = {
+    facebook: facebook?.films ?? [], instagram: instagram?.films ?? [], tiktok: tiktok?.films ?? [],
+    youtube: youtube?.films ?? [], pinterest: pinterest?.films ?? [],
+  };
+  const unmatched: UnmatchedSocialPost[] = [];
+  const syncedRows: Array<Record<string, unknown>> = [];
+  for (const [platform, rows] of Object.entries(liveByPlatform) as Array<[SocialPlatform, PlatformFilm[]]>) {
+    for (const row of rows) {
+      if (!row.id) continue;
+      const matchedTitle = savedMatches.get(`${platform}:${row.id}`)
+        ?? matchSocialFilmId(platform, row.id)
+        ?? matchSocialFilmTitle(row.title);
+      const matchedFilm = matchedTitle ? films.find((film) => film.title === matchedTitle) : null;
+      if (!matchedFilm && !ignoredPostIds.has(`${platform}:${row.id}`)) {
+        unmatched.push({ platform, postId: row.id, title: row.title, metricValue: row.views });
+      }
+      syncedRows.push({
+        platform,
+        post_id: row.id,
+        film_video: matchedFilm?.video ?? null,
+        post_title: row.title,
+        metric_value: row.views,
+        published_at: row.publishedAt ?? null,
+        last_synced_at: new Date().toISOString(),
+        ignored: ignoredPostIds.has(`${platform}:${row.id}`),
+      });
+    }
+  }
+  if (syncedRows.length) {
+    const syncResult = await client.from("social_film_posts").upsert(syncedRows, {
+      onConflict: "platform,post_id",
+    });
+    if (syncResult.error) console.error("OPR social-film actuals could not be saved", syncResult.error);
+  }
   const websiteByTitle = new Map(website.map((row) => [row.title, row]));
   const youtubePublishedByTitle = earliestPublishedByTitle(youtube?.films ?? []);
 
-  return films.map((film) => {
+  const filmRows = films.map((film) => {
     const site = websiteByTitle.get(film.title);
     const uploadDate = film.uploadDate ? filmUploadDate(film) : (youtubePublishedByTitle.get(film.title) ?? null);
     const daysOnline = uploadDate
@@ -719,6 +808,19 @@ async function buildSocialFilmViews(website: AnalyticsFilmSummary[]): Promise<An
       daysOnline,
     };
   });
+  const connections: SocialConnectionStatus[] = (["facebook", "instagram", "tiktok", "youtube", "pinterest"] as const)
+    .map((platform) => {
+      const summary = { facebook, instagram, tiktok, youtube, pinterest }[platform];
+      const unresolvedPosts = unmatched.filter((post) => post.platform === platform).length;
+      return {
+        platform,
+        connected: Boolean(summary),
+        fetchedAt: summary?.fetchedAt ?? null,
+        matchedPosts: liveByPlatform[platform].length - unresolvedPosts,
+        unresolvedPosts,
+      };
+    });
+  return { films: filmRows, unmatched, connections };
 }
 
 export async function loadAdminAnalytics(
@@ -825,7 +927,8 @@ export async function loadAdminAnalytics(
 
   const filmViews = buildFilmViews(eventResult.data ?? []);
   const submissionFunnel = buildSubmissionFunnel(eventResult.data ?? []);
-  const socialFilmViews = await buildSocialFilmViews(filmViews);
+  const socialFilmData = await buildSocialFilmViews(client, filmViews);
+  const socialFilmViews = socialFilmData.films;
 
   const [snapshot, pageSpeed, searchConsole] = await Promise.all([
     withLiveLinkedIn(
@@ -899,6 +1002,8 @@ export async function loadAdminAnalytics(
     submissionFunnel,
     filmViews,
     socialFilmViews,
+    unmatchedSocialPosts: socialFilmData.unmatched,
+    socialConnectionStatus: socialFilmData.connections,
     snapshot: snapshotWithPageSpeed,
     priorities,
     report,

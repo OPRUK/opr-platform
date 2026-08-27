@@ -13,6 +13,7 @@ type AdminAnalyticsPanelProps = {
   refreshing: boolean;
   onDownload: () => void;
   onRefresh: () => void;
+  onMapSocialPost: (platform: string, postId: string, filmVideo: string | null) => Promise<boolean>;
   onOpenSecurity: () => void;
   onSignOut: () => void;
 };
@@ -171,10 +172,13 @@ export default function AdminAnalyticsPanel({
   refreshing,
   onDownload,
   onRefresh,
+  onMapSocialPost,
   onOpenSecurity,
   onSignOut,
 }: AdminAnalyticsPanelProps) {
   const [filmFilter, setFilmFilter] = useState<"all" | "published" | "missing" | "highest">("all");
+  const [postMatches, setPostMatches] = useState<Record<string, string>>({});
+  const [savingPost, setSavingPost] = useState("");
   const snapshot = analytics?.snapshot ?? null;
   const report = analytics?.report ?? null;
   const staticUpdateNote = report
@@ -356,6 +360,74 @@ export default function AdminAnalyticsPanel({
                   </tbody>
                 </table>
               </div>
+            </div>
+
+            <div className="mt-6 rounded-3xl border border-[#DDB765]/70 bg-[#FFF3DF] p-6 shadow-lg shadow-[#1C5A50]/10">
+              <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+                <div>
+                  <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#9A622A]">Permanent post matching</p>
+                  <h3 className="mt-2 text-2xl font-bold">Social data connections</h3>
+                </div>
+                <p className="max-w-xl text-sm leading-6 text-stone-600">Post IDs and latest actual metrics are saved after every refresh. Caption changes and temporary API outages no longer break an established match.</p>
+              </div>
+              <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+                {analytics.socialConnectionStatus.map((connection) => (
+                  <article key={connection.platform} className={`rounded-2xl border p-4 ${connection.connected ? "border-[#8CB9A8] bg-[#E6F1EB]" : "border-[#C98F80] bg-[#F8E5DF]"}`}>
+                    <p className="font-bold capitalize">{connection.platform}</p>
+                    <p className="mt-2 text-sm">{connection.connected ? `${connection.matchedPosts} posts matched` : "Connection needs attention"}</p>
+                    <p className="mt-1 text-xs text-stone-600">{connection.unresolvedPosts} unresolved</p>
+                  </article>
+                ))}
+              </div>
+              {analytics.unmatchedSocialPosts.length ? (
+                <div className="mt-6 space-y-3">
+                  <p className="text-sm font-semibold text-[#6B431E]">Match each unresolved live post once. The post ID keeps the choice permanent.</p>
+                  {analytics.unmatchedSocialPosts.map((post) => {
+                    const key = `${post.platform}:${post.postId}`;
+                    return (
+                      <div key={key} className="grid gap-3 rounded-2xl border border-[#DDB765]/60 bg-white/55 p-4 lg:grid-cols-[8rem_minmax(0,1fr)_minmax(16rem,1fr)_auto_auto] lg:items-center">
+                        <p className="font-bold capitalize">{post.platform}</p>
+                        <p className="line-clamp-3 text-sm leading-5 text-stone-700">{post.title || "Untitled post"} · {formatNumber(post.metricValue)}</p>
+                        <select
+                          aria-label={`Match ${post.platform} post to film`}
+                          value={postMatches[key] ?? ""}
+                          onChange={(event) => setPostMatches((current) => ({ ...current, [key]: event.target.value }))}
+                          className="w-full rounded-full border border-[#DDB765] bg-white px-4 py-2 text-sm text-[#123C39]"
+                        >
+                          <option value="">Choose the matching OPR film</option>
+                          {analytics.socialFilmViews.map((film) => <option key={film.video} value={film.video}>{film.title}</option>)}
+                        </select>
+                        <button
+                          type="button"
+                          disabled={!postMatches[key] || savingPost === key}
+                          onClick={async () => {
+                            setSavingPost(key);
+                            await onMapSocialPost(post.platform, post.postId, postMatches[key]);
+                            setSavingPost("");
+                          }}
+                          className="rounded-full bg-[#123C39] px-4 py-2 text-sm font-bold text-white disabled:opacity-50"
+                        >
+                          {savingPost === key ? "Saving…" : "Save match"}
+                        </button>
+                        <button
+                          type="button"
+                          disabled={savingPost === key}
+                          onClick={async () => {
+                            setSavingPost(key);
+                            await onMapSocialPost(post.platform, post.postId, null);
+                            setSavingPost("");
+                          }}
+                          className="rounded-full border border-[#9A622A] px-4 py-2 text-sm font-bold text-[#6B431E] disabled:opacity-50"
+                        >
+                          Not an OPR film
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <p className="mt-5 rounded-2xl bg-[#E6F1EB] px-4 py-3 text-sm font-medium">Every live post returned by the connected platforms has a permanent film match.</p>
+              )}
             </div>
 
             <div className="mt-6 overflow-hidden rounded-3xl border border-[#DDB765]/70 bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/10">
