@@ -6,6 +6,7 @@ import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import type { AdminAnalyticsResponse } from "../../lib/admin-analytics-types";
 import { isAdminEmail } from "../../lib/admin-emails";
+import { applyCommunityRecipeEditorialOverride } from "../../lib/community-recipe-overrides";
 import { featuredRecipes } from "../../lib/recipes";
 import { supabase } from "../../lib/supabase/client";
 import AdminAnalyticsPanel from "./AdminAnalyticsPanel";
@@ -259,7 +260,9 @@ export default function AdminDashboard({
         );
       } else {
         const { submissions: data } = await recipeResponse.json();
-        setSubmissions((data ?? []) as Submission[]);
+        setSubmissions(
+          ((data ?? []) as Submission[]).map(applyCommunityRecipeEditorialOverride),
+        );
       }
       if (communityResponse.ok) {
         const { communityCooks: data } = await communityResponse.json();

@@ -3,6 +3,7 @@ import Navigation from "../components/Navigation";
 import TrackedLink from "../components/TrackedLink";
 import VideoBrandMark from "../components/VideoBrandMark";
 import PublishedRecipes from "./PublishedRecipes";
+import { applyCommunityRecipeEditorialOverride } from "../../lib/community-recipe-overrides";
 import { featuredRecipes } from "../../lib/recipes";
 import { absoluteUrl } from "../../lib/site";
 import { supabase } from "../../lib/supabase/client";
@@ -52,10 +53,12 @@ async function getPublishedCommunityRecipes() {
     .eq("is_published", true)
     .order("published_at", { ascending: false });
 
-  return (data ?? []).map((recipe) => ({
-    ...recipe,
-    category: recipe.category ?? "Recipe",
-  }));
+  return (data ?? []).map((recipe) =>
+    applyCommunityRecipeEditorialOverride({
+      ...recipe,
+      category: recipe.category ?? "Recipe",
+    }),
+  );
 }
 
 const cookbookJsonLd = {

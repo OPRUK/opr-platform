@@ -9,7 +9,11 @@ import RecipeFaqs from "../../../components/RecipeFaqs";
 import RecipeVisualGuide from "../../../components/RecipeVisualGuide";
 import CommunityCookForm from "../../../components/CommunityCookForm";
 import FamiliesWhoMadeThis from "../../../components/FamiliesWhoMadeThis";
-import { fallbackImageForCommunityRecipe } from "../../../../lib/community-recipe-image";
+import {
+  fallbackImageForCommunityRecipe,
+  fallbackOriginalImageForCommunityRecipe,
+} from "../../../../lib/community-recipe-image";
+import { applyCommunityRecipeEditorialOverride } from "../../../../lib/community-recipe-overrides";
 import { supabase } from "../../../../lib/supabase/client";
 import { getApprovedCommunityCooks } from "../../../../lib/community-cooks";
 import { communityRecipeMethodPhotos } from "../../../../lib/community-recipe-visuals";
@@ -62,7 +66,9 @@ async function getCommunityRecipe(id: string): Promise<CommunityRecipe | null> {
     .eq("is_published", true)
     .maybeSingle();
 
-  return (data as CommunityRecipe | null) ?? null;
+  return data
+    ? applyCommunityRecipeEditorialOverride(data as CommunityRecipe)
+    : null;
 }
 
 function imageUrlFor(recipe: CommunityRecipe): string | null {
@@ -72,10 +78,23 @@ function imageUrlFor(recipe: CommunityRecipe): string | null {
   return fallbackImageForCommunityRecipe(recipe.title);
 }
 
-function originalRecipeImageUrlFor(recipe: CommunityRecipe): string | null {
-  return recipe.original_recipe_path
-    ? supabase.storage.from("recipe-published").getPublicUrl(recipe.original_recipe_path).data.publicUrl
-    : null;
+function originalRecipeImageFor(recipe: CommunityRecipe): {
+  src: string;
+  width: number;
+  height: number;
+  unoptimized: boolean;
+} | null {
+  if (recipe.original_recipe_path) {
+    return {
+      src: supabase.storage.from("recipe-published").getPublicUrl(recipe.original_recipe_path).data.publicUrl,
+      width: 1200,
+      height: 1600,
+      unoptimized: true,
+    };
+  }
+
+  const fallback = fallbackOriginalImageForCommunityRecipe(recipe.id);
+  return fallback ? { ...fallback, unoptimized: false } : null;
 }
 
 function contributorPhotoUrlFor(recipe: CommunityRecipe): string | null {
@@ -145,7 +164,7 @@ export default async function CommunityRecipePage({
   const imageUrl = imageUrlFor(recipe);
   const communityCooks = await getApprovedCommunityCooks({ recipeId: recipe.id });
   const contributorPhotoUrl = contributorPhotoUrlFor(recipe);
-  const originalRecipeImageUrl = originalRecipeImageUrlFor(recipe);
+  const originalRecipeImage = originalRecipeImageFor(recipe);
   const audioStoryUrl = audioStoryUrlFor(recipe);
   const recipeVideoUrl = recipeVideoUrlFor(recipe);
   const ingredients = splitRecipeLines(recipe.ingredients);
@@ -301,15 +320,16 @@ export default async function CommunityRecipePage({
           </div>
         </section>
       ) : null}
-      {originalRecipeImageUrl ? (
+      {originalRecipeImage ? (
         <section className="bg-[#EED8B2]/60 px-6 py-20">
           <div className="mx-auto grid max-w-5xl items-center gap-10 rounded-3xl bg-[#FFF3DF] p-7 shadow-xl shadow-[#1C5A50]/10 md:grid-cols-[0.85fr_1.15fr] md:p-10">
             <Image
-              src={originalRecipeImageUrl}
+              src={originalRecipeImage.src}
               alt={`The original handwritten recipe for ${recipe.title}`}
-              width={1200}
-              height={1600}
-              unoptimized
+              width={originalRecipeImage.width}
+              height={originalRecipeImage.height}
+              unoptimized={originalRecipeImage.unoptimized}
+              sizes="(min-width: 768px) 36rem, calc(100vw - 88px)"
               className="max-h-[36rem] w-full rounded-2xl object-contain shadow-lg"
             />
             <div>

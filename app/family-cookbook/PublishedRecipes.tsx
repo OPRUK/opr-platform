@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { fallbackImageForCommunityRecipe } from "../../lib/community-recipe-image";
+import { applyCommunityRecipeEditorialOverride } from "../../lib/community-recipe-overrides";
 import { supabase } from "../../lib/supabase/client";
 import { WORLD_LAND_PATH } from "./world-map-path";
 import { WORLD_MAP_VIEWBOX, coordinatesForLocation, percentPosition } from "./world-map-geocode";
@@ -80,7 +81,11 @@ export default function PublishedRecipes({
         .eq("is_published", true)
         .order("published_at", { ascending: false });
 
-      if (data) setCommunityRecipes(data as PublishedRecipe[]);
+      if (data) {
+        setCommunityRecipes(
+          (data as PublishedRecipe[]).map(applyCommunityRecipeEditorialOverride),
+        );
+      }
     }
 
     void loadPublishedRecipes();
