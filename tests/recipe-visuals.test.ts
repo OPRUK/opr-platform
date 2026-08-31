@@ -26,3 +26,16 @@ test("every featured Living Cookbook recipe has three valid visual stages", () =
 test("Grandad's Steak & Ale Pie has three valid visual stages", () => {
   assertValidPhotos(communityRecipeMethodPhotos[41], 18);
 });
+
+test("Georgina's chutney has four valid visual stages", () => {
+  const photos = communityRecipeMethodPhotos[47];
+
+  assert.equal(photos.length, 4);
+  for (const photo of photos) {
+    assert.ok(photo.step >= 1 && photo.step <= 6);
+    assert.ok(photo.alt.trim().length > 0);
+    assert.ok(photo.title.trim().length > 0);
+    assert.ok(photo.caption.trim().length > 0);
+    assert.ok(existsSync(`public${photo.src}`), `${photo.src} should exist`);
+  }
+});

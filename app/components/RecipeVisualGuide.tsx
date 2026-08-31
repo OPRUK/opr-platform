@@ -21,9 +21,9 @@ export default function RecipeVisualGuide({
           See the key stages
         </h2>
         <p className="mx-auto mt-5 max-w-3xl text-center text-base leading-7 text-stone-700">
-          Three key moments to look for as you cook. Use these visual cues alongside the written method.
+          Key moments to look for as you cook. Use these visual cues alongside the written method.
         </p>
-        <div className="mt-9 grid gap-6 md:grid-cols-3">
+        <div className={`mt-9 grid gap-6 ${photos.length === 4 ? "md:grid-cols-2 lg:grid-cols-4" : "md:grid-cols-3"}`}>
           {photos.map((photo) => (
             <figure
               key={photo.src}

@@ -8,6 +8,7 @@
 // community submission has been curated into lib/recipes.ts under the same
 // title, hide the original community entry so it isn't shown twice.
 import { supabase } from "./supabase/client";
+import { applyCommunityRecipeEditorialOverride } from "./community-recipe-overrides";
 import { featuredRecipes, getFeaturedRecipe, type FeaturedRecipe } from "./recipes";
 
 export type MobileRecipeSummary = {
@@ -70,13 +71,15 @@ function communityImageUrl(row: CommunityRow): string | null {
 }
 
 function communityToSummary(row: CommunityRow): MobileRecipeSummary {
+  const editedRow = applyCommunityRecipeEditorialOverride(row);
+
   return {
-    id: `community-${row.id}`,
-    title: row.title,
-    place: row.location || "From the OPR community",
-    category: row.category || "Recipe",
-    story: row.story,
-    image: communityImageUrl(row),
+    id: `community-${editedRow.id}`,
+    title: editedRow.title,
+    place: editedRow.location || "From the OPR community",
+    category: editedRow.category || "Recipe",
+    story: editedRow.story,
+    image: communityImageUrl(editedRow),
   };
 }
 
@@ -133,7 +136,7 @@ export async function getMobileRecipe(id: string): Promise<MobileRecipeDetail | 
       .maybeSingle();
 
     if (!data) return null;
-    const row = data as CommunityRow;
+    const row = applyCommunityRecipeEditorialOverride(data as CommunityRow);
 
     return {
       ...communityToSummary(row),
