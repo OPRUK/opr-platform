@@ -36,6 +36,12 @@ function styleSheet(worksheet: ExcelJS.Worksheet) {
   }
 }
 
+function isCurrentData(value: string | null) {
+  if (!value) return false;
+  const refreshedAt = Date.parse(value);
+  return Number.isFinite(refreshedAt) && Date.now() - refreshedAt <= 48 * 60 * 60 * 1000;
+}
+
 export async function GET(request: Request) {
   const startedAt = Date.now();
   const requestId = request.headers.get("x-vercel-id");
@@ -73,26 +79,27 @@ export async function GET(request: Request) {
     ];
 
     if (analytics.snapshot) {
-      const websiteLive = Boolean(analytics.snapshot.website.fetchedAt);
-      const googleLive = Boolean(analytics.snapshot.google.fetchedAt);
+      const websiteLive = isCurrentData(analytics.snapshot.website.fetchedAt);
+      const googleLive = isCurrentData(analytics.snapshot.google.fetchedAt);
       const googleStatus = googleLive
         ? analytics.snapshot.google.provisionalFrom
           ? `Latest API data; provisional from ${analytics.snapshot.google.provisionalFrom}`
           : "Latest available via API"
         : "Historical snapshot";
-      overview.addRows([
-        { metric: "Website visitors", value: analytics.snapshot.website.visitors, period: analytics.snapshot.website.period, source: "Vercel Web Analytics", status: websiteLive ? "Latest available via API" : "Historical snapshot", refreshedAt: analytics.snapshot.website.fetchedAt ?? analytics.snapshot.capturedAt },
-        { metric: "Website page views", value: analytics.snapshot.website.pageViews, period: analytics.snapshot.website.period, source: "Vercel Web Analytics", status: websiteLive ? "Latest available via API" : "Historical snapshot", refreshedAt: analytics.snapshot.website.fetchedAt ?? analytics.snapshot.capturedAt },
-        { metric: "Pages per visitor", value: analytics.snapshot.website.pagesPerVisitor, period: analytics.snapshot.website.period, source: "Vercel Web Analytics", status: websiteLive ? "Calculated from live API" : "Historical snapshot", refreshedAt: analytics.snapshot.website.fetchedAt ?? analytics.snapshot.capturedAt },
-        { metric: "Bounce rate", value: analytics.snapshot.website.bounceRate, period: analytics.snapshot.website.period, source: "Vercel Web Analytics", status: "Historical snapshot", refreshedAt: analytics.snapshot.capturedAt },
-        { metric: "Google clicks", value: analytics.snapshot.google.clicks, period: analytics.snapshot.google.period, source: "Google Search Console", status: googleStatus, refreshedAt: analytics.snapshot.google.fetchedAt ?? analytics.snapshot.capturedAt },
-        { metric: "Google impressions", value: analytics.snapshot.google.impressions, period: analytics.snapshot.google.period, source: "Google Search Console", status: googleStatus, refreshedAt: analytics.snapshot.google.fetchedAt ?? analytics.snapshot.capturedAt },
-        { metric: "Google CTR", value: analytics.snapshot.google.ctr, period: analytics.snapshot.google.period, source: "Google Search Console", status: googleStatus, refreshedAt: analytics.snapshot.google.fetchedAt ?? analytics.snapshot.capturedAt },
-        { metric: "Google average position", value: analytics.snapshot.google.averagePosition, period: analytics.snapshot.google.period, source: "Google Search Console", status: googleStatus, refreshedAt: analytics.snapshot.google.fetchedAt ?? analytics.snapshot.capturedAt },
-        { metric: "Indexed pages", value: analytics.snapshot.google.indexedPages, period: analytics.snapshot.google.period, source: "Google Search Console", status: "Historical snapshot", refreshedAt: analytics.snapshot.capturedAt },
+      if (websiteLive) overview.addRows([
+        { metric: "Website visitors", value: analytics.snapshot.website.visitors, period: analytics.snapshot.website.period, source: "Vercel Web Analytics", status: "Latest available via API", refreshedAt: analytics.snapshot.website.fetchedAt },
+        { metric: "Website page views", value: analytics.snapshot.website.pageViews, period: analytics.snapshot.website.period, source: "Vercel Web Analytics", status: "Latest available via API", refreshedAt: analytics.snapshot.website.fetchedAt },
+        { metric: "Pages per visitor", value: analytics.snapshot.website.pagesPerVisitor, period: analytics.snapshot.website.period, source: "Vercel Web Analytics", status: "Calculated from live API", refreshedAt: analytics.snapshot.website.fetchedAt },
       ]);
-      overview.getCell("B5").numFmt = "0.0%";
-      overview.getCell("B8").numFmt = "0.0%";
+      if (googleLive) overview.addRows([
+        { metric: "Google clicks", value: analytics.snapshot.google.clicks, period: analytics.snapshot.google.period, source: "Google Search Console", status: googleStatus, refreshedAt: analytics.snapshot.google.fetchedAt },
+        { metric: "Google impressions", value: analytics.snapshot.google.impressions, period: analytics.snapshot.google.period, source: "Google Search Console", status: googleStatus, refreshedAt: analytics.snapshot.google.fetchedAt },
+        { metric: "Google CTR", value: analytics.snapshot.google.ctr, period: analytics.snapshot.google.period, source: "Google Search Console", status: googleStatus, refreshedAt: analytics.snapshot.google.fetchedAt },
+        { metric: "Google average position", value: analytics.snapshot.google.averagePosition, period: analytics.snapshot.google.period, source: "Google Search Console", status: googleStatus, refreshedAt: analytics.snapshot.google.fetchedAt },
+      ]);
+      overview.eachRow((row) => {
+        if (row.getCell(1).value === "Google CTR") row.getCell(2).numFmt = "0.0%";
+      });
     }
     styleSheet(overview);
 
@@ -155,10 +162,10 @@ export async function GET(request: Request) {
       { header: "Source refreshed", key: "refreshedAt", width: 25 },
     ];
     if (analytics.snapshot) {
-      social.addRows(analytics.snapshot.social.map((platform) => ({
+      social.addRows(analytics.snapshot.social.filter((platform) => isCurrentData(platform.fetchedAt)).map((platform) => ({
         ...platform,
-        status: platform.fetchedAt ? "Latest available via API" : "Historical snapshot",
-        refreshedAt: platform.fetchedAt ?? analytics.snapshot?.capturedAt,
+        status: "Latest available via API",
+        refreshedAt: platform.fetchedAt,
       })));
     }
     styleSheet(social);
@@ -174,15 +181,12 @@ export async function GET(request: Request) {
       { header: "Data status", key: "status", width: 24 },
       { header: "Source refreshed", key: "refreshedAt", width: 25 },
     ];
-    pageSpeed.addRows(analytics.report.seoTechnical.pageSpeed.map((metric) => ({
+    pageSpeed.addRows((isCurrentData(analytics.report.seoTechnical.pageSpeedMeta.fetchedAt) ? analytics.report.seoTechnical.pageSpeed : []).map((metric) => ({
       ...metric,
       strategy: analytics.report.seoTechnical.pageSpeedMeta.strategy,
       testedUrl: analytics.report.seoTechnical.pageSpeedMeta.testedUrl,
-      status: analytics.report.seoTechnical.pageSpeedMeta.fetchedAt
-        ? "Latest Google Lighthouse lab run"
-        : "Historical snapshot",
-      refreshedAt: analytics.report.seoTechnical.pageSpeedMeta.fetchedAt
-        ?? analytics.report.seoTechnical.asOf,
+      status: "Latest Google Lighthouse lab run",
+      refreshedAt: analytics.report.seoTechnical.pageSpeedMeta.fetchedAt,
     })));
     pageSpeed.eachRow((row) => {
       row.alignment = { vertical: "top", wrapText: true };
@@ -191,11 +195,13 @@ export async function GET(request: Request) {
 
     const actions = workbook.addWorksheet("Recommended Actions");
     actions.columns = [
-      { header: "Priority", key: "title", width: 34 },
+      { header: "Priority", key: "priority", width: 14 },
+      { header: "Area", key: "area", width: 24 },
+      { header: "Finding", key: "title", width: 34 },
       { header: "Evidence", key: "evidence", width: 65 },
       { header: "Recommended action", key: "action", width: 70 },
     ];
-    if (analytics.snapshot) actions.addRows(analytics.snapshot.recommendations);
+    actions.addRows(analytics.priorities);
     actions.eachRow((row) => {
       row.alignment = { vertical: "top", wrapText: true };
     });

@@ -127,8 +127,10 @@ let cachedFilmViews: { data: PinterestFilmViews; expiresAt: number } | null = nu
 // Per-pin metrics come inline from List Pins (pin_metrics=true) rather than a
 // separate call per pin — Pinterest's batch analytics endpoint is beta-gated
 // and not available to all apps, so this is the reliable path.
-export async function getPinterestFilmViews(): Promise<PinterestFilmViews | null> {
-  if (cachedFilmViews && cachedFilmViews.expiresAt > Date.now()) return cachedFilmViews.data;
+export async function getPinterestFilmViews(
+  { forceRefresh = false }: { forceRefresh?: boolean } = {},
+): Promise<PinterestFilmViews | null> {
+  if (!forceRefresh && cachedFilmViews && cachedFilmViews.expiresAt > Date.now()) return cachedFilmViews.data;
 
   const clientId = process.env.PINTEREST_CLIENT_ID;
   const clientSecret = process.env.PINTEREST_CLIENT_SECRET;

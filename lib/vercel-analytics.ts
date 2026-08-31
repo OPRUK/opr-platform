@@ -5,10 +5,18 @@ const REPORT_WINDOW_DAYS = 28;
 
 export type VercelAudienceRow = { label: string; share: number; visitors: number };
 
+export type VercelTrafficWindow = {
+  visitors: number;
+  pageviews: number;
+  pagesPerVisitor: number;
+};
+
 export type VercelAnalyticsSummary = {
   period: string;
   visitors: number;
   pageviews: number;
+  last7Days: VercelTrafficWindow | null;
+  previous7Days: VercelTrafficWindow | null;
   topPages: VercelAudienceRow[];
   topReferrers: VercelAudienceRow[];
   audienceCountry: VercelAudienceRow[];
@@ -51,6 +59,35 @@ async function queryAggregate(
   return payload.data ?? [];
 }
 
+async function queryCount(
+  token: string,
+  projectId: string,
+  teamId: string,
+  since: string,
+  until: string,
+): Promise<VercelTrafficWindow | null> {
+  const url = new URL("https://api.vercel.com/v1/query/web-analytics/visits/count");
+  url.searchParams.set("projectId", projectId);
+  url.searchParams.set("teamId", teamId);
+  url.searchParams.set("since", since);
+  url.searchParams.set("until", until);
+
+  const response = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+  if (!response.ok) {
+    console.error("OPR Vercel Analytics count failed", await response.text());
+    return null;
+  }
+
+  const payload = await response.json();
+  const visitors = Number(payload.data?.visitors ?? 0);
+  const pageviews = Number(payload.data?.pageviews ?? 0);
+  return {
+    visitors,
+    pageviews,
+    pagesPerVisitor: visitors > 0 ? pageviews / visitors : 0,
+  };
+}
+
 function toAudienceRows(rows: Array<Record<string, unknown>>, dimension: string): VercelAudienceRow[] {
   const totalVisitors = rows.reduce((sum, row) => sum + (Number(row.visitors) || 0), 0);
   return rows
@@ -87,14 +124,17 @@ export async function getVercelAnalyticsSummary(
     const since = isoDate(startDate);
     const until = isoDate(endDate);
 
-    const countUrl = new URL("https://api.vercel.com/v1/query/web-analytics/visits/count");
-    countUrl.searchParams.set("projectId", projectId);
-    countUrl.searchParams.set("teamId", teamId);
-    countUrl.searchParams.set("since", since);
-    countUrl.searchParams.set("until", until);
+    const last7StartDate = new Date(endDate);
+    last7StartDate.setUTCDate(last7StartDate.getUTCDate() - 6);
+    const previous7EndDate = new Date(last7StartDate);
+    previous7EndDate.setUTCDate(previous7EndDate.getUTCDate() - 1);
+    const previous7StartDate = new Date(previous7EndDate);
+    previous7StartDate.setUTCDate(previous7StartDate.getUTCDate() - 6);
 
-    const [countResponse, pageRows, referrerRows, countryRows, deviceRows, osRows] = await Promise.all([
-      fetch(countUrl, { headers: { Authorization: `Bearer ${token}` } }),
+    const [count, last7Days, previous7Days, pageRows, referrerRows, countryRows, deviceRows, osRows] = await Promise.all([
+      queryCount(token, projectId, teamId, since, until),
+      queryCount(token, projectId, teamId, isoDate(last7StartDate), until),
+      queryCount(token, projectId, teamId, isoDate(previous7StartDate), isoDate(previous7EndDate)),
       queryAggregate(token, projectId, teamId, "requestPath", since, until),
       queryAggregate(token, projectId, teamId, "referrerHostname", since, until),
       queryAggregate(token, projectId, teamId, "country", since, until),
@@ -102,16 +142,14 @@ export async function getVercelAnalyticsSummary(
       queryAggregate(token, projectId, teamId, "osName", since, until),
     ]);
 
-    if (!countResponse.ok) {
-      console.error("OPR Vercel Analytics count failed", await countResponse.text());
-      return null;
-    }
-    const count = await countResponse.json();
+    if (!count) return null;
 
     const summary: VercelAnalyticsSummary = {
       period: `${REPORT_WINDOW_DAYS} days to ${until}`,
-      visitors: count.data?.visitors ?? 0,
-      pageviews: count.data?.pageviews ?? 0,
+      visitors: count.visitors,
+      pageviews: count.pageviews,
+      last7Days,
+      previous7Days,
       topPages: toAudienceRows(pageRows, "requestPath"),
       topReferrers: toAudienceRows(referrerRows, "referrerHostname"),
       audienceCountry: toAudienceRows(countryRows, "country"),

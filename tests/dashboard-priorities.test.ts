@@ -68,3 +68,13 @@ test("turns site completeness and Lighthouse findings into P2 work", () => {
   assert.match(priorities.find((item) => item.id === "recipe-faq-coverage")?.evidence ?? "", /New recipe/);
   assert.match(priorities.find((item) => item.id === "recipe-visual-coverage")?.evidence ?? "", /New recipe/);
 });
+
+test("treats a social API timestamp older than 48 hours as outdated", () => {
+  const staleSocial = snapshot();
+  staleSocial.social[0].fetchedAt = "2026-08-24T11:59:59.000Z";
+
+  const priorities = build({ snapshot: staleSocial });
+
+  assert.equal(priorities.find((item) => item.id === "social-data-manual")?.priority, "P2");
+  assert.match(priorities.find((item) => item.id === "social-data-manual")?.evidence ?? "", /more than 48 hours/);
+});

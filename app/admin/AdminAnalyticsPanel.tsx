@@ -64,6 +64,12 @@ function formatDateTime(value: string) {
   }).format(new Date(value));
 }
 
+function isCurrentData(value: string | null) {
+  if (!value) return false;
+  const refreshedAt = Date.parse(value);
+  return Number.isFinite(refreshedAt) && Date.now() - refreshedAt <= 48 * 60 * 60 * 1000;
+}
+
 function formatShortDate(value: string) {
   return new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short" }).format(new Date(value));
 }
@@ -184,8 +190,8 @@ export default function AdminAnalyticsPanel({
   const [connectingPlatform, setConnectingPlatform] = useState("");
   const snapshot = analytics?.snapshot ?? null;
   const report = analytics?.report ?? null;
-  const staticUpdateNote = report
-    ? `Static data · Last updated ${formatDateTime(report.staticDataUpdatedAt)}`
+  const reportUpdateNote = report
+    ? `Live report · Generated ${formatDateTime(report.staticDataUpdatedAt)}`
     : null;
   const sourceMaximum = Math.max(
     1,
@@ -199,10 +205,13 @@ export default function AdminAnalyticsPanel({
       (campaign) => campaign.linkClicks + campaign.ctaClicks + campaign.conversions,
     ) ?? []),
   );
-  const socialExposures = snapshot?.social.reduce(
+  const websiteCurrent = isCurrentData(snapshot?.website.fetchedAt ?? null);
+  const googleCurrent = isCurrentData(snapshot?.google.fetchedAt ?? null);
+  const currentSocial = snapshot?.social.filter((platform) => isCurrentData(platform.fetchedAt)) ?? [];
+  const socialExposures = currentSocial.reduce(
     (total, platform) => total + platform.exposures,
     0,
-  ) ?? 0;
+  );
   const filmRows = [...(analytics?.socialFilmViews ?? [])]
     .filter((film) => {
       const allChannelsReported = [film.facebookViews, film.instagramViews, film.tiktokViews, film.youtubeViews, film.pinterestImpressions]
@@ -683,35 +692,35 @@ export default function AdminAnalyticsPanel({
                     <h2 id="baseline-heading" className="mt-3 text-3xl font-bold">Website and Google visibility</h2>
                   </div>
                   <p className="text-sm text-stone-600">
-                    {snapshot.website.fetchedAt
+                    {websiteCurrent && snapshot.website.fetchedAt
                       ? `Website visitors: live from Vercel Web Analytics, refreshed ${formatDateTime(snapshot.website.fetchedAt)}`
-                      : `Website visitors: manual snapshot · ${staticUpdateNote ?? `Captured ${new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(new Date(`${snapshot.capturedAt}T12:00:00Z`))}`}`}
+                      : "Live Vercel Web Analytics is unavailable; historical figures are hidden."}
                   </p>
                 </div>
                 <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                   <MetricCard
                     label="Website visitors"
-                    value={formatNumber(snapshot.website.visitors)}
-                    note={snapshot.website.fetchedAt ? `${snapshot.website.period} · Live` : snapshot.website.period}
+                    value={websiteCurrent ? formatNumber(snapshot.website.visitors) : "Awaiting refresh"}
+                    note={websiteCurrent ? `${snapshot.website.period} · Live` : "No historical total shown"}
                   />
                   <MetricCard
                     label="Page views"
-                    value={formatNumber(snapshot.website.pageViews)}
-                    note={`${formatNumber(snapshot.website.pagesPerVisitor, 2)} pages per visitor${snapshot.website.fetchedAt ? " · Live" : ""}`}
+                    value={websiteCurrent ? formatNumber(snapshot.website.pageViews) : "Awaiting refresh"}
+                    note={websiteCurrent ? `${formatNumber(snapshot.website.pagesPerVisitor, 2)} pages per visitor · Live` : "No historical total shown"}
                   />
                   <MetricCard
                     label="Google clicks"
-                    value={formatNumber(snapshot.google.clicks)}
+                    value={googleCurrent ? formatNumber(snapshot.google.clicks) : "Awaiting refresh"}
                     note={
-                      snapshot.google.fetchedAt
+                      googleCurrent && snapshot.google.fetchedAt
                         ? `${formatNumber(snapshot.google.impressions)} impressions · Live, refreshed ${formatDateTime(snapshot.google.fetchedAt)}`
-                        : `${formatNumber(snapshot.google.impressions)} search impressions · Manual snapshot`
+                        : "Live Search Console data unavailable; historical total hidden"
                     }
                   />
                   <MetricCard
                     label="Google CTR"
-                    value={formatPercent(snapshot.google.ctr)}
-                    note={`Average position ${formatNumber(snapshot.google.averagePosition, 1)} · ${snapshot.google.fetchedAt ? "Live from Search Console" : "Manual snapshot"}`}
+                    value={googleCurrent ? formatPercent(snapshot.google.ctr) : "Awaiting refresh"}
+                    note={googleCurrent ? `Average position ${formatNumber(snapshot.google.averagePosition, 1)} · Live from Search Console` : "No historical rate shown"}
                   />
                 </div>
               </section>
@@ -723,7 +732,9 @@ export default function AdminAnalyticsPanel({
                     <h2 id="social-heading" className="mt-3 text-3xl font-bold">Discovery across each channel</h2>
                   </div>
                   <p className="max-w-xl text-sm leading-6 text-stone-700">
-                    {formatNumber(socialExposures)} combined platform-reported exposures. Periods and platform definitions differ, so this is an activity indicator—not deduplicated reach.
+                    {currentSocial.length
+                      ? `${formatNumber(socialExposures)} current platform-reported exposures across ${currentSocial.length} connected ${currentSocial.length === 1 ? "channel" : "channels"}. Periods and definitions differ, so this is an activity indicator—not deduplicated reach.`
+                      : "No social platform returned a current API result. Historical figures are hidden until the connections refresh."}
                   </p>
                 </div>
                 <div className="mt-6 overflow-hidden rounded-3xl border border-[#DDB765]/70 bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/10">
@@ -732,14 +743,14 @@ export default function AdminAnalyticsPanel({
                       <article key={platform.platform} className="px-5 py-5">
                         <div className="flex flex-wrap items-center gap-2">
                           <h3 className="text-lg font-bold">{platform.platform}</h3>
-                          <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white ${platform.fetchedAt ? "bg-[#1C5A50]" : "bg-[#9A622A]"}`}>
-                            {platform.fetchedAt ? "Automatic" : "Static"}
+                          <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white ${isCurrentData(platform.fetchedAt) ? "bg-[#1C5A50]" : "bg-[#9A622A]"}`}>
+                            {isCurrentData(platform.fetchedAt) ? "Automatic" : "Needs connection"}
                           </span>
                         </div>
                         <p className="mt-1 text-xs leading-5 text-stone-600">{platform.period}</p>
                         <div className="mt-4 rounded-2xl bg-[#123C39] p-4 text-[#FFF3DF]">
                           <p className="text-[10px] uppercase tracking-[0.08em] text-[#DDB765]">{platform.exposureLabel}</p>
-                          <p className="mt-1 text-3xl font-bold text-white">{formatNumber(platform.exposures)}</p>
+                          <p className="mt-1 text-3xl font-bold text-white">{isCurrentData(platform.fetchedAt) ? formatNumber(platform.exposures) : "Hidden"}</p>
                         </div>
                         <dl className="mt-3 grid grid-cols-2 gap-3">
                           {[
@@ -750,14 +761,14 @@ export default function AdminAnalyticsPanel({
                           ].map(([label, value]) => (
                             <div key={String(label)} className="rounded-2xl border border-[#DDB765]/50 bg-white/50 p-3">
                               <dt className="text-[10px] uppercase tracking-[0.06em] text-[#6B431E]">{label}</dt>
-                              <dd className="mt-1 text-lg font-bold">{formatNumber(value as number | null)}</dd>
+                              <dd className="mt-1 text-lg font-bold">{isCurrentData(platform.fetchedAt) ? formatNumber(value as number | null) : "Hidden"}</dd>
                             </div>
                           ))}
                         </dl>
                         <p className="mt-3 text-[11px] text-stone-500">
-                          {platform.fetchedAt
+                          {isCurrentData(platform.fetchedAt) && platform.fetchedAt
                             ? `Refreshed ${formatDateTime(platform.fetchedAt)}`
-                            : staticUpdateNote}
+                            : "Historical figures hidden"}
                         </p>
                       </article>
                     ))}
@@ -780,23 +791,23 @@ export default function AdminAnalyticsPanel({
                         <tr key={platform.platform} className="border-b border-[#DDB765]/40 last:border-0">
                           <th scope="row" className="px-6 py-4 font-semibold">
                             {platform.platform}
-                            {platform.fetchedAt ? (
+                            {isCurrentData(platform.fetchedAt) ? (
                               <span className="ml-2 rounded-full bg-[#1C5A50] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white">Automatic</span>
                             ) : null}
                           </th>
                           <td className="px-4 py-4 text-stone-600">
                             {platform.period}
-                            {platform.fetchedAt ? (
+                            {isCurrentData(platform.fetchedAt) && platform.fetchedAt ? (
                               <span className="block text-xs text-stone-500">Refreshed {formatDateTime(platform.fetchedAt)}</span>
-                            ) : staticUpdateNote ? (
-                              <span className="block text-xs text-stone-500">{staticUpdateNote}</span>
-                            ) : null}
+                            ) : (
+                              <span className="block text-xs text-stone-500">Historical figures hidden</span>
+                            )}
                           </td>
-                          <td className="px-4 py-4"><span className="font-semibold">{formatNumber(platform.exposures)}</span><span className="block text-xs text-stone-500">{platform.exposureLabel}</span></td>
-                          <td className="px-4 py-4">{formatNumber(platform.interactions)}</td>
-                          <td className="px-4 py-4">{formatNumber(platform.followers)}</td>
-                          <td className="px-4 py-4">{formatNumber(platform.profileVisits)}</td>
-                          <td className="px-6 py-4">{formatNumber(platform.outboundClicks)}</td>
+                          <td className="px-4 py-4"><span className="font-semibold">{isCurrentData(platform.fetchedAt) ? formatNumber(platform.exposures) : "Hidden"}</span><span className="block text-xs text-stone-500">{platform.exposureLabel}</span></td>
+                          <td className="px-4 py-4">{isCurrentData(platform.fetchedAt) ? formatNumber(platform.interactions) : "Hidden"}</td>
+                          <td className="px-4 py-4">{isCurrentData(platform.fetchedAt) ? formatNumber(platform.followers) : "Hidden"}</td>
+                          <td className="px-4 py-4">{isCurrentData(platform.fetchedAt) ? formatNumber(platform.profileVisits) : "Hidden"}</td>
+                          <td className="px-6 py-4">{isCurrentData(platform.fetchedAt) ? formatNumber(platform.outboundClicks) : "Hidden"}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -814,7 +825,7 @@ export default function AdminAnalyticsPanel({
           )}
 
           <p className="mx-auto mt-10 max-w-7xl text-sm leading-6 text-stone-600">
-            Dashboard generated {new Intl.DateTimeFormat("en-GB", { dateStyle: "medium", timeStyle: "short" }).format(new Date(analytics.generatedAt))}. Connected sources update whenever this page opens and are saved automatically each morning. If a service is temporarily unavailable, the dashboard keeps its latest saved figures; unconnected fields remain manual.
+            Dashboard generated {new Intl.DateTimeFormat("en-GB", { dateStyle: "medium", timeStyle: "short" }).format(new Date(analytics.generatedAt))}. Connected sources update whenever this page opens, and each successful refresh saves the latest figures as the protected fallback. Historical values are hidden wherever a current source is unavailable.
           </p>
 
           {report ? (
@@ -822,12 +833,12 @@ export default function AdminAnalyticsPanel({
             <p className="text-sm font-bold uppercase tracking-[0.3em] text-[#DDB765]">Full report</p>
             <h2 id="full-report-heading" className="mt-3 text-3xl font-bold text-white">SEO &amp; social traffic report</h2>
             <p className="mt-3 max-w-3xl text-sm leading-6 text-[#EED8B2]">
-              Baseline prepared {new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(new Date(`${report.preparedDate}T12:00:00Z`))}. Website, Google, connected social-platform and PageSpeed fields now refresh automatically; unavailable platform details retain their latest verified snapshot.
-              <span className="mt-1 block font-medium text-white">Static data last updated {formatDateTime(report.staticDataUpdatedAt)}.</span>
+              Live report generated {new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(new Date(`${report.preparedDate}T12:00:00Z`))}. Website, Google, connected social-platform, first-party and PageSpeed statistics are rebuilt from their current sources; dated manual figures are not mixed into these tables.
+              <span className="mt-1 block font-medium text-white">Generated {formatDateTime(report.staticDataUpdatedAt)}.</span>
             </p>
 
             <div className="mt-8 rounded-[1.5rem] bg-[#EED8B2] p-5 text-[#123C39] shadow-inner md:p-7">
-              <SubHeading eyebrow="Executive summary" title="Headline KPIs" note={staticUpdateNote ?? undefined} />
+              <SubHeading eyebrow="Executive summary" title="Headline KPIs" note={reportUpdateNote ?? undefined} />
               <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
                 {report.executiveSummary.kpis.map((kpi) => (
                   <div key={kpi.label} className="rounded-2xl border border-[#DDB765]/60 bg-[#FFF3DF] px-4 py-3 shadow shadow-[#1C5A50]/10">
@@ -849,17 +860,21 @@ export default function AdminAnalyticsPanel({
                 ]}
               />
 
-              <SubHeading eyebrow="Executive summary" title="Top priorities" />
-              <div className="mt-4 grid gap-5 lg:grid-cols-2">
-                {report.executiveSummary.topPriorities.map((priority, index) => (
-                  <article key={`${priority.priority}-${index}`} className="rounded-3xl border border-[#DDB765]/70 bg-[#FFF3DF] p-6 shadow-lg shadow-[#1C5A50]/10">
-                    <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#9A622A]">{priority.priority} · {priority.owner}</p>
-                    <h4 className="mt-3 text-lg font-bold leading-6">{priority.action}</h4>
-                    <p className="mt-3 text-sm leading-6 text-stone-700">{priority.whyNow}</p>
-                    <p className="mt-3 border-t border-[#DDB765]/60 pt-3 text-sm font-medium leading-6 text-[#123C39]">{priority.successMeasure}</p>
-                  </article>
-                ))}
-              </div>
+              {report.executiveSummary.topPriorities.length ? (
+                <>
+                  <SubHeading eyebrow="Executive summary" title="Top priorities" />
+                  <div className="mt-4 grid gap-5 lg:grid-cols-2">
+                    {report.executiveSummary.topPriorities.map((priority, index) => (
+                      <article key={`${priority.priority}-${index}`} className="rounded-3xl border border-[#DDB765]/70 bg-[#FFF3DF] p-6 shadow-lg shadow-[#1C5A50]/10">
+                        <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#9A622A]">{priority.priority} · {priority.owner}</p>
+                        <h4 className="mt-3 text-lg font-bold leading-6">{priority.action}</h4>
+                        <p className="mt-3 text-sm leading-6 text-stone-700">{priority.whyNow}</p>
+                        <p className="mt-3 border-t border-[#DDB765]/60 pt-3 text-sm font-medium leading-6 text-[#123C39]">{priority.successMeasure}</p>
+                      </article>
+                    ))}
+                  </div>
+                </>
+              ) : null}
               <p className="mt-4 text-xs leading-5 text-stone-600">{report.executiveSummary.footnote}</p>
             </div>
 
@@ -870,7 +885,7 @@ export default function AdminAnalyticsPanel({
                 note={
                   report.website.fetchedAt
                     ? `${report.website.period} · Live, refreshed ${formatDateTime(report.website.fetchedAt)}`
-                    : `${report.website.period} · ${staticUpdateNote}`
+                    : `${report.website.period} · historical detail hidden`
                 }
               />
               <DataTable<(typeof report.website.core)[number]>
@@ -878,8 +893,8 @@ export default function AdminAnalyticsPanel({
                 rows={report.website.core}
                 columns={[
                   { header: "Metric", render: (row) => row.metric },
-                  { header: "Last 30 days", render: (row) => (row.metric === "Bounce rate" ? formatPercent(row.last30Days) : formatNumber(row.last30Days, row.metric === "Pages per visitor" ? 2 : 0)) },
-                  { header: "Last 7 days", render: (row) => (row.metric === "Bounce rate" ? formatPercent(row.last7Days) : formatNumber(row.last7Days, row.metric === "Pages per visitor" ? 2 : 0)) },
+                  { header: "Last 28 days", render: (row) => (row.metric === "Bounce rate" && row.last30Days !== null ? formatPercent(row.last30Days) : formatNumber(row.last30Days, row.metric === "Pages per visitor" ? 2 : 0)) },
+                  { header: "Last 7 days", render: (row) => (row.metric === "Bounce rate" && row.last7Days !== null ? formatPercent(row.last7Days) : formatNumber(row.last7Days, row.metric === "Pages per visitor" ? 2 : 0)) },
                   { header: "Change (7d)", render: (row) => (row.change7d === null ? "—" : formatPercent(row.change7d)) },
                 ]}
               />
@@ -948,7 +963,7 @@ export default function AdminAnalyticsPanel({
                 note={
                   report.googleSearch.fetchedAt
                     ? `${report.googleSearch.period} · Live, refreshed ${formatDateTime(report.googleSearch.fetchedAt)}`
-                    : `${report.googleSearch.period} · ${staticUpdateNote}`
+                    : `${report.googleSearch.period} · historical detail hidden`
                 }
               />
               <p className="mt-2 text-xs leading-5 text-stone-600">
@@ -1033,39 +1048,47 @@ export default function AdminAnalyticsPanel({
             </div>
 
             <div className="mt-8 rounded-[1.5rem] bg-[#EED8B2] p-5 text-[#123C39] shadow-inner md:p-7">
-              <SubHeading eyebrow="Technical SEO" title="Site health" note={`As of ${new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(new Date(`${report.seoTechnical.asOf}T12:00:00Z`))} · ${staticUpdateNote}`} />
-              <DataTable<(typeof report.seoTechnical.indexing)[number]>
-                keyFn={(row) => row.measure}
-                rows={report.seoTechnical.indexing}
-                columns={[
-                  { header: "Measure", render: (row) => row.measure },
-                  { header: "Value", render: (row) => formatNumber(row.value) },
-                  { header: "Status", render: (row) => row.status },
-                  { header: "Interpretation", render: (row) => row.interpretation },
-                  { header: "Action", render: (row) => row.action },
-                ]}
-              />
+              <SubHeading eyebrow="Technical SEO" title="Site health" note={`Live report generated ${new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(new Date(`${report.seoTechnical.asOf}T12:00:00Z`))}`} />
+              {report.seoTechnical.indexing.length ? (
+                <DataTable<(typeof report.seoTechnical.indexing)[number]>
+                  keyFn={(row) => row.measure}
+                  rows={report.seoTechnical.indexing}
+                  columns={[
+                    { header: "Measure", render: (row) => row.measure },
+                    { header: "Value", render: (row) => formatNumber(row.value) },
+                    { header: "Status", render: (row) => row.status },
+                    { header: "Interpretation", render: (row) => row.interpretation },
+                    { header: "Action", render: (row) => row.action },
+                  ]}
+                />
+              ) : (
+                <p className="mt-4 rounded-2xl bg-[#FFF3DF] p-4 text-sm leading-6 text-stone-700">Live Google index-coverage totals are not available through the connected Search Analytics API, so the older coverage counts are hidden.</p>
+              )}
 
-              <SubHeading eyebrow="Technical SEO" title="Not indexed" />
-              <DataTable<(typeof report.seoTechnical.notIndexed)[number]>
-                keyFn={(row) => row.url}
-                rows={report.seoTechnical.notIndexed}
-                columns={[
-                  { header: "URL", render: (row) => row.url },
-                  { header: "Reason", render: (row) => row.reason },
-                  { header: "Assessment", render: (row) => row.assessment },
-                  { header: "Treatment", render: (row) => row.treatment },
-                  { header: "Priority", render: (row) => row.priority },
-                ]}
-              />
+              {report.seoTechnical.notIndexed.length ? (
+                <>
+                  <SubHeading eyebrow="Technical SEO" title="Not indexed" />
+                  <DataTable<(typeof report.seoTechnical.notIndexed)[number]>
+                    keyFn={(row) => row.url}
+                    rows={report.seoTechnical.notIndexed}
+                    columns={[
+                      { header: "URL", render: (row) => row.url },
+                      { header: "Reason", render: (row) => row.reason },
+                      { header: "Assessment", render: (row) => row.assessment },
+                      { header: "Treatment", render: (row) => row.treatment },
+                      { header: "Priority", render: (row) => row.priority },
+                    ]}
+                  />
+                </>
+              ) : null}
 
               <SubHeading eyebrow="Technical SEO" title="PageSpeed (lab data)" />
               <p className="mt-3 text-sm leading-6 text-stone-600">
                 {report.seoTechnical.pageSpeedMeta.fetchedAt
                   ? `Live mobile Lighthouse run: ${new Intl.DateTimeFormat("en-GB", { dateStyle: "medium", timeStyle: "short" }).format(new Date(report.seoTechnical.pageSpeedMeta.fetchedAt))}${report.seoTechnical.pageSpeedMeta.lighthouseVersion ? ` · Lighthouse ${report.seoTechnical.pageSpeedMeta.lighthouseVersion}` : ""}`
-                  : `Latest verified PageSpeed snapshot; live refresh is temporarily unavailable. ${staticUpdateNote}`}
+                  : "Live PageSpeed is temporarily unavailable; the older score is hidden."}
               </p>
-              <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {report.seoTechnical.pageSpeed.length ? <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {report.seoTechnical.pageSpeed.map((metric) => (
                   <div key={metric.metric} className="rounded-2xl border border-[#DDB765]/60 bg-[#FFF3DF] px-4 py-3 shadow shadow-[#1C5A50]/10">
                     <p className="text-xs font-bold uppercase tracking-[0.15em] text-[#9A622A]">{metric.metric}</p>
@@ -1073,9 +1096,9 @@ export default function AdminAnalyticsPanel({
                     <p className="mt-2 text-xs leading-5 text-stone-600">{metric.context}</p>
                   </div>
                 ))}
-              </div>
+              </div> : null}
 
-              <SubHeading eyebrow="Technical SEO" title="Structured data" />
+              {report.seoTechnical.structuredData.length ? <><SubHeading eyebrow="Technical SEO" title="Structured data" />
               <DataTable<(typeof report.seoTechnical.structuredData)[number]>
                 keyFn={(row) => row.area}
                 rows={report.seoTechnical.structuredData}
@@ -1086,9 +1109,9 @@ export default function AdminAnalyticsPanel({
                   { header: "Finding", render: (row) => row.finding },
                   { header: "Action", render: (row) => row.action },
                 ]}
-              />
+              /></> : null}
 
-              <SubHeading eyebrow="Technical SEO" title="Authority" />
+              {report.seoTechnical.authority.length ? <><SubHeading eyebrow="Technical SEO" title="Authority" />
               <DataTable<(typeof report.seoTechnical.authority)[number]>
                 keyFn={(row) => row.measure}
                 rows={report.seoTechnical.authority}
@@ -1099,12 +1122,12 @@ export default function AdminAnalyticsPanel({
                   { header: "Implication", render: (row) => row.implication },
                   { header: "Action", render: (row) => row.action },
                 ]}
-              />
+              /></> : null}
               <p className="mt-4 text-xs leading-5 text-stone-600">{report.seoTechnical.note}</p>
             </div>
 
             <div className="mt-8 rounded-[1.5rem] bg-[#EED8B2] p-5 text-[#123C39] shadow-inner md:p-7">
-              <SubHeading eyebrow="Social" title="Platform overview" note={staticUpdateNote ?? undefined} />
+              <SubHeading eyebrow="Social" title="Platform overview" note={reportUpdateNote ?? undefined} />
               <DataTable<(typeof report.socialOverview.platforms)[number]>
                 keyFn={(row) => row.platform}
                 rows={report.socialOverview.platforms}
@@ -1140,8 +1163,8 @@ export default function AdminAnalyticsPanel({
               const platform = report.platforms[key];
               return (
                 <div key={key} className="mt-8 rounded-[1.5rem] bg-[#EED8B2] p-5 text-[#123C39] shadow-inner md:p-7">
-                  <SubHeading eyebrow="Social platform" title={`${label} · ${platform.handle}`} note={`${platform.period} · ${staticUpdateNote}`} />
-                  <DataTable<(typeof platform.metrics)[number]>
+                  <SubHeading eyebrow="Social platform" title={`${label} · ${platform.handle}`} note={platform.fetchedAt ? `${platform.period} · Refreshed ${formatDateTime(platform.fetchedAt)}` : platform.period} />
+                  {platform.metrics.length ? <DataTable<(typeof platform.metrics)[number]>
                     keyFn={(row) => row.metric}
                     rows={platform.metrics}
                     columns={[
@@ -1150,7 +1173,7 @@ export default function AdminAnalyticsPanel({
                       { header: "Interpretation", render: (row) => row.interpretation },
                       { header: "Action", render: (row) => row.action },
                     ]}
-                  />
+                  /> : <p className="mt-4 rounded-2xl bg-[#FFF3DF] p-4 text-sm leading-6 text-stone-700">Historical statistics are hidden until this platform returns a current API result.</p>}
 
                   {platform.topContent.length ? (
                     <>
@@ -1191,15 +1214,15 @@ export default function AdminAnalyticsPanel({
             })}
 
             <div className="mt-8 rounded-[1.5rem] bg-[#EED8B2] p-5 text-[#123C39] shadow-inner md:p-7">
-              <SubHeading eyebrow="Measurement" title="Link clicks" note={staticUpdateNote ?? undefined} />
+              <SubHeading eyebrow="Measurement" title="Link clicks" note={reportUpdateNote ?? undefined} />
               <DataTable<(typeof report.measurementActions.linkClicks)[number]>
                 keyFn={(row) => row.linkKey}
                 rows={report.measurementActions.linkClicks}
                 columns={[
                   { header: "Link key", render: (row) => row.linkKey },
                   { header: "Clicks", render: (row) => formatNumber(row.clicks) },
-                  { header: "First click", render: (row) => row.firstClick },
-                  { header: "Last click", render: (row) => row.lastClick },
+                  { header: "First click", render: (row) => formatDateTime(row.firstClick) },
+                  { header: "Last click", render: (row) => formatDateTime(row.lastClick) },
                   { header: "Status", render: (row) => row.status },
                   { header: "Interpretation", render: (row) => row.interpretation },
                 ]}
@@ -1220,22 +1243,26 @@ export default function AdminAnalyticsPanel({
                 ]}
               />
 
-              <SubHeading eyebrow="Measurement" title="90-day delivery plan" />
-              <DataTable<(typeof report.measurementActions.deliveryPlan)[number]>
-                keyFn={(row) => `${row.priority}-${row.workstream}`}
-                rows={report.measurementActions.deliveryPlan}
-                columns={[
-                  { header: "Priority", render: (row) => row.priority },
-                  { header: "Workstream", render: (row) => row.workstream },
-                  { header: "Action", render: (row) => row.action },
-                  { header: "Baseline", render: (row) => row.baseline },
-                  { header: "30-day goal", render: (row) => row.goal30d },
-                  { header: "90-day goal", render: (row) => row.goal90d },
-                  { header: "Owner", render: (row) => row.owner },
-                  { header: "Timing", render: (row) => row.timing },
-                  { header: "Status", render: (row) => row.status },
-                ]}
-              />
+              {report.measurementActions.deliveryPlan.length ? (
+                <>
+                  <SubHeading eyebrow="Measurement" title="90-day delivery plan" />
+                  <DataTable<(typeof report.measurementActions.deliveryPlan)[number]>
+                    keyFn={(row) => `${row.priority}-${row.workstream}`}
+                    rows={report.measurementActions.deliveryPlan}
+                    columns={[
+                      { header: "Priority", render: (row) => row.priority },
+                      { header: "Workstream", render: (row) => row.workstream },
+                      { header: "Action", render: (row) => row.action },
+                      { header: "Baseline", render: (row) => row.baseline },
+                      { header: "30-day goal", render: (row) => row.goal30d },
+                      { header: "90-day goal", render: (row) => row.goal90d },
+                      { header: "Owner", render: (row) => row.owner },
+                      { header: "Timing", render: (row) => row.timing },
+                      { header: "Status", render: (row) => row.status },
+                    ]}
+                  />
+                </>
+              ) : null}
               <p className="mt-4 text-xs leading-5 text-stone-600">{report.measurementActions.note}</p>
             </div>
           </section>

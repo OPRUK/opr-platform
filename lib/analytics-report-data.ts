@@ -279,6 +279,7 @@ export const analyticsReport: AnalyticsReport = {
     instagram: {
       handle: "@opr_uk",
       period: "Native professional dashboard · Last 30 days to 21 Aug 2026 · 27 posts",
+      fetchedAt: null,
       metrics: [
         { metric: "Views", value: "4,838", interpretation: "Total content views.", action: "Track weekly trend." },
         { metric: "Viewers", value: "2,173", interpretation: "Accounts that viewed content.", action: "Use as reach proxy." },
@@ -303,6 +304,7 @@ export const analyticsReport: AnalyticsReport = {
     facebook: {
       handle: "Other People's Recipes",
       period: "Meta Business Suite · 24 Jul–20 Aug 2026",
+      fetchedAt: null,
       metrics: [
         { metric: "Views", value: "6,600", interpretation: "Content was viewed approximately 6.6K times.", action: "Maintain consistent Reel/post cadence." },
         { metric: "Viewers", value: "2,428", interpretation: "Unique viewer metric shown by Meta.", action: "Use for reach trend." },
@@ -325,6 +327,7 @@ export const analyticsReport: AnalyticsReport = {
     pinterest: {
       handle: "Other Peoples Recipes",
       period: "Pinterest Analytics · 26 Jul–25 Aug 2026 · 37 Pins in the OPR Family Recipes board",
+      fetchedAt: null,
       metrics: [
         { metric: "Impressions", value: "428", interpretation: "Pins shown on screen.", action: "Increase keyworded pin volume." },
         { metric: "Engagements", value: "24", interpretation: "Clicks and saves combined.", action: "Optimise titles and creative." },
@@ -347,6 +350,7 @@ export const analyticsReport: AnalyticsReport = {
     youtube: {
       handle: "OPR",
       period: "YouTube Studio · 28 days to 24 Aug 2026 · 10 current subscribers",
+      fetchedAt: null,
       metrics: [
         { metric: "Views", value: "232", interpretation: "Total channel views in the selected period.", action: "Keep formats distinct in reporting." },
         { metric: "Watch time", value: "0.4 hours", interpretation: "Total estimated watch time.", action: "Grow with stronger packaging and retention." },
@@ -377,6 +381,7 @@ export const analyticsReport: AnalyticsReport = {
     tiktok: {
       handle: "@opr_uk",
       period: "TikTok Studio · Last 28 days to 21 Aug 2026",
+      fetchedAt: null,
       metrics: [
         { metric: "Video views", value: "5,300", interpretation: "Strong native exposure across OPR short-form content.", action: "Convert discovery into profile/site action." },
         { metric: "Likes", value: "39", interpretation: "Primary visible engagement.", action: "Test stronger emotional/comedic payoffs." },

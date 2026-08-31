@@ -31,8 +31,8 @@ export type WebsiteTrafficReport = {
   period: string;
   core: Array<{
     metric: string;
-    last30Days: number;
-    last7Days: number;
+    last30Days: number | null;
+    last7Days: number | null;
     change7d: number | null;
   }>;
   topPages: Array<{
@@ -114,7 +114,7 @@ export type SocialPlatformSummary = {
   period: string;
   views: number;
   viewers: number | string | null;
-  interactions: number | string;
+  interactions: number | string | null;
   followers: number | string | null;
   profileVisits: number | string | null;
   outboundClicks: number | string | null;
@@ -160,6 +160,7 @@ export type PlatformDiscoverySourceRow = {
 export type PlatformReport = {
   handle: string;
   period: string;
+  fetchedAt: string | null;
   metrics: PlatformMetricRow[];
   topContent: PlatformTopContentRow[];
   discoverySources: PlatformDiscoverySourceRow[];

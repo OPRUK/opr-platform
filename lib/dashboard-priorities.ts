@@ -66,7 +66,7 @@ export function buildDashboardPriorities(input: PriorityInputs): DashboardPriori
     }
 
     const manualPlatforms = input.snapshot.social
-      .filter((platform) => !platform.fetchedAt)
+      .filter((platform) => !platform.fetchedAt || ageInHours(platform.fetchedAt, input.now) > 48)
       .map((platform) => platform.platform);
     if (manualPlatforms.length) {
       add({
@@ -74,7 +74,7 @@ export function buildDashboardPriorities(input: PriorityInputs): DashboardPriori
         priority: "P2",
         area: "Measurement",
         title: "Close remaining social-data gaps",
-        evidence: `${manualPlatforms.join(", ")} ${manualPlatforms.length === 1 ? "still uses" : "still use"} a manual snapshot rather than a current API result.`,
+        evidence: `${manualPlatforms.join(", ")} ${manualPlatforms.length === 1 ? "is" : "are"} missing a current API result or last refreshed more than 48 hours ago.`,
         action: "Restore or obtain API access where practical; until then, date every manual update and treat cross-channel comparisons as directional.",
         source: "live data",
       });
