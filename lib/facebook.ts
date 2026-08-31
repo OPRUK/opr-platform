@@ -1,6 +1,7 @@
 import "server-only";
 
 const GRAPH_API_VERSION = "v21.0";
+const CACHE_MS = 15 * 60 * 1000;
 const REPORT_WINDOW_DAYS = 28;
 
 export type FacebookSummary = {
@@ -13,11 +14,17 @@ export type FacebookSummary = {
   films: Array<{ id: string; title: string; views: number }>;
 };
 
+let cached: { data: FacebookSummary; expiresAt: number } | null = null;
+
 function isoDate(date: Date) {
   return date.toISOString().slice(0, 10);
 }
 
-export async function getFacebookSummary(): Promise<FacebookSummary | null> {
+export async function getFacebookSummary(
+  { forceRefresh = false }: { forceRefresh?: boolean } = {},
+): Promise<FacebookSummary | null> {
+  if (!forceRefresh && cached && cached.expiresAt > Date.now()) return cached.data;
+
   const pageId = process.env.FACEBOOK_PAGE_ID;
   const accessToken = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
   if (!pageId || !accessToken) return null;
@@ -69,7 +76,7 @@ export async function getFacebookSummary(): Promise<FacebookSummary | null> {
       );
     }
 
-    return {
+    const summary: FacebookSummary = {
       period: `${REPORT_WINDOW_DAYS} days to ${isoDate(endDate)}`,
       views28d: totals.get("page_media_view") ?? 0,
       interactions28d: totals.get("page_post_engagements") ?? 0,
@@ -82,6 +89,8 @@ export async function getFacebookSummary(): Promise<FacebookSummary | null> {
         views: Number(video.views ?? 0),
       })),
     };
+    cached = { data: summary, expiresAt: Date.now() + CACHE_MS };
+    return summary;
   } catch (error) {
     console.error("OPR Facebook summary could not be loaded", error);
     return null;

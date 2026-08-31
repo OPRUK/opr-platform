@@ -5,16 +5,16 @@ import { countryName } from "@/lib/country-names";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { attributionSources } from "./attribution";
 import { getSearchConsoleSummary, type SearchConsoleSummary } from "./google-search-console";
-import { getYouTubeSummary } from "./youtube";
-import { getInstagramSummary } from "./instagram";
-import { getTikTokSummary } from "./tiktok";
-import { getPinterestFilmViews, getPinterestSummary } from "./pinterest";
-import { getLinkedInSummary } from "./linkedin";
-import { getFacebookSummary } from "./facebook";
-import { getVercelAnalyticsSummary } from "./vercel-analytics";
+import { getYouTubeSummary, type YouTubeSummary } from "./youtube";
+import { getInstagramSummary, type InstagramSummary } from "./instagram";
+import { getTikTokSummary, type TikTokSummary } from "./tiktok";
+import { getPinterestFilmViews, getPinterestSummary, type PinterestFilmViews, type PinterestSummary } from "./pinterest";
+import { getLinkedInSummary, type LinkedInSummary } from "./linkedin";
+import { getFacebookSummary, type FacebookSummary } from "./facebook";
+import { getVercelAnalyticsSummary, type VercelAnalyticsSummary } from "./vercel-analytics";
 import { getPageSpeedSummary, type PageSpeedSummary } from "./pagespeed";
 import { analyticsReport } from "./analytics-report-data";
-import { loadLatestDailySnapshot } from "./analytics-daily-snapshots";
+import { loadLatestDailySnapshot, saveDailySnapshot } from "./analytics-daily-snapshots";
 import { films, filmUploadDate } from "./films";
 import { featuredRecipes } from "./recipes";
 import { buildDashboardPriorities } from "./dashboard-priorities";
@@ -40,7 +40,7 @@ import type {
   AnalyticsSnapshot,
   AnalyticsSourceSummary,
 } from "./admin-analytics-types";
-import type { AnalyticsReport } from "./analytics-report-types";
+import type { AnalyticsReport, PlatformReport, PlatformMetricRow, PlatformTopContentRow } from "./analytics-report-types";
 
 const conversionEvents = new Set([
   "join_table_success",
@@ -99,127 +99,13 @@ async function getSnapshot(client: SupabaseClient): Promise<AnalyticsSnapshot | 
   }
 }
 
-async function withLiveSearchConsole(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
-  if (!snapshot) return snapshot;
-
-  const live = await getSearchConsoleSummary();
-  if (!live) return snapshot;
-
-  return {
-    ...snapshot,
-    google: {
-      ...snapshot.google,
-      period: live.period,
-      clicks: live.clicks,
-      impressions: live.impressions,
-      ctr: live.ctr,
-      averagePosition: live.averagePosition,
-      fetchedAt: live.fetchedAt,
-    },
-  };
-}
-
-async function withLiveYouTube(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
-  if (!snapshot) return snapshot;
-
-  const live = await getYouTubeSummary();
-  if (!live) return snapshot;
-
-  return {
-    ...snapshot,
-    social: snapshot.social.map((platform) =>
-      platform.platform.toLowerCase() === "youtube"
-        ? {
-            ...platform,
-            period: live.period,
-            exposureLabel: "Views",
-            exposures: live.views28d,
-            followers: live.subscribers,
-            fetchedAt: live.fetchedAt,
-          }
-        : platform,
-    ),
-  };
-}
-
-async function withLiveInstagram(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
-  if (!snapshot) return snapshot;
-
-  const live = await getInstagramSummary();
-  if (!live) return snapshot;
-
-  return {
-    ...snapshot,
-    social: snapshot.social.map((platform) =>
-      platform.platform.toLowerCase() === "instagram"
-        ? {
-            ...platform,
-            period: live.period,
-            exposureLabel: "Views",
-            exposures: live.views28d,
-            followers: live.followers,
-            profileVisits: live.profileViews28d,
-            fetchedAt: live.fetchedAt,
-          }
-        : platform,
-    ),
-  };
-}
-
-async function withLiveTikTok(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
-  if (!snapshot) return snapshot;
-
-  const live = await getTikTokSummary();
-  if (!live) return snapshot;
-
-  return {
-    ...snapshot,
-    social: snapshot.social.map((platform) =>
-      platform.platform.toLowerCase() === "tiktok"
-        ? {
-            ...platform,
-            period: live.period,
-            exposureLabel: "Views",
-            exposures: live.views28d,
-            followers: live.followers,
-            fetchedAt: live.fetchedAt,
-          }
-        : platform,
-    ),
-  };
-}
-
-async function withLivePinterest(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
-  if (!snapshot) return snapshot;
-
-  const live = await getPinterestSummary();
-  if (!live) return snapshot;
-
-  return {
-    ...snapshot,
-    social: snapshot.social.map((platform) =>
-      platform.platform.toLowerCase() === "pinterest"
-        ? {
-            ...platform,
-            period: live.period,
-            exposureLabel: "Impressions",
-            exposures: live.impressions28d,
-            followers: live.followers,
-            outboundClicks: live.outboundClicks28d,
-            fetchedAt: live.fetchedAt,
-          }
-        : platform,
-    ),
-  };
-}
-
 function withLatestPinterestSnapshot(snapshot: AnalyticsSnapshot | null): AnalyticsSnapshot | null {
   if (!snapshot) return snapshot;
 
   return {
     ...snapshot,
     social: snapshot.social.map((platform) =>
-      platform.platform.toLowerCase() === "pinterest"
+      platform.platform.toLowerCase() === "pinterest" && !platform.fetchedAt
         ? {
             ...platform,
             period: "1 Aug–25 Aug 2026",
@@ -236,19 +122,13 @@ function withLatestPinterestSnapshot(snapshot: AnalyticsSnapshot | null): Analyt
   };
 }
 
-async function withCurrentPinterest(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
-  // Pinterest returns null until the app's trial access is approved. Once the
-  // credentials work, the live figures take over automatically.
-  return withLivePinterest(withLatestPinterestSnapshot(snapshot));
-}
-
 function withLatestFacebookSnapshot(snapshot: AnalyticsSnapshot | null): AnalyticsSnapshot | null {
   if (!snapshot) return snapshot;
 
   return {
     ...snapshot,
     social: snapshot.social.map((platform) =>
-      platform.platform.toLowerCase() === "facebook"
+      platform.platform.toLowerCase() === "facebook" && !platform.fetchedAt
         ? {
             ...platform,
             period: "24 Jul–20 Aug 2026",
@@ -265,37 +145,13 @@ function withLatestFacebookSnapshot(snapshot: AnalyticsSnapshot | null): Analyti
   };
 }
 
-async function withLiveFacebook(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
-  if (!snapshot) return snapshot;
-  const live = await getFacebookSummary();
-  if (!live) return snapshot;
-
-  return {
-    ...snapshot,
-    social: snapshot.social.map((platform) =>
-      platform.platform.toLowerCase() === "facebook"
-        ? {
-            ...platform,
-            period: live.period,
-            exposureLabel: "Views",
-            exposures: live.views28d,
-            interactions: live.interactions28d,
-            followers: live.followers,
-            profileVisits: live.profileVisits28d,
-            fetchedAt: live.fetchedAt,
-          }
-        : platform,
-    ),
-  };
-}
-
 function withLatestYouTubeSnapshot(snapshot: AnalyticsSnapshot | null): AnalyticsSnapshot | null {
   if (!snapshot) return snapshot;
 
   return {
     ...snapshot,
     social: snapshot.social.map((platform) =>
-      platform.platform.toLowerCase() === "youtube"
+      platform.platform.toLowerCase() === "youtube" && !platform.fetchedAt
         ? {
             ...platform,
             period: "24 Jul–20 Aug 2026",
@@ -318,7 +174,7 @@ function withLatestInstagramSnapshot(snapshot: AnalyticsSnapshot | null): Analyt
   return {
     ...snapshot,
     social: snapshot.social.map((platform) =>
-      platform.platform.toLowerCase() === "instagram"
+      platform.platform.toLowerCase() === "instagram" && !platform.fetchedAt
         ? {
             ...platform,
             period: "Last 30 days to 21 Aug 2026",
@@ -341,7 +197,7 @@ function withLatestTikTokSnapshot(snapshot: AnalyticsSnapshot | null): Analytics
   return {
     ...snapshot,
     social: snapshot.social.map((platform) =>
-      platform.platform.toLowerCase() === "tiktok"
+      platform.platform.toLowerCase() === "tiktok" && !platform.fetchedAt
         ? {
             ...platform,
             period: "Last 28 days to 21 Aug 2026",
@@ -358,109 +214,408 @@ function withLatestTikTokSnapshot(snapshot: AnalyticsSnapshot | null): Analytics
   };
 }
 
-async function withLiveLinkedIn(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
+type LiveSources = {
+  website: VercelAnalyticsSummary | null;
+  searchConsole: SearchConsoleSummary | null;
+  facebook: FacebookSummary | null;
+  instagram: InstagramSummary | null;
+  tiktok: TikTokSummary | null;
+  youtube: YouTubeSummary | null;
+  pinterest: PinterestSummary | null;
+  pinterestFilms: PinterestFilmViews | null;
+  linkedIn: LinkedInSummary | null;
+  pageSpeed: PageSpeedSummary | null;
+};
+
+async function loadLiveSources(forceRefresh: boolean): Promise<LiveSources> {
+  const options = { forceRefresh };
+  const [website, searchConsole, facebook, instagram, tiktok, youtube, pinterest, pinterestFilms, linkedIn, pageSpeed] = await Promise.all([
+    getVercelAnalyticsSummary(options),
+    getSearchConsoleSummary(options),
+    getFacebookSummary(options),
+    getInstagramSummary(options),
+    getTikTokSummary(options),
+    getYouTubeSummary(options),
+    getPinterestSummary(options),
+    getPinterestFilmViews(options),
+    getLinkedInSummary(options),
+    getPageSpeedSummary(options),
+  ]);
+  return { website, searchConsole, facebook, instagram, tiktok, youtube, pinterest, pinterestFilms, linkedIn, pageSpeed };
+}
+
+function applyLiveSources(snapshot: AnalyticsSnapshot | null, live: LiveSources): AnalyticsSnapshot | null {
   if (!snapshot) return snapshot;
 
-  const live = await getLinkedInSummary();
-  if (!live) return snapshot;
+  let current = withLatestTikTokSnapshot(
+    withLatestInstagramSnapshot(
+      withLatestYouTubeSnapshot(
+        withLatestFacebookSnapshot(withLatestPinterestSnapshot(snapshot)),
+      ),
+    ),
+  );
+  if (!current) return current;
 
-  const hasLinkedIn = snapshot.social.some((platform) => platform.platform.toLowerCase() === "linkedin");
+  if (live.website) {
+    current = {
+      ...current,
+      website: {
+        ...current.website,
+        period: live.website.period,
+        visitors: live.website.visitors,
+        pageViews: live.website.pageviews,
+        pagesPerVisitor: live.website.visitors > 0 ? live.website.pageviews / live.website.visitors : 0,
+        fetchedAt: live.website.fetchedAt,
+      },
+    };
+  }
 
-  const linkedInRow = {
-    platform: "LinkedIn",
-    period: live.period,
-    exposureLabel: "Impressions",
-    exposures: live.impressions28d,
-    interactions: null,
-    followers: live.followers,
-    profileVisits: null,
-    outboundClicks: live.clicks28d,
-    websiteVisitors: null,
-    fetchedAt: live.fetchedAt,
-  };
+  if (live.searchConsole) {
+    current = {
+      ...current,
+      google: {
+        ...current.google,
+        period: live.searchConsole.period,
+        clicks: live.searchConsole.clicks,
+        impressions: live.searchConsole.impressions,
+        ctr: live.searchConsole.ctr,
+        averagePosition: live.searchConsole.averagePosition,
+        provisionalFrom: live.searchConsole.provisionalFrom,
+        fetchedAt: live.searchConsole.fetchedAt,
+      },
+    };
+  }
 
+  const socialRows = current.social.map((platform) => {
+    const key = platform.platform.toLowerCase();
+    if (key === "facebook" && live.facebook) return {
+      ...platform,
+      period: live.facebook.period,
+      exposureLabel: "Views",
+      exposures: live.facebook.views28d,
+      interactions: live.facebook.interactions28d,
+      followers: live.facebook.followers,
+      profileVisits: live.facebook.profileVisits28d,
+      outboundClicks: null,
+      fetchedAt: live.facebook.fetchedAt,
+    };
+    if (key === "instagram" && live.instagram) return {
+      ...platform,
+      period: live.instagram.period,
+      exposureLabel: "Views",
+      exposures: live.instagram.views28d,
+      interactions: null,
+      followers: live.instagram.followers,
+      profileVisits: live.instagram.profileViews28d,
+      outboundClicks: null,
+      fetchedAt: live.instagram.fetchedAt,
+    };
+    if (key === "tiktok" && live.tiktok) return {
+      ...platform,
+      period: live.tiktok.period,
+      exposureLabel: "Views",
+      exposures: live.tiktok.views28d,
+      interactions: null,
+      followers: live.tiktok.followers,
+      profileVisits: null,
+      outboundClicks: null,
+      fetchedAt: live.tiktok.fetchedAt,
+    };
+    if (key === "youtube" && live.youtube) return {
+      ...platform,
+      period: live.youtube.period,
+      exposureLabel: "Views",
+      exposures: live.youtube.views28d,
+      interactions: null,
+      followers: live.youtube.subscribers,
+      profileVisits: null,
+      outboundClicks: null,
+      fetchedAt: live.youtube.fetchedAt,
+    };
+    if (key === "pinterest" && live.pinterest) return {
+      ...platform,
+      period: live.pinterest.period,
+      exposureLabel: "Impressions",
+      exposures: live.pinterest.impressions28d,
+      interactions: live.pinterest.saves28d + live.pinterest.outboundClicks28d,
+      followers: live.pinterest.followers,
+      profileVisits: null,
+      outboundClicks: live.pinterest.outboundClicks28d,
+      fetchedAt: live.pinterest.fetchedAt,
+    };
+    if (key === "linkedin" && live.linkedIn) return {
+      ...platform,
+      period: live.linkedIn.period,
+      exposureLabel: "Impressions",
+      exposures: live.linkedIn.impressions28d,
+      interactions: null,
+      followers: live.linkedIn.followers,
+      profileVisits: live.linkedIn.uniqueImpressions28d,
+      outboundClicks: live.linkedIn.clicks28d,
+      fetchedAt: live.linkedIn.fetchedAt,
+    };
+    return platform;
+  });
+
+  if (live.linkedIn && !socialRows.some((platform) => platform.platform.toLowerCase() === "linkedin")) {
+    socialRows.push({
+      platform: "LinkedIn",
+      period: live.linkedIn.period,
+      exposureLabel: "Impressions",
+      exposures: live.linkedIn.impressions28d,
+      interactions: null,
+      followers: live.linkedIn.followers,
+      profileVisits: live.linkedIn.uniqueImpressions28d,
+      outboundClicks: live.linkedIn.clicks28d,
+      websiteVisitors: null,
+      fetchedAt: live.linkedIn.fetchedAt,
+    });
+  }
+
+  return { ...current, social: socialRows, pageSpeed: live.pageSpeed ?? current.pageSpeed };
+}
+
+function changeRate(current: number, previous: number): number | null {
+  if (previous === 0) return current === 0 ? 0 : null;
+  return (current - previous) / previous;
+}
+
+function isFreshSource(fetchedAt: string | null, now: number): boolean {
+  if (!fetchedAt) return false;
+  const fetchedAtMs = Date.parse(fetchedAt);
+  return Number.isFinite(fetchedAtMs) && now - fetchedAtMs <= 48 * 60 * 60 * 1000;
+}
+
+function currentMetric(metric: string, value: number | string, interpretation: string, action: string): PlatformMetricRow {
+  return { metric, value: typeof value === "number" ? value.toLocaleString("en-GB") : value, interpretation, action };
+}
+
+function currentTopContent(
+  rows: ReadonlyArray<{ title: string; views: number }>,
+  label: string,
+): PlatformTopContentRow[] {
+  return [...rows]
+    .sort((a, b) => b.views - a.views)
+    .slice(0, 5)
+    .map((row, index) => ({
+      rank: index + 1,
+      title: row.title,
+      value: `${row.views.toLocaleString("en-GB")} ${label}`,
+      extra: "",
+      note: "Latest value returned by the platform API.",
+    }));
+}
+
+function unavailablePlatform(report: PlatformReport): PlatformReport {
   return {
-    ...snapshot,
-    social: hasLinkedIn
-      ? snapshot.social.map((platform) =>
-          platform.platform.toLowerCase() === "linkedin" ? { ...platform, ...linkedInRow } : platform,
-        )
-      : [...snapshot.social, linkedInRow],
+    ...report,
+    period: "Live API unavailable",
+    fetchedAt: null,
+    metrics: [],
+    topContent: [],
+    discoverySources: [],
+    note: "Historical figures are hidden so they are not mistaken for current statistics. Reconnect this platform to restore live reporting.",
   };
 }
 
-async function withLiveWebsiteSnapshot(snapshot: AnalyticsSnapshot | null): Promise<AnalyticsSnapshot | null> {
-  if (!snapshot) return snapshot;
+function buildPlatformReports(report: AnalyticsReport["platforms"], live: LiveSources): AnalyticsReport["platforms"] {
+  const instagram = live.instagram ? {
+    ...report.instagram,
+    period: live.instagram.period,
+    fetchedAt: live.instagram.fetchedAt,
+    metrics: [
+      currentMetric("Views", live.instagram.views28d, "Views in the current reporting window.", "Track the rolling trend."),
+      currentMetric("Profile visits", live.instagram.profileViews28d, "Profile visits in the current reporting window.", "Keep the bio action clear."),
+      currentMetric("Followers", live.instagram.followers, "Current follower count.", "Review net growth monthly."),
+      currentMetric("Published media", live.instagram.mediaCount, "Current lifetime media count.", "Use alongside views, not as a performance rate."),
+    ],
+    topContent: currentTopContent(live.instagram.films, "views"),
+    discoverySources: [],
+    note: "Only metrics returned by the current Instagram API connection are shown; older manual figures are excluded.",
+  } : unavailablePlatform(report.instagram);
 
-  const live = await getVercelAnalyticsSummary();
-  if (!live) return snapshot;
+  const facebook = live.facebook ? {
+    ...report.facebook,
+    period: live.facebook.period,
+    fetchedAt: live.facebook.fetchedAt,
+    metrics: [
+      currentMetric("Views", live.facebook.views28d, "Views in the current reporting window.", "Track the rolling trend."),
+      currentMetric("Content interactions", live.facebook.interactions28d, "Post engagements in the current reporting window.", "Review interactions relative to views."),
+      currentMetric("Profile visits", live.facebook.profileVisits28d, "Page views in the current reporting window.", "Keep the page action clear."),
+      currentMetric("Followers", live.facebook.followers, "Current follower count.", "Review net growth monthly."),
+    ],
+    topContent: currentTopContent(live.facebook.films, "views"),
+    discoverySources: [],
+    note: "Only metrics returned by the current Facebook API connection are shown; older manual figures are excluded.",
+  } : unavailablePlatform(report.facebook);
 
-  return {
-    ...snapshot,
-    website: {
-      ...snapshot.website,
-      period: live.period,
-      visitors: live.visitors,
-      pageViews: live.pageviews,
-      pagesPerVisitor: live.visitors > 0 ? live.pageviews / live.visitors : 0,
-      fetchedAt: live.fetchedAt,
-    },
-  };
+  const pinterest = live.pinterest ? {
+    ...report.pinterest,
+    period: live.pinterest.period,
+    fetchedAt: live.pinterest.fetchedAt,
+    metrics: [
+      currentMetric("Impressions", live.pinterest.impressions28d, "Impressions in the current reporting window.", "Track search-led reach."),
+      currentMetric("Saves", live.pinterest.saves28d, "Saves in the current reporting window.", "Create useful recipe cards people want to keep."),
+      currentMetric("Outbound clicks", live.pinterest.outboundClicks28d, "Clicks to OPR in the current reporting window.", "Link each Pin to its canonical recipe."),
+      currentMetric("Followers", live.pinterest.followers, "Current follower count.", "Review net growth monthly."),
+    ],
+    topContent: [],
+    discoverySources: [],
+    note: "Current account metrics are shown. Per-Pin data uses a different window, so it remains in the film-performance table rather than being mixed here.",
+  } : unavailablePlatform(report.pinterest);
+
+  const youtube = live.youtube ? {
+    ...report.youtube,
+    period: live.youtube.period,
+    fetchedAt: live.youtube.fetchedAt,
+    metrics: [
+      currentMetric("Views", live.youtube.views28d, "Views in the current reporting window.", "Track the rolling trend."),
+      currentMetric("Watch time", `${(live.youtube.watchTimeMinutes28d / 60).toFixed(1)} hours`, "Watch time in the current reporting window.", "Review it alongside views."),
+      currentMetric("Subscribers", live.youtube.subscribers, "Current subscriber count.", "Review net growth monthly."),
+      currentMetric("Lifetime views", live.youtube.lifetimeViews, "Current channel lifetime views.", "Use as context, not a rolling performance metric."),
+    ],
+    topContent: currentTopContent(live.youtube.films, "lifetime views"),
+    discoverySources: [],
+    note: "Only metrics returned by the current YouTube API connection are shown; older manual figures are excluded.",
+  } : unavailablePlatform(report.youtube);
+
+  const tiktok = live.tiktok ? {
+    ...report.tiktok,
+    period: live.tiktok.period,
+    fetchedAt: live.tiktok.fetchedAt,
+    metrics: [
+      currentMetric("Video views", live.tiktok.views28d, "Views on videos published within the current reporting window.", "Track the rolling trend."),
+      currentMetric("Followers", live.tiktok.followers, "Current follower count.", "Review follower growth per 1,000 views."),
+      currentMetric("Lifetime likes", live.tiktok.likesTotal, "Current lifetime likes total.", "Use as context, not a rolling interaction rate."),
+      currentMetric("Published videos", live.tiktok.videoCount, "Current lifetime video count.", "Use alongside current-window views."),
+    ],
+    topContent: currentTopContent(live.tiktok.films, "views"),
+    discoverySources: [],
+    note: "Only metrics returned by the current TikTok API connection are shown; older manual figures are excluded.",
+  } : unavailablePlatform(report.tiktok);
+
+  return { instagram, facebook, pinterest, youtube, tiktok };
 }
+
+type LiveLinkClick = { link_key: string; created_at: string };
 
 async function withLiveReport(
   report: AnalyticsReport,
   snapshot: AnalyticsSnapshot | null,
-  pageSpeed: PageSpeedSummary | null,
-  searchConsole: SearchConsoleSummary | null,
+  liveSources: LiveSources,
+  currentCounts: { ctaClicks: number; linkClicks: number; conversions: number },
+  linkClicks: LiveLinkClick[],
 ): Promise<AnalyticsReport> {
-  const live = await getVercelAnalyticsSummary();
+  const live = liveSources.website;
+  const now = Date.now();
+  const savedPageSpeed = snapshot?.pageSpeed ?? null;
+  const pageSpeed = liveSources.pageSpeed ?? (savedPageSpeed && isFreshSource(savedPageSpeed.fetchedAt, now) ? savedPageSpeed : null);
+  const searchConsole = liveSources.searchConsole;
   const pagesPerVisitor = live && live.visitors > 0 ? live.pageviews / live.visitors : snapshot?.website.pagesPerVisitor ?? 0;
-  const socialExposures = snapshot?.social.reduce((total, platform) => total + platform.exposures, 0) ?? null;
+  const currentSocial = snapshot?.social.filter((platform) => isFreshSource(platform.fetchedAt, now)) ?? [];
+  const socialExposures = currentSocial.reduce((total, platform) => total + platform.exposures, 0);
+  const facebookReferrals = live?.topReferrers
+    .filter((row) => row.label.toLowerCase().includes("facebook"))
+    .reduce((total, row) => total + row.visitors, 0) ?? 0;
+  const generatedAt = new Date().toISOString();
+  const preparedDate = generatedAt.slice(0, 10);
+  const currentKpis: AnalyticsReport["executiveSummary"]["kpis"] = [];
+  if (live) {
+    currentKpis.push(
+      { label: "Website visitors · 28d", value: live.visitors.toLocaleString("en-GB") },
+      { label: "Page views · 28d", value: live.pageviews.toLocaleString("en-GB") },
+    );
+  }
+  if (searchConsole) {
+    currentKpis.push(
+      { label: "Google clicks · 28d", value: searchConsole.clicks.toLocaleString("en-GB") },
+      { label: "Google CTR · 28d", value: `${(searchConsole.ctr * 100).toFixed(1)}%` },
+    );
+  }
+  if (currentSocial.length) currentKpis.push({ label: "Connected social exposures*", value: socialExposures.toLocaleString("en-GB") });
+  if (facebookReferrals > 0) currentKpis.push({ label: "Facebook referrals · 28d", value: facebookReferrals.toLocaleString("en-GB") });
+  currentKpis.push(
+    { label: "Site actions · 90d", value: currentCounts.ctaClicks.toLocaleString("en-GB") },
+    { label: "Conversions · 90d", value: currentCounts.conversions.toLocaleString("en-GB") },
+  );
+  if (pageSpeed) {
+    currentKpis.push(
+      { label: "Mobile performance", value: String(pageSpeed.metrics.find((metric) => metric.metric === "Performance")?.value ?? "—") },
+      { label: "Accessibility score", value: String(pageSpeed.metrics.find((metric) => metric.metric === "Accessibility")?.value ?? "—") },
+      { label: "Mobile SEO score", value: String(pageSpeed.metrics.find((metric) => metric.metric === "SEO")?.value ?? "—") },
+    );
+  }
+
+  const numberRead: AnalyticsReport["executiveSummary"]["whatTheNumbersSay"] = [];
+  if (live) numberRead.push({
+    area: "Website",
+    evidence: `${live.visitors.toLocaleString("en-GB")} visitors generated ${live.pageviews.toLocaleString("en-GB")} page views; ${pagesPerVisitor.toFixed(2)} pages per visitor in the current 28-day window.`,
+    meaning: "Current visitors continue to explore beyond a single page.",
+    decision: "Keep one measurable primary action on the busiest landing pages.",
+  });
+  if (searchConsole) numberRead.push({
+    area: "Google Search",
+    evidence: `${searchConsole.clicks.toLocaleString("en-GB")} clicks from ${searchConsole.impressions.toLocaleString("en-GB")} impressions; ${(searchConsole.ctr * 100).toFixed(1)}% CTR; average position ${searchConsole.averagePosition.toFixed(1)}.`,
+    meaning: "The current Search Console window shows how organic visibility is changing.",
+    decision: "Use the live query and page tables below to prioritise recipe-led search work.",
+  });
+  if (currentSocial.length) numberRead.push({
+    area: "Social discovery",
+    evidence: `${socialExposures.toLocaleString("en-GB")} current platform-reported views or impressions across ${currentSocial.length} connected ${currentSocial.length === 1 ? "channel" : "channels"}.`,
+    meaning: "The total is an activity indicator because platform definitions and periods differ.",
+    decision: "Judge each channel on its own trend and source-coded site actions, not a blended reach claim.",
+  });
+  numberRead.push({
+    area: "Measurement",
+    evidence: `${currentCounts.linkClicks.toLocaleString("en-GB")} link-page clicks, ${currentCounts.ctaClicks.toLocaleString("en-GB")} site actions and ${currentCounts.conversions.toLocaleString("en-GB")} conversions were recorded in the current 90-day first-party window.`,
+    meaning: "These privacy-safe events show which journeys produce participation.",
+    decision: "Keep stable source and campaign codes on every active link.",
+  });
+  if (pageSpeed) numberRead.push({
+    area: "Technical performance",
+    evidence: `Latest live mobile Lighthouse scores: performance ${pageSpeed.metrics.find((metric) => metric.metric === "Performance")?.value ?? "—"}, accessibility ${pageSpeed.metrics.find((metric) => metric.metric === "Accessibility")?.value ?? "—"}, SEO ${pageSpeed.metrics.find((metric) => metric.metric === "SEO")?.value ?? "—"}.`,
+    meaning: "This is current lab data for the tested production URL.",
+    decision: "Investigate any score below the agreed threshold and confirm with production field data.",
+  });
+
+  const liveLinkRows = Array.from(linkClicks.reduce((groups, click) => {
+    const existing = groups.get(click.link_key) ?? { count: 0, first: click.created_at, last: click.created_at };
+    existing.count += 1;
+    if (click.created_at < existing.first) existing.first = click.created_at;
+    if (click.created_at > existing.last) existing.last = click.created_at;
+    groups.set(click.link_key, existing);
+    return groups;
+  }, new Map<string, { count: number; first: string; last: string }>()))
+    .map(([linkKey, row]) => ({
+      linkKey,
+      clicks: row.count,
+      firstClick: row.first,
+      lastClick: row.last,
+      status: "Live · last 90 days",
+      interpretation: "Current privacy-safe click count from the OPR links page.",
+    }))
+    .sort((a, b) => b.clicks - a.clicks || a.linkKey.localeCompare(b.linkKey));
 
   return {
     ...report,
+    preparedDate,
+    staticDataUpdatedAt: generatedAt,
     executiveSummary: {
       ...report.executiveSummary,
-      kpis: report.executiveSummary.kpis.map((row) => {
-        if (row.label === "Website visitors · 30d" && snapshot) return { ...row, value: snapshot.website.visitors.toLocaleString("en-GB") };
-        if (row.label === "Page views · 30d" && snapshot) return { ...row, value: snapshot.website.pageViews.toLocaleString("en-GB") };
-        if (row.label === "Google clicks" && snapshot) return { ...row, value: snapshot.google.clicks.toLocaleString("en-GB") };
-        if (row.label === "Google CTR" && snapshot) return { ...row, value: `${(snapshot.google.ctr * 100).toFixed(1)}%` };
-        if (row.label === "Indexed pages" && snapshot) return { ...row, value: snapshot.google.indexedPages.toLocaleString("en-GB") };
-        if (row.label === "Social exposures*" && socialExposures !== null) return { ...row, value: socialExposures.toLocaleString("en-GB") };
-        if (row.label === "Mobile SEO score" && pageSpeed) return { ...row, value: String(pageSpeed.metrics.find((metric) => metric.metric === "SEO")?.value ?? row.value) };
-        if (row.label === "Accessibility score" && pageSpeed) return { ...row, value: String(pageSpeed.metrics.find((metric) => metric.metric === "Accessibility")?.value ?? row.value) };
-        return row;
-      }),
-      whatTheNumbersSay: report.executiveSummary.whatTheNumbersSay.map((row) => {
-        if (row.area === "Website" && snapshot) return {
-          ...row,
-          evidence: `${snapshot.website.visitors.toLocaleString("en-GB")} visitors generated ${snapshot.website.pageViews.toLocaleString("en-GB")} page views; ${pagesPerVisitor.toFixed(2)} pages per visitor.`,
-          meaning: "Current visitors continue to explore beyond a single page.",
-        };
-        if (row.area === "Google Search" && snapshot) return {
-          ...row,
-          evidence: `${snapshot.google.clicks.toLocaleString("en-GB")} clicks from ${snapshot.google.impressions.toLocaleString("en-GB")} impressions; ${(snapshot.google.ctr * 100).toFixed(1)}% CTR; average position ${snapshot.google.averagePosition.toFixed(1)}.`,
-          meaning: "Current Search Console totals show whether visibility is expanding.",
-        };
-        if (row.area === "Technical SEO" && pageSpeed) return {
-          ...row,
-          evidence: `Latest live mobile Lighthouse scores: performance ${pageSpeed.metrics.find((metric) => metric.metric === "Performance")?.value ?? "—"}, accessibility ${pageSpeed.metrics.find((metric) => metric.metric === "Accessibility")?.value ?? "—"}, SEO ${pageSpeed.metrics.find((metric) => metric.metric === "SEO")?.value ?? "—"}.`,
-        };
-        return row;
-      }),
+      preparedDate,
+      kpis: currentKpis,
+      whatTheNumbersSay: numberRead,
+      topPriorities: [],
+      footnote: "*Connected social exposures add platform-reported views or impressions and are not deduplicated people. Native definitions and date windows differ.",
     },
     website: {
       ...report.website,
-      period: live?.period ?? snapshot?.website.period ?? report.website.period,
-      core: report.website.core.map((row) => {
-        if (row.metric === "Visitors" && snapshot) return { ...row, last30Days: snapshot.website.visitors };
-        if (row.metric === "Page views" && snapshot) return { ...row, last30Days: snapshot.website.pageViews };
-        if (row.metric === "Pages per visitor") return { ...row, last30Days: Number(pagesPerVisitor.toFixed(2)) };
-        if (row.metric === "Bounce rate" && snapshot) return { ...row, last30Days: snapshot.website.bounceRate };
-        return row;
-      }),
+      period: live?.period ?? "Live Vercel Web Analytics unavailable",
+      core: live ? [
+        { metric: "Visitors", last30Days: live.visitors, last7Days: live.last7Days?.visitors ?? null, change7d: live.last7Days && live.previous7Days ? changeRate(live.last7Days.visitors, live.previous7Days.visitors) : null },
+        { metric: "Page views", last30Days: live.pageviews, last7Days: live.last7Days?.pageviews ?? null, change7d: live.last7Days && live.previous7Days ? changeRate(live.last7Days.pageviews, live.previous7Days.pageviews) : null },
+        { metric: "Pages per visitor", last30Days: Number(pagesPerVisitor.toFixed(2)), last7Days: live.last7Days ? Number(live.last7Days.pagesPerVisitor.toFixed(2)) : null, change7d: live.last7Days && live.previous7Days ? changeRate(live.last7Days.pagesPerVisitor, live.previous7Days.pagesPerVisitor) : null },
+      ] : [],
       topPages: live?.topPages.length
         ? live.topPages.map((row) => {
             const previous = report.website.topPages.find((page) => page.path === row.label);
@@ -471,7 +626,7 @@ async function withLiveReport(
               seoNote: previous?.seoNote ?? "Review its primary action and internal links.",
             };
           })
-        : report.website.topPages,
+        : [],
       topReferrers: live?.topReferrers.length
         ? live.topReferrers.map((row) => {
             const previous = report.website.topReferrers.find((referrer) => referrer.host === row.label);
@@ -483,33 +638,36 @@ async function withLiveReport(
               action: previous?.action ?? "Retain source and campaign coding on shared links.",
             };
           })
-        : report.website.topReferrers,
+        : [],
       audienceCountry: live?.audienceCountry.length
         ? live.audienceCountry.map((row) => ({
             country: countryName(row.label),
             share: row.share,
             visitors: row.visitors,
           }))
-        : report.website.audienceCountry,
+        : [],
       audienceDevice: live?.audienceDevice.length
         ? live.audienceDevice.map((row) => ({ device: row.label, share: row.share }))
-        : report.website.audienceDevice,
+        : [],
       audienceOS: live?.audienceOS.length
         ? live.audienceOS.map((row) => ({ os: row.label, share: row.share, visitors: row.visitors }))
-        : report.website.audienceOS,
-      fetchedAt: live?.fetchedAt ?? snapshot?.website.fetchedAt ?? report.website.fetchedAt,
+        : [],
+      note: live
+        ? "Current Vercel Web Analytics data. Bounce rate is omitted because this API does not provide it; no historical value is mixed into the live table. Seven-day change compares the latest seven days with the preceding seven days."
+        : "Historical website detail is hidden until the live Vercel Analytics source is available.",
+      fetchedAt: live?.fetchedAt ?? null,
     },
-    googleSearch: snapshot ? {
+    googleSearch: searchConsole ? {
       ...report.googleSearch,
-      period: snapshot.google.period,
-      kpis: report.googleSearch.kpis.map((row) => {
-        if (row.metric === "Clicks") return { ...row, value: snapshot.google.clicks };
-        if (row.metric === "Impressions") return { ...row, value: snapshot.google.impressions };
-        if (row.metric === "CTR") return { ...row, value: snapshot.google.ctr };
-        if (row.metric === "Average position") return { ...row, value: snapshot.google.averagePosition };
-        if (row.metric === "Indexed pages") return { ...row, value: snapshot.google.indexedPages };
-        return row;
-      }),
+      period: searchConsole.period,
+      kpis: report.googleSearch.kpis
+        .filter((row) => ["Clicks", "Impressions", "CTR", "Average position"].includes(row.metric))
+        .map((row) => {
+          if (row.metric === "Clicks") return { ...row, value: searchConsole.clicks };
+          if (row.metric === "Impressions") return { ...row, value: searchConsole.impressions };
+          if (row.metric === "CTR") return { ...row, value: searchConsole.ctr };
+          return { ...row, value: searchConsole.averagePosition };
+        }),
       daily: searchConsole?.daily.length
         ? searchConsole.daily.map((row) => ({
             date: row.label,
@@ -517,63 +675,74 @@ async function withLiveReport(
             impressions: row.impressions,
             ctr: row.ctr,
           }))
-        : report.googleSearch.daily,
+        : [],
       queries: searchConsole?.queries.length
         ? searchConsole.queries.map((row) => ({ query: row.label, clicks: row.clicks, impressions: row.impressions }))
-        : report.googleSearch.queries,
+        : [],
       pages: searchConsole?.pages.length
         ? searchConsole.pages.map((row) => ({ page: row.label, clicks: row.clicks, impressions: row.impressions }))
-        : report.googleSearch.pages,
+        : [],
       countries: searchConsole?.countries.length
         ? searchConsole.countries.map((row) => ({
             country: countryName(row.label),
             clicks: row.clicks,
             impressions: row.impressions,
           }))
-        : report.googleSearch.countries,
+        : [],
       devices: searchConsole?.devices.length
         ? searchConsole.devices.map((row) => ({ device: row.label, clicks: row.clicks, impressions: row.impressions }))
-        : report.googleSearch.devices,
-      fetchedAt: searchConsole?.fetchedAt ?? report.googleSearch.fetchedAt,
-    } : report.googleSearch,
+        : [],
+      note: "Current Search Analytics data from Google Search Console. Index coverage counts are omitted because this API does not provide a trustworthy live total.",
+      fetchedAt: searchConsole.fetchedAt,
+    } : { ...report.googleSearch, period: "Live Search Console unavailable", kpis: [], daily: [], queries: [], pages: [], countries: [], devices: [], fetchedAt: null, note: "Historical Search Console figures are hidden until the live source is available." },
     socialOverview: snapshot ? {
       ...report.socialOverview,
-      platforms: report.socialOverview.platforms.map((row) => {
-        const livePlatform = snapshot.social.find((platform) => platform.platform.toLowerCase() === row.platform.toLowerCase());
-        if (!livePlatform) return row;
-        const interactions = livePlatform.interactions ?? row.interactions;
-        return {
-          ...row,
-          period: livePlatform.period,
-          views: livePlatform.exposures,
-          interactions,
-          followers: livePlatform.followers,
-          profileVisits: livePlatform.profileVisits,
-          outboundClicks: livePlatform.outboundClicks,
-          websiteVisitors: livePlatform.websiteVisitors,
-          interactionRate: typeof interactions === "number" && livePlatform.exposures > 0
-            ? interactions / livePlatform.exposures
-            : row.interactionRate,
-        };
-      }),
+      platforms: currentSocial.map((platform) => ({
+        platform: platform.platform,
+        period: platform.period,
+        views: platform.exposures,
+        viewers: null,
+        interactions: platform.interactions,
+        followers: platform.followers,
+        profileVisits: platform.profileVisits,
+        outboundClicks: platform.outboundClicks,
+        websiteVisitors: platform.websiteVisitors,
+        interactionRate: typeof platform.interactions === "number" && platform.exposures > 0 ? platform.interactions / platform.exposures : null,
+      })),
+      diagnosis: currentSocial.map((platform) => ({
+        channel: platform.platform,
+        strength: `${platform.exposures.toLocaleString("en-GB")} ${platform.exposureLabel.toLowerCase()} in ${platform.period}.`,
+        constraint: platform.outboundClicks === null ? "The current API does not expose outbound clicks for this connection." : `${platform.outboundClicks.toLocaleString("en-GB")} outbound clicks in the same window.`,
+        nextMove: "Compare the next complete window and keep every profile link source-coded.",
+        workingKpi: `${platform.exposureLabel} and source-coded site actions`,
+      })),
+      note: "Only current API-supported platform figures are shown. Unsupported metrics are marked Not reported rather than filled from an older manual export.",
     } : report.socialOverview,
-    seoTechnical: pageSpeed ? {
+    platforms: buildPlatformReports(report.platforms, liveSources),
+    seoTechnical: {
       ...report.seoTechnical,
-      pageSpeed: pageSpeed.metrics,
+      asOf: pageSpeed?.fetchedAt.slice(0, 10) ?? preparedDate,
+      indexing: [],
+      notIndexed: [],
+      pageSpeed: pageSpeed?.metrics ?? [],
       pageSpeedMeta: {
-        testedUrl: pageSpeed.testedUrl,
-        strategy: pageSpeed.strategy,
-        fetchedAt: pageSpeed.fetchedAt,
-        lighthouseVersion: pageSpeed.lighthouseVersion,
+        testedUrl: pageSpeed?.testedUrl ?? "https://otherpeoplesrecipes.co.uk/",
+        strategy: pageSpeed?.strategy ?? "mobile",
+        fetchedAt: pageSpeed?.fetchedAt ?? null,
+        lighthouseVersion: pageSpeed?.lighthouseVersion ?? null,
       },
-      structuredData: report.seoTechnical.structuredData.map((row) => row.area === "Core Web Vitals"
-        ? {
-            ...row,
-            finding: "Live mobile Lighthouse lab data is refreshed automatically when the PageSpeed connection is available.",
-            action: "Review Vercel Speed Insights and the daily Lighthouse trend at each month-end.",
-          }
-        : row),
-    } : report.seoTechnical,
+      structuredData: [],
+      authority: [],
+      note: pageSpeed
+        ? "Current mobile Lighthouse lab data. Historical index-coverage, structured-data and backlink counts are hidden until they have a live source."
+        : "Historical technical statistics are hidden until PageSpeed or another live source is available.",
+    },
+    measurementActions: {
+      ...report.measurementActions,
+      linkClicks: liveLinkRows,
+      deliveryPlan: [],
+      note: "Link-click rows are rebuilt from the current 90-day first-party event window. The dated delivery-plan baseline is excluded; use the dynamic action queue above for current priorities.",
+    },
   };
 }
 
@@ -688,18 +857,13 @@ function earliestPublishedByTitle(rows: ReadonlyArray<{ id?: string; title: stri
 async function buildSocialFilmViews(
   client: SupabaseClient,
   website: AnalyticsFilmSummary[],
+  live: LiveSources,
 ): Promise<{
   films: AnalyticsSocialFilmSummary[];
   unmatched: UnmatchedSocialPost[];
   connections: SocialConnectionStatus[];
 }> {
-  const [facebook, instagram, tiktok, youtube, pinterest] = await Promise.all([
-    getFacebookSummary(),
-    getInstagramSummary(),
-    getTikTokSummary(),
-    getYouTubeSummary(),
-    getPinterestFilmViews(),
-  ]);
+  const { facebook, instagram, tiktok, youtube, pinterestFilms: pinterest } = live;
   const savedResult = await client
     .from("social_film_posts")
     .select("platform, post_id, film_video, post_title, metric_value, published_at, ignored");
@@ -835,7 +999,7 @@ export async function loadAdminAnalytics(
   const [clickResult, eventResult, participation] = await Promise.all([
     client
       .from("link_clicks")
-      .select("source, link_key, utm_campaign")
+      .select("source, link_key, utm_campaign, created_at")
       .gte("created_at", since90Days.toISOString())
       .limit(10_000),
     client
@@ -927,43 +1091,25 @@ export async function loadAdminAnalytics(
 
   const filmViews = buildFilmViews(eventResult.data ?? []);
   const submissionFunnel = buildSubmissionFunnel(eventResult.data ?? []);
-  const socialFilmData = await buildSocialFilmViews(client, filmViews);
+  const liveSources = await loadLiveSources(_options?.forceRefresh ?? false);
+  const socialFilmData = await buildSocialFilmViews(client, filmViews, liveSources);
   const socialFilmViews = socialFilmData.films;
 
-  const [snapshot, pageSpeed, searchConsole] = await Promise.all([
-    withLiveLinkedIn(
-      await withLiveWebsiteSnapshot(
-        await withCurrentPinterest(
-          await withLiveFacebook(withLatestFacebookSnapshot(
-            await withLiveTikTok(
-              withLatestTikTokSnapshot(
-                await withLiveInstagram(
-                  withLatestInstagramSnapshot(
-                    await withLiveYouTube(
-                      withLatestYouTubeSnapshot(await withLiveSearchConsole(await getSnapshot(client))),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          )),
-        ),
-      ),
-    ),
-    getPageSpeedSummary({ forceRefresh: _options?.forceRefresh ?? false }),
-    getSearchConsoleSummary(),
-  ]);
-  const effectivePageSpeed = pageSpeed ?? snapshot?.pageSpeed ?? null;
-  const snapshotWithPageSpeed = snapshot
-    ? { ...snapshot, pageSpeed: effectivePageSpeed }
-    : snapshot;
+  const snapshotWithPageSpeed = applyLiveSources(await getSnapshot(client), liveSources);
 
   const generatedAt = new Date().toISOString();
   const report = await withLiveReport(
     analyticsReport,
     snapshotWithPageSpeed,
-    effectivePageSpeed,
-    searchConsole,
+    liveSources,
+    {
+      linkClicks: clickResult.data?.length ?? 0,
+      ctaClicks: (eventResult.data ?? []).filter(
+        (event) => !conversionEvents.has(event.event_key) && !submissionFunnelEvents.has(event.event_key),
+      ).length,
+      conversions: (eventResult.data ?? []).filter((event) => conversionEvents.has(event.event_key)).length,
+    },
+    (clickResult.data ?? []).map((row) => ({ link_key: row.link_key, created_at: row.created_at })),
   );
   const priorities = buildDashboardPriorities({
     now: generatedAt,
@@ -984,6 +1130,14 @@ export async function loadAdminAnalytics(
       visualCount: recipe.methodPhotos?.length ?? 0,
     })),
   });
+
+  if (snapshotWithPageSpeed) {
+    try {
+      await saveDailySnapshot(client, snapshotWithPageSpeed);
+    } catch (error) {
+      console.warn("OPR current analytics snapshot could not be saved", error);
+    }
+  }
 
   return {
     generatedAt,
