@@ -754,10 +754,10 @@ export default function AdminAnalyticsPanel({
                         </div>
                         <dl className="mt-3 grid grid-cols-2 gap-3">
                           {[
-                            ["Interactions", platform.interactions],
+                            [platform.interactionLabel ?? "Interactions", platform.interactions],
                             ["Followers", platform.followers],
-                            ["Profile visits", platform.profileVisits],
-                            ["Outbound clicks", platform.outboundClicks],
+                            [platform.profileVisitLabel ?? "Profile visits", platform.profileVisits],
+                            [platform.outboundClickLabel ?? "Outbound clicks", platform.outboundClicks],
                           ].map(([label, value]) => (
                             <div key={String(label)} className="rounded-2xl border border-[#DDB765]/50 bg-white/50 p-3">
                               <dt className="text-[10px] uppercase tracking-[0.06em] text-[#6B431E]">{label}</dt>
@@ -804,10 +804,10 @@ export default function AdminAnalyticsPanel({
                             )}
                           </td>
                           <td className="px-4 py-4"><span className="font-semibold">{isCurrentData(platform.fetchedAt) ? formatNumber(platform.exposures) : "Hidden"}</span><span className="block text-xs text-stone-500">{platform.exposureLabel}</span></td>
-                          <td className="px-4 py-4">{isCurrentData(platform.fetchedAt) ? formatNumber(platform.interactions) : "Hidden"}</td>
+                          <td className="px-4 py-4">{isCurrentData(platform.fetchedAt) ? formatNumber(platform.interactions) : "Hidden"}{platform.interactionLabel ? <span className="block text-xs text-stone-500">{platform.interactionLabel}</span> : null}</td>
                           <td className="px-4 py-4">{isCurrentData(platform.fetchedAt) ? formatNumber(platform.followers) : "Hidden"}</td>
-                          <td className="px-4 py-4">{isCurrentData(platform.fetchedAt) ? formatNumber(platform.profileVisits) : "Hidden"}</td>
-                          <td className="px-6 py-4">{isCurrentData(platform.fetchedAt) ? formatNumber(platform.outboundClicks) : "Hidden"}</td>
+                          <td className="px-4 py-4">{isCurrentData(platform.fetchedAt) ? formatNumber(platform.profileVisits) : "Hidden"}{platform.profileVisitLabel ? <span className="block text-xs text-stone-500">{platform.profileVisitLabel}</span> : null}</td>
+                          <td className="px-6 py-4">{isCurrentData(platform.fetchedAt) ? formatNumber(platform.outboundClicks) : "Hidden"}{platform.outboundClickLabel ? <span className="block text-xs text-stone-500">{platform.outboundClickLabel}</span> : null}</td>
                         </tr>
                       ))}
                     </tbody>

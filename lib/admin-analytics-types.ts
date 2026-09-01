@@ -57,9 +57,12 @@ export type AnalyticsSnapshotPlatform = {
   exposureLabel: string;
   exposures: number | null;
   interactions: number | null;
+  interactionLabel?: string;
   followers: number | null;
   profileVisits: number | null;
+  profileVisitLabel?: string;
   outboundClicks: number | null;
+  outboundClickLabel?: string;
   websiteVisitors: number | null;
   // Set when these figures came from a connected platform API. Null means
   // this row is still the dated OPR_ANALYTICS_SNAPSHOT fallback.

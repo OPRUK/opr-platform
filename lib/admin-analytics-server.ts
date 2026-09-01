@@ -348,10 +348,13 @@ function applyLiveSources(snapshot: AnalyticsSnapshot | null, live: LiveSources)
       period: live.linkedIn.period,
       exposureLabel: "Page views",
       exposures: live.linkedIn.pageViews28d,
-      interactions: null,
+      interactions: live.linkedIn.postClicks28d,
+      interactionLabel: "Post clicks",
       followers: live.linkedIn.followers,
       profileVisits: live.linkedIn.uniquePageViews28d,
-      outboundClicks: live.linkedIn.clicks28d,
+      profileVisitLabel: "Unique page views",
+      outboundClicks: live.linkedIn.pageButtonClicks28d,
+      outboundClickLabel: "Page-button clicks",
       fetchedAt: live.linkedIn.fetchedAt,
     };
     return platform;
@@ -363,10 +366,13 @@ function applyLiveSources(snapshot: AnalyticsSnapshot | null, live: LiveSources)
       period: live.linkedIn.period,
       exposureLabel: "Page views",
       exposures: live.linkedIn.pageViews28d,
-      interactions: null,
+      interactions: live.linkedIn.postClicks28d,
+      interactionLabel: "Post clicks",
       followers: live.linkedIn.followers,
       profileVisits: live.linkedIn.uniquePageViews28d,
-      outboundClicks: live.linkedIn.clicks28d,
+      profileVisitLabel: "Unique page views",
+      outboundClicks: live.linkedIn.pageButtonClicks28d,
+      outboundClickLabel: "Page-button clicks",
       websiteVisitors: null,
       fetchedAt: live.linkedIn.fetchedAt,
     });
@@ -716,7 +722,9 @@ async function withLiveReport(
         strength: platform.exposures === null
           ? `${platform.exposureLabel} are not available for ${platform.period}.`
           : `${platform.exposures.toLocaleString("en-GB")} ${platform.exposureLabel.toLowerCase()} in ${platform.period}.`,
-        constraint: platform.outboundClicks === null ? "The current API does not expose outbound clicks for this connection." : `${platform.outboundClicks.toLocaleString("en-GB")} outbound clicks in the same window.`,
+        constraint: platform.outboundClicks === null
+          ? `The current API does not expose ${(platform.outboundClickLabel ?? "outbound clicks").toLowerCase()} for this connection.`
+          : `${platform.outboundClicks.toLocaleString("en-GB")} ${(platform.outboundClickLabel ?? "outbound clicks").toLowerCase()} in the same window.`,
         nextMove: "Compare the next complete window and keep every profile link source-coded.",
         workingKpi: `${platform.exposureLabel} and source-coded site actions`,
       })),
