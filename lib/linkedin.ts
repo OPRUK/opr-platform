@@ -1,6 +1,6 @@
 import "server-only";
 
-const API_VERSION = "202508";
+const API_VERSION = "202608";
 const CACHE_MS = 15 * 60 * 1000;
 const REPORT_LAG_DAYS = 1;
 const REPORT_WINDOW_DAYS = 28;
@@ -41,6 +41,19 @@ async function getAccessToken(clientId: string, clientSecret: string, refreshTok
   return typeof payload.access_token === "string" ? payload.access_token : null;
 }
 
+async function resolveAccessToken(): Promise<string | null> {
+  const clientId = process.env.LINKEDIN_CLIENT_ID;
+  const clientSecret = process.env.LINKEDIN_CLIENT_SECRET;
+  const refreshToken = process.env.LINKEDIN_REFRESH_TOKEN;
+
+  if (clientId && clientSecret && refreshToken) {
+    const refreshedAccessToken = await getAccessToken(clientId, clientSecret, refreshToken);
+    if (refreshedAccessToken) return refreshedAccessToken;
+  }
+
+  return process.env.LINKEDIN_ACCESS_TOKEN ?? null;
+}
+
 function isoDate(date: Date) {
   return date.toISOString().slice(0, 10);
 }
@@ -50,13 +63,8 @@ export async function getLinkedInSummary(
 ): Promise<LinkedInSummary | null> {
   if (!forceRefresh && cached && cached.expiresAt > Date.now()) return cached.data;
 
-  const clientId = process.env.LINKEDIN_CLIENT_ID;
-  const clientSecret = process.env.LINKEDIN_CLIENT_SECRET;
-  const refreshToken = process.env.LINKEDIN_REFRESH_TOKEN;
-  if (!clientId || !clientSecret || !refreshToken) return null;
-
   try {
-    const accessToken = await getAccessToken(clientId, clientSecret, refreshToken);
+    const accessToken = await resolveAccessToken();
     if (!accessToken) return null;
 
     const authHeaders = {
