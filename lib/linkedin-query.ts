@@ -9,16 +9,11 @@ export function buildLinkedInPageStatisticsUrl({
   start: number;
   end: number;
 }) {
-  const url = new URL(PAGE_STATISTICS_ENDPOINT);
-  url.searchParams.set("q", "organization");
-  url.searchParams.set("organization", organizationUrn);
-
-  // LinkedIn documents both Rest.li object syntax and these flattened fields.
-  // The flattened form avoids the PARAM_INVALID response the live endpoint
-  // returns when URLSearchParams serialises the object expression.
-  url.searchParams.set("timeIntervals.timeGranularityType", "DAY");
-  url.searchParams.set("timeIntervals.timeRange.start", String(start));
-  url.searchParams.set("timeIntervals.timeRange.end", String(end));
-
-  return url;
+  // Rest.li 2.0 uses structural punctuation in complex query parameters.
+  // URLSearchParams percent-encodes that punctuation and LinkedIn rejects the
+  // resulting timeIntervals value, so build this documented expression intact.
+  const timeIntervals = `(timeRange:(start:${start},end:${end}),timeGranularityType:DAY)`;
+  return new URL(
+    `${PAGE_STATISTICS_ENDPOINT}?q=organization&organization=${encodeURIComponent(organizationUrn)}&timeIntervals=${timeIntervals}`,
+  );
 }
