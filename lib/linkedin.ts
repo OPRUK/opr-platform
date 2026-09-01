@@ -9,9 +9,9 @@ const ORGANIZATION_URN = "urn:li:organization:141313963";
 export type LinkedInSummary = {
   period: string;
   followers: number;
-  impressions28d: number;
-  uniqueImpressions28d: number;
-  clicks28d: number;
+  pageViews28d: number | null;
+  uniquePageViews28d: number | null;
+  clicks28d: number | null;
   fetchedAt: string;
 };
 
@@ -85,33 +85,60 @@ export async function getLinkedInSummary(
 
     const endDate = new Date();
     endDate.setUTCDate(endDate.getUTCDate() - REPORT_LAG_DAYS);
+    endDate.setUTCHours(23, 59, 59, 999);
     const startDate = new Date(endDate);
     startDate.setUTCDate(startDate.getUTCDate() - (REPORT_WINDOW_DAYS - 1));
+    startDate.setUTCHours(0, 0, 0, 0);
 
     const statsUrl = new URL("https://api.linkedin.com/rest/organizationPageStatistics");
     statsUrl.searchParams.set("q", "organization");
     statsUrl.searchParams.set("organization", ORGANIZATION_URN);
+    statsUrl.searchParams.set(
+      "timeIntervals",
+      `(timeRange:(start:${startDate.getTime()},end:${endDate.getTime()}),timeGranularityType:DAY)`,
+    );
 
     const statsResponse = await fetch(statsUrl, { headers: authHeaders });
 
-    let impressions = 0;
-    let uniqueImpressions = 0;
-    let clicks = 0;
+    let pageViews: number | null = null;
+    let uniquePageViews: number | null = null;
+    let clicks: number | null = null;
     if (statsResponse.ok) {
       const stats = await statsResponse.json();
-      const totals = stats.elements?.[0]?.totalPageStatistics?.views?.allPageViews;
-      impressions = totals?.pageViews ?? 0;
-      uniqueImpressions = totals?.uniquePageViews ?? 0;
-      clicks = stats.elements?.[0]?.totalPageStatistics?.clicks?.mobileCustomButtonClickCounts?.[0]?.clicks ?? 0;
+      const elements = Array.isArray(stats.elements) ? stats.elements : [];
+      pageViews = elements.reduce(
+        (total: number, element: { totalPageStatistics?: { views?: { allPageViews?: { pageViews?: number } } } }) =>
+          total + (element.totalPageStatistics?.views?.allPageViews?.pageViews ?? 0),
+        0,
+      );
+      uniquePageViews = elements.reduce(
+        (total: number, element: { totalPageStatistics?: { views?: { allPageViews?: { uniquePageViews?: number } } } }) =>
+          total + (element.totalPageStatistics?.views?.allPageViews?.uniquePageViews ?? 0),
+        0,
+      );
+      clicks = elements.reduce((total: number, element: {
+        totalPageStatistics?: {
+          clicks?: {
+            desktopCustomButtonClickCounts?: Array<{ clicks?: number }>;
+            mobileCustomButtonClickCounts?: Array<{ clicks?: number }>;
+          };
+        };
+      }) => {
+        const clickGroups = [
+          ...(element.totalPageStatistics?.clicks?.desktopCustomButtonClickCounts ?? []),
+          ...(element.totalPageStatistics?.clicks?.mobileCustomButtonClickCounts ?? []),
+        ];
+        return total + clickGroups.reduce((subtotal, row) => subtotal + (row.clicks ?? 0), 0);
+      }, 0);
     } else {
-      console.error("OPR LinkedIn page statistics query failed", await statsResponse.text());
+      console.warn("OPR LinkedIn page statistics query failed", await statsResponse.text());
     }
 
     const summary: LinkedInSummary = {
       period: `${REPORT_WINDOW_DAYS} days to ${isoDate(endDate)}`,
       followers: followers.firstDegreeSize ?? 0,
-      impressions28d: impressions,
-      uniqueImpressions28d: uniqueImpressions,
+      pageViews28d: pageViews,
+      uniquePageViews28d: uniquePageViews,
       clicks28d: clicks,
       fetchedAt: new Date().toISOString(),
     };

@@ -112,7 +112,7 @@ export type SeoTechnicalReport = {
 export type SocialPlatformSummary = {
   platform: string;
   period: string;
-  views: number;
+  views: number | null;
   viewers: number | string | null;
   interactions: number | string | null;
   followers: number | string | null;
