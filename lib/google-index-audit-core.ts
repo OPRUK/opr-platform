@@ -38,6 +38,15 @@ function stringOrNull(value: unknown): string | null {
   return typeof value === "string" && value.trim() ? value : null;
 }
 
+function isFetchFailure(state: string | null): boolean {
+  return Boolean(
+    state &&
+    state !== "SUCCESSFUL" &&
+    !state.includes("UNSPECIFIED") &&
+    state !== "UNKNOWN",
+  );
+}
+
 function decodeXmlText(value: string): string {
   return value
     .replace(/&amp;/g, "&")
@@ -126,7 +135,7 @@ export function indexAuditTreatment(result: GoogleIndexInspection): string {
   if (result.indexingState?.includes("BLOCKED")) {
     return "Remove the indexing block if this page should appear in Google, then request indexing.";
   }
-  if (result.pageFetchState && result.pageFetchState !== "SUCCESSFUL") {
+  if (isFetchFailure(result.pageFetchState)) {
     return "Fix the page-fetch problem first, confirm the live URL works, then request indexing.";
   }
   if (result.googleCanonical && result.userCanonical && result.googleCanonical !== result.userCanonical) {
@@ -135,6 +144,9 @@ export function indexAuditTreatment(result: GoogleIndexInspection): string {
   const coverage = result.coverageState?.toLowerCase() ?? "";
   if (coverage.includes("discovered")) {
     return "Strengthen internal links to this page and request indexing after the next production update.";
+  }
+  if (coverage.includes("unknown to google")) {
+    return "Strengthen internal links to this page and request indexing in Search Console.";
   }
   if (coverage.includes("crawled")) {
     return "Improve the page's distinct value and internal links, then request indexing in Search Console.";
@@ -145,6 +157,6 @@ export function indexAuditTreatment(result: GoogleIndexInspection): string {
 export function indexAuditPriority(result: GoogleIndexInspection): string {
   if (result.error) return "Retry";
   if (result.indexingState?.includes("BLOCKED")) return "P1";
-  if (result.pageFetchState && result.pageFetchState !== "SUCCESSFUL") return "P1";
+  if (isFetchFailure(result.pageFetchState)) return "P1";
   return "P2";
 }
