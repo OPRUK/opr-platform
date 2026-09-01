@@ -209,7 +209,7 @@ export default function AdminAnalyticsPanel({
   const googleCurrent = isCurrentData(snapshot?.google.fetchedAt ?? null);
   const currentSocial = snapshot?.social.filter((platform) => isCurrentData(platform.fetchedAt)) ?? [];
   const socialExposures = currentSocial.reduce(
-    (total, platform) => total + platform.exposures,
+    (total, platform) => total + (platform.exposures ?? 0),
     0,
   );
   const filmRows = [...(analytics?.socialFilmViews ?? [])]

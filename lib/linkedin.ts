@@ -1,6 +1,6 @@
 import "server-only";
 
-const API_VERSION = "202508";
+const API_VERSION = "202608";
 const CACHE_MS = 15 * 60 * 1000;
 const REPORT_LAG_DAYS = 1;
 const REPORT_WINDOW_DAYS = 28;
@@ -9,9 +9,9 @@ const ORGANIZATION_URN = "urn:li:organization:141313963";
 export type LinkedInSummary = {
   period: string;
   followers: number;
-  impressions28d: number;
-  uniqueImpressions28d: number;
-  clicks28d: number;
+  pageViews28d: number | null;
+  uniquePageViews28d: number | null;
+  clicks28d: number | null;
   fetchedAt: string;
 };
 
@@ -41,6 +41,19 @@ async function getAccessToken(clientId: string, clientSecret: string, refreshTok
   return typeof payload.access_token === "string" ? payload.access_token : null;
 }
 
+async function resolveAccessToken(): Promise<string | null> {
+  const clientId = process.env.LINKEDIN_CLIENT_ID;
+  const clientSecret = process.env.LINKEDIN_CLIENT_SECRET;
+  const refreshToken = process.env.LINKEDIN_REFRESH_TOKEN;
+
+  if (clientId && clientSecret && refreshToken) {
+    const refreshedAccessToken = await getAccessToken(clientId, clientSecret, refreshToken);
+    if (refreshedAccessToken) return refreshedAccessToken;
+  }
+
+  return process.env.LINKEDIN_ACCESS_TOKEN ?? null;
+}
+
 function isoDate(date: Date) {
   return date.toISOString().slice(0, 10);
 }
@@ -50,13 +63,8 @@ export async function getLinkedInSummary(
 ): Promise<LinkedInSummary | null> {
   if (!forceRefresh && cached && cached.expiresAt > Date.now()) return cached.data;
 
-  const clientId = process.env.LINKEDIN_CLIENT_ID;
-  const clientSecret = process.env.LINKEDIN_CLIENT_SECRET;
-  const refreshToken = process.env.LINKEDIN_REFRESH_TOKEN;
-  if (!clientId || !clientSecret || !refreshToken) return null;
-
   try {
-    const accessToken = await getAccessToken(clientId, clientSecret, refreshToken);
+    const accessToken = await resolveAccessToken();
     if (!accessToken) return null;
 
     const authHeaders = {
@@ -66,7 +74,7 @@ export async function getLinkedInSummary(
     };
 
     const followersResponse = await fetch(
-      `https://api.linkedin.com/rest/networkSizes/${encodeURIComponent(ORGANIZATION_URN)}?edgeType=CompanyFollowedByMember`,
+      `https://api.linkedin.com/rest/networkSizes/${encodeURIComponent(ORGANIZATION_URN)}?edgeType=COMPANY_FOLLOWED_BY_MEMBER`,
       { headers: authHeaders },
     );
     if (!followersResponse.ok) {
@@ -77,33 +85,60 @@ export async function getLinkedInSummary(
 
     const endDate = new Date();
     endDate.setUTCDate(endDate.getUTCDate() - REPORT_LAG_DAYS);
+    endDate.setUTCHours(23, 59, 59, 999);
     const startDate = new Date(endDate);
     startDate.setUTCDate(startDate.getUTCDate() - (REPORT_WINDOW_DAYS - 1));
+    startDate.setUTCHours(0, 0, 0, 0);
 
     const statsUrl = new URL("https://api.linkedin.com/rest/organizationPageStatistics");
     statsUrl.searchParams.set("q", "organization");
     statsUrl.searchParams.set("organization", ORGANIZATION_URN);
+    statsUrl.searchParams.set(
+      "timeIntervals",
+      `(timeRange:(start:${startDate.getTime()},end:${endDate.getTime()}),timeGranularityType:DAY)`,
+    );
 
     const statsResponse = await fetch(statsUrl, { headers: authHeaders });
 
-    let impressions = 0;
-    let uniqueImpressions = 0;
-    let clicks = 0;
+    let pageViews: number | null = null;
+    let uniquePageViews: number | null = null;
+    let clicks: number | null = null;
     if (statsResponse.ok) {
       const stats = await statsResponse.json();
-      const totals = stats.elements?.[0]?.totalPageStatistics?.views?.allPageViews;
-      impressions = totals?.pageViews ?? 0;
-      uniqueImpressions = totals?.uniquePageViews ?? 0;
-      clicks = stats.elements?.[0]?.totalPageStatistics?.clicks?.mobileCustomButtonClickCounts?.[0]?.clicks ?? 0;
+      const elements = Array.isArray(stats.elements) ? stats.elements : [];
+      pageViews = elements.reduce(
+        (total: number, element: { totalPageStatistics?: { views?: { allPageViews?: { pageViews?: number } } } }) =>
+          total + (element.totalPageStatistics?.views?.allPageViews?.pageViews ?? 0),
+        0,
+      );
+      uniquePageViews = elements.reduce(
+        (total: number, element: { totalPageStatistics?: { views?: { allPageViews?: { uniquePageViews?: number } } } }) =>
+          total + (element.totalPageStatistics?.views?.allPageViews?.uniquePageViews ?? 0),
+        0,
+      );
+      clicks = elements.reduce((total: number, element: {
+        totalPageStatistics?: {
+          clicks?: {
+            desktopCustomButtonClickCounts?: Array<{ clicks?: number }>;
+            mobileCustomButtonClickCounts?: Array<{ clicks?: number }>;
+          };
+        };
+      }) => {
+        const clickGroups = [
+          ...(element.totalPageStatistics?.clicks?.desktopCustomButtonClickCounts ?? []),
+          ...(element.totalPageStatistics?.clicks?.mobileCustomButtonClickCounts ?? []),
+        ];
+        return total + clickGroups.reduce((subtotal, row) => subtotal + (row.clicks ?? 0), 0);
+      }, 0);
     } else {
-      console.error("OPR LinkedIn page statistics query failed", await statsResponse.text());
+      console.warn("OPR LinkedIn page statistics query failed", await statsResponse.text());
     }
 
     const summary: LinkedInSummary = {
       period: `${REPORT_WINDOW_DAYS} days to ${isoDate(endDate)}`,
       followers: followers.firstDegreeSize ?? 0,
-      impressions28d: impressions,
-      uniqueImpressions28d: uniqueImpressions,
+      pageViews28d: pageViews,
+      uniquePageViews28d: uniquePageViews,
       clicks28d: clicks,
       fetchedAt: new Date().toISOString(),
     };
