@@ -21,7 +21,10 @@ export async function GET(request: Request) {
   }
 
   try {
-    const analytics = await loadAdminAnalytics(client);
+    const analytics = await loadAdminAnalytics(client, {
+      forceRefresh: true,
+      refreshIndexAudit: true,
+    });
     if (!analytics.snapshot) {
       return Response.json({ error: "No analytics baseline is available." }, { status: 503 });
     }
@@ -31,6 +34,15 @@ export async function GET(request: Request) {
       ok: true,
       snapshotDate: new Date().toISOString().slice(0, 10),
       capturedAt: analytics.generatedAt,
+      indexAudit: analytics.snapshot.indexAudit
+        ? {
+            submitted: analytics.snapshot.indexAudit.submittedUrls,
+            inspected: analytics.snapshot.indexAudit.inspectedUrls,
+            indexed: analytics.snapshot.indexAudit.indexedUrls,
+            notIndexed: analytics.snapshot.indexAudit.notIndexedUrls,
+            errors: analytics.snapshot.indexAudit.failedInspections,
+          }
+        : null,
     });
   } catch (error) {
     console.error("OPR daily analytics snapshot failed", error);

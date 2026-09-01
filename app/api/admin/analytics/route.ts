@@ -1,6 +1,9 @@
 import { requireAdmin } from "../../../../lib/admin-auth";
 import { loadAdminAnalytics } from "../../../../lib/admin-analytics-server";
 
+export const runtime = "nodejs";
+export const maxDuration = 60;
+
 export async function GET(request: Request) {
   const startedAt = Date.now();
   const requestId = request.headers.get("x-vercel-id");
@@ -22,7 +25,10 @@ export async function GET(request: Request) {
   }
 
   try {
-    const analytics = await loadAdminAnalytics(client, { forceRefresh });
+    const analytics = await loadAdminAnalytics(client, {
+      forceRefresh,
+      refreshIndexAudit: forceRefresh,
+    });
     console.log(JSON.stringify({
       level: "info",
       message: "Admin analytics request completed",

@@ -1,7 +1,7 @@
 import "server-only";
 import { createSign } from "node:crypto";
 
-const SITE_URL = "sc-domain:otherpeoplesrecipes.co.uk";
+export const SEARCH_CONSOLE_SITE_URL = "sc-domain:otherpeoplesrecipes.co.uk";
 const CACHE_MS = 15 * 60 * 1000;
 const REPORT_WINDOW_DAYS = 28;
 
@@ -72,6 +72,21 @@ async function getAccessToken(clientEmail: string, privateKey: string): Promise<
   return typeof payload.access_token === "string" ? payload.access_token : null;
 }
 
+export async function getSearchConsoleAccessToken(): Promise<string | null> {
+  const clientEmail = process.env.GOOGLE_SEARCH_CONSOLE_CLIENT_EMAIL;
+  // Vercel environment variables are single strings, so restore the private
+  // key's escaped newlines before using it to sign the service-account JWT.
+  const privateKey = process.env.GOOGLE_SEARCH_CONSOLE_PRIVATE_KEY?.replace(/\\n/g, "\n");
+  if (!clientEmail || !privateKey) return null;
+
+  try {
+    return await getAccessToken(clientEmail, privateKey);
+  } catch (error) {
+    console.error("OPR Search Console access token could not be created", error);
+    return null;
+  }
+}
+
 function isoDate(date: Date) {
   return date.toISOString().slice(0, 10);
 }
@@ -83,7 +98,7 @@ async function queryDimension(
   endDate: string,
 ): Promise<SearchConsoleRow[]> {
   const response = await fetch(
-    `https://searchconsole.googleapis.com/webmasters/v3/sites/${encodeURIComponent(SITE_URL)}/searchAnalytics/query`,
+    `https://searchconsole.googleapis.com/webmasters/v3/sites/${encodeURIComponent(SEARCH_CONSOLE_SITE_URL)}/searchAnalytics/query`,
     {
       method: "POST",
       headers: {
@@ -127,7 +142,7 @@ async function queryDaily(
   endDate: string,
 ): Promise<SearchConsoleDailyRow[]> {
   const response = await fetch(
-    `https://searchconsole.googleapis.com/webmasters/v3/sites/${encodeURIComponent(SITE_URL)}/searchAnalytics/query`,
+    `https://searchconsole.googleapis.com/webmasters/v3/sites/${encodeURIComponent(SEARCH_CONSOLE_SITE_URL)}/searchAnalytics/query`,
     {
       method: "POST",
       headers: {
@@ -169,14 +184,8 @@ export async function getSearchConsoleSummary(
 ): Promise<SearchConsoleSummary | null> {
   if (!forceRefresh && cached && cached.expiresAt > Date.now()) return cached.data;
 
-  const clientEmail = process.env.GOOGLE_SEARCH_CONSOLE_CLIENT_EMAIL;
-  // Vercel env vars are single strings, so the key's real newlines are
-  // stored escaped as literal "\n" — restore them before signing with it.
-  const privateKey = process.env.GOOGLE_SEARCH_CONSOLE_PRIVATE_KEY?.replace(/\\n/g, "\n");
-  if (!clientEmail || !privateKey) return null;
-
   try {
-    const accessToken = await getAccessToken(clientEmail, privateKey);
+    const accessToken = await getSearchConsoleAccessToken();
     if (!accessToken) return null;
 
     const endDate = new Date();
@@ -187,7 +196,7 @@ export async function getSearchConsoleSummary(
 
     const [response, daily, queries, pages, countries, devices] = await Promise.all([
       fetch(
-        `https://searchconsole.googleapis.com/webmasters/v3/sites/${encodeURIComponent(SITE_URL)}/searchAnalytics/query`,
+        `https://searchconsole.googleapis.com/webmasters/v3/sites/${encodeURIComponent(SEARCH_CONSOLE_SITE_URL)}/searchAnalytics/query`,
         {
           method: "POST",
           headers: {

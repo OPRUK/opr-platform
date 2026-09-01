@@ -5,6 +5,12 @@ import { countryName } from "@/lib/country-names";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { attributionSources } from "./attribution";
 import { getSearchConsoleSummary, type SearchConsoleSummary } from "./google-search-console";
+import { runGoogleIndexAudit } from "./google-index-audit";
+import {
+  indexAuditPriority,
+  indexAuditTreatment,
+  type GoogleIndexAudit,
+} from "./google-index-audit-core";
 import { getYouTubeSummary, type YouTubeSummary } from "./youtube";
 import { getInstagramSummary, type InstagramSummary } from "./instagram";
 import { getTikTokSummary, type TikTokSummary } from "./tiktok";
@@ -505,6 +511,81 @@ function buildPlatformReports(report: AnalyticsReport["platforms"], live: LiveSo
 
 type LiveLinkClick = { link_key: string; created_at: string };
 
+function buildIndexingRows(
+  audit: GoogleIndexAudit | null | undefined,
+): AnalyticsReport["seoTechnical"]["indexing"] {
+  if (!audit) return [];
+
+  const inspectedShare = audit.submittedUrls > 0
+    ? `${Math.round((audit.inspectedUrls / audit.submittedUrls) * 100)}% checked successfully`
+    : "No sitemap URLs found";
+  const indexedShare = audit.inspectedUrls > 0
+    ? `${Math.round((audit.indexedUrls / audit.inspectedUrls) * 100)}% of inspected URLs`
+    : "No successful inspections";
+
+  return [
+    {
+      measure: "URLs in live sitemap",
+      value: audit.submittedUrls,
+      status: "Live sitemap",
+      interpretation: "Pages OPR is currently submitting to Google for discovery.",
+      action: "Keep the sitemap limited to canonical, indexable pages.",
+      lastUpdate: audit.auditedAt,
+    },
+    {
+      measure: "Successfully inspected",
+      value: audit.inspectedUrls,
+      status: inspectedShare,
+      interpretation: "Sitemap URLs for which Google returned a current index-status result.",
+      action: audit.failedInspections ? "Retry inspection errors at the next refresh." : "No inspection errors need action.",
+      lastUpdate: audit.auditedAt,
+    },
+    {
+      measure: "Indexed sitemap URLs",
+      value: audit.indexedUrls,
+      status: indexedShare,
+      interpretation: "Inspected sitemap URLs that Google reports as indexed.",
+      action: audit.notIndexedUrls ? "Work through the sitemap URLs listed below." : "Continue monitoring after material site changes.",
+      lastUpdate: audit.auditedAt,
+    },
+    {
+      measure: "Not indexed",
+      value: audit.notIndexedUrls,
+      status: audit.notIndexedUrls ? "Review required" : "Clear",
+      interpretation: "Inspected sitemap URLs that Google does not currently report as indexed.",
+      action: audit.notIndexedUrls ? "Use the reason and treatment table below." : "No sitemap URL needs indexing work today.",
+      lastUpdate: audit.auditedAt,
+    },
+    {
+      measure: "Inspection errors",
+      value: audit.failedInspections,
+      status: audit.failedInspections ? "Retry required" : "Clear",
+      interpretation: "URLs for which the inspection API did not return a usable result.",
+      action: audit.failedInspections ? "Retry after the one-hour refresh guard expires." : "No API retries are required.",
+      lastUpdate: audit.auditedAt,
+    },
+  ];
+}
+
+function buildNotIndexedRows(
+  audit: GoogleIndexAudit | null | undefined,
+): AnalyticsReport["seoTechnical"]["notIndexed"] {
+  if (!audit) return [];
+
+  return audit.results
+    .filter((result) => result.indexed === false)
+    .map((result) => ({
+      url: result.url,
+      reason: result.coverageState ?? result.verdict ?? "Not indexed",
+      assessment: [result.pageFetchState, result.indexingState]
+        .filter(Boolean)
+        .join(" · ") || "Google supplied no further status detail.",
+      treatment: indexAuditTreatment(result),
+      priority: indexAuditPriority(result),
+      observed: result.lastCrawlTime ?? audit.auditedAt,
+    }));
+}
+
 async function withLiveReport(
   report: AnalyticsReport,
   snapshot: AnalyticsSnapshot | null,
@@ -516,6 +597,7 @@ async function withLiveReport(
   const now = Date.now();
   const savedPageSpeed = snapshot?.pageSpeed ?? null;
   const pageSpeed = liveSources.pageSpeed ?? (savedPageSpeed && isFreshSource(savedPageSpeed.fetchedAt, now) ? savedPageSpeed : null);
+  const indexAudit = snapshot?.indexAudit ?? null;
   const searchConsole = liveSources.searchConsole;
   const pagesPerVisitor = live && live.visitors > 0 ? live.pageviews / live.visitors : snapshot?.website.pagesPerVisitor ?? 0;
   const currentSocial = snapshot?.social.filter((platform) => isFreshSource(platform.fetchedAt, now)) ?? [];
@@ -733,9 +815,9 @@ async function withLiveReport(
     platforms: buildPlatformReports(report.platforms, liveSources),
     seoTechnical: {
       ...report.seoTechnical,
-      asOf: pageSpeed?.fetchedAt.slice(0, 10) ?? preparedDate,
-      indexing: [],
-      notIndexed: [],
+      asOf: indexAudit?.auditedAt.slice(0, 10) ?? pageSpeed?.fetchedAt.slice(0, 10) ?? preparedDate,
+      indexing: buildIndexingRows(indexAudit),
+      notIndexed: buildNotIndexedRows(indexAudit),
       pageSpeed: pageSpeed?.metrics ?? [],
       pageSpeedMeta: {
         testedUrl: pageSpeed?.testedUrl ?? "https://otherpeoplesrecipes.co.uk/",
@@ -745,9 +827,11 @@ async function withLiveReport(
       },
       structuredData: [],
       authority: [],
-      note: pageSpeed
-        ? "Current mobile Lighthouse lab data. Historical index-coverage, structured-data and backlink counts are hidden until they have a live source."
-        : "Historical technical statistics are hidden until PageSpeed or another live source is available.",
+      note: indexAudit
+        ? `Google index status was checked URL by URL against the live OPR sitemap on ${new Intl.DateTimeFormat("en-GB", { dateStyle: "medium", timeStyle: "short", timeZone: "Europe/London" }).format(new Date(indexAudit.auditedAt))}. This is a sitemap URL audit, not Google's complete Page Indexing total for every URL it may know about.${pageSpeed ? " PageSpeed figures are current mobile Lighthouse lab data." : " Live PageSpeed is temporarily unavailable."}`
+        : pageSpeed
+          ? "Current mobile Lighthouse lab data. Run Refresh dashboard to create the first live sitemap URL inspection audit."
+          : "Run Refresh dashboard to create the first live sitemap URL inspection audit. Live PageSpeed is temporarily unavailable.",
     },
     measurementActions: {
       ...report.measurementActions,
@@ -1001,7 +1085,7 @@ async function buildSocialFilmViews(
 
 export async function loadAdminAnalytics(
   client: SupabaseClient,
-  _options?: { forceRefresh?: boolean },
+  _options?: { forceRefresh?: boolean; refreshIndexAudit?: boolean },
 ): Promise<AdminAnalyticsResponse> {
   const since90Days = new Date();
   since90Days.setUTCDate(since90Days.getUTCDate() - 90);
@@ -1107,7 +1191,18 @@ export async function loadAdminAnalytics(
   const socialFilmData = await buildSocialFilmViews(client, filmViews, liveSources);
   const socialFilmViews = socialFilmData.films;
 
-  const snapshotWithPageSpeed = applyLiveSources(await getSnapshot(client), liveSources);
+  const savedSnapshot = await getSnapshot(client);
+  let indexAudit = savedSnapshot?.indexAudit ?? null;
+  const auditAgeMs = indexAudit ? Date.now() - Date.parse(indexAudit.auditedAt) : Number.POSITIVE_INFINITY;
+  if (_options?.refreshIndexAudit && (!Number.isFinite(auditAgeMs) || auditAgeMs >= 60 * 60 * 1000)) {
+    const refreshedAudit = await runGoogleIndexAudit();
+    if (refreshedAudit) indexAudit = refreshedAudit;
+  }
+
+  const currentSnapshot = applyLiveSources(savedSnapshot, liveSources);
+  const snapshotWithPageSpeed = currentSnapshot
+    ? { ...currentSnapshot, indexAudit }
+    : currentSnapshot;
 
   const generatedAt = new Date().toISOString();
   const report = await withLiveReport(
