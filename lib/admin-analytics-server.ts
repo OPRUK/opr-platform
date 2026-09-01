@@ -346,11 +346,11 @@ function applyLiveSources(snapshot: AnalyticsSnapshot | null, live: LiveSources)
     if (key === "linkedin" && live.linkedIn) return {
       ...platform,
       period: live.linkedIn.period,
-      exposureLabel: "Impressions",
-      exposures: live.linkedIn.impressions28d,
+      exposureLabel: "Page views",
+      exposures: live.linkedIn.pageViews28d,
       interactions: null,
       followers: live.linkedIn.followers,
-      profileVisits: live.linkedIn.uniqueImpressions28d,
+      profileVisits: live.linkedIn.uniquePageViews28d,
       outboundClicks: live.linkedIn.clicks28d,
       fetchedAt: live.linkedIn.fetchedAt,
     };
@@ -361,11 +361,11 @@ function applyLiveSources(snapshot: AnalyticsSnapshot | null, live: LiveSources)
     socialRows.push({
       platform: "LinkedIn",
       period: live.linkedIn.period,
-      exposureLabel: "Impressions",
-      exposures: live.linkedIn.impressions28d,
+      exposureLabel: "Page views",
+      exposures: live.linkedIn.pageViews28d,
       interactions: null,
       followers: live.linkedIn.followers,
-      profileVisits: live.linkedIn.uniqueImpressions28d,
+      profileVisits: live.linkedIn.uniquePageViews28d,
       outboundClicks: live.linkedIn.clicks28d,
       websiteVisitors: null,
       fetchedAt: live.linkedIn.fetchedAt,
@@ -513,7 +513,7 @@ async function withLiveReport(
   const searchConsole = liveSources.searchConsole;
   const pagesPerVisitor = live && live.visitors > 0 ? live.pageviews / live.visitors : snapshot?.website.pagesPerVisitor ?? 0;
   const currentSocial = snapshot?.social.filter((platform) => isFreshSource(platform.fetchedAt, now)) ?? [];
-  const socialExposures = currentSocial.reduce((total, platform) => total + platform.exposures, 0);
+  const socialExposures = currentSocial.reduce((total, platform) => total + (platform.exposures ?? 0), 0);
   const facebookReferrals = live?.topReferrers
     .filter((row) => row.label.toLowerCase().includes("facebook"))
     .reduce((total, row) => total + row.visitors, 0) ?? 0;
@@ -707,11 +707,15 @@ async function withLiveReport(
         profileVisits: platform.profileVisits,
         outboundClicks: platform.outboundClicks,
         websiteVisitors: platform.websiteVisitors,
-        interactionRate: typeof platform.interactions === "number" && platform.exposures > 0 ? platform.interactions / platform.exposures : null,
+        interactionRate: typeof platform.interactions === "number" && typeof platform.exposures === "number" && platform.exposures > 0
+          ? platform.interactions / platform.exposures
+          : null,
       })),
       diagnosis: currentSocial.map((platform) => ({
         channel: platform.platform,
-        strength: `${platform.exposures.toLocaleString("en-GB")} ${platform.exposureLabel.toLowerCase()} in ${platform.period}.`,
+        strength: platform.exposures === null
+          ? `${platform.exposureLabel} are not available for ${platform.period}.`
+          : `${platform.exposures.toLocaleString("en-GB")} ${platform.exposureLabel.toLowerCase()} in ${platform.period}.`,
         constraint: platform.outboundClicks === null ? "The current API does not expose outbound clicks for this connection." : `${platform.outboundClicks.toLocaleString("en-GB")} outbound clicks in the same window.`,
         nextMove: "Compare the next complete window and keep every profile link source-coded.",
         workingKpi: `${platform.exposureLabel} and source-coded site actions`,

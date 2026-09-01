@@ -55,7 +55,7 @@ export type AnalyticsSnapshotPlatform = {
   platform: string;
   period: string;
   exposureLabel: string;
-  exposures: number;
+  exposures: number | null;
   interactions: number | null;
   followers: number | null;
   profileVisits: number | null;
