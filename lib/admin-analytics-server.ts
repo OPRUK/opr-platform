@@ -1197,17 +1197,24 @@ export async function loadAdminAnalytics(
 
   const filmViews = buildFilmViews(eventResult.data ?? []);
   const submissionFunnel = buildSubmissionFunnel(eventResult.data ?? []);
-  const liveSources = await loadLiveSources(_options?.forceRefresh ?? false);
-  const socialFilmData = await buildSocialFilmViews(client, filmViews, liveSources);
-  const socialFilmViews = socialFilmData.films;
-
   const savedSnapshot = await getSnapshot(client);
   let indexAudit = savedSnapshot?.indexAudit ?? null;
   const auditAgeMs = indexAudit ? Date.now() - Date.parse(indexAudit.auditedAt) : Number.POSITIVE_INFINITY;
-  if (_options?.refreshIndexAudit && (!Number.isFinite(auditAgeMs) || auditAgeMs >= 60 * 60 * 1000)) {
-    const refreshedAudit = await runGoogleIndexAudit();
-    if (refreshedAudit) indexAudit = refreshedAudit;
-  }
+  const shouldRefreshIndexAudit = Boolean(
+    _options?.refreshIndexAudit &&
+    (!Number.isFinite(auditAgeMs) || auditAgeMs >= 60 * 60 * 1000),
+  );
+  // PageSpeed can legitimately take most of its 45-second timeout. Run the
+  // independent URL inspection audit alongside all live connectors so the
+  // combined refresh remains safely inside the function duration limit.
+  const [liveSources, refreshedAudit] = await Promise.all([
+    loadLiveSources(_options?.forceRefresh ?? false),
+    shouldRefreshIndexAudit ? runGoogleIndexAudit() : Promise.resolve(null),
+  ]);
+  if (refreshedAudit) indexAudit = refreshedAudit;
+
+  const socialFilmData = await buildSocialFilmViews(client, filmViews, liveSources);
+  const socialFilmViews = socialFilmData.films;
 
   const currentSnapshot = applyLiveSources(savedSnapshot, liveSources);
   const snapshotWithPageSpeed = currentSnapshot
