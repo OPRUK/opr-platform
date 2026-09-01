@@ -74,7 +74,7 @@ export async function getLinkedInSummary(
     };
 
     const followersResponse = await fetch(
-      `https://api.linkedin.com/rest/networkSizes/${encodeURIComponent(ORGANIZATION_URN)}?edgeType=CompanyFollowedByMember`,
+      `https://api.linkedin.com/rest/networkSizes/${encodeURIComponent(ORGANIZATION_URN)}?edgeType=COMPANY_FOLLOWED_BY_MEMBER`,
       { headers: authHeaders },
     );
     if (!followersResponse.ok) {
