@@ -104,18 +104,18 @@ type Column<T> = { header: string; render: (row: T) => React.ReactNode; classNam
 
 function DataTable<T>({ columns, rows, keyFn }: { columns: Column<T>[]; rows: T[]; keyFn: (row: T, index: number) => string }) {
   return (
-    <div className="mt-4 overflow-hidden rounded-3xl border border-[#DDB765]/70 bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/10">
+    <div className="mt-4 w-full min-w-0 max-w-full overflow-hidden rounded-3xl border border-[#DDB765]/70 bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/10">
       <div className="divide-y divide-[#DDB765]/50 md:hidden">
         {rows.map((row, index) => (
-          <article key={keyFn(row, index)} className="px-5 py-5">
+          <article key={keyFn(row, index)} className="min-w-0 px-4 py-5 sm:px-5">
             {columns.map((column, columnIndex) => (
-              <div key={column.header} className={columnIndex === 0 ? "mb-4" : "grid grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] gap-3 border-t border-[#DDB765]/30 py-2.5 first:border-0"}>
+              <div key={column.header} className={columnIndex === 0 ? "mb-4 min-w-0" : "grid min-w-0 grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] gap-3 border-t border-[#DDB765]/30 py-2.5 first:border-0"}>
                 {columnIndex === 0 ? (
-                  <p className="break-words text-base font-bold leading-6 text-[#123C39]">{column.render(row)}</p>
+                  <p className="min-w-0 [overflow-wrap:anywhere] text-base font-bold leading-6 text-[#123C39]">{column.render(row)}</p>
                 ) : (
                   <>
-                    <p className="text-xs font-semibold leading-5 text-[#6B431E]">{column.header}</p>
-                    <div className="break-words text-right text-sm leading-5 text-[#123C39]">{column.render(row)}</div>
+                    <p className="min-w-0 text-xs font-semibold leading-5 text-[#6B431E]">{column.header}</p>
+                    <div className="min-w-0 [overflow-wrap:anywhere] text-right text-sm leading-5 text-[#123C39]">{column.render(row)}</div>
                   </>
                 )}
               </div>
