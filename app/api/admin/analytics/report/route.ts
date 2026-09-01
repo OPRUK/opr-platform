@@ -97,6 +97,12 @@ export async function GET(request: Request) {
         { metric: "Google CTR", value: analytics.snapshot.google.ctr, period: analytics.snapshot.google.period, source: "Google Search Console", status: googleStatus, refreshedAt: analytics.snapshot.google.fetchedAt },
         { metric: "Google average position", value: analytics.snapshot.google.averagePosition, period: analytics.snapshot.google.period, source: "Google Search Console", status: googleStatus, refreshedAt: analytics.snapshot.google.fetchedAt },
       ]);
+      if (analytics.snapshot.indexAudit) overview.addRows([
+        { metric: "Sitemap URLs submitted", value: analytics.snapshot.indexAudit.submittedUrls, period: "Latest URL inspection audit", source: "Google URL Inspection API", status: "Live sitemap audit", refreshedAt: analytics.snapshot.indexAudit.auditedAt },
+        { metric: "Sitemap URLs indexed", value: analytics.snapshot.indexAudit.indexedUrls, period: "Latest URL inspection audit", source: "Google URL Inspection API", status: "Live sitemap audit", refreshedAt: analytics.snapshot.indexAudit.auditedAt },
+        { metric: "Sitemap URLs not indexed", value: analytics.snapshot.indexAudit.notIndexedUrls, period: "Latest URL inspection audit", source: "Google URL Inspection API", status: "Review listed URLs", refreshedAt: analytics.snapshot.indexAudit.auditedAt },
+        { metric: "URL inspection errors", value: analytics.snapshot.indexAudit.failedInspections, period: "Latest URL inspection audit", source: "Google URL Inspection API", status: analytics.snapshot.indexAudit.failedInspections ? "Retry required" : "Clear", refreshedAt: analytics.snapshot.indexAudit.auditedAt },
+      ]);
       overview.eachRow((row) => {
         if (row.getCell(1).value === "Google CTR") row.getCell(2).numFmt = "0.0%";
       });
@@ -192,6 +198,29 @@ export async function GET(request: Request) {
       row.alignment = { vertical: "top", wrapText: true };
     });
     styleSheet(pageSpeed);
+
+    const indexAudit = workbook.addWorksheet("Google Index Audit");
+    indexAudit.columns = [
+      { header: "URL", key: "url", width: 62 },
+      { header: "Indexed", key: "indexed", width: 14 },
+      { header: "Verdict", key: "verdict", width: 18 },
+      { header: "Coverage state", key: "coverageState", width: 34 },
+      { header: "Indexing state", key: "indexingState", width: 24 },
+      { header: "Fetch state", key: "pageFetchState", width: 24 },
+      { header: "Last crawl", key: "lastCrawlTime", width: 25 },
+      { header: "Google canonical", key: "googleCanonical", width: 62 },
+      { header: "Declared canonical", key: "userCanonical", width: 62 },
+      { header: "Crawled as", key: "crawledAs", width: 20 },
+      { header: "Inspection error", key: "error", width: 42 },
+    ];
+    indexAudit.addRows((analytics.snapshot?.indexAudit?.results ?? []).map((result) => ({
+      ...result,
+      indexed: result.indexed === null ? "Not checked" : result.indexed ? "Yes" : "No",
+    })));
+    indexAudit.eachRow((row) => {
+      row.alignment = { vertical: "top", wrapText: true };
+    });
+    styleSheet(indexAudit);
 
     const actions = workbook.addWorksheet("Recommended Actions");
     actions.columns = [

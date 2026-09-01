@@ -1062,12 +1062,12 @@ export default function AdminAnalyticsPanel({
                   ]}
                 />
               ) : (
-                <p className="mt-4 rounded-2xl bg-[#FFF3DF] p-4 text-sm leading-6 text-stone-700">Live Google index-coverage totals are not available through the connected Search Analytics API, so the older coverage counts are hidden.</p>
+                <p className="mt-4 rounded-2xl bg-[#FFF3DF] p-4 text-sm leading-6 text-stone-700">No sitemap URL inspection audit has been stored yet. Select Refresh dashboard to run the first audit, or wait for the daily analytics refresh.</p>
               )}
 
               {report.seoTechnical.notIndexed.length ? (
                 <>
-                  <SubHeading eyebrow="Technical SEO" title="Not indexed" />
+                  <SubHeading eyebrow="Technical SEO" title="Sitemap URLs not indexed" />
                   <DataTable<(typeof report.seoTechnical.notIndexed)[number]>
                     keyFn={(row) => row.url}
                     rows={report.seoTechnical.notIndexed}
