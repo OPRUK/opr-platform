@@ -1,4 +1,5 @@
 type CommunityRecipeEditorialFields = {
+  title: string;
   name: string;
   story: string;
   ingredients: string | null;
@@ -13,6 +14,36 @@ const communityRecipeEditorialOverrides: Record<
   number,
   Partial<CommunityRecipeEditorialFields>
 > = {
+  45: {
+    title: "Pat’s Haddock and Tomato Bake",
+    story:
+      "This was a regular favourite in our house when I was growing up. My mum, Pat, hated cooking, but everything she made was delicious — and made with love.",
+    ingredients: [
+      "4 undyed smoked haddock fillets",
+      "1 small pack tiger prawns",
+      "2–3 large beef tomatoes",
+      "1 large white onion",
+      "1–2 cloves garlic",
+      "Butter, for cooking",
+      "100 ml milk",
+      "100 ml double cream",
+      "Salt and freshly ground black pepper",
+      "Cooked rice and green vegetables, to serve",
+    ].join("\n"),
+    method: [
+      "Thinly slice the onion.",
+      "Skin the tomatoes, then roughly chop them.",
+      "Remove the skin from the haddock and break the fillets into pieces.",
+      "Melt a little butter in a frying pan, then gently sweat the onion and garlic until softened.",
+      "Add the tomatoes, season well and cook for 10 minutes.",
+      "Arrange the raw haddock in a shallow baking dish and scatter the prawns over it, then spoon the tomato and onion sauce on top.",
+      "Mix the cream and milk in a jug and pour over the dish. Finish with plenty of freshly ground black pepper and a little salt.",
+      "Bake at 190°C for 20–25 minutes, until bubbling and the fish is cooked through.",
+      "Serve with rice and green vegetables.",
+    ].join("\n"),
+    cook_notes:
+      "You can use a mix of cod and haddock, or smoked and unsmoked haddock, but smoked haddock gives the dish the most flavour.",
+  },
   47: {
     name: "Georgina Hovanessian",
     story:

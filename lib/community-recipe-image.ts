@@ -11,6 +11,15 @@ export function fallbackImageForCommunityRecipe(title: string): string | null {
   }
 
   if (
+    normalisedTitle.includes("pat") &&
+    normalisedTitle.includes("haddock") &&
+    normalisedTitle.includes("tomato") &&
+    normalisedTitle.includes("bake")
+  ) {
+    return "/images/recipes/pats-haddock-tomato-bake.webp";
+  }
+
+  if (
     normalisedTitle.includes("grandad") &&
     normalisedTitle.includes("steak") &&
     normalisedTitle.includes("ale") &&

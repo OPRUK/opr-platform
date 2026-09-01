@@ -27,6 +27,22 @@ test("Grandad's Steak & Ale Pie has three valid visual stages", () => {
   assertValidPhotos(communityRecipeMethodPhotos[41], 18);
 });
 
+test("Pat's Haddock and Tomato Bake has all nine valid visual stages", () => {
+  const photos = communityRecipeMethodPhotos[45];
+
+  assert.equal(photos.length, 9);
+  assert.deepEqual(
+    photos.map((photo) => photo.step),
+    [1, 2, 3, 4, 5, 6, 7, 8, 9],
+  );
+  for (const photo of photos) {
+    assert.ok(photo.alt.trim().length > 0);
+    assert.ok(photo.title.trim().length > 0);
+    assert.ok(photo.caption.trim().length > 0);
+    assert.ok(existsSync(`public${photo.src}`), `${photo.src} should exist`);
+  }
+});
+
 test("Georgina's chutney has four valid visual stages", () => {
   const photos = communityRecipeMethodPhotos[47];
 

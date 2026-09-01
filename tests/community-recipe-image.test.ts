@@ -27,6 +27,13 @@ test("Grandad's Steak & Ale Pie uses its local cookbook image when no upload exi
   );
 });
 
+test("Pat's Haddock and Tomato Bake uses Amy's approved photograph", () => {
+  assert.equal(
+    fallbackImageForCommunityRecipe("Pat’s Haddock And Tomato Bake"),
+    "/images/recipes/pats-haddock-tomato-bake.webp",
+  );
+});
+
 test("unknown community recipes keep the standard text fallback", () => {
   assert.equal(fallbackImageForCommunityRecipe("A new family recipe"), null);
 });
