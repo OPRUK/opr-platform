@@ -1,5 +1,7 @@
 import "server-only";
 
+import { buildLinkedInPageStatisticsUrl } from "./linkedin-query";
+
 const API_VERSION = "202608";
 const CACHE_MS = 15 * 60 * 1000;
 const REPORT_LAG_DAYS = 1;
@@ -90,13 +92,11 @@ export async function getLinkedInSummary(
     startDate.setUTCDate(startDate.getUTCDate() - (REPORT_WINDOW_DAYS - 1));
     startDate.setUTCHours(0, 0, 0, 0);
 
-    const statsUrl = new URL("https://api.linkedin.com/rest/organizationPageStatistics");
-    statsUrl.searchParams.set("q", "organization");
-    statsUrl.searchParams.set("organization", ORGANIZATION_URN);
-    statsUrl.searchParams.set(
-      "timeIntervals",
-      `(timeRange:(start:${startDate.getTime()},end:${endDate.getTime()}),timeGranularityType:DAY)`,
-    );
+    const statsUrl = buildLinkedInPageStatisticsUrl({
+      organizationUrn: ORGANIZATION_URN,
+      start: startDate.getTime(),
+      end: endDate.getTime(),
+    });
 
     const statsResponse = await fetch(statsUrl, { headers: authHeaders });
 
