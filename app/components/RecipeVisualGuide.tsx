@@ -8,6 +8,17 @@ export default function RecipeVisualGuide({
 }) {
   if (!photos.length) return null;
 
+  const gridColumns =
+    photos.length === 4
+      ? "md:grid-cols-2 lg:grid-cols-4"
+      : photos.length >= 5
+        ? "md:grid-cols-2 lg:grid-cols-3"
+        : "md:grid-cols-3";
+  const imageSizes =
+    photos.length >= 5
+      ? "(min-width: 1152px) 352px, (min-width: 1024px) calc(33vw - 32px), (min-width: 768px) calc(50vw - 36px), calc(100vw - 48px)"
+      : "(min-width: 1152px) 352px, (min-width: 768px) calc(33vw - 32px), calc(100vw - 48px)";
+
   return (
     <section className="bg-[#EED8B2] px-6 py-12 md:px-8 md:py-16" aria-labelledby="visual-guide-heading">
       <div className="mx-auto max-w-6xl">
@@ -23,7 +34,7 @@ export default function RecipeVisualGuide({
         <p className="mx-auto mt-5 max-w-3xl text-center text-base leading-7 text-stone-700">
           Key moments to look for as you cook. Use these visual cues alongside the written method.
         </p>
-        <div className={`mt-9 grid gap-6 ${photos.length === 4 ? "md:grid-cols-2 lg:grid-cols-4" : "md:grid-cols-3"}`}>
+        <div className={`mt-9 grid gap-6 ${gridColumns}`}>
           {photos.map((photo) => (
             <figure
               key={photo.src}
@@ -34,7 +45,7 @@ export default function RecipeVisualGuide({
                 alt={photo.alt}
                 width={1536}
                 height={1024}
-                sizes="(min-width: 1152px) 352px, (min-width: 768px) calc(33vw - 32px), calc(100vw - 48px)"
+                sizes={imageSizes}
                 className="aspect-[3/2] w-full object-cover"
               />
               <figcaption className="p-6">
