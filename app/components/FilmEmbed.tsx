@@ -26,7 +26,9 @@ export default function FilmEmbed({
   className?: string;
 }) {
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const ambientVideoRef = useRef<HTMLVideoElement>(null);
   const hideControlsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   // Guards against onPlay firing a "film_play" event every time a visitor
   // pauses and resumes — only the first play of a viewing session counts.
@@ -38,6 +40,8 @@ export default function FilmEmbed({
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [autoplayMuted, setAutoplayMuted] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [fullscreenSupported, setFullscreenSupported] = useState(false);
 
   function keepControlsVisible() {
     setControlsVisible(true);
@@ -49,12 +53,36 @@ export default function FilmEmbed({
 
   function closeFilm() {
     videoRef.current?.pause();
+    ambientVideoRef.current?.pause();
+    if (document.fullscreenElement === stageRef.current) {
+      void document.exitFullscreen().catch(() => undefined);
+    }
     setOpen(false);
     setIsPlaying(false);
     setCurrentTime(0);
     setAutoplayMuted(false);
     hasSentPlayEvent.current = false;
     window.setTimeout(() => triggerRef.current?.focus(), 0);
+  }
+
+  function syncAmbientVideo() {
+    const player = videoRef.current;
+    const ambient = ambientVideoRef.current;
+    if (!player || !ambient) return;
+
+    if (Math.abs(ambient.currentTime - player.currentTime) > 0.2) {
+      ambient.currentTime = player.currentTime;
+    }
+    ambient.playbackRate = player.playbackRate;
+  }
+
+  async function toggleFullscreen() {
+    if (document.fullscreenElement) {
+      await document.exitFullscreen().catch(() => undefined);
+      return;
+    }
+    await stageRef.current?.requestFullscreen().catch(() => undefined);
+    keepControlsVisible();
   }
 
   async function openFilm() {
@@ -105,13 +133,24 @@ export default function FilmEmbed({
     document.body.style.overflow = "hidden";
 
     function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") closeFilm();
+      if (event.key === "Escape") {
+        // The first Escape leaves browser full screen; a second closes the film.
+        if (document.fullscreenElement) return;
+        closeFilm();
+      }
       setControlsVisible(true);
     }
 
+    function onFullscreenChange() {
+      setIsFullscreen(document.fullscreenElement === stageRef.current);
+    }
+
+    setFullscreenSupported(Boolean(stageRef.current?.requestFullscreen));
     window.addEventListener("keydown", onKeyDown);
+    document.addEventListener("fullscreenchange", onFullscreenChange);
     return () => {
       window.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("fullscreenchange", onFullscreenChange);
       document.body.style.overflow = previousOverflow;
       if (hideControlsTimer.current) clearTimeout(hideControlsTimer.current);
     };
@@ -122,31 +161,36 @@ export default function FilmEmbed({
       role="dialog"
       aria-modal="true"
       aria-label={title}
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-[#08231F]/95 px-3 py-5 backdrop-blur-sm sm:px-8"
+      className="fixed inset-0 z-[100] bg-black"
       onPointerMove={keepControlsVisible}
       onClick={closeFilm}
     >
-      <button
-        type="button"
-        onClick={closeFilm}
-        aria-label={`Close ${title}`}
-        autoFocus
-        className="absolute right-4 top-4 z-30 flex h-11 w-11 items-center justify-center rounded-full border border-white/45 bg-black/50 text-2xl text-white transition hover:bg-white hover:text-[#08231F] focus-visible:bg-white focus-visible:text-[#08231F] sm:right-8 sm:top-8"
-      >
-        <span aria-hidden="true">×</span>
-      </button>
-
       <div
-        className="relative w-full max-w-6xl overflow-hidden rounded-2xl bg-black shadow-2xl shadow-black/60"
+        ref={stageRef}
+        className="relative h-[100dvh] w-screen overflow-hidden bg-black"
         onClick={(event) => {
           event.stopPropagation();
           keepControlsVisible();
         }}
       >
         <video
+          ref={ambientVideoRef}
+          aria-hidden="true"
+          tabIndex={-1}
+          className="pointer-events-none absolute -inset-[8%] h-[116%] w-[116%] scale-110 object-cover opacity-55 blur-3xl"
+          src={video}
+          playsInline
+          muted
+          preload="auto"
+          poster={poster}
+          controls={false}
+        />
+        <div className="pointer-events-none absolute inset-0 bg-[#041513]/55" aria-hidden="true" />
+
+        <video
           ref={videoRef}
           aria-label={title}
-          className="aspect-video max-h-[82vh] w-full bg-black object-contain"
+          className="relative z-10 h-full w-full object-contain"
           src={video}
           playsInline
           preload="auto"
@@ -156,6 +200,8 @@ export default function FilmEmbed({
           disablePictureInPicture
           onPlay={() => {
             setIsPlaying(true);
+            syncAmbientVideo();
+            void ambientVideoRef.current?.play().catch(() => undefined);
             if (!hasSentPlayEvent.current) {
               hasSentPlayEvent.current = true;
               sendAnalyticsEvent("film_play", video);
@@ -164,42 +210,89 @@ export default function FilmEmbed({
           onPause={() => {
             setIsPlaying(false);
             setControlsVisible(true);
+            ambientVideoRef.current?.pause();
           }}
           onEnded={() => {
             setIsPlaying(false);
             setControlsVisible(true);
+            ambientVideoRef.current?.pause();
             sendAnalyticsEvent("film_watched", video);
           }}
-          onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)}
+          onTimeUpdate={(event) => {
+            setCurrentTime(event.currentTarget.currentTime);
+            syncAmbientVideo();
+          }}
+          onSeeking={syncAmbientVideo}
+          onRateChange={syncAmbientVideo}
           onDurationChange={(event) => setDuration(event.currentTarget.duration)}
         >
           {captions ? <track kind="captions" src={captions} srcLang="en" label="English captions" default /> : null}
           Your browser does not support video playback.
         </video>
-        <VideoBrandMark />
+        <VideoBrandMark className="z-20" />
+
+        <div
+          className={`absolute inset-x-0 top-0 z-30 flex items-start justify-between bg-gradient-to-b from-black/75 to-transparent p-4 pb-16 transition-opacity duration-300 sm:p-6 sm:pb-20 ${
+            controlsVisible ? "opacity-100" : "pointer-events-none opacity-0"
+          }`}
+          onFocusCapture={() => setControlsVisible(true)}
+        >
+          <p className="line-clamp-2 max-w-[70vw] pt-2 text-sm font-semibold text-white sm:text-base">{title}</p>
+          <div className="flex gap-2">
+            {fullscreenSupported ? (
+              <button
+                type="button"
+                onClick={() => void toggleFullscreen()}
+                aria-label={isFullscreen ? "Exit full screen" : "Enter full screen"}
+                tabIndex={controlsVisible ? 0 : -1}
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-white/45 bg-black/50 text-white transition hover:bg-white hover:text-[#08231F] focus-visible:bg-white focus-visible:text-[#08231F]"
+              >
+                {isFullscreen ? (
+                  <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" />
+                  </svg>
+                ) : (
+                  <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" />
+                  </svg>
+                )}
+              </button>
+            ) : null}
+            <button
+              type="button"
+              onClick={closeFilm}
+              aria-label={`Close ${title}`}
+              autoFocus
+              tabIndex={controlsVisible ? 0 : -1}
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-white/45 bg-black/50 text-2xl text-white transition hover:bg-white hover:text-[#08231F] focus-visible:bg-white focus-visible:text-[#08231F]"
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+        </div>
 
         {autoplayMuted ? (
           <button
             type="button"
             onClick={toggleMuted}
-            className="absolute left-1/2 top-5 z-20 -translate-x-1/2 rounded-full bg-[#FFF3DF] px-5 py-2.5 text-sm font-bold text-[#123C39] shadow-lg"
+            className="absolute left-1/2 top-20 z-40 -translate-x-1/2 rounded-full bg-[#FFF3DF] px-5 py-2.5 text-sm font-bold text-[#123C39] shadow-lg sm:top-24"
           >
             Tap for sound
           </button>
         ) : null}
 
         <div
-          className={`absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-black/90 via-black/60 to-transparent px-4 pb-4 pt-16 text-white transition-opacity duration-300 sm:px-6 sm:pb-6 ${
+          className={`absolute inset-x-0 bottom-0 z-30 bg-gradient-to-t from-black/90 via-black/60 to-transparent px-4 pb-4 pt-16 text-white transition-opacity duration-300 sm:px-6 sm:pb-6 ${
             controlsVisible ? "opacity-100" : "pointer-events-none opacity-0"
           }`}
           onFocusCapture={() => setControlsVisible(true)}
         >
-          <p className="mb-4 line-clamp-1 pr-12 text-sm font-semibold sm:text-base">{title}</p>
           <div className="flex items-center gap-3 sm:gap-4">
             <button
               type="button"
               onClick={togglePlayback}
               aria-label={isPlaying ? "Pause film" : "Play film"}
+              tabIndex={controlsVisible ? 0 : -1}
               className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#FFF3DF] text-[#08231F] transition hover:scale-105"
             >
               <span aria-hidden="true">{isPlaying ? "❚❚" : "▶"}</span>
@@ -215,6 +308,7 @@ export default function FilmEmbed({
               onChange={(event) => {
                 if (videoRef.current) videoRef.current.currentTime = Number(event.target.value);
               }}
+              tabIndex={controlsVisible ? 0 : -1}
               className="min-w-0 flex-1 accent-[#DDB765]"
             />
             <span className="shrink-0 text-xs tabular-nums text-white/85 sm:text-sm">
@@ -224,6 +318,7 @@ export default function FilmEmbed({
               type="button"
               onClick={toggleMuted}
               aria-label={muted ? "Turn sound on" : "Mute film"}
+              tabIndex={controlsVisible ? 0 : -1}
               className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/45 bg-black/35 text-lg transition hover:bg-white hover:text-[#08231F]"
             >
               <span aria-hidden="true">{muted ? "◖" : "◕"}</span>
