@@ -1,6 +1,6 @@
 import "server-only";
 
-import { buildLinkedInPageStatisticsUrl } from "./linkedin-query";
+import { buildLinkedInPageStatisticsUrl, buildLinkedInShareStatisticsUrl } from "./linkedin-query";
 
 const API_VERSION = "202608";
 const CACHE_MS = 15 * 60 * 1000;
@@ -13,7 +13,8 @@ export type LinkedInSummary = {
   followers: number;
   pageViews28d: number | null;
   uniquePageViews28d: number | null;
-  clicks28d: number | null;
+  pageButtonClicks28d: number | null;
+  postClicks28d: number | null;
   fetchedAt: string;
 };
 
@@ -92,19 +93,27 @@ export async function getLinkedInSummary(
     startDate.setUTCDate(startDate.getUTCDate() - (REPORT_WINDOW_DAYS - 1));
     startDate.setUTCHours(0, 0, 0, 0);
 
-    const statsUrl = buildLinkedInPageStatisticsUrl({
+    const pageStatsUrl = buildLinkedInPageStatisticsUrl({
+      organizationUrn: ORGANIZATION_URN,
+      start: startDate.getTime(),
+      end: endDate.getTime(),
+    });
+    const shareStatsUrl = buildLinkedInShareStatisticsUrl({
       organizationUrn: ORGANIZATION_URN,
       start: startDate.getTime(),
       end: endDate.getTime(),
     });
 
-    const statsResponse = await fetch(statsUrl, { headers: authHeaders });
+    const [pageStatsResponse, shareStatsResponse] = await Promise.all([
+      fetch(pageStatsUrl, { headers: authHeaders }),
+      fetch(shareStatsUrl, { headers: authHeaders }),
+    ]);
 
     let pageViews: number | null = null;
     let uniquePageViews: number | null = null;
-    let clicks: number | null = null;
-    if (statsResponse.ok) {
-      const stats = await statsResponse.json();
+    let pageButtonClicks: number | null = null;
+    if (pageStatsResponse.ok) {
+      const stats = await pageStatsResponse.json();
       const elements = Array.isArray(stats.elements) ? stats.elements : [];
       pageViews = elements.reduce(
         (total: number, element: { totalPageStatistics?: { views?: { allPageViews?: { pageViews?: number } } } }) =>
@@ -116,7 +125,7 @@ export async function getLinkedInSummary(
           total + (element.totalPageStatistics?.views?.allPageViews?.uniquePageViews ?? 0),
         0,
       );
-      clicks = elements.reduce((total: number, element: {
+      pageButtonClicks = elements.reduce((total: number, element: {
         totalPageStatistics?: {
           clicks?: {
             desktopCustomButtonClickCounts?: Array<{ clicks?: number }>;
@@ -131,7 +140,20 @@ export async function getLinkedInSummary(
         return total + clickGroups.reduce((subtotal, row) => subtotal + (row.clicks ?? 0), 0);
       }, 0);
     } else {
-      console.warn("OPR LinkedIn page statistics query failed", await statsResponse.text());
+      console.warn("OPR LinkedIn page statistics query failed", await pageStatsResponse.text());
+    }
+
+    let postClicks: number | null = null;
+    if (shareStatsResponse.ok) {
+      const shareStats = await shareStatsResponse.json();
+      const elements = Array.isArray(shareStats.elements) ? shareStats.elements : [];
+      postClicks = elements.reduce(
+        (total: number, element: { totalShareStatistics?: { clickCount?: number } }) =>
+          total + (element.totalShareStatistics?.clickCount ?? 0),
+        0,
+      );
+    } else {
+      console.warn("OPR LinkedIn post statistics query failed", await shareStatsResponse.text());
     }
 
     const summary: LinkedInSummary = {
@@ -139,7 +161,8 @@ export async function getLinkedInSummary(
       followers: followers.firstDegreeSize ?? 0,
       pageViews28d: pageViews,
       uniquePageViews28d: uniquePageViews,
-      clicks28d: clicks,
+      pageButtonClicks28d: pageButtonClicks,
+      postClicks28d: postClicks,
       fetchedAt: new Date().toISOString(),
     };
 
