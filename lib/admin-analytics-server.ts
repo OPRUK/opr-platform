@@ -572,14 +572,24 @@ function buildNotIndexedRows(
 ): AnalyticsReport["seoTechnical"]["notIndexed"] {
   if (!audit) return [];
 
+  const readableState = (state: string | null, unspecified: string) => {
+    if (!state || state.includes("UNSPECIFIED")) return unspecified;
+    return state
+      .toLowerCase()
+      .split("_")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
   return audit.results
     .filter((result) => result.indexed === false)
     .map((result) => ({
       url: result.url,
       reason: result.coverageState ?? result.verdict ?? "Not indexed",
-      assessment: [result.pageFetchState, result.indexingState]
-        .filter(Boolean)
-        .join(" · ") || "Google supplied no further status detail.",
+      assessment: [
+        readableState(result.pageFetchState, "Not crawled yet"),
+        readableState(result.indexingState, "Indexing not assessed"),
+      ].join(" · "),
       treatment: indexAuditTreatment(result),
       priority: indexAuditPriority(result),
       observed: result.lastCrawlTime ?? audit.auditedAt,

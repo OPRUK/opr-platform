@@ -80,6 +80,12 @@ test("assigns practical treatments and priorities to Google indexing states", ()
     indexingState: "INDEXING_ALLOWED",
     pageFetchState: "SUCCESSFUL",
   });
+  const discovered = normaliseIndexInspection("https://otherpeoplesrecipes.co.uk/discovered", {
+    verdict: "NEUTRAL",
+    coverageState: "Discovered – currently not indexed",
+    indexingState: "INDEXING_STATE_UNSPECIFIED",
+    pageFetchState: "PAGE_FETCH_STATE_UNSPECIFIED",
+  });
 
   assert.equal(indexAuditPriority(blocked), "P1");
   assert.match(indexAuditTreatment(blocked), /Remove the indexing block/);
@@ -87,4 +93,6 @@ test("assigns practical treatments and priorities to Google indexing states", ()
   assert.match(indexAuditTreatment(fetchFailed), /Fix the page-fetch problem/);
   assert.equal(indexAuditPriority(crawled), "P2");
   assert.match(indexAuditTreatment(crawled), /distinct value/);
+  assert.equal(indexAuditPriority(discovered), "P2");
+  assert.match(indexAuditTreatment(discovered), /Strengthen internal links/);
 });
