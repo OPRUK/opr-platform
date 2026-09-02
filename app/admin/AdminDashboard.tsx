@@ -124,6 +124,7 @@ export default function AdminDashboard({
   const [loadingNewsletterRecipients, setLoadingNewsletterRecipients] = useState(false);
   const [newsletterConfirmation, setNewsletterConfirmation] = useState("");
   const [sendingNewsletter, setSendingNewsletter] = useState(false);
+  const [sendingNewsletterTest, setSendingNewsletterTest] = useState(false);
   const [newsletterResult, setNewsletterResult] = useState<string | null>(null);
   const analyticsRefreshInFlight = useRef(false);
 
@@ -407,6 +408,24 @@ export default function AdminDashboard({
       setNewsletterConfirmation("");
     } finally {
       setSendingNewsletter(false);
+    }
+  }
+
+  async function sendNewsletterTest() {
+    setSendingNewsletterTest(true);
+    setNewsletterResult(null);
+    try {
+      const response = await adminRequest("/api/admin/newsletter-test", {
+        method: "POST",
+      });
+      const payload = await response.json().catch(() => null);
+      if (!response.ok) {
+        setNewsletterResult(payload?.error ?? "The test newsletter was not sent.");
+        return;
+      }
+      setNewsletterResult("Test newsletter accepted for delivery to Chaten's admin inbox.");
+    } finally {
+      setSendingNewsletterTest(false);
     }
   }
 
@@ -796,6 +815,21 @@ export default function AdminDashboard({
                 : `This will send to ${newsletterRecipients} ${newsletterRecipients === 1 ? "person" : "people"} — everyone who opted into marketing across the Founding Table, recipe submissions, and cook-along signups.`}
           </p>
 
+          <div className="mt-6 rounded-2xl border border-[#DDB765] bg-white/55 p-5">
+            <p className="font-medium">Check the newsletter before sending it to subscribers.</p>
+            <p className="mt-2 text-sm text-stone-700">
+              This sends one copy to Chaten&apos;s admin inbox only. It does not contact or change the subscriber list.
+            </p>
+            <button
+              type="button"
+              onClick={() => void sendNewsletterTest()}
+              disabled={sendingNewsletterTest || sendingNewsletter}
+              className="mt-4 rounded-full border border-[#123C39] px-5 py-2.5 text-sm font-medium transition hover:bg-[#123C39] hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              {sendingNewsletterTest ? "Sending test…" : "Send test to Chaten"}
+            </button>
+          </div>
+
           <label className="mt-6 block text-sm font-medium">
             Type <span className="font-mono">SEND OPR NEWSLETTER 1</span> to confirm
             <input
@@ -816,7 +850,7 @@ export default function AdminDashboard({
             <button
               type="button"
               onClick={() => void sendNewsletter()}
-              disabled={!confirmationMatches || sendingNewsletter || !newsletterRecipients}
+              disabled={!confirmationMatches || sendingNewsletter || sendingNewsletterTest || !newsletterRecipients}
               className="rounded-full bg-[#123C39] px-6 py-3 text-sm font-medium text-white transition hover:bg-[#08231F] disabled:cursor-not-allowed disabled:opacity-40"
             >
               {sendingNewsletter ? "Sending…" : "Send newsletter"}
