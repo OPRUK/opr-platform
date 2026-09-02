@@ -89,6 +89,12 @@ export default async function Home() {
 
           <h1 className="font-brand mx-auto max-w-6xl text-balance text-[clamp(2.8rem,7vw,5.5rem)] font-semibold leading-[0.94] tracking-[-0.025em] drop-shadow-2xl">
             Other People&apos;s Recipes
+            <sup
+              aria-hidden="true"
+              className="ml-0.5 align-super text-[0.35em]"
+            >
+              ™
+            </sup>
           </h1>
 
           <p className="font-display mx-auto mt-6 max-w-3xl text-balance text-2xl leading-tight text-[#FFF3DF] sm:text-3xl md:text-4xl">
