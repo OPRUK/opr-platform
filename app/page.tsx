@@ -140,7 +140,7 @@ export default async function Home() {
             <div className="flex min-h-[200px] flex-col justify-between bg-[#DDB765] p-8 text-[#123C39] md:min-h-full md:p-10">
               <p className="text-xs font-bold uppercase tracking-[0.3em]">OPR invitation</p>
               <div>
-                <p className="font-brand text-7xl font-semibold leading-none md:text-8xl">August</p>
+                <p className="font-brand text-7xl font-semibold leading-none md:text-8xl">September</p>
                 <p className="mt-2 text-sm font-bold uppercase tracking-[0.22em]">2026</p>
               </div>
               <p className="max-w-[13rem] text-sm leading-6">
@@ -156,7 +156,7 @@ export default async function Home() {
                 Every family has that one recipe. What&apos;s yours?
               </h2>
               <p className="mt-6 max-w-3xl text-lg leading-8 text-[#FFF3DF] md:text-xl">
-                Throughout August, we&apos;re looking for the recipes your family
+                Throughout September, we&apos;re looking for the recipes your family
                 asks for again and again. Share the recipe and the story behind
                 it for a chance to be featured in the OPR Cookbook and
                 shared with our growing community.
@@ -230,8 +230,8 @@ export default async function Home() {
         <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2">
           <div className="relative min-h-[360px] overflow-hidden rounded-[2rem] shadow-2xl md:min-h-[530px]">
             <Image
-              src="/images/recipes/krishna-vantis-baingan-ka-bharta-wide.webp"
-              alt="Krishna Anand's Baingan ka Bharta"
+              src="/images/recipes/georginas-mums-apple-pear-chutney.webp"
+              alt="Jars of Mum's Apple/Pear Chutney"
               fill
               sizes="(min-width: 768px) 50vw, 100vw"
               className="object-cover"
@@ -243,26 +243,26 @@ export default async function Home() {
               From the kitchen drawer
             </p>
             <h2 className="mt-5 max-w-xl text-4xl font-bold leading-tight md:text-6xl">
-              Krishna Anand&apos;s Baingan ka Bharta
+              Mum&apos;s Apple/Pear Chutney
             </h2>
             <div className="font-founder-hand mt-8 space-y-2 text-2xl leading-[1.35] text-[#EED8B2] md:text-3xl">
-              <p>onions, cooked till pink</p>
-              <p>tomatoes, salt &amp; deghi mirch</p>
-              <p>2 slit green chillies</p>
-              <p>fold in mashed bhuna baingan</p>
-              <p className="pl-6">simmer till smoky &amp; rich</p>
+              <p>windfall apples or pears</p>
+              <p>onions, sultanas &amp; brown sugar</p>
+              <p>vinegar, ginger &amp; garlic</p>
+              <p>simmer until thick and brown</p>
+              <p className="pl-6">spoon into prepared jars while hot</p>
             </div>
             <p className="font-founder-hand mt-7 text-2xl italic text-[#DDB765] md:text-3xl">
-              Don&apos;t let it turn brown.
+              Label it, then let the flavours mellow.
             </p>
             <Link
-              href="/family-cookbook/krishna-anands-baingan-ka-bharta"
+              href="/family-cookbook/community/47"
               className="mt-10 inline-flex w-fit items-center rounded-full bg-[#DDB765] px-8 py-4 text-lg font-bold text-[#123C39] shadow-lg transition hover:scale-105 hover:bg-[#EED8B2]"
             >
-              Cook Krishna&apos;s recipe →
+              Cook Mum&apos;s chutney recipe →
             </Link>
             <p className="mt-5 max-w-xl text-sm italic leading-6 text-[#DABF91]">
-              A treasured family recipe, carried from Krishna&apos;s kitchen into yours.
+              A family staple, passed from Georgina&apos;s grandmother to her mum and into kitchens across the family.
             </p>
           </div>
         </div>
@@ -369,8 +369,8 @@ function RecipeOfWeekFallback() {
       <div className="mx-auto grid max-w-6xl overflow-hidden rounded-[2rem] bg-[#1C5A50] shadow-2xl md:grid-cols-2">
         <div className="relative min-h-[340px]">
           <Image
-            src="/images/recipes/gautam-shobha-tandoori-aloo-nazakat-wide.webp"
-            alt="Gautam and Shobha's Tandoori Aloo Nazakat"
+            src="/images/recipes/pats-haddock-tomato-bake.webp"
+            alt="Pat's Haddock and Tomato Bake"
             fill
             sizes="(min-width: 768px) 50vw, 100vw"
             className="object-cover"
@@ -382,19 +382,19 @@ function RecipeOfWeekFallback() {
             This month&apos;s story from the OPR cookbook
           </p>
           <h2 className="mt-5 text-4xl font-bold leading-tight md:text-5xl">
-            Gautam &amp; Shobha&apos;s Tandoori Aloo Nazakat
+            Pat&apos;s Haddock and Tomato Bake
           </h2>
           <p className="mt-3 text-sm uppercase tracking-[0.25em] text-[#FFF3DF]">
-            New Delhi, India
+            New Malden, England
           </p>
           <p className="mt-7 text-lg leading-8 text-[#FFF3DF]">
-            When Gautam was preparing to open his first restaurant, Martabaan Tales, he turned to his mum, Shobha. Her Tandoori Aloo Nazakat became part of the moment a family lesson turned into the first step of his professional story.
+            This was a regular favourite in Amy&apos;s house when she was growing up. Her mum, Pat, hated cooking, but everything she made was delicious — and made with love.
           </p>
           <Link
-            href="/family-cookbook/gautam-and-shobhas-tandoori-aloo-nazakat"
+            href="/family-cookbook/community/45"
             className="mt-9 inline-flex w-fit items-center rounded-full bg-[#DDB765] px-7 py-4 font-medium text-[#08231F] transition hover:scale-105 hover:bg-[#DDB765]"
           >
-            Read Gautam &amp; Shobha&apos;s story →
+            Read Pat&apos;s story →
           </Link>
         </div>
       </div>
