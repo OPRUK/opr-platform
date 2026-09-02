@@ -9,6 +9,12 @@ const newFilmTitles = [
   "Dave & Rubble | Butter Chicken Recipe",
 ];
 
+const latestFilmTitles = [
+  "Dave & Rubble | The Inheritance",
+  "Dave & Rubble | More Chicken",
+  "Dave & Rubble | The Guest List",
+];
+
 test("the new Dave and Rubble films have complete website assets", () => {
   for (const title of newFilmTitles) {
     const film = films.find((candidate) => candidate.title === title);
@@ -36,6 +42,22 @@ test("unrelated Dave and Rubble films do not link to the Butter Chicken recipe",
     const film = films.find((candidate) => candidate.title === title);
     assert.ok(film);
     assert.equal(film.recipeSlug, undefined);
+  }
+});
+
+test("the September Dave and Rubble films have complete accessible masters", () => {
+  for (const title of latestFilmTitles) {
+    const film = films.find((candidate) => candidate.title === title);
+
+    assert.ok(film, `${title} should be present in the film collection`);
+    assert.match(film.uploadDate ?? "", /^2026-09-02T09:3[0-2]:00\+01:00$/);
+    assert.ok(film.transcript?.includes("Dave:"));
+    assert.ok(film.transcript?.includes("Rubble:"));
+    assert.ok(film.poster);
+    assert.ok(film.captions);
+    assert.ok(existsSync(resolve(`public${film.video}`)), `${film.video} should exist`);
+    assert.ok(existsSync(resolve(`public${film.poster}`)), `${film.poster} should exist`);
+    assert.ok(existsSync(resolve(`public${film.captions}`)), `${film.captions} should exist`);
   }
 });
 
