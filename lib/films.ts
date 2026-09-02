@@ -29,6 +29,40 @@ export function getFilmBySlug(slug: string): Film | null {
   return films.find((candidate) => filmSlug(candidate) === slug) ?? null;
 }
 
+export function getFilmsForRecipe(recipeSlug: string): Film[] {
+  return films.filter((candidate) => candidate.recipeSlug === recipeSlug);
+}
+
+export function getRelatedFilms(currentFilm: Film, limit = 3): Film[] {
+  if (limit <= 0 || films.length <= 1) return [];
+
+  const currentSlug = filmSlug(currentFilm);
+  const currentIndex = films.findIndex((candidate) => filmSlug(candidate) === currentSlug);
+  if (currentIndex === -1) return [];
+
+  const selected: Film[] = [];
+  const selectedSlugs = new Set([currentSlug]);
+  const addFilm = (candidate: Film) => {
+    const candidateSlug = filmSlug(candidate);
+    if (selectedSlugs.has(candidateSlug) || selected.length >= limit) return;
+    selectedSlugs.add(candidateSlug);
+    selected.push(candidate);
+  };
+
+  if (currentFilm.recipeSlug) {
+    for (const candidate of films) {
+      if (candidate.recipeSlug === currentFilm.recipeSlug) addFilm(candidate);
+    }
+  }
+
+  for (let distance = 1; distance < films.length && selected.length < limit; distance += 1) {
+    addFilm(films[(currentIndex + distance) % films.length]);
+    addFilm(films[(currentIndex - distance + films.length) % films.length]);
+  }
+
+  return selected;
+}
+
 export const defaultFilmUploadDate = "2026-08-01T12:00:00+00:00";
 
 export function filmUploadDate(film: Pick<Film, "uploadDate">): string {

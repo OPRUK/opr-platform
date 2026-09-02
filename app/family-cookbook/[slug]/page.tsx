@@ -13,7 +13,7 @@ import { getFeaturedRecipe } from "../../../lib/recipes";
 import { buildFaqPageJsonLd } from "../../../lib/recipe-faqs";
 import { getApprovedCommunityCooks } from "../../../lib/community-cooks";
 import { SITE_NAME, absoluteUrl } from "../../../lib/site";
-import { filmSlug, films } from "../../../lib/films";
+import { filmSlug, getFilmsForRecipe } from "../../../lib/films";
 
 export const dynamic = "force-dynamic";
 
@@ -92,11 +92,7 @@ export default async function RecipePage({
   }
 
   const communityCooks = await getApprovedCommunityCooks({ recipeSlug: recipe.slug });
-  const relatedFilm = {
-    "adas-jollof-rice": "Ada’s Party Jollof Rice | A Recipe to Bring People Together",
-    "krishna-anands-baingan-ka-bharta": "Krishna Anand’s Baingan ka Bharta | A Family Recipe",
-    "sams-shepherds-pie": "Sam & Nadine’s Shepherd’s Pie | A Recipe Worth Passing On",
-  }[recipe.slug];
+  const relatedFilms = getFilmsForRecipe(recipe.slug);
   const relatedRecipes = (recipe.relatedRecipeSlugs ?? []).flatMap((relatedSlug) => {
     const relatedRecipe = getFeaturedRecipe(relatedSlug);
     return relatedRecipe ? [relatedRecipe] : [];
@@ -332,16 +328,22 @@ export default async function RecipePage({
         </section>
       ) : null}
 
-      {relatedFilm ? (
+      {relatedFilms.length ? (
         <section className="bg-[#123C39] px-6 py-16 text-center text-white">
           <p className="text-sm uppercase tracking-[0.35em] text-amber-300">Watch the story</p>
-          <h2 className="mx-auto mt-4 max-w-3xl text-3xl font-bold">{relatedFilm}</h2>
-          <Link
-            href={`/films/${filmSlug(films.find((film) => film.title === relatedFilm) ?? { title: relatedFilm })}`}
-            className="mt-8 inline-block rounded-full bg-[#FFF3DF] px-8 py-4 font-medium text-[#123C39] transition hover:scale-105"
-          >
-            Watch this family recipe film
-          </Link>
+          <h2 className="mx-auto mt-4 max-w-3xl text-3xl font-bold">Films connected to {recipe.title}</h2>
+          <div className="mx-auto mt-8 grid max-w-4xl gap-4 md:grid-cols-2">
+            {relatedFilms.map((relatedFilm) => (
+              <Link
+                key={relatedFilm.video}
+                href={`/films/${filmSlug(relatedFilm)}`}
+                className="group rounded-3xl bg-[#FFF3DF] px-7 py-6 text-left text-[#123C39] transition hover:-translate-y-1 hover:bg-white"
+              >
+                <span className="block text-xl font-bold leading-snug">{relatedFilm.title}</span>
+                <span className="mt-3 block font-semibold text-[#1C5A50] group-hover:underline">Watch this family recipe film →</span>
+              </Link>
+            ))}
+          </div>
         </section>
       ) : null}
 
