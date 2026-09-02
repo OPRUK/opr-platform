@@ -98,6 +98,33 @@ function film(
 
 const filmsUnordered: Film[] = [
   {
+    title: "Dave & Rubble | The Guest List",
+    video: "/videos/opr-dave-and-rubble-the-guest-list.mp4",
+    poster: "/images/opr-dave-and-rubble-the-guest-list-poster.jpg",
+    captions: "/captions/opr-dave-and-rubble-the-guest-list.vtt",
+    transcript:
+      "Dave: “Who should we invite Sunday?”\nRubble: “Whoever brings chicken.”\nDave: “That’s not really a guest list.”\nRubble: “It’s a filtering system.”",
+    uploadDate: "2026-09-02T09:32:00+01:00",
+  },
+  {
+    title: "Dave & Rubble | More Chicken",
+    video: "/videos/opr-dave-and-rubble-more-chicken.mp4",
+    poster: "/images/opr-dave-and-rubble-more-chicken-poster.jpg",
+    captions: "/captions/opr-dave-and-rubble-more-chicken.vtt",
+    transcript:
+      "Dave: “The notes say it needs more salt.”\nRubble: “The notes are wrong. It needs more chicken.”\nDave: “Every recipe doesn’t need more chicken.”\nRubble: “Every recipe needs more chicken.”",
+    uploadDate: "2026-09-02T09:31:00+01:00",
+  },
+  {
+    title: "Dave & Rubble | The Inheritance",
+    video: "/videos/opr-dave-and-rubble-the-inheritance.mp4",
+    poster: "/images/opr-dave-and-rubble-the-inheritance-poster.jpg",
+    captions: "/captions/opr-dave-and-rubble-the-inheritance.vtt",
+    transcript:
+      "Dave: “This book gets passed down one day.”\nRubble: “Can dogs inherit books?”\nDave: “Not legally.”\nRubble: “We’ll revisit that.”",
+    uploadDate: "2026-09-02T09:30:00+01:00",
+  },
+  {
     title: "Dave & Rubble | The Handwritten Recipe",
     video: "/videos/opr-dave-and-rubble-the-handwritten-recipe.mp4",
     poster: "/images/opr-dave-and-rubble-the-handwritten-recipe-poster.jpg",
