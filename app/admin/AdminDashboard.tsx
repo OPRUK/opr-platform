@@ -121,6 +121,8 @@ export default function AdminDashboard({
   const [refreshingAnalytics, setRefreshingAnalytics] = useState(false);
   const [showNewsletterPanel, setShowNewsletterPanel] = useState(false);
   const [newsletterRecipients, setNewsletterRecipients] = useState<number | null>(null);
+  const [newsletterAlreadySent, setNewsletterAlreadySent] = useState<number | null>(null);
+  const [newsletterPendingRecipients, setNewsletterPendingRecipients] = useState<Array<{ name: string; email: string }>>([]);
   const [loadingNewsletterRecipients, setLoadingNewsletterRecipients] = useState(false);
   const [newsletterConfirmation, setNewsletterConfirmation] = useState("");
   const [sendingNewsletter, setSendingNewsletter] = useState(false);
@@ -377,12 +379,16 @@ export default function AdminDashboard({
   async function openNewsletterPanel() {
     setNewsletterResult(null);
     setNewsletterConfirmation("");
+    setNewsletterAlreadySent(null);
+    setNewsletterPendingRecipients([]);
     setShowNewsletterPanel(true);
     setLoadingNewsletterRecipients(true);
     try {
       const response = await adminRequest("/api/admin/newsletter");
       const payload = await response.json().catch(() => null);
       setNewsletterRecipients(response.ok ? (payload?.recipients ?? 0) : null);
+      setNewsletterAlreadySent(response.ok ? (payload?.alreadySent ?? 0) : null);
+      setNewsletterPendingRecipients(response.ok && Array.isArray(payload?.pendingRecipients) ? payload.pendingRecipients : []);
       if (!response.ok) {
         setNewsletterResult(payload?.error ?? "The newsletter audience could not be loaded.");
       }
@@ -404,7 +410,24 @@ export default function AdminDashboard({
         setNewsletterResult(payload?.error ?? "The newsletter was not sent.");
         return;
       }
-      setNewsletterResult(`Sent to ${payload.sent} of ${payload.recipients} recipients.${payload.failed ? ` ${payload.failed} failed.` : ""}`);
+      const failedRecipients = Array.isArray(payload?.failedRecipients)
+        ? payload.failedRecipients
+            .map((failure: { email?: unknown; reason?: unknown }) => {
+              const email = typeof failure.email === "string" ? failure.email : "Unknown recipient";
+              const reason = typeof failure.reason === "string" ? failure.reason : "Delivery failed";
+              return `${email}: ${reason}`;
+            })
+            .join(" ")
+        : "";
+      setNewsletterResult(
+        `${payload.sent} new ${payload.sent === 1 ? "email was" : "emails were"} accepted. ${payload.alreadySent} ${payload.alreadySent === 1 ? "recipient was" : "recipients were"} already recorded by Resend and were not sent a duplicate.${payload.failed ? ` ${payload.failed} failed.${failedRecipients ? ` ${failedRecipients}` : ""}` : ""}`,
+      );
+      setNewsletterAlreadySent((payload.alreadySent ?? 0) + (payload.sent ?? 0));
+      setNewsletterPendingRecipients(
+        Array.isArray(payload?.failedRecipients)
+          ? payload.failedRecipients.map((failure: { email: string }) => ({ name: "", email: failure.email }))
+          : [],
+      );
       setNewsletterConfirmation("");
     } finally {
       setSendingNewsletter(false);
@@ -802,6 +825,7 @@ export default function AdminDashboard({
 
   if (showNewsletterPanel) {
     const confirmationMatches = newsletterConfirmation === "SEND OPR NEWSLETTER 1";
+    const newsletterPending = newsletterPendingRecipients.length;
     return (
       <main className="min-h-screen bg-[#EED8B2] px-6 py-10 text-[#123C39] md:px-10">
         <div className="mx-auto max-w-2xl rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-10">
@@ -812,8 +836,21 @@ export default function AdminDashboard({
               ? "Counting recipients…"
               : newsletterRecipients === null
                 ? "The recipient count could not be loaded."
-                : `This will send to ${newsletterRecipients} ${newsletterRecipients === 1 ? "person" : "people"} — everyone who opted into marketing across the Founding Table, recipe submissions, and cook-along signups.`}
+                : `${newsletterRecipients} ${newsletterRecipients === 1 ? "person has" : "people have"} opted in. Resend already records ${newsletterAlreadySent ?? 0} as sent; ${newsletterPending} ${newsletterPending === 1 ? "person still needs" : "people still need"} this newsletter.`}
           </p>
+
+          {newsletterPendingRecipients.length > 0 ? (
+            <div className="mt-4 rounded-2xl border border-[#DDB765] bg-white/55 p-5">
+              <p className="text-sm font-medium">Recipients still awaiting this newsletter</p>
+              <ul className="mt-2 space-y-1 text-sm text-stone-700">
+                {newsletterPendingRecipients.map((recipient) => (
+                  <li key={recipient.email}>
+                    {recipient.name ? `${recipient.name} — ` : ""}{recipient.email}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
 
           <div className="mt-6 rounded-2xl border border-[#DDB765] bg-white/55 p-5">
             <p className="font-medium">Check the newsletter before sending it to subscribers.</p>
@@ -850,10 +887,10 @@ export default function AdminDashboard({
             <button
               type="button"
               onClick={() => void sendNewsletter()}
-              disabled={!confirmationMatches || sendingNewsletter || sendingNewsletterTest || !newsletterRecipients}
+              disabled={!confirmationMatches || sendingNewsletter || sendingNewsletterTest || newsletterPending === 0}
               className="rounded-full bg-[#123C39] px-6 py-3 text-sm font-medium text-white transition hover:bg-[#08231F] disabled:cursor-not-allowed disabled:opacity-40"
             >
-              {sendingNewsletter ? "Sending…" : "Send newsletter"}
+              {sendingNewsletter ? "Sending…" : newsletterPending > 0 ? `Send to ${newsletterPending} remaining` : "Everyone has been sent this newsletter"}
             </button>
             <button
               type="button"
