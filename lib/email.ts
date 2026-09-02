@@ -1,6 +1,8 @@
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://otherpeoplesrecipes.co.uk";
 const from = process.env.EMAIL_FROM || "Other People's Recipes <onboarding@resend.dev>";
 
+export const WELCOME_NEWSLETTER_SUBJECT = "Welcome to our table, our very first newsletter";
+
 // Shared chrome for every outbound email: the OPR badge and parchment
 // background from the brand guidelines, with body content sitting in a
 // cream card on top. One place to update if the brand assets ever change —
@@ -58,6 +60,7 @@ export async function sendEmail({
   html,
   attachments,
   idempotencyKey,
+  retry,
 }: {
   to: string | string[];
   subject: string;
@@ -68,30 +71,186 @@ export async function sendEmail({
     content_id: string;
   }>;
   idempotencyKey?: string;
+  retry?: {
+    maxAttempts?: number;
+    minimumDelayMs?: number;
+  };
 }) {
   const apiKey = process.env.RESEND_API_KEY;
 
   // Email becomes active as soon as the key is added in Vercel. Until then,
   // recipe submissions still work normally.
   if (!apiKey) {
-    return { sent: false };
+    return {
+      sent: false,
+      attempts: 0,
+      status: null,
+      errorCode: "missing_api_key",
+      errorMessage: "Email delivery is not configured.",
+    };
   }
 
-  const response = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-      ...(idempotencyKey ? { "Idempotency-Key": idempotencyKey } : {}),
-    },
-    body: JSON.stringify({ from, to, subject, html, attachments }),
-  });
+  const maxAttempts = idempotencyKey
+    ? Math.max(1, Math.min(retry?.maxAttempts ?? 1, 5))
+    : 1;
+  const minimumDelayMs = Math.max(0, retry?.minimumDelayMs ?? 1_000);
 
-  if (!response.ok) {
-    console.error("OPR email could not be sent", await response.text());
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    try {
+      const response = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+          ...(idempotencyKey ? { "Idempotency-Key": idempotencyKey } : {}),
+        },
+        body: JSON.stringify({ from, to, subject, html, attachments }),
+      });
+
+      if (response.ok) {
+        return {
+          sent: true,
+          attempts: attempt,
+          status: response.status,
+          errorCode: null,
+          errorMessage: null,
+        };
+      }
+
+      const responseBody = await response.text();
+      let errorCode = `http_${response.status}`;
+      let errorMessage = "The email provider rejected the request.";
+      try {
+        const providerError = JSON.parse(responseBody) as { name?: string; message?: string };
+        errorCode = providerError.name || errorCode;
+        errorMessage = providerError.message || errorMessage;
+      } catch {
+        if (responseBody.trim()) errorMessage = responseBody.trim();
+      }
+
+      const retryable = response.status === 429 || response.status >= 500;
+      if (retryable && attempt < maxAttempts) {
+        const retryAfterSeconds = Number.parseFloat(response.headers.get("retry-after") ?? "");
+        const retryAfterMs = Number.isFinite(retryAfterSeconds) ? retryAfterSeconds * 1_000 : 0;
+        const backoffMs = minimumDelayMs * 2 ** (attempt - 1);
+        await new Promise((resolve) => setTimeout(resolve, Math.max(retryAfterMs, backoffMs)));
+        continue;
+      }
+
+      console.error("OPR email could not be sent", JSON.stringify({
+        status: response.status,
+        errorCode,
+        errorMessage,
+        attempts: attempt,
+      }));
+      return {
+        sent: false,
+        attempts: attempt,
+        status: response.status,
+        errorCode,
+        errorMessage,
+      };
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "The email request failed.";
+      if (attempt < maxAttempts) {
+        const backoffMs = minimumDelayMs * 2 ** (attempt - 1);
+        await new Promise((resolve) => setTimeout(resolve, backoffMs));
+        continue;
+      }
+
+      console.error("OPR email request failed", JSON.stringify({ errorMessage, attempts: attempt }));
+      return {
+        sent: false,
+        attempts: attempt,
+        status: null,
+        errorCode: "network_error",
+        errorMessage,
+      };
+    }
   }
 
-  return { sent: response.ok };
+  return {
+    sent: false,
+    attempts: maxAttempts,
+    status: null,
+    errorCode: "unknown_error",
+    errorMessage: "The email could not be sent.",
+  };
+}
+
+export async function getSentEmailRecipients({
+  subject,
+  maxPages = 10,
+}: {
+  subject: string;
+  maxPages?: number;
+}) {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    return {
+      recipients: null,
+      errorMessage: "Email delivery is not configured.",
+    };
+  }
+
+  const recipients = new Set<string>();
+  let after: string | null = null;
+  let hasMore = false;
+  const pageLimit = Math.max(1, Math.min(maxPages, 100));
+
+  for (let page = 0; page < pageLimit; page += 1) {
+    const url = new URL("https://api.resend.com/emails");
+    url.searchParams.set("limit", "100");
+    if (after) url.searchParams.set("after", after);
+
+    let response: Response;
+    try {
+      response = await fetch(url, {
+        headers: { Authorization: `Bearer ${apiKey}` },
+      });
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "The delivery history request failed.";
+      console.error("OPR email delivery history could not be loaded", JSON.stringify({ errorMessage }));
+      return { recipients: null, errorMessage };
+    }
+
+    if (!response.ok) {
+      const responseBody = await response.text();
+      console.error("OPR email delivery history could not be loaded", JSON.stringify({
+        status: response.status,
+        responseBody,
+      }));
+      return {
+        recipients: null,
+        errorMessage: "Resend delivery history could not be loaded, so no newsletter was sent.",
+      };
+    }
+
+    const payload = await response.json() as {
+      data?: Array<{ id?: string; subject?: string; to?: string[] }>;
+      has_more?: boolean;
+    };
+    const emails = Array.isArray(payload.data) ? payload.data : [];
+    for (const email of emails) {
+      if (email.subject !== subject || !Array.isArray(email.to)) continue;
+      for (const address of email.to) recipients.add(address.trim().toLowerCase());
+    }
+
+    hasMore = payload.has_more === true;
+    if (!hasMore || emails.length === 0) break;
+    const lastId = emails.at(-1)?.id;
+    if (!lastId) break;
+    after = lastId;
+  }
+
+  if (hasMore) {
+    return {
+      recipients: null,
+      errorMessage: "Resend delivery history was incomplete, so no newsletter was sent.",
+    };
+  }
+
+  return { recipients, errorMessage: null };
 }
 
 export function recipeReceivedEmail({ name, title }: { name: string; title: string }) {
@@ -278,7 +437,7 @@ export function firstNewsletterEmail({
 }) {
   const safeName = escapeHtml(name || "there");
   return {
-    subject: "Welcome to our table, our very first newsletter",
+    subject: WELCOME_NEWSLETTER_SUBJECT,
     html: `
       <div style="display:none;max-height:0;overflow:hidden;opacity:0;">A personal note from Chaten, our Dish of the Week and an invitation to cook with Dave, closely supervised by Rubble.</div>
       <div background="${parchmentUrl}" style="font-family: 'Gill Sans MT', 'Gill Sans', Avenir, Corbel, Arial, sans-serif; width: calc(100% - 24px); max-width: 900px; box-sizing: border-box; margin: 0 auto; color: #3E372C; font-size: 19px; line-height: 1.7; background-color: #E8D09B; background-image: url('${parchmentUrl}'); background-repeat: repeat-y; background-position: center top; background-size: 100% auto; padding: 36px; border: 1px solid #C99A4B; border-radius: 22px;">
