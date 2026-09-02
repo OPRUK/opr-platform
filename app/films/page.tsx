@@ -102,7 +102,11 @@ export default function FilmsPage() {
               >
                 <FilmEmbed video={film.video} poster={film.poster} captions={film.captions} title={film.title} className="aspect-video w-full" />
                 <div className="p-6">
-                  <h2 className="text-xl font-bold leading-snug">{film.title}</h2>
+                  <h2 className="text-xl font-bold leading-snug">
+                    <Link href={`/films/${filmSlug(film)}`} className="transition hover:text-[#1C5A50] hover:underline">
+                      {film.title}
+                    </Link>
+                  </h2>
                   <Link
                     href={`/films/${filmSlug(film)}`}
                     className="mt-5 inline-flex rounded-full border border-[#123C39] px-5 py-3 font-semibold text-[#123C39] transition hover:bg-[#123C39] hover:text-white"

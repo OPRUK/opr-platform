@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 import test from "node:test";
-import { filmSlug, films, filmUploadDate, getFilmBySlug } from "../lib/films.ts";
+import { filmSlug, films, filmUploadDate, getFilmBySlug, getFilmsForRecipe, getRelatedFilms } from "../lib/films.ts";
 
 const newFilmTitles = [
   "Dave & Rubble | The Longest Two Seconds",
@@ -74,5 +74,26 @@ test("every film has a unique, reversible watch-page slug and transcript", () =>
   for (const film of films) {
     assert.ok(film.transcript, `${film.title} should have a transcript`);
     assert.equal(getFilmBySlug(filmSlug(film)), film);
+  }
+});
+
+test("every film watch page links to three other film stories", () => {
+  for (const currentFilm of films) {
+    const relatedFilms = getRelatedFilms(currentFilm);
+    const relatedSlugs = relatedFilms.map(filmSlug);
+
+    assert.equal(relatedFilms.length, 3, `${currentFilm.title} should have three related films`);
+    assert.equal(new Set(relatedSlugs).size, relatedFilms.length);
+    assert.ok(!relatedSlugs.includes(filmSlug(currentFilm)));
+  }
+});
+
+test("recipe-linked films can be discovered from their matching recipe page", () => {
+  for (const currentFilm of films) {
+    if (!currentFilm.recipeSlug) continue;
+    assert.ok(
+      getFilmsForRecipe(currentFilm.recipeSlug).includes(currentFilm),
+      `${currentFilm.title} should be linked from ${currentFilm.recipeSlug}`,
+    );
   }
 });

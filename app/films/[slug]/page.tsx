@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import Navigation from "../../components/Navigation";
 import TrackedLink from "../../components/TrackedLink";
 import FilmEmbed from "../../components/FilmEmbed";
-import { filmSlug, films, filmUploadDate, getFilmBySlug } from "../../../lib/films";
+import { filmSlug, films, filmUploadDate, getFilmBySlug, getRelatedFilms } from "../../../lib/films";
 import { buildMetadata } from "../../../lib/metadata";
 import { getFeaturedRecipe } from "../../../lib/recipes";
 import { absoluteUrl } from "../../../lib/site";
@@ -37,6 +37,7 @@ export default async function FilmWatchPage({ params }: FilmPageProps) {
 
   const slug = filmSlug(film);
   const recipe = film.recipeSlug ? getFeaturedRecipe(film.recipeSlug) : null;
+  const relatedFilms = getRelatedFilms(film);
   const description = descriptionFor(film.title);
   const videoJsonLd = {
     "@context": "https://schema.org",
@@ -97,6 +98,35 @@ export default async function FilmWatchPage({ params }: FilmPageProps) {
               Open the recipe →
             </TrackedLink>
           </section>
+        ) : null}
+
+        {relatedFilms.length ? (
+          <nav aria-labelledby="more-film-stories-heading" className="mx-auto mt-12 max-w-5xl">
+            <p className="text-center text-sm font-bold uppercase tracking-[0.35em] text-[#9A622A]">
+              Keep watching
+            </p>
+            <h2 id="more-film-stories-heading" className="mt-3 text-center text-3xl font-bold text-[#123C39] md:text-4xl">
+              More stories from the OPR Film Collection
+            </h2>
+            <div className="mt-8 grid gap-5 md:grid-cols-3">
+              {relatedFilms.map((relatedFilm) => (
+                <Link
+                  key={relatedFilm.video}
+                  href={`/films/${filmSlug(relatedFilm)}`}
+                  className="group flex min-h-48 flex-col justify-between rounded-3xl border border-[#DDB765] bg-[#FFF3DF] p-6 shadow-md shadow-[#1C5A50]/10 transition hover:-translate-y-1 hover:shadow-xl"
+                >
+                  <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#9A622A]">Film story</span>
+                  <span className="mt-4 text-xl font-bold leading-snug text-[#123C39]">{relatedFilm.title}</span>
+                  <span className="mt-6 font-semibold text-[#1C5A50] group-hover:underline">Watch this film →</span>
+                </Link>
+              ))}
+            </div>
+            <div className="mt-8 text-center">
+              <Link href="/films" className="font-semibold text-[#1C5A50] underline decoration-[#DDB765] decoration-2 underline-offset-4">
+                Browse every film in the collection
+              </Link>
+            </div>
+          </nav>
         ) : null}
       </article>
     </main>
