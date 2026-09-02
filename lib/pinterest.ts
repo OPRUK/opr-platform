@@ -1,4 +1,8 @@
 import "server-only";
+import {
+  configuredPinterestAccessToken,
+  configuredPinterestOAuthCredentials,
+} from "./pinterest-auth";
 import { getSocialRefreshToken } from "./social-connections";
 
 const CACHE_MS = 15 * 60 * 1000;
@@ -41,6 +45,20 @@ async function getAccessToken(clientId: string, clientSecret: string, refreshTok
   return typeof payload.access_token === "string" ? payload.access_token : null;
 }
 
+async function resolvePinterestAccessToken(): Promise<string | null> {
+  // Production-limited Pinterest tokens are a short-lived bridge while the
+  // app awaits OAuth approval. Prefer one when explicitly configured, then
+  // fall back to the durable refresh-token connection.
+  const configuredAccessToken = configuredPinterestAccessToken();
+  if (configuredAccessToken) return configuredAccessToken;
+
+  const refreshToken = (await getSocialRefreshToken("pinterest")) ?? process.env.PINTEREST_REFRESH_TOKEN ?? null;
+  const credentials = configuredPinterestOAuthCredentials(refreshToken);
+  if (!credentials) return null;
+
+  return getAccessToken(credentials.clientId, credentials.clientSecret, credentials.refreshToken);
+}
+
 function isoDate(date: Date) {
   return date.toISOString().slice(0, 10);
 }
@@ -50,13 +68,8 @@ export async function getPinterestSummary(
 ): Promise<PinterestSummary | null> {
   if (!forceRefresh && cached && cached.expiresAt > Date.now()) return cached.data;
 
-  const clientId = process.env.PINTEREST_CLIENT_ID;
-  const clientSecret = process.env.PINTEREST_CLIENT_SECRET;
-  const refreshToken = (await getSocialRefreshToken("pinterest")) ?? process.env.PINTEREST_REFRESH_TOKEN;
-  if (!clientId || !clientSecret || !refreshToken) return null;
-
   try {
-    const accessToken = await getAccessToken(clientId, clientSecret, refreshToken);
+    const accessToken = await resolvePinterestAccessToken();
     if (!accessToken) return null;
 
     const authHeaders = { Authorization: `Bearer ${accessToken}` };
@@ -132,13 +145,8 @@ export async function getPinterestFilmViews(
 ): Promise<PinterestFilmViews | null> {
   if (!forceRefresh && cachedFilmViews && cachedFilmViews.expiresAt > Date.now()) return cachedFilmViews.data;
 
-  const clientId = process.env.PINTEREST_CLIENT_ID;
-  const clientSecret = process.env.PINTEREST_CLIENT_SECRET;
-  const refreshToken = (await getSocialRefreshToken("pinterest")) ?? process.env.PINTEREST_REFRESH_TOKEN;
-  if (!clientId || !clientSecret || !refreshToken) return null;
-
   try {
-    const accessToken = await getAccessToken(clientId, clientSecret, refreshToken);
+    const accessToken = await resolvePinterestAccessToken();
     if (!accessToken) return null;
 
     const authHeaders = { Authorization: `Bearer ${accessToken}` };
