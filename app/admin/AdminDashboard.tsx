@@ -123,6 +123,7 @@ export default function AdminDashboard({
   const [newsletterRecipients, setNewsletterRecipients] = useState<number | null>(null);
   const [newsletterAlreadySent, setNewsletterAlreadySent] = useState<number | null>(null);
   const [newsletterPendingRecipients, setNewsletterPendingRecipients] = useState<Array<{ name: string; email: string }>>([]);
+  const [newsletterRecoveryMode, setNewsletterRecoveryMode] = useState(false);
   const [loadingNewsletterRecipients, setLoadingNewsletterRecipients] = useState(false);
   const [newsletterConfirmation, setNewsletterConfirmation] = useState("");
   const [sendingNewsletter, setSendingNewsletter] = useState(false);
@@ -381,6 +382,7 @@ export default function AdminDashboard({
     setNewsletterConfirmation("");
     setNewsletterAlreadySent(null);
     setNewsletterPendingRecipients([]);
+    setNewsletterRecoveryMode(false);
     setShowNewsletterPanel(true);
     setLoadingNewsletterRecipients(true);
     try {
@@ -389,6 +391,7 @@ export default function AdminDashboard({
       setNewsletterRecipients(response.ok ? (payload?.recipients ?? 0) : null);
       setNewsletterAlreadySent(response.ok ? (payload?.alreadySent ?? 0) : null);
       setNewsletterPendingRecipients(response.ok && Array.isArray(payload?.pendingRecipients) ? payload.pendingRecipients : []);
+      setNewsletterRecoveryMode(response.ok && payload?.recoveryMode === true);
       if (!response.ok) {
         setNewsletterResult(payload?.error ?? "The newsletter audience could not be loaded.");
       }
@@ -420,7 +423,9 @@ export default function AdminDashboard({
             .join(" ")
         : "";
       setNewsletterResult(
-        `${payload.sent} new ${payload.sent === 1 ? "email was" : "emails were"} accepted. ${payload.alreadySent} ${payload.alreadySent === 1 ? "recipient was" : "recipients were"} already recorded by Resend and were not sent a duplicate.${payload.failed ? ` ${payload.failed} failed.${failedRecipients ? ` ${failedRecipients}` : ""}` : ""}`,
+        payload.recoveryMode
+          ? `Recovery completed. Resend safely processed ${payload.sent} idempotent deliveries; previously accepted emails were not duplicated.${payload.failed ? ` ${payload.failed} still failed.${failedRecipients ? ` ${failedRecipients}` : ""}` : " The two missed deliveries have now been recovered."}`
+          : `${payload.sent} new ${payload.sent === 1 ? "email was" : "emails were"} accepted. ${payload.alreadySent} ${payload.alreadySent === 1 ? "recipient was" : "recipients were"} already recorded and were not sent a duplicate.${payload.failed ? ` ${payload.failed} failed.${failedRecipients ? ` ${failedRecipients}` : ""}` : ""}`,
       );
       setNewsletterAlreadySent((payload.alreadySent ?? 0) + (payload.sent ?? 0));
       setNewsletterPendingRecipients(
@@ -428,6 +433,7 @@ export default function AdminDashboard({
           ? payload.failedRecipients.map((failure: { email: string }) => ({ name: "", email: failure.email }))
           : [],
       );
+      setNewsletterRecoveryMode(false);
       setNewsletterConfirmation("");
     } finally {
       setSendingNewsletter(false);
@@ -836,10 +842,12 @@ export default function AdminDashboard({
               ? "Counting recipients…"
               : newsletterRecipients === null
                 ? "The recipient count could not be loaded."
-                : `${newsletterRecipients} ${newsletterRecipients === 1 ? "person has" : "people have"} opted in. Resend already records ${newsletterAlreadySent ?? 0} as sent; ${newsletterPending} ${newsletterPending === 1 ? "person still needs" : "people still need"} this newsletter.`}
+                : newsletterRecoveryMode
+                  ? `${newsletterRecipients} people opted in. The original send recorded two failures but did not preserve their addresses. The recovery safely checks all recipients using the original idempotency keys, so the 37 accepted emails will not be duplicated and only the two missed emails will be delivered.`
+                  : `${newsletterRecipients} ${newsletterRecipients === 1 ? "person has" : "people have"} opted in. The delivery ledger records ${newsletterAlreadySent ?? 0} as sent; ${newsletterPending} ${newsletterPending === 1 ? "person still needs" : "people still need"} this newsletter.`}
           </p>
 
-          {newsletterPendingRecipients.length > 0 ? (
+          {newsletterPendingRecipients.length > 0 && !newsletterRecoveryMode ? (
             <div className="mt-4 rounded-2xl border border-[#DDB765] bg-white/55 p-5">
               <p className="text-sm font-medium">Recipients still awaiting this newsletter</p>
               <ul className="mt-2 space-y-1 text-sm text-stone-700">
@@ -890,7 +898,7 @@ export default function AdminDashboard({
               disabled={!confirmationMatches || sendingNewsletter || sendingNewsletterTest || newsletterPending === 0}
               className="rounded-full bg-[#123C39] px-6 py-3 text-sm font-medium text-white transition hover:bg-[#08231F] disabled:cursor-not-allowed disabled:opacity-40"
             >
-              {sendingNewsletter ? "Sending…" : newsletterPending > 0 ? `Send to ${newsletterPending} remaining` : "Everyone has been sent this newsletter"}
+              {sendingNewsletter ? "Sending…" : newsletterRecoveryMode ? "Safely recover the 2 failed deliveries" : newsletterPending > 0 ? `Send to ${newsletterPending} remaining` : "Everyone has been sent this newsletter"}
             </button>
             <button
               type="button"
