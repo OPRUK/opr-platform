@@ -14,6 +14,8 @@ import { buildFaqPageJsonLd } from "../../../lib/recipe-faqs";
 import { getApprovedCommunityCooks } from "../../../lib/community-cooks";
 import { SITE_NAME, absoluteUrl } from "../../../lib/site";
 import { filmSlug, getFilmsForRecipe } from "../../../lib/films";
+import { getFeaturedRecipeSeo } from "../../../lib/recipe-seo";
+import { getRecipeCollectionsForRecipe } from "../../../lib/recipe-collections";
 
 export const dynamic = "force-dynamic";
 
@@ -44,36 +46,25 @@ export async function generateMetadata({
   const recipe = getFeaturedRecipe(slug);
   if (!recipe) return {};
 
-  const seo = {
-    "sudeshs-bhindi": {
-      title: "Sudesh’s Bhindi Recipe | Indian Okra Masala",
-      description: "Cook Sudesh’s Indian bhindi masala: tender okra without the slime, gently fried before it is folded through a tomato and spice masala.",
-    },
-    "adas-jollof-rice": {
-      title: "Ada’s Nigerian Party Jollof Rice Recipe",
-      description: "Cook Ada’s smoky Nigerian party Jollof rice with a deeply reduced pepper base, rich stock and a lightly scorched finish.",
-    },
-  }[recipe.slug];
-  const title = seo?.title ?? `${recipe.title} — ${recipe.place}`;
-  const description = seo?.description ?? truncate(recipe.story, 155);
+  const seo = getFeaturedRecipeSeo(recipe);
   const url = `/family-cookbook/${recipe.slug}`;
   const ogImage = `${url}/opengraph-image`;
 
   return {
-    title,
-    description,
+    title: { absolute: seo.title },
+    description: seo.description,
     alternates: { canonical: url },
     openGraph: {
-      title,
-      description,
+      title: seo.title,
+      description: seo.description,
       type: "article",
       url,
       images: [{ url: ogImage, width: 1200, height: 630, alt: recipe.title }],
     },
     twitter: {
       card: "summary_large_image",
-      title,
-      description,
+      title: seo.title,
+      description: seo.description,
       images: [ogImage],
     },
   };
@@ -93,6 +84,7 @@ export default async function RecipePage({
 
   const communityCooks = await getApprovedCommunityCooks({ recipeSlug: recipe.slug });
   const relatedFilms = getFilmsForRecipe(recipe.slug);
+  const relatedCollections = getRecipeCollectionsForRecipe(recipe.slug);
   const relatedRecipes = (recipe.relatedRecipeSlugs ?? []).flatMap((relatedSlug) => {
     const relatedRecipe = getFeaturedRecipe(relatedSlug);
     return relatedRecipe ? [relatedRecipe] : [];
@@ -290,6 +282,30 @@ export default async function RecipePage({
       <CommunityCookForm recipeSlug={recipe.slug} recipeTitle={recipe.title} />
 
       <RecipeFaqs recipeTitle={recipe.title} faqs={recipe.faqs} />
+
+      {relatedCollections.length ? (
+        <section className="bg-[#EED8B2] px-6 py-12 text-center md:py-16">
+          <div className="mx-auto max-w-5xl">
+            <p className="text-sm font-bold uppercase tracking-[0.35em] text-[#9A622A]">
+              Explore by collection
+            </p>
+            <h2 className="font-display mt-4 text-4xl font-bold text-[#123C39]">
+              More recipes with a family thread
+            </h2>
+            <div className="mt-7 flex flex-wrap justify-center gap-3">
+              {relatedCollections.map((collection) => (
+                <Link
+                  key={collection.slug}
+                  href={`/family-cookbook/collections/${collection.slug}`}
+                  className="rounded-full border border-[#9A622A]/40 bg-[#FFF3DF] px-5 py-3 font-semibold text-[#123C39] transition hover:border-[#123C39] hover:bg-white"
+                >
+                  {collection.title}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       {relatedRecipes.length ? (
         <section className="bg-[#FFF3DF] px-6 py-12 md:py-16">

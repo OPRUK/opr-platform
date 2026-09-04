@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { createClient } from "@supabase/supabase-js";
 import { featuredRecipes } from "../lib/recipes";
+import { recipeCollections } from "../lib/recipe-collections";
 import { filmSlug, films } from "../lib/films";
 import { SITE_URL } from "../lib/site";
 
@@ -15,6 +16,7 @@ const staticRoutes: Array<{ path: string; changeFrequency: MetadataRoute.Sitemap
 ];
 
 const siteLaunchDate = new Date("2026-08-01");
+const collectionLaunchDate = new Date("2026-09-04");
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = staticRoutes.map((route) => ({
@@ -30,6 +32,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: recipe.datePublished ? new Date(recipe.datePublished) : siteLaunchDate,
       changeFrequency: "monthly",
       priority: 0.8,
+    });
+  }
+
+  for (const collection of recipeCollections) {
+    entries.push({
+      url: `${SITE_URL}/family-cookbook/collections/${collection.slug}`,
+      lastModified: collectionLaunchDate,
+      changeFrequency: "monthly",
+      priority: 0.7,
     });
   }
 
