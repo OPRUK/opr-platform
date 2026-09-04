@@ -19,6 +19,7 @@ import { getApprovedCommunityCooks } from "../../../../lib/community-cooks";
 import { communityRecipeMethodPhotos } from "../../../../lib/community-recipe-visuals";
 import { buildFaqPageJsonLd, communityRecipeFaqs } from "../../../../lib/recipe-faqs";
 import { SITE_NAME, absoluteUrl } from "../../../../lib/site";
+import { getCommunityRecipeSeo } from "../../../../lib/recipe-seo";
 
 export const dynamic = "force-dynamic";
 
@@ -124,26 +125,25 @@ export async function generateMetadata({
   const recipe = await getCommunityRecipe(id);
   if (!recipe) return {};
 
-  const title = recipe.location ? `${recipe.title} — ${recipe.location}` : recipe.title;
-  const description = truncate(recipe.story, 155);
+  const seo = getCommunityRecipeSeo(recipe);
   const url = `/family-cookbook/community/${recipe.id}`;
   const image = imageUrlFor(recipe);
 
   return {
-    title,
-    description,
+    title: { absolute: seo.title },
+    description: seo.description,
     alternates: { canonical: url },
     openGraph: {
-      title,
-      description,
+      title: seo.title,
+      description: seo.description,
       type: "article",
       url,
       images: image ? [{ url: image, width: 1200, height: 900, alt: recipe.title }] : undefined,
     },
     twitter: {
       card: "summary_large_image",
-      title,
-      description,
+      title: seo.title,
+      description: seo.description,
       images: image ? [image] : undefined,
     },
   };

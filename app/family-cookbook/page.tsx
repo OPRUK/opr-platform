@@ -1,29 +1,38 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import Navigation from "../components/Navigation";
 import TrackedLink from "../components/TrackedLink";
 import VideoBrandMark from "../components/VideoBrandMark";
 import PublishedRecipes from "./PublishedRecipes";
 import { applyCommunityRecipeEditorialOverride } from "../../lib/community-recipe-overrides";
 import { featuredRecipes } from "../../lib/recipes";
+import { recipeCollections } from "../../lib/recipe-collections";
 import { absoluteUrl } from "../../lib/site";
 import { supabase } from "../../lib/supabase/client";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "The Living Cookbook",
+  title: { absolute: "Family Recipes & Traditional Home Cooking | The Living Cookbook" },
   description:
-    "Real recipes from real family kitchens, each one saved with the memory that made it matter.",
+    "Discover real family recipes passed down through generations, with the people, memories and stories behind every dish.",
   alternates: { canonical: "/family-cookbook" },
   openGraph: {
-    title: "The Living Cookbook | Other People's Recipes",
+    title: "Family Recipes & Traditional Home Cooking | The Living Cookbook",
     description:
-      "Real recipes from real family kitchens, each one saved with the memory that made it matter.",
+      "Discover real family recipes passed down through generations, with the people, memories and stories behind every dish.",
     url: "/family-cookbook",
     siteName: "Other People's Recipes",
     locale: "en_GB",
     type: "website",
     images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Other People's Recipes — Every Recipe has a Story." }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Family Recipes & Traditional Home Cooking | The Living Cookbook",
+    description:
+      "Discover real family recipes passed down through generations, with the people, memories and stories behind every dish.",
+    images: ["/opengraph-image"],
   },
 };
 
@@ -127,6 +136,43 @@ export default async function FamilyCookbook() {
           <h1 className="font-display text-5xl font-bold leading-tight drop-shadow-lg md:text-7xl">
             Every recipe has travelled through time before finding its way here.
           </h1>
+        </div>
+      </section>
+
+      <section className="bg-[#FFF3DF] px-6 py-12 md:px-8 md:py-16">
+        <div className="mx-auto max-w-6xl">
+          <p className="text-sm font-bold uppercase tracking-[0.35em] text-[#9A622A]">
+            Explore by collection
+          </p>
+          <h2 className="font-display mt-4 max-w-3xl text-4xl font-bold md:text-5xl">
+            Find the family recipes you want to cook
+          </h2>
+          <p className="mt-5 max-w-3xl text-lg leading-8 text-stone-700">
+            Browse real recipes by tradition, ingredient and the kind of food
+            families return to.
+          </p>
+          <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {recipeCollections.map((collection) => (
+              <Link
+                key={collection.slug}
+                href={`/family-cookbook/collections/${collection.slug}`}
+                className="group rounded-3xl border border-[#DDB765]/70 bg-white/70 p-6 transition hover:-translate-y-1 hover:border-[#9A622A] hover:bg-white hover:shadow-lg"
+              >
+                <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#9A622A]">
+                  {collection.recipes.length} recipes
+                </p>
+                <h3 className="mt-3 text-2xl font-bold leading-tight text-[#123C39]">
+                  {collection.title}
+                </h3>
+                <p className="mt-4 leading-7 text-stone-700">
+                  {collection.description}
+                </p>
+                <span className="mt-5 inline-block font-semibold text-[#1C5A50] group-hover:underline">
+                  Explore this collection →
+                </span>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
