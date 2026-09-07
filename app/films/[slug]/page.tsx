@@ -4,16 +4,12 @@ import { notFound } from "next/navigation";
 import Navigation from "../../components/Navigation";
 import TrackedLink from "../../components/TrackedLink";
 import FilmEmbed from "../../components/FilmEmbed";
-import { filmSlug, films, filmUploadDate, getFilmBySlug, getRelatedFilms } from "../../../lib/films";
+import { filmDescription, filmSlug, films, filmUploadDate, getFilmBySlug, getRelatedFilms } from "../../../lib/films";
 import { buildMetadata } from "../../../lib/metadata";
 import { getFeaturedRecipe } from "../../../lib/recipes";
 import { absoluteUrl } from "../../../lib/site";
 
 type FilmPageProps = { params: Promise<{ slug: string }> };
-
-function descriptionFor(title: string) {
-  return `${title}, from the OPR Film Collection: a short film about food, family and the recipes we choose to pass on.`;
-}
 
 export function generateStaticParams() {
   return films.map((film) => ({ slug: filmSlug(film) }));
@@ -25,7 +21,8 @@ export async function generateMetadata({ params }: FilmPageProps): Promise<Metad
 
   return buildMetadata({
     title: film.title,
-    description: descriptionFor(film.title),
+    absoluteTitle: true,
+    description: filmDescription(film),
     path: `/films/${filmSlug(film)}`,
     image: film.poster,
   });
@@ -38,7 +35,7 @@ export default async function FilmWatchPage({ params }: FilmPageProps) {
   const slug = filmSlug(film);
   const recipe = film.recipeSlug ? getFeaturedRecipe(film.recipeSlug) : null;
   const relatedFilms = getRelatedFilms(film);
-  const description = descriptionFor(film.title);
+  const description = filmDescription(film);
   const videoJsonLd = {
     "@context": "https://schema.org",
     "@type": "VideoObject",

@@ -1,10 +1,21 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import test from "node:test";
 import {
   getRecipeCollection,
   getRecipeCollectionsForRecipe,
   recipeCollections,
 } from "../lib/recipe-collections.ts";
+
+test("collection recipe photographs have descriptive alternative text", () => {
+  const pageSource = readFileSync(
+    resolve("app/family-cookbook/collections/[slug]/page.tsx"),
+    "utf8",
+  );
+
+  assert.match(pageSource, /alt={`Finished dish of \${recipe\.title}`}/);
+});
 import { featuredRecipes } from "../lib/recipes.ts";
 
 test("recipe collections are unique, useful and resolve to real recipes", () => {
