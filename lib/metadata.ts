@@ -12,18 +12,20 @@ export function buildMetadata({
   path,
   image,
   index = true,
+  absoluteTitle = false,
 }: {
   title: string;
   description: string;
   path: string;
   image?: string;
   index?: boolean;
+  absoluteTitle?: boolean;
 }): Metadata {
   const fullTitle = `${title} | ${SITE_NAME}`;
   const img = image ?? "/opengraph-image";
 
   return {
-    title,
+    title: absoluteTitle ? { absolute: title } : title,
     description,
     alternates: { canonical: path },
     ...(index ? {} : { robots: { index: false, follow: false } }),

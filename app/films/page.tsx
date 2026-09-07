@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import DecorativeHeroVideo from "../components/DecorativeHeroVideo";
 import Navigation from "../components/Navigation";
 import FilmEmbed from "../components/FilmEmbed";
 import VideoBrandMark from "../components/VideoBrandMark";
 import TrackedLink from "../components/TrackedLink";
-import { filmSlug, films, filmUploadDate } from "../../lib/films";
+import { filmDescription, filmSlug, films, filmUploadDate } from "../../lib/films";
 import { getFeaturedRecipe } from "../../lib/recipes";
 import { absoluteUrl } from "../../lib/site";
 import { buildMetadata } from "../../lib/metadata";
@@ -12,7 +13,7 @@ import { buildMetadata } from "../../lib/metadata";
 export const metadata: Metadata = buildMetadata({
   title: "The OPR Film Collection",
   description:
-    "Short films about food, family and the recipes we choose to pass on.",
+    "Watch the OPR Film Collection: short stories about food, family, cherished recipes and the memories we choose to pass on.",
   path: "/films",
 });
 
@@ -22,7 +23,7 @@ export default function FilmsPage() {
     "@graph": films.map((film) => ({
       "@type": "VideoObject",
       name: film.title,
-      description: film.title + ", from the OPR Film Collection: short films about food, family and the recipes we choose to pass on.",
+      description: filmDescription(film),
       thumbnailUrl: [absoluteUrl(film.poster ?? "/images/recipes/barbaras-beef-casserole-wide.webp")],
       uploadDate: filmUploadDate(film),
       contentUrl: absoluteUrl(film.video),
@@ -42,18 +43,11 @@ export default function FilmsPage() {
       <Navigation />
 
       <section className="relative isolate overflow-hidden bg-[#123C39] px-6 pb-24 pt-40 text-center text-white">
-        <video
+        <DecorativeHeroVideo
           className="absolute inset-0 -z-20 h-full w-full object-cover"
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
           poster="/images/recipes/barbaras-beef-casserole-wide.webp"
-          aria-hidden="true"
-        >
-          <source src="/videos/opr-recipe-stories-film-v2.mp4" type="video/mp4" />
-        </video>
+          src="/videos/opr-recipe-stories-film-v2.mp4"
+        />
         <VideoBrandMark />
         <div className="absolute inset-0 -z-10 bg-[#123C39]/75" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#08231F]/65 via-[#123C39]/45 to-[#08231F]/80" />

@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import test from "node:test";
-import { filmSlug, films, filmUploadDate, getFilmBySlug, getFilmsForRecipe, getRelatedFilms } from "../lib/films.ts";
+import { filmDescription, filmSlug, films, filmUploadDate, getFilmBySlug, getFilmsForRecipe, getRelatedFilms } from "../lib/films.ts";
 
 const newFilmTitles = [
   "Dave & Rubble | The Longest Two Seconds",
@@ -67,6 +67,29 @@ test("every VideoObject upload date is a valid ISO timestamp with a timezone", (
     assert.match(uploadDate, /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2})$/);
     assert.ok(Number.isFinite(Date.parse(uploadDate)), `${film.title} should have a valid uploadDate`);
   }
+});
+
+test("every film has concise search metadata", () => {
+  const watchPageSource = readFileSync(resolve("app/films/[slug]/page.tsx"), "utf8");
+
+  assert.match(watchPageSource, /absoluteTitle: true/);
+  for (const film of films) {
+    assert.ok(film.title.length <= 70, `${film.title} should fit an absolute search title`);
+    assert.ok(filmDescription(film).length <= 160, `${film.title} should have a concise description`);
+  }
+});
+
+test("decorative hero films only load after client playback preferences are known", () => {
+  const componentSource = readFileSync(resolve("app/components/DecorativeHeroVideo.tsx"), "utf8");
+  const cookbookSource = readFileSync(resolve("app/family-cookbook/page.tsx"), "utf8");
+  const filmsSource = readFileSync(resolve("app/films/page.tsx"), "utf8");
+
+  assert.match(componentSource, /preload="none"/);
+  assert.match(componentSource, /prefers-reduced-motion: reduce/);
+  assert.match(componentSource, /saveData/);
+  assert.match(componentSource, /showStaticPoster \? null : <source/);
+  assert.doesNotMatch(cookbookSource, /preload="auto"/);
+  assert.doesNotMatch(filmsSource, /preload="auto"/);
 });
 
 test("the video sitemap identifies the direct video without reusing the watch page as a player", () => {

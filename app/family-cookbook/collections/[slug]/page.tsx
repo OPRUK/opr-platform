@@ -164,7 +164,7 @@ export default async function RecipeCollectionPage({ params }: CollectionPagePro
               >
                 <Image
                   src={recipe.image}
-                  alt=""
+                  alt={`Finished dish of ${recipe.title}`}
                   width={800}
                   height={600}
                   sizes="(min-width: 1024px) 352px, (min-width: 768px) 50vw, 100vw"

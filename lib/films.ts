@@ -72,6 +72,10 @@ export function filmUploadDate(film: Pick<Film, "uploadDate">): string {
     : film.uploadDate;
 }
 
+export function filmDescription(film: Pick<Film, "title">): string {
+  return `Watch ${film.title}, a short OPR film about food, family and recipes worth passing on.`;
+}
+
 function film(
   title: string,
   file: string,

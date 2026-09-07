@@ -1,4 +1,4 @@
-import { filmSlug, films, filmUploadDate } from "../../lib/films";
+import { filmDescription, filmSlug, films, filmUploadDate } from "../../lib/films";
 import { absoluteUrl } from "../../lib/site";
 
 export const dynamic = "force-static";
@@ -16,7 +16,7 @@ export function GET() {
   const entries = films.map((film) => {
     const watchUrl = absoluteUrl(`/films/${filmSlug(film)}`);
     const thumbnail = absoluteUrl(film.poster ?? "/images/recipes/barbaras-beef-casserole-wide.webp");
-    const description = `${film.title}, from the OPR Film Collection: a short film about food, family and the recipes we choose to pass on.`;
+    const description = filmDescription(film);
 
     return `  <url>
     <loc>${xml(watchUrl)}</loc>
