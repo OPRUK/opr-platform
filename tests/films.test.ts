@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import test from "node:test";
 import { filmSlug, films, filmUploadDate, getFilmBySlug, getFilmsForRecipe, getRelatedFilms } from "../lib/films.ts";
@@ -67,6 +67,13 @@ test("every VideoObject upload date is a valid ISO timestamp with a timezone", (
     assert.match(uploadDate, /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2})$/);
     assert.ok(Number.isFinite(Date.parse(uploadDate)), `${film.title} should have a valid uploadDate`);
   }
+});
+
+test("the video sitemap identifies the direct video without reusing the watch page as a player", () => {
+  const routeSource = readFileSync(resolve("app/video-sitemap.xml/route.ts"), "utf8");
+
+  assert.match(routeSource, /<video:content_loc>/);
+  assert.doesNotMatch(routeSource, /<video:player_loc>/);
 });
 
 test("Gautam and Shobha's Dish of the Week film has captions and an embedded OPR ending", () => {
