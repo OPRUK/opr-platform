@@ -99,6 +99,15 @@ test("the video sitemap identifies the direct video without reusing the watch pa
   assert.doesNotMatch(routeSource, /<video:player_loc>/);
 });
 
+test("dedicated watch pages expose a crawlable inline video player", () => {
+  const watchPageSource = readFileSync(resolve("app/films/[slug]/page.tsx"), "utf8");
+
+  assert.match(watchPageSource, /<video/);
+  assert.match(watchPageSource, /<source src={film\.video} type="video\/mp4"/);
+  assert.match(watchPageSource, /contentUrl: absoluteUrl\(film\.video\)/);
+  assert.doesNotMatch(watchPageSource, /embedUrl:/);
+});
+
 test("Gautam and Shobha's Dish of the Week film has captions and an embedded OPR ending", () => {
   const film = films.find((candidate) => candidate.title === "Dave & Rubble | Dish of the Week: Gautam & Shobha");
 
