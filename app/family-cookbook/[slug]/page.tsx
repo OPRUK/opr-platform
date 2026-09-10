@@ -16,6 +16,7 @@ import { SITE_NAME, absoluteUrl } from "../../../lib/site";
 import { filmSlug, getFilmsForRecipe } from "../../../lib/films";
 import { getFeaturedRecipeSeo } from "../../../lib/recipe-seo";
 import { getRecipeCollectionsForRecipe } from "../../../lib/recipe-collections";
+import { buildRecipeKeywords, recipeInstructionUrl } from "../../../lib/recipe-schema";
 
 export const dynamic = "force-dynamic";
 
@@ -90,19 +91,28 @@ export default async function RecipePage({
     return relatedRecipe ? [relatedRecipe] : [];
   });
 
+  const recipeUrl = absoluteUrl(`/family-cookbook/${recipe.slug}`);
   const recipeJsonLd = {
     "@context": "https://schema.org",
     "@type": "Recipe",
-    "@id": `${absoluteUrl(`/family-cookbook/${recipe.slug}`)}#recipe`,
+    "@id": `${recipeUrl}#recipe`,
     name: recipe.title,
-    url: absoluteUrl(`/family-cookbook/${recipe.slug}`),
-    mainEntityOfPage: absoluteUrl(`/family-cookbook/${recipe.slug}`),
+    url: recipeUrl,
+    mainEntityOfPage: recipeUrl,
     inLanguage: "en-GB",
     image: [absoluteUrl(recipe.image)],
     description: truncate(recipe.story, 300),
     author: { "@type": "Person", name: recipe.contributorName ?? SITE_NAME },
     ...(recipe.category ? { recipeCategory: recipe.category } : {}),
     ...(recipe.cuisine ? { recipeCuisine: recipe.cuisine } : {}),
+    keywords: buildRecipeKeywords([
+      recipe.title,
+      `${recipe.title} recipe`,
+      recipe.category,
+      recipe.cuisine,
+      recipe.place,
+      "family recipe",
+    ]),
     ...(recipe.prepTime ? { prepTime: recipe.prepTime } : {}),
     ...(recipe.cookTime ? { cookTime: recipe.cookTime } : {}),
     ...(recipe.serves ? { recipeYield: recipe.serves } : {}),
@@ -115,6 +125,7 @@ export default async function RecipePage({
         position: index + 1,
         name: truncate(step, 60),
         text: step,
+        url: recipeInstructionUrl(recipeUrl, index + 1),
         ...(methodPhoto ? { image: absoluteUrl(methodPhoto.src) } : {}),
       };
     }),
@@ -240,7 +251,7 @@ export default async function RecipePage({
           </p>
           <ol className="mt-9 space-y-7">
             {recipe.method.map((step, index) => (
-              <li key={step} className="flex gap-6 text-lg leading-8 text-stone-700">
+              <li id={`method-step-${index + 1}`} key={step} className="flex gap-6 scroll-mt-24 text-lg leading-8 text-stone-700">
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#123C39] text-sm font-bold text-white">
                   {index + 1}
                 </span>
