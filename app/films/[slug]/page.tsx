@@ -3,7 +3,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import Navigation from "../../components/Navigation";
 import TrackedLink from "../../components/TrackedLink";
-import FilmEmbed from "../../components/FilmEmbed";
 import { filmDescription, filmSlug, films, filmUploadDate, getFilmBySlug, getRelatedFilms } from "../../../lib/films";
 import { buildMetadata } from "../../../lib/metadata";
 import { getFeaturedRecipe } from "../../../lib/recipes";
@@ -45,7 +44,6 @@ export default async function FilmWatchPage({ params }: FilmPageProps) {
     thumbnailUrl: [absoluteUrl(film.poster ?? "/images/recipes/barbaras-beef-casserole-wide.webp")],
     uploadDate: filmUploadDate(film),
     contentUrl: absoluteUrl(film.video),
-    embedUrl: absoluteUrl(`/films/${slug}`),
     transcript: film.transcript,
     inLanguage: "en-GB",
     isFamilyFriendly: true,
@@ -78,7 +76,18 @@ export default async function FilmWatchPage({ params }: FilmPageProps) {
         </header>
 
         <div className="relative mt-12 overflow-hidden rounded-3xl bg-black shadow-2xl shadow-[#123C39]/25">
-          <FilmEmbed video={film.video} poster={film.poster} captions={film.captions} title={film.title} className="aspect-video w-full" />
+          <video
+            aria-label={film.title}
+            className="aspect-video w-full bg-black object-contain"
+            controls
+            playsInline
+            preload="metadata"
+            poster={film.poster}
+          >
+            <source src={film.video} type="video/mp4" />
+            {film.captions ? <track kind="captions" src={film.captions} srcLang="en" label="English captions" default /> : null}
+            Your browser does not support video playback.
+          </video>
         </div>
 
         <section aria-labelledby="transcript-heading" className="mx-auto mt-12 max-w-3xl rounded-3xl bg-[#FFF3DF] p-7 shadow-lg shadow-[#1C5A50]/10 md:p-10">
