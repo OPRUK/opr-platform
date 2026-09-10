@@ -20,6 +20,11 @@ import { communityRecipeMethodPhotos } from "../../../../lib/community-recipe-vi
 import { buildFaqPageJsonLd, communityRecipeFaqs } from "../../../../lib/recipe-faqs";
 import { SITE_NAME, absoluteUrl } from "../../../../lib/site";
 import { getCommunityRecipeSeo } from "../../../../lib/recipe-seo";
+import {
+  buildRecipeKeywords,
+  buildRecipeVideoJsonLd,
+  recipeInstructionUrl,
+} from "../../../../lib/recipe-schema";
 
 export const dynamic = "force-dynamic";
 
@@ -172,18 +177,26 @@ export default async function CommunityRecipePage({
   const methodPhotos = communityRecipeMethodPhotos[recipe.id] ?? [];
   const faqs = communityRecipeFaqs[recipe.id] ?? [];
 
+  const recipeUrl = absoluteUrl(`/family-cookbook/community/${recipe.id}`);
   const recipeJsonLd = {
     "@context": "https://schema.org",
     "@type": "Recipe",
-    "@id": `${absoluteUrl(`/family-cookbook/community/${recipe.id}`)}#recipe`,
+    "@id": `${recipeUrl}#recipe`,
     name: recipe.title,
-    url: absoluteUrl(`/family-cookbook/community/${recipe.id}`),
-    mainEntityOfPage: absoluteUrl(`/family-cookbook/community/${recipe.id}`),
+    url: recipeUrl,
+    mainEntityOfPage: recipeUrl,
     inLanguage: "en-GB",
     ...(imageUrl ? { image: [imageUrl] } : {}),
     description: truncate(recipe.story, 300),
     author: { "@type": "Person", name: recipe.name || SITE_NAME },
     ...(recipe.category ? { recipeCategory: recipe.category } : {}),
+    keywords: buildRecipeKeywords([
+      recipe.title,
+      `${recipe.title} recipe`,
+      recipe.category,
+      recipe.location,
+      "family recipe",
+    ]),
     ...(recipe.servings ? { recipeYield: recipe.servings } : {}),
     ...(recipe.prep_time_minutes ? { prepTime: `PT${recipe.prep_time_minutes}M` } : {}),
     ...(recipe.cook_time_minutes ? { cookTime: `PT${recipe.cook_time_minutes}M` } : {}),
@@ -196,9 +209,20 @@ export default async function CommunityRecipePage({
         position: index + 1,
         name: truncate(step, 60),
         text: step,
+        url: recipeInstructionUrl(recipeUrl, index + 1),
         ...(methodPhoto ? { image: absoluteUrl(methodPhoto.src) } : {}),
       };
     }),
+    ...(recipeVideoUrl
+      ? {
+          video: buildRecipeVideoJsonLd({
+            name: `How to make ${recipe.title}`,
+            description: `A cooking video shared with ${recipe.title}, a family recipe on ${SITE_NAME}.`,
+            contentUrl: recipeVideoUrl,
+            thumbnailUrl: imageUrl,
+          }),
+        }
+      : {}),
   };
 
   const breadcrumbJsonLd = {
@@ -347,7 +371,7 @@ export default async function CommunityRecipePage({
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">The method</p>
           <ol className="mt-7 space-y-4">
             {method.map((step, index) => (
-              <li key={`${index}-${step}`} className="grid grid-cols-[2.25rem_1fr] gap-4 rounded-2xl border border-[#DDB765] bg-white/55 p-4 text-base leading-7 text-stone-700 md:p-5 md:text-lg md:leading-8">
+              <li id={`method-step-${index + 1}`} key={`${index}-${step}`} className="grid scroll-mt-24 grid-cols-[2.25rem_1fr] gap-4 rounded-2xl border border-[#DDB765] bg-white/55 p-4 text-base leading-7 text-stone-700 md:p-5 md:text-lg md:leading-8">
                 <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#123C39] text-sm font-bold text-white">{index + 1}</span>
                 <span>{step}</span>
               </li>
