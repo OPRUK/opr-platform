@@ -1,6 +1,6 @@
 "use client";
 
-import type { Session } from "@supabase/supabase-js";
+import type { Factor, Session } from "@supabase/supabase-js";
 import Image from "next/image";
 import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
@@ -113,7 +113,7 @@ export default function AdminDashboard({
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [aal, setAal] = useState<{ current: string | null; next: string | null } | null>(null);
-  const [totpFactorId, setTotpFactorId] = useState<string | null>(null);
+  const [totpFactors, setTotpFactors] = useState<Factor[]>([]);
   const [checkingAal, setCheckingAal] = useState(true);
   const [showSecurityPanel, setShowSecurityPanel] = useState(false);
   const [exportingFoundingTable, setExportingFoundingTable] = useState(false);
@@ -191,9 +191,7 @@ export default function AdminDashboard({
       supabase.auth.mfa.listFactors(),
     ]);
     setAal(aalData ? { current: aalData.currentLevel, next: aalData.nextLevel } : null);
-    setTotpFactorId(
-      factorData?.totp.find((factor) => factor.status === "verified")?.id ?? null,
-    );
+    setTotpFactors(factorData?.totp.filter((factor) => factor.status === "verified") ?? []);
     setCheckingAal(false);
   }
 
@@ -209,9 +207,7 @@ export default function AdminDashboard({
     ]).then(([{ data: aalData }, { data: factorData }]) => {
       if (cancelled) return;
       setAal(aalData ? { current: aalData.currentLevel, next: aalData.nextLevel } : null);
-      setTotpFactorId(
-        factorData?.totp.find((factor) => factor.status === "verified")?.id ?? null,
-      );
+      setTotpFactors(factorData?.totp.filter((factor) => factor.status === "verified") ?? []);
       setCheckingAal(false);
     });
 
@@ -226,7 +222,7 @@ export default function AdminDashboard({
     if (!session || !isAdminEmail(session.user.email)) {
       return;
     }
-    if (checkingAal || mfaPending || !totpFactorId) {
+    if (checkingAal || mfaPending || totpFactors.length === 0) {
       // Wait until a factor is enrolled and this session has cleared the MFA
       // challenge — the admin API routes require aal2 and would otherwise
       // 401 on every request.
@@ -286,7 +282,7 @@ export default function AdminDashboard({
     }
 
     void loadAdminData();
-  }, [session, checkingAal, mfaPending, totpFactorId, initialView]);
+  }, [session, checkingAal, mfaPending, totpFactors, initialView]);
 
   useEffect(() => {
     if (
@@ -295,7 +291,7 @@ export default function AdminDashboard({
       !isAdminEmail(session.user.email) ||
       checkingAal ||
       mfaPending ||
-      !totpFactorId
+      totpFactors.length === 0
     ) {
       return;
     }
@@ -320,7 +316,7 @@ export default function AdminDashboard({
     session,
     checkingAal,
     mfaPending,
-    totpFactorId,
+    totpFactors,
     refreshAnalytics,
   ]);
 
@@ -802,10 +798,10 @@ export default function AdminDashboard({
     return <main className="min-h-screen bg-[#EED8B2]" />;
   }
 
-  if (mfaPending && totpFactorId) {
+  if (mfaPending && totpFactors.length > 0) {
     return (
       <MfaChallenge
-        factorId={totpFactorId}
+        factors={totpFactors}
         onVerified={() => void refreshAal()}
         onSignOut={() => void supabase.auth.signOut()}
       />
@@ -937,7 +933,7 @@ export default function AdminDashboard({
         <div>
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">Private OPR area</p>
           <h1 className="mt-4 text-4xl font-bold md:text-5xl">Recipe inbox</h1>
-          {totpFactorId ? (
+          {totpFactors.length > 0 ? (
             <p className="mt-4 text-lg text-stone-700">
               {submissions.length} {submissions.length === 1 ? "recipe" : "recipes"} shared with OPR.
             </p>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { supabase } from "../../../lib/supabase/client";
 
@@ -12,37 +12,37 @@ export default function MfaEnroll({
   onCancel: () => void;
 }) {
   const [factorId, setFactorId] = useState("");
+  const [deviceName, setDeviceName] = useState("");
   const [qrCode, setQrCode] = useState("");
   const [secret, setSecret] = useState("");
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
-  const [starting, setStarting] = useState(true);
+  const [starting, setStarting] = useState(false);
   const [verifying, setVerifying] = useState(false);
 
-  useEffect(() => {
-    let cancelled = false;
-
-    async function start() {
-      const { data, error: enrollError } = await supabase.auth.mfa.enroll({
-        factorType: "totp",
-      });
-      if (cancelled) return;
-      if (enrollError || !data) {
-        setError(enrollError?.message ?? "We could not start two-factor setup. Please try again.");
-        setStarting(false);
-        return;
-      }
-      setFactorId(data.id);
-      setQrCode(data.totp.qr_code);
-      setSecret(data.totp.secret);
-      setStarting(false);
+  async function start() {
+    const friendlyName = deviceName.trim();
+    if (!friendlyName) {
+      setError("Give this authenticator a name, such as Chaten's phone or Backup authenticator.");
+      return;
     }
 
-    void start();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+    setError("");
+    setStarting(true);
+    const { data, error: enrollError } = await supabase.auth.mfa.enroll({
+      factorType: "totp",
+      friendlyName,
+    });
+    if (enrollError || !data) {
+      setError(enrollError?.message ?? "We could not start two-factor setup. Please try again.");
+      setStarting(false);
+      return;
+    }
+    setFactorId(data.id);
+    setQrCode(data.totp.qr_code);
+    setSecret(data.totp.secret);
+    setStarting(false);
+  }
 
   async function verify() {
     setError("");
@@ -79,17 +79,31 @@ export default function MfaEnroll({
     onCancel();
   }
 
-  if (starting) {
-    return <p className="text-stone-600">Preparing two-factor setup...</p>;
-  }
-
   return (
     <div className="max-w-md">
       <h2 className="text-2xl font-bold text-[#123C39]">Set up two-factor authentication</h2>
-      <p className="mt-3 leading-6 text-stone-700">
-        Scan this code with an authenticator app (like Google Authenticator or 1Password), or enter the
-        secret below by hand.
-      </p>
+      {!factorId ? (
+        <>
+          <p className="mt-3 leading-6 text-stone-700">
+            Use a unique name so you can tell your primary and backup authenticators apart.
+          </p>
+          <label className="mt-6 block text-sm font-medium text-[#123C39]">
+            Device name
+            <input
+              value={deviceName}
+              onChange={(event) => setDeviceName(event.target.value.slice(0, 50))}
+              autoComplete="off"
+              placeholder="Backup authenticator"
+              className="mt-3 w-full rounded-xl border border-[#DDB765] bg-white px-4 py-3 outline-none transition focus:border-[#123C39] focus:ring-2 focus:ring-[#DDB765]/60"
+            />
+          </label>
+        </>
+      ) : (
+        <p className="mt-3 leading-6 text-stone-700">
+          Scan this code with the named authenticator, or enter the secret below by hand. Do not store
+          the secret with the credentials for this account.
+        </p>
+      )}
       {error ? <p role="alert" className="mt-4 text-sm text-red-800">{error}</p> : null}
       {qrCode ? (
         <Image
@@ -104,7 +118,7 @@ export default function MfaEnroll({
       {secret ? (
         <p className="mt-4 break-all rounded-xl bg-[#EED8B2] px-4 py-3 font-mono text-sm text-[#123C39]">{secret}</p>
       ) : null}
-      <label className="mt-6 block text-sm font-medium text-[#123C39]">
+      {factorId ? <label className="mt-6 block text-sm font-medium text-[#123C39]">
         Code from your authenticator app
         <input
           value={code}
@@ -114,15 +128,15 @@ export default function MfaEnroll({
           placeholder="123456"
           className="mt-3 w-full rounded-xl border border-[#DDB765] bg-white px-4 py-3 outline-none transition focus:border-[#123C39] focus:ring-2 focus:ring-[#DDB765]/60"
         />
-      </label>
+      </label> : null}
       <div className="mt-6 flex gap-3">
         <button
           type="button"
-          onClick={() => void verify()}
-          disabled={verifying}
+          onClick={() => void (factorId ? verify() : start())}
+          disabled={verifying || starting}
           className="rounded-full bg-[#123C39] px-6 py-3 font-medium text-white transition hover:bg-[#08231F] disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {verifying ? "Checking..." : "Verify and enable"}
+          {starting ? "Preparing..." : verifying ? "Checking..." : factorId ? "Verify and enable" : "Create QR code"}
         </button>
         <button
           type="button"
