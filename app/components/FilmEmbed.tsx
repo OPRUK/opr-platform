@@ -25,6 +25,7 @@ export default function FilmEmbed({
   title: string;
   className?: string;
 }) {
+  const resolvedPoster = poster ?? "/images/recipes/barbaras-beef-casserole-wide.webp";
   const triggerRef = useRef<HTMLButtonElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -181,8 +182,8 @@ export default function FilmEmbed({
           src={video}
           playsInline
           muted
-          preload="auto"
-          poster={poster}
+          preload="none"
+          poster={resolvedPoster}
           controls={false}
         />
         <div className="pointer-events-none absolute inset-0 bg-[#041513]/55" aria-hidden="true" />
@@ -193,8 +194,8 @@ export default function FilmEmbed({
           className="relative z-10 h-full w-full object-contain"
           src={video}
           playsInline
-          preload="auto"
-          poster={poster}
+          preload="none"
+          poster={resolvedPoster}
           controls={false}
           controlsList="nodownload noremoteplayback"
           disablePictureInPicture
@@ -339,19 +340,8 @@ export default function FilmEmbed({
         aria-label={`Play ${title}`}
         className={`group relative block overflow-hidden bg-black ${className}`}
       >
-        {poster ? (
-          // eslint-disable-next-line @next/next/no-img-element -- Supabase poster URLs are runtime data
-          <img src={poster} alt="" className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]" />
-        ) : (
-          <video
-            src={`${video}#t=0.001`}
-            muted
-            playsInline
-            preload="metadata"
-            aria-hidden="true"
-            className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
-          />
-        )}
+        {/* eslint-disable-next-line @next/next/no-img-element -- Supabase poster URLs are runtime data */}
+        <img src={resolvedPoster} alt="" className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]" />
         <span className="absolute inset-0 flex items-center justify-center bg-black/20 transition group-hover:bg-black/35">
           <span className="flex h-16 w-16 items-center justify-center rounded-full border border-white/70 bg-black/35 shadow-xl backdrop-blur-sm transition group-hover:scale-110 group-hover:bg-[#FFF3DF] group-hover:text-[#123C39]">
             <svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24" fill="currentColor" className="ml-1 text-[#FFF3DF] group-hover:text-[#123C39]">

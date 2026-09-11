@@ -81,8 +81,8 @@ export default async function FilmWatchPage({ params }: FilmPageProps) {
             className="aspect-video w-full bg-black object-contain"
             controls
             playsInline
-            preload="metadata"
-            poster={film.poster}
+            preload="none"
+            poster={film.poster ?? "/images/recipes/barbaras-beef-casserole-wide.webp"}
           >
             <source src={film.video} type="video/mp4" />
             {film.captions ? <track kind="captions" src={film.captions} srcLang="en" label="English captions" default /> : null}
