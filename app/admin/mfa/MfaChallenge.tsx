@@ -1,18 +1,20 @@
 "use client";
 
 import { useState } from "react";
+import type { Factor } from "@supabase/supabase-js";
 import { supabase } from "../../../lib/supabase/client";
 
 export default function MfaChallenge({
-  factorId,
+  factors,
   onVerified,
   onSignOut,
 }: {
-  factorId: string;
+  factors: Factor[];
   onVerified: () => void;
   onSignOut: () => void;
 }) {
   const [code, setCode] = useState("");
+  const [factorId, setFactorId] = useState(factors[0]?.id ?? "");
   const [error, setError] = useState("");
   const [verifying, setVerifying] = useState(false);
 
@@ -53,6 +55,22 @@ export default function MfaChallenge({
           Enter the 6-digit code from your authenticator app to finish signing in.
         </p>
         {error ? <p role="alert" className="mt-4 text-sm text-red-800">{error}</p> : null}
+        {factors.length > 1 ? (
+          <label className="mt-6 block text-sm font-medium">
+            Authenticator
+            <select
+              value={factorId}
+              onChange={(event) => setFactorId(event.target.value)}
+              className="mt-3 w-full rounded-xl border border-[#DDB765] bg-[#EED8B2] px-4 py-3 outline-none transition focus:border-[#123C39] focus:ring-2 focus:ring-[#DDB765]/60"
+            >
+              {factors.map((factor) => (
+                <option key={factor.id} value={factor.id}>
+                  {factor.friendly_name || "Authenticator app"}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : null}
         <label className="mt-6 block text-sm font-medium">
           Authenticator code
           <input

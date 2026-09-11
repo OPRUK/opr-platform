@@ -55,7 +55,12 @@ export default function MfaSecurityPanel({ onFactorsChanged }: { onFactorsChange
     if (error) {
       setMessage("We could not remove that authenticator. Please try again.");
     } else {
-      setMessage("Authenticator removed.");
+      const { error: refreshError } = await supabase.auth.refreshSession();
+      setMessage(
+        refreshError
+          ? "Authenticator removed. Sign out and back in to refresh this session."
+          : "Authenticator removed and the session security level was refreshed.",
+      );
       await refresh();
       onFactorsChanged?.();
     }
