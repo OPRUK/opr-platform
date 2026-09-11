@@ -4,6 +4,13 @@ import { resolve } from "node:path";
 import test from "node:test";
 import { filmDescription, filmSlug, films, filmUploadDate, getFilmBySlug, getFilmsForRecipe, getRelatedFilms } from "../lib/films.ts";
 
+const videoOrigin = "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/";
+
+function assertHostedVideo(video: string) {
+  assert.ok(video.startsWith(videoOrigin), `${video} should use the public OPR Blob store`);
+  assert.match(video, /\.(?:mov|mp4)$/);
+}
+
 const newFilmTitles = [
   "Dave & Rubble | The Longest Two Seconds",
   "Dave & Rubble | Butter Chicken Recipe",
@@ -26,7 +33,7 @@ test("the new Dave and Rubble films have complete website assets", () => {
     assert.equal(film.uploadDate, "2026-08-20T12:00:00+00:00");
     assert.ok(film.transcript?.startsWith("Visual description:"));
     assert.ok(film.poster);
-    assert.ok(existsSync(resolve(`public${film.video}`)), `${film.video} should exist`);
+    assertHostedVideo(film.video);
     assert.ok(existsSync(resolve(`public${film.poster}`)), `${film.poster} should exist`);
   }
 });
@@ -55,7 +62,7 @@ test("the September Dave and Rubble films have complete accessible masters", () 
     assert.ok(film.transcript?.includes("Rubble:"));
     assert.ok(film.poster);
     assert.ok(film.captions);
-    assert.ok(existsSync(resolve(`public${film.video}`)), `${film.video} should exist`);
+    assertHostedVideo(film.video);
     assert.ok(existsSync(resolve(`public${film.poster}`)), `${film.poster} should exist`);
     assert.ok(existsSync(resolve(`public${film.captions}`)), `${film.captions} should exist`);
   }
@@ -123,23 +130,23 @@ test("dedicated watch pages expose a crawlable inline video player", () => {
   assert.doesNotMatch(watchPageSource, /embedUrl:/);
 });
 
-test("Gautam and Shobha's Dish of the Week film has captions and an embedded OPR ending", () => {
+test("Gautam and Shobha's Dish of the Week film has captions and a hosted master", () => {
   const film = films.find((candidate) => candidate.title === "Dave & Rubble | Dish of the Week: Gautam & Shobha");
 
   assert.ok(film);
   assert.equal(film.recipeSlug, "gautam-and-shobhas-tandoori-aloo-nazakat");
   assert.ok(film.captions);
-  assert.ok(existsSync(resolve(`public${film.video}`)));
+  assertHostedVideo(film.video);
   assert.ok(existsSync(resolve(`public${film.captions}`)));
 });
 
-test("Your Nomination film has exact captions and an embedded OPR ending", () => {
+test("Your Nomination film has exact captions and a hosted master", () => {
   const film = films.find((candidate) => candidate.title === "Dave & Rubble | Your Nomination");
 
   assert.ok(film);
   assert.ok(film.transcript?.includes("You do. Every week."));
   assert.ok(film.captions);
-  assert.ok(existsSync(resolve(`public${film.video}`)));
+  assertHostedVideo(film.video);
   assert.ok(existsSync(resolve(`public${film.captions}`)));
 });
 
