@@ -92,6 +92,21 @@ test("decorative hero films only load after client playback preferences are know
   assert.doesNotMatch(filmsSource, /preload="auto"/);
 });
 
+test("visitor-facing film players do not preload video bytes and always render a poster", () => {
+  const embedSource = readFileSync(resolve("app/components/FilmEmbed.tsx"), "utf8");
+  const watchPageSource = readFileSync(resolve("app/films/[slug]/page.tsx"), "utf8");
+  const communityRecipeSource = readFileSync(resolve("app/family-cookbook/community/[id]/page.tsx"), "utf8");
+
+  assert.doesNotMatch(embedSource, /preload="(?:auto|metadata)"/);
+  assert.match(embedSource, /preload="none"/);
+  assert.match(embedSource, /const resolvedPoster = poster \?\?/);
+  assert.doesNotMatch(embedSource, /src={`\$\{video\}#t=0\.001`}/);
+
+  assert.match(watchPageSource, /preload="none"/);
+  assert.match(watchPageSource, /poster={film\.poster \?\?/);
+  assert.match(communityRecipeSource, /preload="none" poster={imageUrl \?\? undefined}/);
+});
+
 test("the video sitemap identifies the direct video without reusing the watch page as a player", () => {
   const routeSource = readFileSync(resolve("app/video-sitemap.xml/route.ts"), "utf8");
 

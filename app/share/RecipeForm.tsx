@@ -861,7 +861,7 @@ export default function RecipeForm() {
           {recipeReadMessage ? <p className="mt-5 rounded-xl bg-[#EED8B2] px-4 py-3 text-base leading-7 text-[#123C39]">{recipeReadMessage}</p> : null}
           {recipeReadError ? <p role="alert" className="mt-5 rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-base leading-7 text-red-800">{recipeReadError}</p> : null}
           <p className="mt-4 text-base leading-7 text-stone-600">
-            When you choose “Read my recipe with AI”, the image is securely sent to OpenAI only to create this editable draft. Check every detail before sharing. It is not saved by the reader itself. Read our{" "}
+            When you choose “Read my recipe with AI”, the image is securely sent to OpenAI only to create this editable draft. Check every detail before sharing. OpenAI does not use API inputs or outputs to train its models by default, but may retain them for abuse monitoring for up to 30 days unless legally required to keep them longer. Read our{" "}
             <Link href="/privacy" className="underline underline-offset-2">Privacy Notice</Link>.
           </p>
         </div>
@@ -938,7 +938,7 @@ export default function RecipeForm() {
           {recipeVideo ? (
             <div className="mt-5">
               <p className="text-base font-medium text-[#123C39]">{recipeVideo.name}</p>
-              {recipeVideoPreview ? <video controls playsInline preload="metadata" src={recipeVideoPreview} className="mt-3 aspect-video w-full rounded-xl bg-black" /> : null}
+              {recipeVideoPreview ? <video controls playsInline preload="none" src={recipeVideoPreview} className="mt-3 aspect-video w-full rounded-xl bg-black" /> : null}
               <button
                 type="button"
                 onClick={() => chooseRecipeVideo(null)}

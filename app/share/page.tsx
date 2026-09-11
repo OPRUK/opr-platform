@@ -48,7 +48,7 @@ export default function ShareYourStory() {
           </p>
           <div className="mt-10 grid gap-6 md:grid-cols-3">
             {[
-              ["01", "Send your recipe", "Your email arrives directly with the OPR team."],
+              ["01", "Send your recipe", "Your recipe arrives directly with the OPR team."],
               ["02", "We read the story", "We look for the people and memories behind every dish."],
               ["03", "A recipe lives on", "Selected stories can appear in the living cookbook and beyond."],
             ].map(([number, title, copy]) => (

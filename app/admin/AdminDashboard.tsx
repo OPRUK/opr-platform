@@ -1239,7 +1239,7 @@ export default function AdminDashboard({
                 {selectedRecipeVideoUrl ? (
                   <article>
                     <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-[#123C39]">Recipe video</h3>
-                    <video controls playsInline preload="metadata" src={selectedRecipeVideoUrl} className="mt-4 aspect-video w-full rounded-2xl bg-black" />
+                    <video controls playsInline preload="none" src={selectedRecipeVideoUrl} className="mt-4 aspect-video w-full rounded-2xl bg-black" />
                   </article>
                 ) : null}
                 <article>

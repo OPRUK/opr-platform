@@ -61,7 +61,7 @@ export default function PrivacyPolicyPage() {
 
             <div>
               <h2 className="text-2xl font-bold text-[#123C39]">4. Optional AI recipe reader</h2>
-              <p className="mt-3">If you select “Read my recipe with AI”, we send the image you choose to our AI provider, OpenAI, solely to create an editable draft of the title, ingredients and method. This processing happens at your request. You remain responsible for checking and correcting the draft before you submit it. The tool does not make decisions about you and does not automatically publish anything.</p>
+              <p className="mt-3">If you select “Read my recipe with AI”, we send the image you choose to our AI provider, OpenAI, solely to create an editable draft of the title, ingredients and method. This processing happens at your request. OpenAI does not use API inputs or outputs to train its models by default, but may retain them for abuse monitoring for up to 30 days unless legally required to keep them longer. You remain responsible for checking and correcting the draft before you submit it. The tool does not make decisions about you and does not automatically publish anything.</p>
             </div>
 
             <div>

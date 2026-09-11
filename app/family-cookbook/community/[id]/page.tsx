@@ -340,7 +340,7 @@ export default async function CommunityRecipePage({
             <p className="text-sm uppercase tracking-[0.35em] text-amber-700">Watch it come to life</p>
             <h2 className="mt-5 text-4xl font-bold">Made in their kitchen.</h2>
             <p className="mx-auto mt-5 max-w-2xl leading-7 text-stone-700">A short film shared by the cook behind this recipe.</p>
-            <video aria-label={`Cooking video for ${recipe.title}`} controls playsInline preload="metadata" src={recipeVideoUrl} className="mx-auto mt-8 aspect-video w-full max-w-3xl rounded-3xl bg-black shadow-xl shadow-[#1C5A50]/15" />
+            <video aria-label={`Cooking video for ${recipe.title}`} controls playsInline preload="none" poster={imageUrl ?? undefined} src={recipeVideoUrl} className="mx-auto mt-8 aspect-video w-full max-w-3xl rounded-3xl bg-black shadow-xl shadow-[#1C5A50]/15" />
           </div>
         </section>
       ) : null}
