@@ -1,6 +1,6 @@
-// The OPR Film Collection. Video masters live in public/videos so they
-// are versioned and named consistently in one place. Some poster images
-// remain in the public Supabase Storage bucket. Both /films (desktop)
+// The OPR Film Collection. Web-ready video files live in the public OPR
+// Blob store so each deployment does not bundle another copy. Some poster
+// images remain in the public Supabase Storage bucket. Both /films (desktop)
 // and /app/films (mobile) read from this one list.
 const storageBase = "https://gtvgjymbmtaplvxdrnln.supabase.co/storage/v1/object/public/films";
 
@@ -13,6 +13,12 @@ export type Film = {
   recipeSlug?: string;
   uploadDate?: string;
 };
+
+const VIDEO_ORIGIN = "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com";
+
+function videoUrl(path: string) {
+  return `${VIDEO_ORIGIN}${path}`;
+}
 
 export function filmSlug(film: Pick<Film, "title">): string {
   return film.title
@@ -93,7 +99,7 @@ function film(
 ): Film {
   return {
     title,
-    video: `/videos/${videoFile}.mp4`,
+    video: videoUrl(`/videos/${videoFile}.mp4`),
     poster: hasPoster ? `${storageBase}/posters/${file}.jpg` : undefined,
     transcript,
     recipeSlug,
@@ -103,7 +109,7 @@ function film(
 const filmsUnordered: Film[] = [
   {
     title: "Dave & Rubble | The Guest List",
-    video: "/videos/opr-dave-and-rubble-the-guest-list.mp4",
+    video: videoUrl("/videos/opr-dave-and-rubble-the-guest-list.mp4"),
     poster: "/images/opr-dave-and-rubble-the-guest-list-poster.jpg",
     captions: "/captions/opr-dave-and-rubble-the-guest-list.vtt",
     transcript:
@@ -112,7 +118,7 @@ const filmsUnordered: Film[] = [
   },
   {
     title: "Dave & Rubble | More Chicken",
-    video: "/videos/opr-dave-and-rubble-more-chicken.mp4",
+    video: videoUrl("/videos/opr-dave-and-rubble-more-chicken.mp4"),
     poster: "/images/opr-dave-and-rubble-more-chicken-poster.jpg",
     captions: "/captions/opr-dave-and-rubble-more-chicken.vtt",
     transcript:
@@ -121,7 +127,7 @@ const filmsUnordered: Film[] = [
   },
   {
     title: "Dave & Rubble | The Inheritance",
-    video: "/videos/opr-dave-and-rubble-the-inheritance.mp4",
+    video: videoUrl("/videos/opr-dave-and-rubble-the-inheritance.mp4"),
     poster: "/images/opr-dave-and-rubble-the-inheritance-poster.jpg",
     captions: "/captions/opr-dave-and-rubble-the-inheritance.vtt",
     transcript:
@@ -130,7 +136,7 @@ const filmsUnordered: Film[] = [
   },
   {
     title: "Dave & Rubble | The Handwritten Recipe",
-    video: "/videos/opr-dave-and-rubble-the-handwritten-recipe.mp4",
+    video: videoUrl("/videos/opr-dave-and-rubble-the-handwritten-recipe.mp4"),
     poster: "/images/opr-dave-and-rubble-the-handwritten-recipe-poster.jpg",
     captions: "/captions/opr-dave-and-rubble-the-handwritten-recipe.vtt",
     transcript:
@@ -139,7 +145,7 @@ const filmsUnordered: Film[] = [
   },
   {
     title: "Dave & Rubble | The Story Behind It",
-    video: "/videos/opr-dave-and-rubble-the-story-behind-it.mp4",
+    video: videoUrl("/videos/opr-dave-and-rubble-the-story-behind-it.mp4"),
     poster: "/images/opr-dave-and-rubble-the-story-behind-it-poster.jpg",
     captions: "/captions/opr-dave-and-rubble-the-story-behind-it.vtt",
     transcript:
@@ -148,7 +154,7 @@ const filmsUnordered: Film[] = [
   },
   {
     title: "Dave & Rubble | Just a Taste",
-    video: "/videos/opr-dave-and-rubble-just-a-taste.mp4",
+    video: videoUrl("/videos/opr-dave-and-rubble-just-a-taste.mp4"),
     poster: "/images/opr-dave-and-rubble-just-a-taste-poster.jpg",
     captions: "/captions/opr-dave-and-rubble-just-a-taste.vtt",
     transcript:
@@ -157,7 +163,7 @@ const filmsUnordered: Film[] = [
   },
   {
     title: "Dave & Rubble | Patience Is the Secret Ingredient",
-    video: "/videos/opr-dave-and-rubble-patience-is-the-secret-ingredient.mp4",
+    video: videoUrl("/videos/opr-dave-and-rubble-patience-is-the-secret-ingredient.mp4"),
     poster: "/images/opr-dave-and-rubble-patience-is-the-secret-ingredient-poster.jpg",
     captions: "/captions/opr-dave-and-rubble-patience-is-the-secret-ingredient.vtt",
     transcript:
@@ -166,7 +172,7 @@ const filmsUnordered: Film[] = [
   },
   {
     title: "Dave & Rubble | The Chicken Nomination",
-    video: "/videos/opr-dave-and-rubble-the-chicken-nomination.mp4",
+    video: videoUrl("/videos/opr-dave-and-rubble-the-chicken-nomination.mp4"),
     poster: "/images/opr-dave-and-rubble-the-chicken-nomination-poster.jpg",
     captions: "/captions/opr-dave-and-rubble-the-chicken-nomination.vtt",
     transcript:
@@ -175,7 +181,7 @@ const filmsUnordered: Film[] = [
   },
   {
     title: "Dave & Rubble | Five Generations",
-    video: "/videos/opr-dave-and-rubble-five-generations.mp4",
+    video: videoUrl("/videos/opr-dave-and-rubble-five-generations.mp4"),
     poster: "/images/opr-dave-and-rubble-five-generations-poster.jpg",
     captions: "/captions/opr-dave-and-rubble-five-generations.vtt",
     transcript:
@@ -184,7 +190,7 @@ const filmsUnordered: Film[] = [
   },
   {
     title: "Dave & Rubble | Before Your Time",
-    video: "/videos/opr-dave-and-rubble-before-your-time.mp4",
+    video: videoUrl("/videos/opr-dave-and-rubble-before-your-time.mp4"),
     poster: "/images/opr-dave-and-rubble-before-your-time-poster.jpg",
     captions: "/captions/opr-dave-and-rubble-before-your-time.vtt",
     transcript:
@@ -193,7 +199,7 @@ const filmsUnordered: Film[] = [
   },
   {
     title: "Dave & Rubble | The Measuring Spoon",
-    video: "/videos/opr-dave-and-rubble-the-measuring-spoon.mp4",
+    video: videoUrl("/videos/opr-dave-and-rubble-the-measuring-spoon.mp4"),
     poster: "/images/opr-dave-and-rubble-the-measuring-spoon-poster.jpg",
     captions: "/captions/opr-dave-and-rubble-the-measuring-spoon.vtt",
     transcript:
@@ -202,7 +208,7 @@ const filmsUnordered: Film[] = [
   },
   {
     title: "Dave & Rubble | The Family Vote",
-    video: "/videos/opr-dave-and-rubble-the-family-vote.mp4",
+    video: videoUrl("/videos/opr-dave-and-rubble-the-family-vote.mp4"),
     poster: "/images/opr-dave-and-rubble-the-family-vote-poster.jpg",
     captions: "/captions/opr-dave-and-rubble-the-family-vote.vtt",
     transcript:
@@ -211,7 +217,7 @@ const filmsUnordered: Film[] = [
   },
   {
     title: "Dave & Rubble | Ten Out of Ten",
-    video: "/videos/opr-dave-and-rubble-ten-out-of-ten.mp4",
+    video: videoUrl("/videos/opr-dave-and-rubble-ten-out-of-ten.mp4"),
     poster: "/images/opr-dave-and-rubble-ten-out-of-ten-poster.jpg",
     captions: "/captions/opr-dave-and-rubble-ten-out-of-ten.vtt",
     transcript:
@@ -220,7 +226,7 @@ const filmsUnordered: Film[] = [
   },
   {
     title: "Dave & Rubble | The Substitution",
-    video: "/videos/opr-dave-and-rubble-the-substitution.mp4",
+    video: videoUrl("/videos/opr-dave-and-rubble-the-substitution.mp4"),
     poster: "/images/opr-dave-and-rubble-the-substitution-poster.jpg",
     captions: "/captions/opr-dave-and-rubble-the-substitution.vtt",
     transcript:
@@ -229,7 +235,7 @@ const filmsUnordered: Film[] = [
   },
   {
     title: "Dave & Rubble | Room at the Table",
-    video: "/videos/opr-dave-and-rubble-room-at-the-table.mp4",
+    video: videoUrl("/videos/opr-dave-and-rubble-room-at-the-table.mp4"),
     poster: "/images/opr-dave-and-rubble-room-at-the-table-poster.jpg",
     captions: "/captions/opr-dave-and-rubble-room-at-the-table.vtt",
     transcript:
@@ -238,7 +244,7 @@ const filmsUnordered: Film[] = [
   },
   {
     title: "Dave & Rubble | Your Nomination",
-    video: "/videos/opr-dave-and-rubble-your-nomination.mp4",
+    video: videoUrl("/videos/opr-dave-and-rubble-your-nomination.mp4"),
     captions: "/captions/opr-dave-and-rubble-your-nomination.vtt",
     transcript:
       "Dave: “Nominate the family dish everyone should taste.”\nRubble: “Can I nominate Butter Chicken?”\nDave: “You do. Every week.”",
@@ -246,7 +252,7 @@ const filmsUnordered: Film[] = [
   },
   {
     title: "Dave & Rubble | Dish of the Week: Gautam & Shobha",
-    video: "/videos/opr-dave-and-rubble-gautam-shobha-dish-of-the-week.mp4",
+    video: videoUrl("/videos/opr-dave-and-rubble-gautam-shobha-dish-of-the-week.mp4"),
     captions: "/captions/opr-dave-and-rubble-gautam-shobha-dish-of-the-week.vtt",
     transcript:
       "Dave: “This week’s dish comes from Gautam and his mum, Shobha.”\nRubble: “Did they make one for me?”\nDave: “You can have the story.”",
@@ -255,7 +261,7 @@ const filmsUnordered: Film[] = [
   },
   {
     title: "Dave & Rubble | The Longest Two Seconds",
-    video: "/videos/opr-dave-and-rubble-longest-two-seconds.mp4",
+    video: videoUrl("/videos/opr-dave-and-rubble-longest-two-seconds.mp4"),
     poster: "/images/opr-dave-and-rubble-longest-two-seconds-poster.jpg",
     transcript:
       "Visual description: Dave sets a kitchen timer while Rubble watches closely. They exchange a joke as the final seconds count down before the OPR social card appears.",
@@ -263,7 +269,7 @@ const filmsUnordered: Film[] = [
   },
   {
     title: "Dave & Rubble | Butter Chicken Recipe",
-    video: "/videos/opr-dave-and-rubble-butter-chicken-recipe.mp4",
+    video: videoUrl("/videos/opr-dave-and-rubble-butter-chicken-recipe.mp4"),
     poster: "/images/opr-dave-and-rubble-butter-chicken-recipe-poster.jpg",
     transcript:
       "Visual description: Dave stirs a steaming pan of Butter Chicken while Rubble watches beside the hob. They exchange a joke about the recipe before the OPR social card appears.",
@@ -272,7 +278,7 @@ const filmsUnordered: Film[] = [
   },
   {
     title: "Dave & Rubble | The Secret Ingredient",
-    video: "/videos/opr-dave-and-rubble-secret-ingredient.mp4",
+    video: videoUrl("/videos/opr-dave-and-rubble-secret-ingredient.mp4"),
     poster: "/images/opr-dave-and-rubble-secret-ingredient-poster.jpg",
     transcript:
       "Dave: “It just needs one secret ingredient.”\nRubble: “Chicken?”\nDave: “Apparently.”",
@@ -280,47 +286,47 @@ const filmsUnordered: Film[] = [
   },
   {
     title: "Dave & Rubble | Quality Control",
-    video: "/videos/opr-dave-and-rubble-quality-control.mp4",
+    video: videoUrl("/videos/opr-dave-and-rubble-quality-control.mp4"),
     poster: "/images/opr-dave-and-rubble-quality-control-poster.jpg",
     transcript:
       "Dave: “Family recipe. Four generations. Really?”\nRubble: “Quality control.”",
   },
   {
     title: "Dave & Rubble | Dave's Butter Chicken",
-    video: "/videos/opr-dave-and-rubble-daves-butter-chicken.mp4",
+    video: videoUrl("/videos/opr-dave-and-rubble-daves-butter-chicken.mp4"),
     transcript:
       "Dave: “You’ve been watching this pan for ages.”\nRubble: “I’m supervising the Butter Chicken.”\nDave: “Family recipe. No shortcuts.”",
     recipeSlug: "daves-butter-chicken",
   },
   {
     title: "Dave & Rubble | Sam's Soufflé",
-    video: "/videos/opr-dave-and-rubble-sams-souffle.mp4",
+    video: videoUrl("/videos/opr-dave-and-rubble-sams-souffle.mp4"),
     transcript:
       "Dave: “Sam says we mustn’t let it fall.”\nRubble: “Then stop talking to it.”\nDave: “Sam doesn’t need to know.”",
     uploadDate: "2026-08-14T12:00:00+01:00",
   },
   {
     title: "Dave & Rubble | Some Recipes Never Leave You",
-    video: "/videos/opr-dave-and-rubble-some-recipes-never-leave-you.mp4",
+    video: videoUrl("/videos/opr-dave-and-rubble-some-recipes-never-leave-you.mp4"),
     transcript:
       "Dave: “You remember this one, Rubble?”\nRubble: “Of course. Your mum’s beef casserole.”\nDave: “Some recipes never leave you.”",
     recipeSlug: "barbaras-beef-casserole",
   },
   {
     title: "Dave & Rubble | Some Recipes Are Made with a Little Extra Company",
-    video: "/videos/opr-dave-and-rubble-steak-story.mp4",
+    video: videoUrl("/videos/opr-dave-and-rubble-steak-story.mp4"),
     transcript:
       "Visual description: Dave prepares a steak recipe in the kitchen while Rubble keeps him company.",
   },
   {
     title: "Dave & Rubble | Finding an Old Family Recipe",
-    video: "/videos/opr-dave-and-rubble-old-family-recipe.mp4",
+    video: videoUrl("/videos/opr-dave-and-rubble-old-family-recipe.mp4"),
     transcript:
       "Dave: “This one has been in the family for years. The best recipes are not just made; they are passed on.”",
   },
   {
     title: "Mummy Morris & Rubble | Dave’s Mum’s Beef Casserole",
-    video: "/videos/opr-mummy-morris-and-rubble-beef-casserole.mp4",
+    video: videoUrl("/videos/opr-mummy-morris-and-rubble-beef-casserole.mp4"),
     transcript:
       "Mummy Morris: “This is my generation’s special beef casserole.”\nRubble: “Can I have some?”\nMummy Morris: “No, but I will make you some dental sticks that I found on Other People’s Recipes.”",
     recipeSlug: "barbaras-beef-casserole",
@@ -328,18 +334,18 @@ const filmsUnordered: Film[] = [
   },
   {
     title: "Dave & Rubble | A Recipe Worth Passing On",
-    video: "/videos/opr-dave-and-rubble-recipe-worth-passing-on.mp4",
+    video: videoUrl("/videos/opr-dave-and-rubble-recipe-worth-passing-on.mp4"),
     poster: "/images/opr-dave-and-rubble-recipe-worth-passing-on-poster.jpg",
     transcript: "Dave: “Every family has one recipe worth passing on.”",
   },
   {
     title: "Dave & Rubble | OPR Recipe of the Month",
-    video: "/videos/opr-dave-and-rubble-recipe-of-the-month.mp4",
+    video: videoUrl("/videos/opr-dave-and-rubble-recipe-of-the-month.mp4"),
     transcript: "Dave: “Which one gets your vote?”",
   },
   {
     title: "Dave & Rubble | Cooking Together",
-    video: "/videos/opr-dave-and-rubble-kitchen-story-enhanced.mp4",
+    video: videoUrl("/videos/opr-dave-and-rubble-kitchen-story-enhanced.mp4"),
     poster: "/images/opr-dave-and-rubble-kitchen-story-poster.jpg",
     transcript:
       "Rubble: “All right, Dave, pay attention. We are making dental sticks.”\nDave: “Okay, I am listening.”\nRubble: “Go to OPR if you want to make it.”",

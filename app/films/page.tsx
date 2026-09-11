@@ -46,7 +46,7 @@ export default function FilmsPage() {
         <DecorativeHeroVideo
           className="absolute inset-0 -z-20 h-full w-full object-cover"
           poster="/images/recipes/barbaras-beef-casserole-wide.webp"
-          src="/videos/opr-recipe-stories-film-v2.mp4"
+          src="https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-recipe-stories-film-v2.mp4"
         />
         <VideoBrandMark />
         <div className="absolute inset-0 -z-10 bg-[#123C39]/75" />

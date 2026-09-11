@@ -11,20 +11,20 @@ type HomeHeroProps = {
 
 const introductionFilms = [
   {
-    desktop: "/videos/opr-add-your-recipe-promo.mp4",
-    mobile: "/videos/opr-add-your-recipe-promo-mobile.mp4",
+    desktop: "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-add-your-recipe-promo.mp4",
+    mobile: "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-add-your-recipe-promo-mobile.mp4",
     poster: optimizedPoster("/images/opr-add-your-recipe-promo-poster.jpg"),
     label: "Add your family recipe to Other People's Recipes",
   },
   {
-    desktop: "/videos/opr-sam-and-nadines-shepherds-pie.mp4",
-    mobile: "/videos/opr-sam-and-nadines-shepherds-pie-mobile.mp4",
+    desktop: "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-sam-and-nadines-shepherds-pie.mp4",
+    mobile: "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-sam-and-nadines-shepherds-pie-mobile.mp4",
     poster: optimizedPoster("/images/opr-sam-and-nadines-shepherds-pie-poster.jpg"),
     label: "Sam & Nadine's Shepherd's Pie | A Recipe Worth Passing On",
   },
   {
-    desktop: "/videos/opr-krishna-kitchen-drawer.mp4",
-    mobile: "/videos/opr-krishna-kitchen-drawer-mobile.mp4",
+    desktop: "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-krishna-kitchen-drawer.mp4",
+    mobile: "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-krishna-kitchen-drawer-mobile.mp4",
     poster: optimizedPoster("/images/opr-krishna-kitchen-drawer-poster.jpg"),
     label: "Krishna Anand's Baingan Ka Bharta | From the Kitchen Drawer",
   },
