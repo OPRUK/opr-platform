@@ -10,6 +10,7 @@ export type Film = {
   poster?: string;
   captions?: string;
   transcript?: string;
+  description?: string;
   recipeSlug?: string;
   uploadDate?: string;
 };
@@ -78,8 +79,8 @@ export function filmUploadDate(film: Pick<Film, "uploadDate">): string {
     : film.uploadDate;
 }
 
-export function filmDescription(film: Pick<Film, "title">): string {
-  return `Watch ${film.title}, a short OPR film about food, family and recipes worth passing on.`;
+export function filmDescription(film: Pick<Film, "title" | "description">): string {
+  return film.description ?? `Watch ${film.title}, a short OPR film about food, family and recipes worth passing on.`;
 }
 
 function film(
@@ -107,6 +108,39 @@ function film(
 }
 
 const filmsUnordered: Film[] = [
+  {
+    title: "Dave & Rubble | The Timer",
+    video: videoUrl("/videos/opr-dave-and-rubble-the-timer.mp4"),
+    poster: videoUrl("/posters/opr-dave-and-rubble-the-timer-poster.jpg"),
+    transcript:
+      "Dave: “Twenty minutes. Then dinner.”\nRubble: “I’ve been ready since breakfast.”\nDave: “That was eight hours ago.”",
+    description:
+      "Dave sets a twenty-minute dinner timer while Rubble points out he has been ready to eat since breakfast, in this short OPR kitchen comedy.",
+    captions: "/captions/opr-dave-and-rubble-the-timer.vtt",
+    uploadDate: "2026-09-21T14:15:00+01:00",
+  },
+  {
+    title: "Dave & Rubble | Does It Mention Me?",
+    video: videoUrl("/videos/opr-dave-and-rubble-does-it-mention-me.mp4"),
+    poster: videoUrl("/posters/opr-dave-and-rubble-does-it-mention-me-poster.jpg"),
+    transcript:
+      "Dave: “This has been in the family for years.”\nRubble: “Does it mention me?”\nDave: “It’s from 1984.”",
+    description:
+      "Dave shares a family recipe from 1984, and Rubble immediately wants to know whether the handwritten notes mention him, in this short OPR film.",
+    captions: "/captions/opr-dave-and-rubble-does-it-mention-me.vtt",
+    uploadDate: "2026-09-21T14:14:00+01:00",
+  },
+  {
+    title: "Dave & Rubble | Taste Test",
+    video: videoUrl("/videos/opr-dave-and-rubble-taste-test.mp4"),
+    poster: videoUrl("/posters/opr-dave-and-rubble-taste-test-poster.jpg"),
+    transcript:
+      "Dave: “Needs a second opinion.”\nRubble: “Finally.”\nDave: “Mine.”",
+    description:
+      "Dave says dinner needs a second opinion. Rubble is ready to help—until Dave explains that he means his own, in this short OPR kitchen comedy.",
+    captions: "/captions/opr-dave-and-rubble-taste-test.vtt",
+    uploadDate: "2026-09-21T14:13:00+01:00",
+  },
   {
     title: "Dave & Rubble | The Guest List",
     video: videoUrl("/videos/opr-dave-and-rubble-the-guest-list.mp4"),
