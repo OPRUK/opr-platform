@@ -2,12 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import DecorativeHeroVideo from "../components/DecorativeHeroVideo";
 import Navigation from "../components/Navigation";
-import FilmEmbed from "../components/FilmEmbed";
 import VideoBrandMark from "../components/VideoBrandMark";
 import TrackedLink from "../components/TrackedLink";
-import { filmDescription, filmSlug, films, filmUploadDate } from "../../lib/films";
+import { filmSlug, films } from "../../lib/films";
 import { getFeaturedRecipe } from "../../lib/recipes";
-import { absoluteUrl } from "../../lib/site";
 import { buildMetadata } from "../../lib/metadata";
 
 export const metadata: Metadata = buildMetadata({
@@ -18,28 +16,8 @@ export const metadata: Metadata = buildMetadata({
 });
 
 export default function FilmsPage() {
-  const videoJsonLd = {
-    "@context": "https://schema.org",
-    "@graph": films.map((film) => ({
-      "@type": "VideoObject",
-      name: film.title,
-      description: filmDescription(film),
-      thumbnailUrl: [absoluteUrl(film.poster ?? "/images/recipes/barbaras-beef-casserole-wide.webp")],
-      uploadDate: filmUploadDate(film),
-      contentUrl: absoluteUrl(film.video),
-      embedUrl: absoluteUrl(`/films/${filmSlug(film)}`),
-      transcript: film.transcript,
-    })),
-  };
-
   return (
     <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] text-[#123C39]">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(videoJsonLd).replace(/</g, "\\u003c"),
-        }}
-      />
       <Navigation />
 
       <section className="relative isolate overflow-hidden bg-[#123C39] px-6 pb-24 pt-40 text-center text-white">
@@ -83,6 +61,9 @@ export default function FilmsPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-20 md:px-8">
+        <p className="mb-10 text-center text-lg text-stone-700">
+          Looking for Dave and Rubble? <Link href="/dave-and-rubble" className="font-semibold text-[#1C5A50] underline decoration-[#DDB765] decoration-2 underline-offset-4">Explore their kitchen stories →</Link>
+        </p>
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {films.map((film) => {
             const recipe = film.recipeSlug ? getFeaturedRecipe(film.recipeSlug) : null;
@@ -94,7 +75,21 @@ export default function FilmsPage() {
                 key={film.video}
                 className="overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/15"
               >
-                <FilmEmbed video={film.video} poster={film.poster} captions={film.captions} title={film.title} className="aspect-video w-full" />
+                <Link
+                  href={`/films/${filmSlug(film)}`}
+                  aria-label={`Watch ${film.title}`}
+                  className="group relative block aspect-video overflow-hidden bg-[#123C39]"
+                >
+                  <img
+                    src={film.poster ?? "/images/recipes/barbaras-beef-casserole-wide.webp"}
+                    alt={`Still from ${film.title}`}
+                    className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                  />
+                  <span className="absolute inset-0 bg-[#08231F]/25 transition group-hover:bg-[#08231F]/10" aria-hidden="true" />
+                  <span className="absolute inset-0 flex items-center justify-center" aria-hidden="true">
+                    <span className="rounded-full bg-[#FFF3DF] px-5 py-3 font-bold text-[#123C39] shadow-lg">Watch film ▶</span>
+                  </span>
+                </Link>
                 <div className="p-6">
                   <h2 className="text-xl font-bold leading-snug">
                     <Link href={`/films/${filmSlug(film)}`} className="transition hover:text-[#1C5A50] hover:underline">
