@@ -4,10 +4,12 @@ import Navigation from "./components/Navigation";
 import Image from "next/image";
 import Link from "next/link";
 import HomeHero from "./components/HomeHero";
+import HomeRecipePoll from "./components/HomeRecipePoll";
 import TrackedLink from "./components/TrackedLink";
 import { optimizedPoster } from "../lib/optimized-poster";
 import { supabase } from "../lib/supabase/client";
 import { cookalongEvent } from "../lib/cookalong-event";
+import { featuredRecipes } from "../lib/recipes";
 
 export const dynamic = "force-dynamic";
 
@@ -37,6 +39,10 @@ type RecipeOfWeek = {
 };
 
 const useCuratedRecipeOfWeek = true;
+const homepageMonthName = new Intl.DateTimeFormat("en-GB", {
+  month: "long",
+  timeZone: "Europe/London",
+}).format(new Date());
 
 async function getRecipeOfWeek(): Promise<RecipeOfWeek | null> {
   const { data } = await supabase
@@ -271,6 +277,15 @@ export default async function Home() {
       <Suspense fallback={<RecipeOfWeekFallback />}>
         <RecipeOfWeekSection />
       </Suspense>
+
+      <HomeRecipePoll
+        initialMonthName={homepageMonthName}
+        candidates={featuredRecipes.map((recipe) => ({
+          id: `featured-${recipe.slug}`,
+          title: recipe.title,
+          place: recipe.place,
+        }))}
+      />
 
       <section
         id="cookbook"
