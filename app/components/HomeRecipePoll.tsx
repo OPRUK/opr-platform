@@ -111,7 +111,7 @@ export default function HomeRecipePoll({
                   <option value="">Select a recipe</option>
                   {candidates.map((candidate) => (
                     <option key={candidate.id} value={candidate.id}>
-                      {candidate.title} — {candidate.place}
+                      {candidate.title}, {candidate.place}
                     </option>
                   ))}
                 </select>

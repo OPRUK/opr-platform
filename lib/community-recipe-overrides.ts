@@ -17,7 +17,7 @@ const communityRecipeEditorialOverrides: Record<
   45: {
     title: "Pat’s Haddock and Tomato Bake",
     story:
-      "This was a regular favourite in our house when I was growing up. My mum, Pat, hated cooking, but everything she made was delicious — and made with love.",
+      "This was a regular favourite in our house when I was growing up. My mum, Pat, hated cooking, but everything she made was delicious and made with love.",
     ingredients: [
       "4 undyed smoked haddock fillets",
       "1 small pack tiger prawns",

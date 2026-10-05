@@ -140,7 +140,7 @@ export default function RecipeActions({
       link.click();
       link.remove();
       URL.revokeObjectURL(link.href);
-      setInstagramMessage("Instagram card downloaded — ready to share.");
+      setInstagramMessage("Instagram card downloaded. Ready to share.");
     }, "image/png");
   }
 

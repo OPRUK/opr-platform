@@ -15,13 +15,13 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: {
-    absolute: "Other People's Recipes — A Living Cookbook of Family Recipes",
+    absolute: "Other People's Recipes: A Living Cookbook of Family Recipes",
   },
   description:
     "Handwritten, handed-down and half-remembered family recipes from across the world, preserved with the stories behind them.",
   alternates: { canonical: "/" },
   openGraph: {
-    title: "Other People's Recipes — A Living Cookbook of Family Recipes",
+    title: "Other People's Recipes: A Living Cookbook of Family Recipes",
     description:
       "Handwritten, handed-down and half-remembered family recipes from across the world, preserved with the stories behind them.",
     url: "/",
@@ -209,7 +209,7 @@ export default async function Home() {
               </p>
               <p>
                 We are creating a living collection of family recipes and the
-                stories behind them — shared with care, discovered by others,
+                stories behind them, shared with care, discovered by others,
                 and one day celebrated around real restaurant tables.
               </p>
             </div>
@@ -403,7 +403,7 @@ function RecipeOfWeekFallback() {
             Mumbles, Wales
           </p>
           <p className="mt-7 text-lg leading-8 text-[#FFF3DF]">
-            Robin Vaughan from Mumbles shared his mum&apos;s gingerbread recipe with OPR — the moistest and tastiest gingerbread he remembers. There are no photographs of the original because it was usually eaten long before camera phones were even imagined.
+            Robin Vaughan from Mumbles shared his mum&apos;s gingerbread recipe with OPR. It is the moistest and tastiest gingerbread he remembers. There are no photographs of the original because it was usually eaten long before camera phones were even imagined.
           </p>
           <Link
             href="/family-cookbook/robin-vaughans-gingerbread"

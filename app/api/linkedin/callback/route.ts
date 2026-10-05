@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
 
   if (error) {
     return htmlResponse(
-      `<p>LinkedIn authorization failed: ${escapeHtml(error)} — ${escapeHtml(errorDescription ?? "")}</p>`,
+      `<p>LinkedIn authorization failed: ${escapeHtml(error)}. ${escapeHtml(errorDescription ?? "")}</p>`,
       400,
     );
   }
@@ -102,7 +102,7 @@ export async function GET(request: NextRequest) {
         ta.select();
         document.execCommand("copy");
         document.body.removeChild(ta);
-        this.textContent = "Copied — paste into Vercel";
+        this.textContent = "Copied. Paste into Vercel";
       });
     </script>
   </body>

@@ -35,7 +35,7 @@ export const metadata: Metadata = {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "Other People's Recipes — Every Recipe has a Story.",
+        alt: "Other People's Recipes: Every Recipe has a Story.",
       },
     ],
   },

@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     siteName: "Other People's Recipes",
     locale: "en_GB",
     type: "website",
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Other People's Recipes — Every Recipe has a Story." }],
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Other People's Recipes: Every Recipe has a Story." }],
   },
   twitter: {
     card: "summary_large_image",

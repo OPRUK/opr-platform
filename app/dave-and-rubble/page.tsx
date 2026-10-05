@@ -22,7 +22,7 @@ export default function DaveAndRubblePage() {
           <p className="text-sm font-bold uppercase tracking-[0.35em] text-amber-800">The OPR Film Collection</p>
           <h1 className="mt-5 font-display text-5xl font-bold leading-tight md:text-7xl">Dave &amp; Rubble</h1>
           <p className="mx-auto mt-7 max-w-2xl text-lg leading-8 text-stone-700">
-            Dave cooks. Rubble asks the important questions—usually about chicken. Together they share the family recipes,
+            Dave cooks. Rubble asks the important questions, usually about chicken. Together they share the family recipes,
             kitchen memories and small jokes that make a table feel like home.
           </p>
         </header>

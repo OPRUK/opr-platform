@@ -137,7 +137,7 @@ const filmsUnordered: Film[] = [
     transcript:
       "Dave: “Needs a second opinion.”\nRubble: “Finally.”\nDave: “Mine.”",
     description:
-      "Dave says dinner needs a second opinion. Rubble is ready to help—until Dave explains that he means his own, in this short OPR kitchen comedy.",
+      "Dave says dinner needs a second opinion. Rubble is ready to help, until Dave explains that he means his own, in this short OPR kitchen comedy.",
     captions: "/captions/opr-dave-and-rubble-taste-test.vtt",
     uploadDate: "2026-09-21T14:13:00+01:00",
   },

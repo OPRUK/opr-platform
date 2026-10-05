@@ -19,7 +19,7 @@ export default async function CookbookScreen() {
       <div className="flex-1 overflow-y-auto px-5 py-4">
         {recipes.length === 0 ? (
           <p className="py-10 text-center text-sm opacity-80">
-            No recipes are published yet — check back soon.
+            No recipes are published yet. Check back soon.
           </p>
         ) : (
           <div className="flex flex-col gap-4">

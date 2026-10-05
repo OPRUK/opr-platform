@@ -426,7 +426,7 @@ export default function PublishedRecipes({
                   type="button"
                   onClick={() => setExpandedClusterKey(expanded ? null : cluster.key)}
                   aria-expanded={expanded}
-                  aria-label={`${cluster.recipes.length} recipes clustered here — press to see them`}
+                  aria-label={`${cluster.recipes.length} recipes clustered here. Press to see them`}
                   className={`flex h-9 w-9 items-center justify-center rounded-full border-[3px] text-sm font-bold shadow-lg transition duration-200 hover:scale-125 sm:h-10 sm:w-10 sm:text-base ${
                     expanded
                       ? "border-[#DDB765] bg-[#DDB765] text-[#123C39]"

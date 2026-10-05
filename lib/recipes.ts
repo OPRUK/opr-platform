@@ -60,7 +60,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
     title: "Robin Vaughan's Gingerbread",
     place: "Mumbles, Wales",
     story:
-      "Robin Vaughan from Mumbles shared his mum's gingerbread recipe with OPR — the moistest and tastiest gingerbread he remembers. There are no photographs of the original because it was usually eaten long before camera phones were even imagined.",
+      "Robin Vaughan from Mumbles shared his mum's gingerbread recipe with OPR. It is the moistest and tastiest gingerbread he remembers. There are no photographs of the original because it was usually eaten long before camera phones were even imagined.",
     ingredients: [
       "113g Stork margarine or baking margarine (4 oz)",
       "113g soft brown sugar (4 oz)",
@@ -150,7 +150,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
     title: "Nana Serb's Sunday Rice Pudding",
     place: "Birmingham, England",
     story:
-      "Every Sunday after church, Nana Serb put this pudding in the oven before we sat down for lunch. By the time we reached dessert, the house smelled of vanilla and nutmeg. She never measured a thing — she simply knew. One spoonful still takes us straight back to her kitchen.",
+      "Every Sunday after church, Nana Serb put this pudding in the oven before we sat down for lunch. By the time we reached dessert, the house smelled of vanilla and nutmeg. She never measured a thing; she simply knew. One spoonful still takes us straight back to her kitchen.",
     ingredients: [
       "100g pudding rice",
       "850ml whole milk",
@@ -233,7 +233,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
     title: "Dave's Butter Chicken",
     place: "New Malden, England",
     story:
-      "I learned this from my Indian mother-in-law and tweaked it a little by replacing the tinned tomatoes with passata for a smoother, richer taste. I have cooked it in India for family and received their seal of approval — as well as my mother-in-law declaring that mine is better than hers now!",
+      "I learned this from my Indian mother-in-law and tweaked it a little by replacing the tinned tomatoes with passata for a smoother, richer taste. I have cooked it in India for family and received their seal of approval, as well as my mother-in-law declaring that mine is better than hers now!",
     ingredients: [
       "600g chicken breasts, trimmed and diced",
       "3 tablespoons tandoori masala",
@@ -247,7 +247,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
       "Chopped fresh coriander, to garnish",
     ],
     method: [
-      "Pour the passata into a large, heavy-bottomed pan — ideally cast iron. Add half the butter, diced into cubes, along with the sugar and salt.",
+      "Pour the passata into a large, heavy-bottomed pan, ideally cast iron. Add half the butter, diced into cubes, along with the sugar and salt.",
       "Keep the chillies whole, but prick each one several times with the point of a knife so the flavour can escape, then add them to the passata.",
       "Bring the sauce to the boil, then simmer briskly over a medium heat for 20–25 minutes, using a splash guard rather than a lid. You want the steam to escape and the sauce to reduce, without bubbling or spitting out.",
       "Meanwhile, place the chicken in a bowl with a good glug of olive oil and the tandoori masala, then coat it well.",
@@ -268,7 +268,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
     notes: [
       {
         title: "Tandoori masala",
-        text: "This is a ready-made Indian spice blend. If you cannot find it, use garam masala with a little mild paprika for warmth and colour — the flavour will be different, but still delicious.",
+        text: "This is a ready-made Indian spice blend. If you cannot find it, use garam masala with a little mild paprika for warmth and colour. The flavour will be different, but still delicious.",
       },
       {
         title: "About Degi Mirch",
@@ -343,7 +343,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
     method: [
       "Brown the beef in batches, then soften the onions and carrots in the same pan.",
       "Stir in the flour, then add the ale, stock and Bovril. Return the beef to the pan.",
-      "Simmer gently for two hours until tender. Barbara always prepared it the day before — overnight is even better.",
+      "Simmer gently for two hours until tender. Barbara always prepared it the day before. Overnight is even better.",
       "Reheat slowly until the sauce is rich and glossy, then season to taste.",
       "Serve in warmed bowls with creamy mash or crusty bread, and plenty of extra gravy.",
     ],
@@ -414,7 +414,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
     title: "Krishna Anand's Baingan ka Bharta",
     place: "New Delhi, India",
     story:
-      "Once kept in a kitchen drawer, Krishna Anand's baingan ka bharta has been carefully translated so everyone can make it their own. Krishna was the late grandmother of OPR founder Chaten, and this smoky aubergine dish — with softly pink onions, tomatoes and fresh green chillies — carries her family story to every new table.",
+      "Once kept in a kitchen drawer, Krishna Anand's baingan ka bharta has been carefully translated so everyone can make it their own. Krishna was the late grandmother of OPR founder Chaten, and this smoky aubergine dish, with softly pink onions, tomatoes and fresh green chillies, carries her family story to every new table.",
     ingredients: [
       "1 large aubergine (eggplant)",
       "Oil or ghee",
@@ -427,7 +427,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
     method: [
       "Roast the whole aubergine directly over an open gas flame, or in the oven, until the skin is completely charred and blackened and the inside is soft and collapsed.",
       "Let it cool slightly, then peel away the charred skin and coarsely mash the soft flesh with a fork.",
-      "Heat oil or ghee in a pan over a medium heat. Add the chopped onions and cook only until soft and pink — do not let them turn brown.",
+      "Heat oil or ghee in a pan over a medium heat. Add the chopped onions and cook only until soft and pink. Do not let them turn brown.",
       "Stir in the tomatoes, salt and degi mirch. Cook until the tomatoes break down completely and become part of the onions.",
       "Add the two slit green chillies to the bubbling tomato-onion base so their fresh heat can infuse the masala.",
       "Fold in the mashed roasted aubergine and stir thoroughly to coat it in the masala.",
@@ -446,7 +446,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
       },
       {
         title: "Keep the onions pink",
-        text: "This is the key instruction from Krishna Anand's recipe. Let the onions soften, but do not allow them to brown — it keeps the finished bharta sweet, fresh and light.",
+        text: "This is the key instruction from Krishna Anand's recipe. Let the onions soften, but do not allow them to brown. It keeps the finished bharta sweet, fresh and light.",
       },
     ],
     faqs: [
@@ -519,7 +519,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
     method: [
       "Wash each bhindi and pat it thoroughly dry with kitchen paper. Remove the head and a little from the tail, then chop into rounds.",
       "Heat 1 tablespoon of oil in a pan over a medium heat. Add the bhindi and cook for 10 minutes, stirring often. Lower the heat and cook for another 5 minutes, until it is mostly cooked and very little sliminess remains. Transfer it to a bowl.",
-      "In another pan — or the same pan once emptied — heat the remaining 1½ tablespoons of oil over a medium heat. Add the cumin seeds and let them sizzle for a few seconds.",
+      "In another pan, or the same pan once emptied, heat the remaining 1½ tablespoons of oil over a medium heat. Add the cumin seeds and let them sizzle for a few seconds.",
       "Add the chopped onion and sauté for 2–3 minutes until soft. Add the ginger and green chilli, then cook for one more minute.",
       "Add the chopped tomatoes and cook for around 4 minutes, until soft and mushy.",
       "Stir in the coriander powder, turmeric, amchur, red chilli powder and salt. Add a tablespoon of water so the spices do not burn, then stir well.",
@@ -536,7 +536,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
     notes: [
       {
         title: "How to make bhindi less slimy",
-        text: "Bhindi releases mucilage, which is what makes it sticky. Wash it first, then dry it completely before chopping. Spread the okra in a single layer on kitchen paper, let it dry for a while, and pat each piece dry. If you can plan ahead, wash it and leave it to air-dry overnight — it will be ready to use in the morning.",
+        text: "Bhindi releases mucilage, which is what makes it sticky. Wash it first, then dry it completely before chopping. Spread the okra in a single layer on kitchen paper, let it dry for a while, and pat each piece dry. If you can plan ahead, wash it and leave it to air-dry overnight. It will be ready to use in the morning.",
       },
       {
         title: "Cook it gently",
@@ -990,7 +990,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
       "Auntie Marcia made her Jamaican Jerk Chicken with that sweet and sour sauce that was finger lickin' good.",
     ingredients: [
       "1.4–1.8kg chicken, bone-in and skin-on (thighs and drumsticks recommended)",
-      "60ml canned pineapple juice (canned holds up better than fresh for a long marinade — see notes)",
+      "60ml canned pineapple juice (canned holds up better than fresh for a long marinade; see notes)",
       "2–3 Scotch bonnet peppers, stemmed (seeds in for real heat, seeds out for milder)",
       "1 tablespoon ground allspice (pimento)",
       "4 scallions (spring onions), roughly chopped",
@@ -1091,7 +1091,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
     title: "Badepapa's Pindi Cholley",
     place: "Noida, India",
     story:
-      "This was Mickey's Badepapa's — his grandfather's — favourite dish, made in the house every Tuesday without fail. Badepapa's secret was a spoonful of chunky chaat masala folded into the garam masala, giving the chickpeas their extra tang.",
+      "This was Mickey's Badepapa's favourite dish, made in the house every Tuesday without fail. Badepapa was his grandfather, and his secret was a spoonful of chunky chaat masala folded into the garam masala, giving the chickpeas their extra tang.",
     ingredients: [
       "200g kabuli chana (white chickpeas), soaked overnight",
       "Water, as needed for soaking and boiling",
@@ -1138,7 +1138,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
     notes: [
       {
         title: "Why black tea?",
-        text: "Boiling the chickpeas with black tea bags is what gives Pindi Cholley its signature dark colour — it's a traditional Rawalpindi technique, not a mistake if your chana comes out looking deep brown-black.",
+        text: "Boiling the chickpeas with black tea bags is what gives Pindi Cholley its signature dark colour. It is a traditional Rawalpindi technique, not a mistake if your chana comes out looking deep brown-black.",
       },
       {
         title: "The 8-hour soak isn't optional",
