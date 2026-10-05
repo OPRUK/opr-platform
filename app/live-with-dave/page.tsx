@@ -3,11 +3,12 @@ import Link from "next/link";
 import HeroCarousel from "../components/HeroCarousel";
 import Navigation from "../components/Navigation";
 import { buildMetadata } from "../../lib/metadata";
+import { cookalongEvent } from "../../lib/cookalong-event";
 
 export const metadata: Metadata = buildMetadata({
   title: "Cook With Dave | Other People's Recipes",
   description:
-    "Dave's Butter Chicken cook-along has now finished. Join Other People's Recipes to hear about the next chance to cook together.",
+    cookalongEvent.public.livePage.summary,
   path: "/live-with-dave",
 });
 
@@ -20,13 +21,13 @@ export default function LiveWithDavePage() {
         <HeroCarousel />
         <div className="relative z-10">
           <p className="mb-5 text-sm uppercase tracking-[0.4em] text-[#DDB765]">
-            Cook with Dave
+            {cookalongEvent.public.livePage.eyebrow}
           </p>
           <h1 className="font-display mx-auto max-w-4xl text-5xl font-bold leading-tight drop-shadow-2xl md:text-7xl">
-            This cook-along has now finished.
+            {cookalongEvent.public.livePage.title}
           </h1>
           <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-[#FFF3DF]">
-            Thank you to everyone who joined Dave in the kitchen. We&apos;re planning the next chance to cook together.
+            {cookalongEvent.public.livePage.summary}
           </p>
         </div>
       </section>
@@ -37,10 +38,10 @@ export default function LiveWithDavePage() {
             The next session
           </p>
           <h2 className="mt-5 text-4xl font-bold leading-tight md:text-5xl">
-            Be first to hear when we cook together again.
+            {cookalongEvent.public.livePage.nextSessionHeading}
           </h2>
           <p className="mt-7 max-w-xl text-lg leading-8 text-stone-700">
-            We&apos;ll share the next cook-along date, recipe and any replay details with the OPR community once they&apos;re confirmed.
+            {cookalongEvent.public.livePage.nextSessionCopy}
           </p>
           <p className="mt-10 text-stone-700">
             Cook Dave&apos;s recipe at home: <Link href="/family-cookbook/daves-butter-chicken" className="font-semibold text-[#9A622A] underline decoration-[#DDB765] underline-offset-4">see Dave&apos;s Butter Chicken recipe.</Link>
@@ -50,16 +51,16 @@ export default function LiveWithDavePage() {
         <div className="rounded-3xl bg-[#1C5A50] p-8 shadow-2xl md:p-10">
           <p className="text-sm uppercase tracking-[0.35em] text-[#DDB765]">Stay at the table</p>
           <h2 className="mt-5 text-3xl font-bold leading-tight text-[#FFF3DF]">
-            Get future invitations from OPR.
+            {cookalongEvent.public.livePage.inviteHeading}
           </h2>
           <p className="mt-5 leading-7 text-[#FFF3DF]">
-            Join the OPR table for news, new recipes and future cook-along announcements. We won&apos;t promise a date until it is confirmed.
+            {cookalongEvent.public.livePage.inviteCopy}
           </p>
           <Link
-            href="/join-our-table"
+            href={cookalongEvent.cta.href}
             className="mt-10 inline-flex rounded-full bg-[#DDB765] px-7 py-4 font-medium text-[#08231F] transition hover:scale-[1.02] hover:bg-[#FFF3DF]"
           >
-            Join Our Table →
+            {cookalongEvent.cta.label}
           </Link>
         </div>
       </section>

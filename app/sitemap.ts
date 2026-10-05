@@ -4,26 +4,31 @@ import { featuredRecipes } from "../lib/recipes";
 import { recipeCollections } from "../lib/recipe-collections";
 import { filmSlug, films } from "../lib/films";
 import { SITE_URL } from "../lib/site";
+import { cookalongEvent } from "../lib/cookalong-event";
 
-const staticRoutes: Array<{ path: string; changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"]; priority: number }> = [
-  { path: "/", changeFrequency: "monthly", priority: 1 },
-  { path: "/family-cookbook", changeFrequency: "weekly", priority: 0.9 },
-  { path: "/founder", changeFrequency: "yearly", priority: 0.5 },
-  { path: "/films", changeFrequency: "monthly", priority: 0.6 },
-  { path: "/dave-and-rubble", changeFrequency: "weekly", priority: 0.8 },
-  { path: "/live-with-dave", changeFrequency: "monthly", priority: 0.6 },
-  { path: "/join-our-table", changeFrequency: "monthly", priority: 0.7 },
-  { path: "/share", changeFrequency: "monthly", priority: 0.8 },
-  { path: "/accessibility", changeFrequency: "yearly", priority: 0.4 },
+const staticRoutes: Array<{ path: string; lastModified: string; changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"]; priority: number }> = [
+  { path: "/", lastModified: "2026-10-05", changeFrequency: "monthly", priority: 1 },
+  { path: "/family-cookbook", lastModified: "2026-10-05", changeFrequency: "weekly", priority: 0.9 },
+  { path: "/founder", lastModified: "2026-08-01", changeFrequency: "yearly", priority: 0.5 },
+  { path: "/films", lastModified: "2026-10-05", changeFrequency: "monthly", priority: 0.6 },
+  { path: "/dave-and-rubble", lastModified: "2026-09-22", changeFrequency: "weekly", priority: 0.8 },
+  ...(cookalongEvent.evergreenPage
+    ? [{ path: "/live-with-dave", lastModified: cookalongEvent.lastMeaningfulUpdate, changeFrequency: "monthly" as const, priority: 0.6 }]
+    : []),
+  { path: "/join-our-table", lastModified: "2026-10-05", changeFrequency: "monthly", priority: 0.7 },
+  { path: "/share", lastModified: "2026-08-01", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/accessibility", lastModified: "2026-08-01", changeFrequency: "yearly", priority: 0.4 },
 ];
 
 const siteLaunchDate = new Date("2026-08-01");
-const collectionLaunchDate = new Date("2026-09-04");
+const collectionLastModified: Record<string, string> = {
+  "british-family-recipes": "2026-10-05",
+};
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = staticRoutes.map((route) => ({
     url: `${SITE_URL}${route.path}`,
-    lastModified: siteLaunchDate,
+    lastModified: new Date(route.lastModified),
     changeFrequency: route.changeFrequency,
     priority: route.priority,
   }));
@@ -40,7 +45,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   for (const collection of recipeCollections) {
     entries.push({
       url: `${SITE_URL}/family-cookbook/collections/${collection.slug}`,
-      lastModified: collectionLaunchDate,
+      lastModified: new Date(collectionLastModified[collection.slug] ?? "2026-09-04"),
       changeFrequency: "monthly",
       priority: 0.7,
     });
