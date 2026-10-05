@@ -253,13 +253,12 @@ export function cookalongSignupWelcomeEmail({
   marketingOptIn: boolean;
 }) {
   return {
-    subject: "You're in for Dave's live Butter Chicken cook-along",
+    subject: "An update from Other People's Recipes",
     html: emailShell(`
-      <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 32px; line-height: 1.2; text-align: center; color: #123C39; margin: 0 0 22px;">You&apos;ve got a spot at Dave&apos;s table.</h1>
+      <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 32px; line-height: 1.2; text-align: center; color: #123C39; margin: 0 0 22px;">The cook-along has finished.</h1>
       <p>Hi ${escapeHtml(name)},</p>
-      <p>You&apos;re on the list for Dave&apos;s live Butter Chicken cook-along on <strong>Sunday 4 October, 5pm UK time</strong>, over Zoom.</p>
-      <p>We&apos;ll send you the recipe list about a week before, so you can shop and prep, then the Zoom link closer to the day.</p>
-      <p>Can&apos;t make it live? No problem — just keep an eye on your inbox for the details.</p>
+      <p>Dave&apos;s Butter Chicken cook-along has now finished, so no further event emails will be sent from this list.</p>
+      <p>Future OPR invitations will only be sent when a new session has been confirmed and you have opted in to receive them.</p>
       ${signatureBlock("Warmly,")}
       ${marketingFooter(unsubscribeUrl)}
       ${!marketingOptIn ? '<p style="font-size: 13px; color: #6B6254; margin-top: 18px;">You will only hear from us about this cook-along — you did not opt in to other OPR news.</p>' : ""}
@@ -275,45 +274,31 @@ export function cookalongRecipeListEmail({
   ingredients: string[];
 }) {
   return {
-    subject: "Dave's Butter Chicken — the recipe list for Sunday",
+    subject: "Dave's Butter Chicken — the recipe",
     html: emailShell(`
       <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 32px; line-height: 1.2; text-align: center; color: #123C39; margin: 0 0 22px;">Time to go shopping.</h1>
       <p>Hi ${escapeHtml(name)},</p>
-      <p>Dave&apos;s cooking his family Butter Chicken live this <strong>Sunday 4 October, 5pm UK time</strong>, over Zoom — here&apos;s everything you need to shop and prep before then, so you can cook right alongside him.</p>
+      <p>Dave&apos;s live Butter Chicken cook-along has finished. Here is the recipe in case you would like to cook it at home.</p>
       <p style="margin-top: 28px; font-weight: bold; color: #123C39;">What you&apos;ll need:</p>
       <ul style="padding-left: 20px; margin: 12px 0;">
         ${ingredients.map((item) => `<li style="margin-bottom: 6px;">${escapeHtml(item)}</li>`).join("\n        ")}
       </ul>
       <p><a href="${siteUrl}/family-cookbook/daves-butter-chicken" style="display: inline-block; background: #1C5A50; color: #FFF3DF; padding: 12px 18px; border-radius: 999px; text-decoration: none;">See the full recipe and method</a></p>
-      <p style="margin-top: 24px;">We&apos;ll send the Zoom link separately, closer to the day.</p>
       ${signatureBlock("See you Sunday,")}
       <p style="border-top: 1px solid #DDB765; padding-top: 18px; margin-top: 24px; font-size: 13px; color: #6B6254;">You&apos;re receiving this because you signed up for Dave&apos;s live cook-along.</p>
     `),
   };
 }
 
-export function cookalongZoomLinkEmail({
-  name,
-  zoomLink,
-}: {
-  name: string;
-  zoomLink: string;
-}) {
+export function cookalongZoomLinkEmail({ name }: { name: string }) {
   return {
-    subject: "Your Zoom link for Dave's cook-along on Sunday",
+    subject: "Dave's Butter Chicken cook-along update",
     html: emailShell(`
-      <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 32px; line-height: 1.2; text-align: center; color: #123C39; margin: 0 0 22px;">See you in the kitchen.</h1>
+      <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 32px; line-height: 1.2; text-align: center; color: #123C39; margin: 0 0 22px;">The cook-along has finished.</h1>
       <p>Hi ${escapeHtml(name)},</p>
-      <p>Dave&apos;s live Butter Chicken cook-along starts <strong>Sunday 4 October, 5pm UK time</strong>. Here&apos;s your link to join:</p>
-      <p style="text-align: center; margin: 28px 0;"><a href="${escapeHtml(zoomLink)}" style="display: inline-block; background: #1C5A50; color: #FFF3DF; padding: 14px 26px; border-radius: 999px; text-decoration: none; font-weight: bold;">Join the Zoom cook-along</a></p>
-      <p>A few things that help:</p>
-      <ul style="padding-left: 20px; margin: 12px 0;">
-        <li style="margin-bottom: 6px;">Have your ingredients prepped and within reach — Dave keeps moving.</li>
-        <li style="margin-bottom: 6px;">Join a few minutes early to get set up.</li>
-        <li style="margin-bottom: 6px;">Bring your questions — this is a live kitchen, not a recording.</li>
-      </ul>
-      <p>This link is just for you — please don&apos;t share it on.</p>
-      ${signatureBlock("See you Sunday,")}
+      <p>Dave&apos;s live Butter Chicken cook-along has finished, so this link is no longer active.</p>
+      <p>We&apos;ll share future OPR events only after their details are confirmed.</p>
+      ${signatureBlock("Warmly,")}
       <p style="border-top: 1px solid #DDB765; padding-top: 18px; margin-top: 24px; font-size: 13px; color: #6B6254;">You&apos;re receiving this because you signed up for Dave&apos;s live cook-along.</p>
     `),
   };
@@ -402,11 +387,10 @@ export function firstNewsletterEmail({
             <p><strong style="color:#DDB765;">DAVE:</strong><br />You’re not having Butter Chicken.</p>
             <p style="margin-bottom:0;"><strong style="color:#DDB765;">RUBBLE:</strong><br />Then I will attend in my capacity as quality control.</p>
           </div>
-          <p style="color: #9A622A; font-weight: bold; letter-spacing: 1.5px; font-size: 14px; text-transform: uppercase; margin-top:28px;">Cook with Dave live</p>
-          <h2 style="font-family: Didot, 'Bodoni MT', Georgia, serif; color: #123C39; font-size: 32px; line-height: 1.25;">Dave’s Butter Chicken cook along</h2>
-          <p>Join Dave and a closely supervised Rubble for a free live cook along over Zoom. Same recipe, four generations, no shortcuts. This time, you’re invited into the kitchen with them.</p>
-          <p><strong>Sunday 4 October 2026<br />5pm UK time<br />Free to attend on Zoom</strong></p>
-          <p><a href="${siteUrl}/live-with-dave?utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=dave-cookalong" style="display: inline-block; background: #1C5A50; color: #FFF3DF; font-size:17px; font-weight:bold; padding: 14px 20px; border-radius: 999px; text-decoration: none;">Reserve your place</a></p>
+          <p style="color: #9A622A; font-weight: bold; letter-spacing: 1.5px; font-size: 14px; text-transform: uppercase; margin-top:28px;">Cook with Dave</p>
+          <h2 style="font-family: Didot, 'Bodoni MT', Georgia, serif; color: #123C39; font-size: 32px; line-height: 1.25;">More from Dave&apos;s kitchen</h2>
+          <p>The Butter Chicken cook-along has now finished. We&apos;ll announce the next chance to cook together once the details are confirmed.</p>
+          <p><a href="${siteUrl}/join-our-table?utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=dave-cookalong" style="display: inline-block; background: #1C5A50; color: #FFF3DF; font-size:17px; font-weight:bold; padding: 14px 20px; border-radius: 999px; text-decoration: none;">Join Our Table</a></p>
           <p style="font-size:16px; color:#6B6254;">Rubble’s responsibilities will remain strictly observational.</p>
         </div>
 

@@ -122,14 +122,14 @@ export default async function Home() {
       <section className="bg-[#123C39] px-6 py-8 md:py-9">
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 text-center text-[#FFF3DF] sm:flex-row sm:justify-between sm:text-left">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#DDB765]">Live cook-along · Sunday 4 October, 5pm UK time</p>
-            <p className="mt-2 text-xl font-bold leading-snug sm:text-2xl">Cook Dave&apos;s Butter Chicken with him, live over Zoom.</p>
+            <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#DDB765]">Cook with OPR</p>
+            <p className="mt-2 text-xl font-bold leading-snug sm:text-2xl">The next cook-along is being planned.</p>
           </div>
           <Link
-            href="/live-with-dave"
+            href="/join-our-table"
             className="inline-flex shrink-0 rounded-full bg-[#DDB765] px-7 py-3.5 font-bold text-[#08231F] transition hover:scale-105 hover:bg-[#DDB765]"
           >
-            Save my spot →
+            Join Our Table →
           </Link>
         </div>
       </section>
@@ -140,11 +140,11 @@ export default async function Home() {
             <div className="flex min-h-[200px] flex-col justify-between bg-[#DDB765] p-8 text-[#123C39] md:min-h-full md:p-10">
               <p className="text-xs font-bold uppercase tracking-[0.3em]">OPR invitation</p>
               <div>
-                <p className="font-brand text-7xl font-semibold leading-none md:text-8xl">September</p>
-                <p className="mt-2 text-sm font-bold uppercase tracking-[0.22em]">2026</p>
+                <p className="font-brand text-7xl font-semibold leading-none md:text-8xl">Your</p>
+                <p className="mt-2 text-sm font-bold uppercase tracking-[0.22em]">family story</p>
               </div>
               <p className="max-w-[13rem] text-sm leading-6">
-                A month for the meals that make a family feel at home.
+                The recipes and memories worth passing on.
               </p>
             </div>
 
@@ -156,10 +156,9 @@ export default async function Home() {
                 Every family has that one recipe. What&apos;s yours?
               </h2>
               <p className="mt-6 max-w-3xl text-lg leading-8 text-[#FFF3DF] md:text-xl">
-                Throughout September, we&apos;re looking for the recipes your family
-                asks for again and again. Share the recipe and the story behind
-                it for a chance to be featured in the OPR Cookbook and
-                shared with our growing community.
+                We&apos;re looking for the recipes your family asks for again and
+                again. Share the recipe and the story behind it for a chance to
+                be featured in the OPR Cookbook and shared with our growing community.
               </p>
               <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
                 <Link

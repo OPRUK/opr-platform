@@ -2,22 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import HeroCarousel from "../components/HeroCarousel";
 import Navigation from "../components/Navigation";
-import CookalongSignupForm from "./CookalongSignupForm";
 import { buildMetadata } from "../../lib/metadata";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Live With Dave: Butter Chicken Cook-Along",
+  title: "Cook With Dave | Other People's Recipes",
   description:
-    "Join Dave live over Zoom on Sunday 4 October at 5pm UK time as he cooks his family Butter Chicken. Free to join — save your spot.",
+    "Dave's Butter Chicken cook-along has now finished. Join Other People's Recipes to hear about the next chance to cook together.",
   path: "/live-with-dave",
 });
-
-const whatToExpect = [
-  "Dave cooks his family Butter Chicken live, start to finish",
-  "The recipe list lands in your inbox the week before, so you can shop and prep",
-  "The Zoom join link follows a few days before the event",
-  "Ask Dave anything — this is a live kitchen, not a recording",
-];
 
 export default function LiveWithDavePage() {
   return (
@@ -28,13 +20,13 @@ export default function LiveWithDavePage() {
         <HeroCarousel />
         <div className="relative z-10">
           <p className="mb-5 text-sm uppercase tracking-[0.4em] text-[#DDB765]">
-            Live cook-along
+            Cook with Dave
           </p>
           <h1 className="font-display mx-auto max-w-4xl text-5xl font-bold leading-tight drop-shadow-2xl md:text-7xl">
-            Cook Dave&apos;s Butter Chicken with him, live.
+            This cook-along has now finished.
           </h1>
           <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-[#FFF3DF]">
-            Sunday 4 October, 5pm UK time, over Zoom. Free to join — bring your apron and your questions.
+            Thank you to everyone who joined Dave in the kitchen. We&apos;re planning the next chance to cook together.
           </p>
         </div>
       </section>
@@ -42,39 +34,33 @@ export default function LiveWithDavePage() {
       <section className="mx-auto grid max-w-6xl gap-12 px-6 py-20 md:grid-cols-[1.05fr_0.95fr] md:px-8">
         <div>
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
-            Sunday 4 October · 5pm UK time
+            The next session
           </p>
           <h2 className="mt-5 text-4xl font-bold leading-tight md:text-5xl">
-            The family Butter Chicken recipe, cooked live in Dave&apos;s kitchen.
+            Be first to hear when we cook together again.
           </h2>
           <p className="mt-7 max-w-xl text-lg leading-8 text-stone-700">
-            Four generations, no shortcuts. Save your spot and we will send everything
-            you need to cook along in real time — or just watch and ask questions.
+            We&apos;ll share the next cook-along date, recipe and any replay details with the OPR community once they&apos;re confirmed.
           </p>
-          <ul className="mt-10 space-y-5">
-            {whatToExpect.map((item) => (
-              <li key={item} className="flex gap-4 text-lg leading-7 text-stone-700">
-                <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#1C5A50] text-base text-[#DDB765]">✓</span>
-                {item}
-              </li>
-            ))}
-          </ul>
           <p className="mt-10 text-stone-700">
-            Want a preview first? <Link href="/family-cookbook/daves-butter-chicken" className="font-semibold text-[#9A622A] underline decoration-[#DDB765] underline-offset-4">See Dave&apos;s Butter Chicken recipe.</Link>
+            Cook Dave&apos;s recipe at home: <Link href="/family-cookbook/daves-butter-chicken" className="font-semibold text-[#9A622A] underline decoration-[#DDB765] underline-offset-4">see Dave&apos;s Butter Chicken recipe.</Link>
           </p>
         </div>
 
         <div className="rounded-3xl bg-[#1C5A50] p-8 shadow-2xl md:p-10">
-          <p className="text-sm uppercase tracking-[0.35em] text-[#DDB765]">
-            Save your spot
-          </p>
+          <p className="text-sm uppercase tracking-[0.35em] text-[#DDB765]">Stay at the table</p>
           <h2 className="mt-5 text-3xl font-bold leading-tight text-[#FFF3DF]">
-            Free to join. Just tell us where to send it.
+            Get future invitations from OPR.
           </h2>
           <p className="mt-5 leading-7 text-[#FFF3DF]">
-            Leave your details and we will send the recipe list a week before, then the Zoom link closer to the day.
+            Join the OPR table for news, new recipes and future cook-along announcements. We won&apos;t promise a date until it is confirmed.
           </p>
-          <CookalongSignupForm />
+          <Link
+            href="/join-our-table"
+            className="mt-10 inline-flex rounded-full bg-[#DDB765] px-7 py-4 font-medium text-[#08231F] transition hover:scale-[1.02] hover:bg-[#FFF3DF]"
+          >
+            Join Our Table →
+          </Link>
         </div>
       </section>
 
