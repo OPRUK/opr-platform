@@ -41,6 +41,9 @@ export type FeaturedRecipe = {
   /** Optional consented portrait of the contributor or family behind the recipe. */
   contributorImage?: string;
   contributorImageAlt?: string;
+  /** Original recipe image supplied by the contributor, where one is available. */
+  originalRecipeImage?: string;
+  originalRecipeImageAlt?: string;
   /** Optional practical tips and ingredient alternatives from the contributor. */
   notes?: { title: string; text: string }[];
   /** Answers derived only from the recipe's own method and contributor notes. */
@@ -52,6 +55,96 @@ export type FeaturedRecipe = {
 };
 
 export const featuredRecipes: FeaturedRecipe[] = [
+  {
+    slug: "robin-vaughans-gingerbread",
+    title: "Robin Vaughan's Gingerbread",
+    place: "Mumbles, Wales",
+    story:
+      "Robin Vaughan from Mumbles shared this gingerbread clipping with OPR. Its original note calls for a rich brown cake with a moist, open texture and says it improves when wrapped and stored for a few days before eating.",
+    ingredients: [
+      "113g Stork margarine or baking margarine (4 oz)",
+      "113g soft brown sugar (4 oz)",
+      "113g golden syrup (4 oz)",
+      "142ml milk (¼ pint)",
+      "1 large egg",
+      "225g plain flour (8 oz)",
+      "3–4 level teaspoons ground ginger",
+      "1 level teaspoon bicarbonate of soda",
+    ],
+    method: [
+      "Heat the oven to 150°C conventional / 130°C fan / 300°F / Gas 2. Line a 7-inch (18cm) square cake tin with baking paper.",
+      "Sift the flour, ground ginger and bicarbonate of soda together into a mixing bowl.",
+      "Add the margarine, brown sugar, golden syrup, milk and egg. Beat with a wooden spoon for 2–3 minutes, until the mixture is well combined.",
+      "Pour the batter into the prepared tin and level the surface.",
+      "Bake on the middle shelf for 1¼–1½ hours, until a tester comes out clean.",
+      "Leave the gingerbread in the tin for 2–3 minutes. Turn it out, remove the paper and cool on a wire rack. The original recipe recommends wrapping and storing it for a few days before eating.",
+    ],
+    image: "/images/recipes/robin-vaughans-gingerbread-wide.png",
+    category: "Dessert or baking",
+    number: "12",
+    cookTime: "PT1H30M",
+    cuisine: "British",
+    datePublished: "2026-10-05",
+    contributorName: "Robin Vaughan",
+    originalRecipeImage: "/images/recipes/robin-vaughans-gingerbread-original.png",
+    originalRecipeImageAlt: "Original stained printed clipping for Robin Vaughan's gingerbread recipe",
+    notes: [
+      {
+        title: "Golden syrup or treacle",
+        text: "The clipping says that 4 oz (113g) black treacle may be used instead of the golden syrup, if you prefer a deeper, more bittersweet gingerbread.",
+      },
+      {
+        title: "Melting method",
+        text: "For the alternative method printed on the clipping, melt the margarine, sugar and syrup or treacle in the milk over a low heat, stirring without letting it get too hot. Cool until lukewarm, then add it to the sifted dry ingredients with the beaten egg and mix until smooth before baking as above.",
+      },
+      {
+        title: "Oven conversion",
+        text: "The original gives a slow oven at 300°F. The Celsius and Gas Mark settings shown in the method are practical conversions, so use the printed baking time and test before taking the cake out.",
+      },
+    ],
+    faqs: [
+      {
+        question: "What tin should I use for Robin Vaughan's gingerbread?",
+        answer: "The original clipping specifies a 7-inch square cake tin. Line it with baking paper before you begin so the baked gingerbread can be turned out cleanly after its short rest.",
+      },
+      {
+        question: "Can I use black treacle instead of golden syrup?",
+        answer: "Yes. Robin's clipping specifically says that 4 oz (113g) black treacle can replace the same amount of golden syrup if you would like a deeper, more bittersweet flavour.",
+      },
+      {
+        question: "How do I know when the gingerbread is baked?",
+        answer: "Bake for 1¼ to 1½ hours, then test before removing it from the oven. The original recipe describes the finished gingerbread as rich brown, moist, well risen and flat-topped.",
+      },
+      {
+        question: "Should gingerbread be eaten straight away?",
+        answer: "The original note recommends wrapping and storing the gingerbread for a few days before eating. That resting time is part of the character of this recipe, rather than an afterthought.",
+      },
+    ],
+    methodPhotos: [
+      {
+        src: "/images/recipes/robin-vaughans-gingerbread-step-2-ai.png",
+        alt: "Smooth dark gingerbread batter in a mixing bowl with golden syrup, milk, egg, brown sugar and ground ginger nearby",
+        title: "Beat until well mixed",
+        caption: "The all-in-one method brings the wet ingredients and sifted dry ingredients together in one bowl. Beat for 2–3 minutes until smooth.",
+        step: 3,
+      },
+      {
+        src: "/images/recipes/robin-vaughans-gingerbread-step-3-ai.png",
+        alt: "A lined square tin filled with dark gingerbread batter before baking",
+        title: "Fill the lined tin",
+        caption: "Pour the smooth batter into the lined 7-inch square tin and level it before it goes into the slow oven.",
+        step: 4,
+      },
+      {
+        src: "/images/recipes/robin-vaughans-gingerbread-wide.png",
+        alt: "Rich brown gingerbread cut into squares, showing a moist open crumb",
+        title: "Look for a rich brown cake",
+        caption: "The clipping describes a well-risen, flat-topped cake with a moist, open texture. Let it cool, then wrap it if you can wait a few days.",
+        step: 6,
+      },
+    ],
+    relatedRecipeSlugs: ["nana-serbs-sunday-rice-pudding", "sams-shepherds-pie"],
+  },
   {
     slug: "nana-serbs-sunday-rice-pudding",
     title: "Nana Serb's Sunday Rice Pudding",
