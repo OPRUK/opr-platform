@@ -5,10 +5,16 @@ import test from "node:test";
 import { filmDescription, filmSlug, films, filmUploadDate, getFilmBySlug, getFilmsForRecipe, getRelatedFilms } from "../lib/films.ts";
 
 const videoOrigin = "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/";
+const posterOrigin = "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/posters/";
 
 function assertHostedVideo(video: string) {
   assert.ok(video.startsWith(videoOrigin), `${video} should use the public OPR Blob store`);
   assert.match(video, /\.(?:mov|mp4)$/);
+}
+
+function assertHostedPoster(poster: string) {
+  assert.ok(poster.startsWith(posterOrigin), `${poster} should use the public OPR Blob store`);
+  assert.match(poster, /\.(?:avif|jpe?g|png|webp)$/);
 }
 
 const newFilmTitles = [
@@ -86,7 +92,7 @@ test("the newest Dave and Rubble films are crawlable, accessible watch-page asse
     assert.ok(film.poster);
     assert.ok(film.captions);
     assertHostedVideo(film.video);
-    assertHostedVideo(film.poster);
+    assertHostedPoster(film.poster);
     assert.ok(existsSync(resolve(`public${film.captions}`)), `${film.captions} should exist`);
   }
 });

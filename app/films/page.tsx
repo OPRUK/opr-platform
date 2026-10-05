@@ -48,14 +48,14 @@ export default function FilmsPage() {
       <section className="bg-[#DDB765] px-6 py-8 md:py-9">
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 text-center text-[#08231F] sm:flex-row sm:justify-between sm:text-left">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.3em]">Live cook-along · Sunday 4 October, 5pm UK time</p>
-            <p className="mt-2 text-xl font-bold leading-snug sm:text-2xl">See Dave cook his Butter Chicken live, over Zoom.</p>
+            <p className="text-xs font-bold uppercase tracking-[0.3em]">Dave &amp; Rubble</p>
+            <p className="mt-2 text-xl font-bold leading-snug sm:text-2xl">Find their latest kitchen stories in one place.</p>
           </div>
           <Link
-            href="/live-with-dave"
+            href="/dave-and-rubble"
             className="inline-flex shrink-0 rounded-full bg-[#123C39] px-7 py-3.5 font-bold text-[#FFF3DF] transition hover:scale-105 hover:bg-[#08231F]"
           >
-            Save my spot →
+            Explore Dave &amp; Rubble →
           </Link>
         </div>
       </section>
