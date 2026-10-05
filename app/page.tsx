@@ -369,8 +369,8 @@ function RecipeOfWeekFallback() {
       <div className="mx-auto grid max-w-6xl overflow-hidden rounded-[2rem] bg-[#1C5A50] shadow-2xl md:grid-cols-2">
         <div className="relative min-h-[340px]">
           <Image
-            src="/images/recipes/pats-haddock-tomato-bake.webp"
-            alt="Pat's Haddock and Tomato Bake"
+            src="/images/recipes/robin-vaughans-gingerbread-wide.png"
+            alt="Robin Vaughan's gingerbread, cut into squares with a moist open crumb"
             fill
             sizes="(min-width: 768px) 50vw, 100vw"
             className="object-cover"
@@ -382,19 +382,19 @@ function RecipeOfWeekFallback() {
             This month&apos;s story from the OPR cookbook
           </p>
           <h2 className="mt-5 text-4xl font-bold leading-tight md:text-5xl">
-            Pat&apos;s Haddock and Tomato Bake
+            Robin Vaughan&apos;s Gingerbread
           </h2>
           <p className="mt-3 text-sm uppercase tracking-[0.25em] text-[#FFF3DF]">
-            New Malden, England
+            Mumbles, Wales
           </p>
           <p className="mt-7 text-lg leading-8 text-[#FFF3DF]">
-            This was a regular favourite in Amy&apos;s house when she was growing up. Her mum, Pat, hated cooking, but everything she made was delicious — and made with love.
+            Robin Vaughan from Mumbles shared this gingerbread clipping with OPR. Its original note calls for a rich brown cake with a moist, open texture and says it improves when wrapped and stored for a few days before eating.
           </p>
           <Link
-            href="/family-cookbook/community/45"
+            href="/family-cookbook/robin-vaughans-gingerbread"
             className="mt-9 inline-flex w-fit items-center rounded-full bg-[#DDB765] px-7 py-4 font-medium text-[#08231F] transition hover:scale-105 hover:bg-[#DDB765]"
           >
-            Read Pat&apos;s story →
+            Cook Robin&apos;s gingerbread →
           </Link>
         </div>
       </div>
