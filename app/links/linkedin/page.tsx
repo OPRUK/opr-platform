@@ -5,7 +5,7 @@ import LinksLanding from "../LinksLanding";
 
 export const metadata: Metadata = buildMetadata({
   title: "Links",
-  description: "Every way to explore Other People's Recipes — share a recipe, browse the Living Cookbook, join our table and more.",
+  description: "Every way to explore Other People's Recipes: share a recipe, browse the Living Cookbook, join our table and more.",
   path: "/links/linkedin",
   index: false,
 });

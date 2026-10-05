@@ -186,7 +186,7 @@ export function recipeReceivedEmail({ name, title }: { name: string; title: stri
     html: emailShell(`
       <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 32px; line-height: 1.2; text-align: center; color: #123C39; margin: 0 0 22px;">Thank you for sharing your recipe.</h1>
       <p>Hi ${escapeHtml(name)},</p>
-      <p>Thank you for trusting us with <strong>${escapeHtml(title)}</strong> and the story behind it — that&apos;s exactly what Other People&apos;s Recipes is for.</p>
+      <p>Thank you for trusting us with <strong>${escapeHtml(title)}</strong> and the story behind it. That&apos;s exactly what Other People&apos;s Recipes is for.</p>
       <p>I read every recipe that comes in myself. If it&apos;s selected for the Living Cookbook, the restaurant, or a future film, I&apos;ll be in touch.</p>
       ${signatureBlock("Warmly,")}
     `),
@@ -213,7 +213,7 @@ export function publishedRecipeEmail({ name, title, recipeUrl }: { name: string;
     html: emailShell(`
       <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 32px; line-height: 1.2; text-align: center; color: #123C39; margin: 0 0 22px;">Your recipe is now part of the book.</h1>
       <p>Hi ${escapeHtml(name)},</p>
-      <p><strong>${escapeHtml(title)}</strong> is now live in the Living Cookbook — permanently, alongside the story of who taught it to you and why it matters.</p>
+      <p><strong>${escapeHtml(title)}</strong> is now live in the Living Cookbook, permanently alongside the story of who taught it to you and why it matters.</p>
       <p><a href="${recipeUrl}" style="display: inline-block; background: #123C39; color: #FFF3DF; padding: 12px 18px; border-radius: 999px; text-decoration: none;">See your recipe</a></p>
       <p>Thank you for trusting us with it. This is exactly what Other People&apos;s Recipes is for.</p>
       ${signatureBlock("Warmly,")}
@@ -235,7 +235,7 @@ export function foundingTableWelcomeEmail({
     html: emailShell(`
       <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 32px; line-height: 1.2; text-align: center; color: #123C39; margin: 0 0 22px;">You&apos;ve got a seat at our table.</h1>
       <p>Hi ${escapeHtml(name)},</p>
-      <p>Other People&apos;s Recipes started as a note I wrote myself back in 2000 — one day, build the place where family recipes can live on. You just became one of the first people helping make that real.</p>
+      <p>Other People&apos;s Recipes started as a note I wrote myself back in 2000: one day, build the place where family recipes can live on. You just became one of the first people helping make that real.</p>
       ${marketingOptIn ? "<p>You&apos;ll be the first to hear when a new family recipe goes up, when tasting events open, when Recipe of the Month voting starts, and whatever we build next.</p>" : "<p>Your place is saved. You didn&apos;t opt in to OPR news, so that&apos;s the last you&apos;ll hear from us unless you get in touch.</p>"}
       <p>While you wait, the Living Cookbook is already open.</p>
       <p><a href="${siteUrl}/family-cookbook" style="display: inline-block; background: #1C5A50; color: #FFF3DF; padding: 12px 18px; border-radius: 999px; text-decoration: none;">Explore the Living Cookbook</a></p>
@@ -263,7 +263,7 @@ export function cookalongSignupWelcomeEmail({
       <p>${cookalongEvent.email.closedSignup.futureCopy}</p>
       ${signatureBlock("Warmly,")}
       ${marketingFooter(unsubscribeUrl)}
-      ${!marketingOptIn ? '<p style="font-size: 13px; color: #6B6254; margin-top: 18px;">You will only hear from us about this cook-along — you did not opt in to other OPR news.</p>' : ""}
+      ${!marketingOptIn ? '<p style="font-size: 13px; color: #6B6254; margin-top: 18px;">You will only hear from us about this cook-along. You did not opt in to other OPR news.</p>' : ""}
     `),
   };
 }

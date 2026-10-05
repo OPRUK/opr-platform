@@ -30,7 +30,7 @@ export default function CommunityCookForm({ recipeId, recipeSlug, recipeTitle }:
       const payload = await response.json().catch(() => null);
       if (!response.ok) throw new Error(payload?.error ?? "We could not save your post");
       formRef.current?.reset();
-      setMessage("Thank you — your photo and note are with the OPR team for approval.");
+      setMessage("Thank you. Your photo and note are with the OPR team for approval.");
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "We could not save your post");
     } finally {
@@ -45,7 +45,7 @@ export default function CommunityCookForm({ recipeId, recipeSlug, recipeTitle }:
           <p className="text-sm font-bold uppercase tracking-[0.35em] text-[#9A622A]">Families who&apos;ve made this</p>
           <h2 className="mt-4 text-4xl font-bold text-[#123C39]">Add your place at the table.</h2>
           <p className="mt-5 text-lg leading-8 text-stone-700">
-            Cooked {recipeTitle}? Share a photo or a few words for the families who make it next —
+            Cooked {recipeTitle}? Share a photo or a few words for the families who make it next.
             and you could be picked for a future OPR live cook-along. Every post is checked by OPR
             before it appears here.
           </p>

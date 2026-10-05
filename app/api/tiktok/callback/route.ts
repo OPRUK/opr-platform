@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
   const errorDescription = request.nextUrl.searchParams.get("error_description");
 
   if (error) {
-    return htmlResponse(`<p>TikTok authorization failed: ${error} — ${errorDescription ?? ""}</p>`);
+    return htmlResponse(`<p>TikTok authorization failed: ${error}. ${errorDescription ?? ""}</p>`);
   }
   if (!code) {
     return htmlResponse("<p>Missing authorization code.</p>");

@@ -195,7 +195,7 @@ export default function MobileShareForm() {
         <CheckIcon />
         <h2 className="mb-2.5 mt-5 text-[26px] font-bold">Thank you.</h2>
         <p className="max-w-[26ch] text-base opacity-80">
-          Your family&apos;s story is now with the OPR kitchen — we&apos;ll be in touch before it&apos;s published.
+          Your family&apos;s story is now with the OPR kitchen. We&apos;ll be in touch before it&apos;s published.
         </p>
         {uploadWarnings.length ? (
           <div className="mt-5 border border-amber-700/50 bg-[#FFF3DF] p-4 text-left text-base text-amber-900">

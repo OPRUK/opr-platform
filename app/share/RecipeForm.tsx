@@ -298,7 +298,7 @@ export default function RecipeForm() {
         method: draft.method || current.method,
         cookNotes: draft.cookNotes || current.cookNotes,
       }));
-      setRecipeReadMessage("We have made a first draft — please check every detail above before you share it, old handwriting can be wonderfully unpredictable.");
+      setRecipeReadMessage("We have made a first draft. Please check every detail above before you share it, old handwriting can be wonderfully unpredictable.");
       recipeFieldsetRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (error) {
       setSubmissionError(error instanceof Error ? error.message : "We could not read that recipe just now.");

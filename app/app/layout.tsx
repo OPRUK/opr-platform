@@ -3,7 +3,7 @@ import type { Metadata, Viewport } from "next";
 export const metadata: Metadata = {
   title: {
     default: "OPR",
-    template: "%s — OPR",
+    template: "%s | OPR",
   },
   description: "Every Recipe has a Story.",
   // These screens largely mirror content already indexed under

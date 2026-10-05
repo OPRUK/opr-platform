@@ -66,7 +66,7 @@ export default function AddCookForm({
   if (submitted) {
     return (
       <p role="status" aria-live="polite" className="mt-4 border border-[#123C39]/35 bg-[#FFF3DF] p-4 text-center text-base leading-7">
-        Thank you — your photo and note are with the OPR team and will appear here once reviewed.
+        Thank you. Your photo and note are with the OPR team and will appear here once reviewed.
       </p>
     );
   }

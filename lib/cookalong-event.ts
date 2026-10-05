@@ -47,7 +47,7 @@ export const cookalongEvent = {
       ctaCampaign: "dave-cookalong",
     },
     recipeList: {
-      subject: "Dave’s Butter Chicken — the recipe",
+      subject: "Dave’s Butter Chicken: the recipe",
       heading: "Time to go shopping.",
       copy: "Dave’s live Butter Chicken cook-along has finished. Here is the recipe in case you would like to cook it at home.",
       recipeHref: "/family-cookbook/daves-butter-chicken",
