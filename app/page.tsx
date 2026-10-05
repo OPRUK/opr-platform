@@ -388,7 +388,7 @@ function RecipeOfWeekFallback() {
             Mumbles, Wales
           </p>
           <p className="mt-7 text-lg leading-8 text-[#FFF3DF]">
-            Robin Vaughan from Mumbles shared this gingerbread clipping with OPR. Its original note calls for a rich brown cake with a moist, open texture and says it improves when wrapped and stored for a few days before eating.
+            Robin Vaughan from Mumbles shared her mum&apos;s gingerbread recipe with OPR — the moistest and tastiest gingerbread she remembers. There are no photographs of the original because it was usually eaten long before camera phones were even imagined.
           </p>
           <Link
             href="/family-cookbook/robin-vaughans-gingerbread"

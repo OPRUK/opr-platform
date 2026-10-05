@@ -60,7 +60,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
     title: "Robin Vaughan's Gingerbread",
     place: "Mumbles, Wales",
     story:
-      "Robin Vaughan from Mumbles shared this gingerbread clipping with OPR. Its original note calls for a rich brown cake with a moist, open texture and says it improves when wrapped and stored for a few days before eating.",
+      "Robin Vaughan from Mumbles shared her mum's gingerbread recipe with OPR — the moistest and tastiest gingerbread she remembers. There are no photographs of the original because it was usually eaten long before camera phones were even imagined.",
     ingredients: [
       "113g Stork margarine or baking margarine (4 oz)",
       "113g soft brown sugar (4 oz)",
