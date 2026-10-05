@@ -1,3 +1,5 @@
+import { cookalongEvent } from "./cookalong-event.ts";
+
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://otherpeoplesrecipes.co.uk";
 const from = process.env.EMAIL_FROM || "Other People's Recipes <onboarding@resend.dev>";
 
@@ -253,12 +255,12 @@ export function cookalongSignupWelcomeEmail({
   marketingOptIn: boolean;
 }) {
   return {
-    subject: "An update from Other People's Recipes",
+    subject: cookalongEvent.email.closedSignup.subject,
     html: emailShell(`
-      <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 32px; line-height: 1.2; text-align: center; color: #123C39; margin: 0 0 22px;">The cook-along has finished.</h1>
+      <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 32px; line-height: 1.2; text-align: center; color: #123C39; margin: 0 0 22px;">${cookalongEvent.email.closedSignup.heading}</h1>
       <p>Hi ${escapeHtml(name)},</p>
-      <p>Dave&apos;s Butter Chicken cook-along has now finished, so no further event emails will be sent from this list.</p>
-      <p>Future OPR invitations will only be sent when a new session has been confirmed and you have opted in to receive them.</p>
+      <p>${cookalongEvent.email.closedSignup.copy}</p>
+      <p>${cookalongEvent.email.closedSignup.futureCopy}</p>
       ${signatureBlock("Warmly,")}
       ${marketingFooter(unsubscribeUrl)}
       ${!marketingOptIn ? '<p style="font-size: 13px; color: #6B6254; margin-top: 18px;">You will only hear from us about this cook-along — you did not opt in to other OPR news.</p>' : ""}
@@ -274,43 +276,43 @@ export function cookalongRecipeListEmail({
   ingredients: string[];
 }) {
   return {
-    subject: "Dave's Butter Chicken — the recipe",
+    subject: cookalongEvent.email.recipeList.subject,
     html: emailShell(`
-      <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 32px; line-height: 1.2; text-align: center; color: #123C39; margin: 0 0 22px;">Time to go shopping.</h1>
+      <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 32px; line-height: 1.2; text-align: center; color: #123C39; margin: 0 0 22px;">${cookalongEvent.email.recipeList.heading}</h1>
       <p>Hi ${escapeHtml(name)},</p>
-      <p>Dave&apos;s live Butter Chicken cook-along has finished. Here is the recipe in case you would like to cook it at home.</p>
+      <p>${cookalongEvent.email.recipeList.copy}</p>
       <p style="margin-top: 28px; font-weight: bold; color: #123C39;">What you&apos;ll need:</p>
       <ul style="padding-left: 20px; margin: 12px 0;">
         ${ingredients.map((item) => `<li style="margin-bottom: 6px;">${escapeHtml(item)}</li>`).join("\n        ")}
       </ul>
-      <p><a href="${siteUrl}/family-cookbook/daves-butter-chicken" style="display: inline-block; background: #1C5A50; color: #FFF3DF; padding: 12px 18px; border-radius: 999px; text-decoration: none;">See the full recipe and method</a></p>
-      ${signatureBlock("See you Sunday,")}
-      <p style="border-top: 1px solid #DDB765; padding-top: 18px; margin-top: 24px; font-size: 13px; color: #6B6254;">You&apos;re receiving this because you signed up for Dave&apos;s live cook-along.</p>
+      <p><a href="${siteUrl}${cookalongEvent.email.recipeList.recipeHref}" style="display: inline-block; background: #1C5A50; color: #FFF3DF; padding: 12px 18px; border-radius: 999px; text-decoration: none;">${cookalongEvent.email.recipeList.recipeCta}</a></p>
+      ${signatureBlock("Warmly,")}
+      <p style="border-top: 1px solid #DDB765; padding-top: 18px; margin-top: 24px; font-size: 13px; color: #6B6254;">${cookalongEvent.email.recipeList.audienceNote}</p>
     `),
   };
 }
 
 export function cookalongZoomLinkEmail({ name }: { name: string }) {
   return {
-    subject: "Dave's Butter Chicken cook-along update",
+    subject: cookalongEvent.email.joiningLink.subject,
     html: emailShell(`
-      <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 32px; line-height: 1.2; text-align: center; color: #123C39; margin: 0 0 22px;">The cook-along has finished.</h1>
+      <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 32px; line-height: 1.2; text-align: center; color: #123C39; margin: 0 0 22px;">${cookalongEvent.email.joiningLink.heading}</h1>
       <p>Hi ${escapeHtml(name)},</p>
-      <p>Dave&apos;s live Butter Chicken cook-along has finished, so this link is no longer active.</p>
-      <p>We&apos;ll share future OPR events only after their details are confirmed.</p>
+      <p>${cookalongEvent.email.joiningLink.copy}</p>
+      <p>${cookalongEvent.email.joiningLink.futureCopy}</p>
       ${signatureBlock("Warmly,")}
-      <p style="border-top: 1px solid #DDB765; padding-top: 18px; margin-top: 24px; font-size: 13px; color: #6B6254;">You&apos;re receiving this because you signed up for Dave&apos;s live cook-along.</p>
+      <p style="border-top: 1px solid #DDB765; padding-top: 18px; margin-top: 24px; font-size: 13px; color: #6B6254;">${cookalongEvent.email.joiningLink.audienceNote}</p>
     `),
   };
 }
 
 export function newCookalongSignupEmail({ name, email }: { name: string; email: string }) {
   return {
-    subject: `New cook-along signup: ${name}`,
+    subject: `${cookalongEvent.email.adminSignup.subjectPrefix}: ${name}`,
     html: emailShell(`
       <p style="color: #9A622A; font-size: 12px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; margin: 0 0 10px;">Private OPR alert</p>
-      <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 26px; color: #123C39; margin: 0 0 18px;">Someone has joined the cook-along.</h1>
-      <p><strong>${escapeHtml(name)}</strong> signed up to watch Dave&apos;s live Butter Chicken cook-along.</p>
+      <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 26px; color: #123C39; margin: 0 0 18px;">${cookalongEvent.email.adminSignup.heading}</h1>
+      <p><strong>${escapeHtml(name)}</strong> ${cookalongEvent.email.adminSignup.copy}</p>
       <p>Contact: <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></p>
     `),
   };
@@ -387,10 +389,10 @@ export function firstNewsletterEmail({
             <p><strong style="color:#DDB765;">DAVE:</strong><br />You’re not having Butter Chicken.</p>
             <p style="margin-bottom:0;"><strong style="color:#DDB765;">RUBBLE:</strong><br />Then I will attend in my capacity as quality control.</p>
           </div>
-          <p style="color: #9A622A; font-weight: bold; letter-spacing: 1.5px; font-size: 14px; text-transform: uppercase; margin-top:28px;">Cook with Dave</p>
-          <h2 style="font-family: Didot, 'Bodoni MT', Georgia, serif; color: #123C39; font-size: 32px; line-height: 1.25;">More from Dave&apos;s kitchen</h2>
-          <p>The Butter Chicken cook-along has now finished. We&apos;ll announce the next chance to cook together once the details are confirmed.</p>
-          <p><a href="${siteUrl}/join-our-table?utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=dave-cookalong" style="display: inline-block; background: #1C5A50; color: #FFF3DF; font-size:17px; font-weight:bold; padding: 14px 20px; border-radius: 999px; text-decoration: none;">Join Our Table</a></p>
+          <p style="color: #9A622A; font-weight: bold; letter-spacing: 1.5px; font-size: 14px; text-transform: uppercase; margin-top:28px;">${cookalongEvent.email.newsletter.eyebrow}</p>
+          <h2 style="font-family: Didot, 'Bodoni MT', Georgia, serif; color: #123C39; font-size: 32px; line-height: 1.25;">${cookalongEvent.email.newsletter.heading}</h2>
+          <p>${cookalongEvent.email.newsletter.copy}</p>
+          <p><a href="${siteUrl}${cookalongEvent.cta.href}?utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=${cookalongEvent.email.newsletter.ctaCampaign}" style="display: inline-block; background: #1C5A50; color: #FFF3DF; font-size:17px; font-weight:bold; padding: 14px 20px; border-radius: 999px; text-decoration: none;">${cookalongEvent.cta.label}</a></p>
           <p style="font-size:16px; color:#6B6254;">Rubble’s responsibilities will remain strictly observational.</p>
         </div>
 

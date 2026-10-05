@@ -1,3 +1,5 @@
+import { cookalongUnavailableMessage, isCookalongCronEligible } from "../../../../lib/cookalong-event.ts";
+
 export const runtime = "nodejs";
 
 function isAuthorised(request: Request): boolean {
@@ -10,5 +12,9 @@ export async function GET(request: Request) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  return Response.json({ error: "The October 2026 cook-along has finished. No email was sent." }, { status: 410 });
+  if (!isCookalongCronEligible("recipeList")) {
+    return Response.json({ error: `${cookalongUnavailableMessage()} No email was sent.` }, { status: 410 });
+  }
+
+  return Response.json({ error: "Cook-along recipe-list delivery is not configured yet." }, { status: 501 });
 }

@@ -7,6 +7,7 @@ import TrackedLink from "../components/TrackedLink";
 import { filmSlug, films } from "../../lib/films";
 import { getFeaturedRecipe } from "../../lib/recipes";
 import { buildMetadata } from "../../lib/metadata";
+import { cookalongEvent } from "../../lib/cookalong-event";
 
 export const metadata: Metadata = buildMetadata({
   title: "The OPR Film Collection",
@@ -42,6 +43,21 @@ export default function FilmsPage() {
             building towards: a growing collection about food, family and the
             memories we choose to pass on.
           </p>
+        </div>
+      </section>
+
+      <section className="bg-[#123C39] px-6 py-8 md:py-9">
+        <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 text-center text-[#FFF3DF] sm:flex-row sm:justify-between sm:text-left">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#DDB765]">{cookalongEvent.public.films.eyebrow}</p>
+            <p className="mt-2 text-xl font-bold leading-snug sm:text-2xl">{cookalongEvent.public.films.message}</p>
+          </div>
+          <Link
+            href={cookalongEvent.cta.href}
+            className="inline-flex shrink-0 rounded-full bg-[#DDB765] px-7 py-3.5 font-bold text-[#08231F] transition hover:scale-105"
+          >
+            {cookalongEvent.cta.label}
+          </Link>
         </div>
       </section>
 

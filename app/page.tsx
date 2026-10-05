@@ -7,6 +7,7 @@ import HomeHero from "./components/HomeHero";
 import TrackedLink from "./components/TrackedLink";
 import { optimizedPoster } from "../lib/optimized-poster";
 import { supabase } from "../lib/supabase/client";
+import { cookalongEvent } from "../lib/cookalong-event";
 
 export const dynamic = "force-dynamic";
 
@@ -122,14 +123,14 @@ export default async function Home() {
       <section className="bg-[#123C39] px-6 py-8 md:py-9">
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 text-center text-[#FFF3DF] sm:flex-row sm:justify-between sm:text-left">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#DDB765]">Cook with OPR</p>
-            <p className="mt-2 text-xl font-bold leading-snug sm:text-2xl">The next cook-along is being planned.</p>
+            <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#DDB765]">{cookalongEvent.public.home.eyebrow}</p>
+            <p className="mt-2 text-xl font-bold leading-snug sm:text-2xl">{cookalongEvent.public.home.message}</p>
           </div>
           <Link
-            href="/join-our-table"
+            href={cookalongEvent.cta.href}
             className="inline-flex shrink-0 rounded-full bg-[#DDB765] px-7 py-3.5 font-bold text-[#08231F] transition hover:scale-105 hover:bg-[#DDB765]"
           >
-            Join Our Table →
+            {cookalongEvent.cta.label}
           </Link>
         </div>
       </section>
