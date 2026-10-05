@@ -110,10 +110,10 @@ function film(
 const filmsUnordered: Film[] = [
   {
     title: "Ada & Rubble | Party Jollof",
-    video: videoUrl("/videos/opr-ada-and-rubble-party-jollof.mp4"),
+    video: videoUrl("/videos/opr-ada-and-rubble-party-jollof-with-audio-v2.mp4"),
     poster: videoUrl("/posters/opr-ada-and-rubble-party-jollof-poster.jpg"),
     transcript:
-      "Ada: “Ada’s party Jollof. The smoky bit is the secret.”\nRubble: “I’ll supervise. Very closely.”\nAda: “Not for you, Rubble. Too much Scotch bonnet.”",
+      "Ada: “Ada’s party Jollof. The smoky bit is the secret. Not for you, Rubble. Too much Scotch bonnet.”",
     description:
       "Ada makes her smoky Nigerian party Jollof while Rubble offers to supervise, in this short OPR kitchen film.",
     captions: "/captions/opr-ada-and-rubble-party-jollof.vtt",
