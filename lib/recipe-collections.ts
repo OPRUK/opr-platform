@@ -40,12 +40,13 @@ const collectionDefinitions: RecipeCollectionDefinition[] = [
     eyebrow: "Comforting recipes from family kitchens",
     metaTitle: "British Family Recipes | Traditional Home Cooking",
     description:
-      "Discover traditional British family recipes for baked rice pudding, slow-cooked beef casserole and lamb shepherd’s pie, with the memories behind them.",
+      "Discover family gingerbread, baked rice pudding, slow-cooked beef casserole and lamb shepherd’s pie, with the memories behind them.",
     introduction: [
       "The recipes in this collection are the kind that settle into family life: a pudding put into the oven before Sunday lunch, a casserole made a day early and a shepherd’s pie built for a full table.",
       "Each page includes the ingredients, method and practical details, but it also records why the dish mattered and who kept cooking it.",
     ],
     recipeSlugs: [
+      "robin-vaughans-gingerbread",
       "nana-serbs-sunday-rice-pudding",
       "barbaras-beef-casserole",
       "sams-shepherds-pie",

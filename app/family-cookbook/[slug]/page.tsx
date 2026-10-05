@@ -227,6 +227,22 @@ export default async function RecipePage({
               </figure>
             ) : null}
           </div>
+          {recipe.originalRecipeImage ? (
+            <figure className="mt-8 border-t border-[#DDB765] pt-8">
+              <p className="text-sm uppercase tracking-[0.35em] text-amber-700">The original clipping</p>
+              <Image
+                src={recipe.originalRecipeImage}
+                alt={recipe.originalRecipeImageAlt ?? `Original recipe for ${recipe.title}`}
+                width={1200}
+                height={1600}
+                sizes="(min-width: 1024px) 768px, 100vw"
+                className="mt-5 max-h-[42rem] w-auto max-w-full rounded-2xl object-contain shadow-lg shadow-[#1C5A50]/15"
+              />
+              <figcaption className="mt-3 text-sm text-stone-600">
+                Shared with OPR by {recipe.contributorName ?? "the contributor"}. Transcribed above with practical metric conversions.
+              </figcaption>
+            </figure>
+          ) : null}
         </article>
 
         <aside className="recipe-card-paper w-full p-8 md:p-10">
