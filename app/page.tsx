@@ -142,41 +142,33 @@ export default async function Home() {
       </section>
 
       <section className="bg-[#EED8B2] px-6 py-10 md:py-14">
-        <div className="mx-auto max-w-6xl overflow-hidden rounded-[2rem] border-2 border-[#DDB765] bg-[#123C39] shadow-2xl shadow-[#08231F]/25">
-          <div className="grid items-stretch md:grid-cols-[0.7fr_1.7fr]">
-            <div className="flex min-h-[200px] flex-col justify-between bg-[#DDB765] p-8 text-[#123C39] md:min-h-full md:p-10">
-              <p className="text-xs font-bold uppercase tracking-[0.3em]">OPR invitation</p>
-              <div>
-                <p className="font-brand text-7xl font-semibold leading-none md:text-8xl">Your</p>
-                <p className="mt-2 text-sm font-bold uppercase tracking-[0.22em]">family story</p>
-              </div>
-              <p className="max-w-[13rem] text-sm leading-6">
-                The recipes and memories worth passing on.
-              </p>
-            </div>
+        <div className="mx-auto grid max-w-6xl overflow-hidden rounded-[2rem] bg-[#FFF3DF] shadow-xl shadow-[#1C5A50]/15 md:grid-cols-[0.9fr_1.1fr]">
+          <div className="relative min-h-72 md:min-h-[22rem]">
+            <Image
+              src="/images/recipes/robin-vaughans-gingerbread-original.png"
+              alt="Robin Vaughan's worn gingerbread recipe clipping, marked by years of family baking"
+              fill
+              sizes="(max-width: 767px) 100vw, 45vw"
+              className="object-cover"
+            />
+          </div>
 
-            <div className="relative px-8 py-11 text-[#FFF3DF] md:px-14 md:py-14">
-              <p className="text-sm font-bold uppercase tracking-[0.38em] text-[#DDB765]">
-                The Recipe That Feels Like Home
-              </p>
-              <h2 className="mt-5 max-w-3xl text-4xl font-bold leading-tight md:text-6xl">
-                Every family has that one recipe. What&apos;s yours?
-              </h2>
-              <p className="mt-6 max-w-3xl text-lg leading-8 text-[#FFF3DF] md:text-xl">
-                We&apos;re looking for the recipes your family asks for again and
-                again. Share the recipe and the story behind it for a chance to
-                be featured in the OPR Cookbook and shared with our growing community.
-              </p>
-              <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
-                <Link
-                  href="/share"
-                  className="inline-flex w-fit rounded-full bg-[#DDB765] px-8 py-4 text-base font-bold text-[#08231F] transition hover:scale-105 hover:bg-[#DDB765]"
-                >
-                  Share your recipe →
-                </Link>
-                <p className="text-sm text-[#DDB765]">Your family story could be next.</p>
-              </div>
-            </div>
+          <div className="flex flex-col justify-center px-8 py-10 text-[#123C39] md:px-12 md:py-12">
+            <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#8D6520]">
+              Share a family recipe
+            </p>
+            <h2 className="mt-4 max-w-xl font-display text-4xl font-bold leading-tight md:text-5xl">
+              What&apos;s the recipe everyone asks you to make?
+            </h2>
+            <p className="mt-5 max-w-xl text-lg leading-8 text-stone-700">
+              The handwritten note, the Sunday favourite, the dish that brings everyone back to the table. We&apos;d love to help preserve its story.
+            </p>
+            <Link
+              href="/share"
+              className="mt-7 inline-flex w-fit rounded-full bg-[#123C39] px-7 py-3.5 text-base font-bold text-[#FFF3DF] transition hover:scale-105 hover:bg-[#1C5A50]"
+            >
+              Share your recipe
+            </Link>
           </div>
         </div>
       </section>
