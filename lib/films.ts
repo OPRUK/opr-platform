@@ -110,7 +110,7 @@ function film(
 const filmsUnordered: Film[] = [
   {
     title: "Dave & Rubble | The Portion",
-    video: videoUrl("/videos/opr-dave-and-rubble-the-portion.mp4"),
+    video: videoUrl("/videos/opr-dave-and-rubble-the-portion-v2.mp4"),
     poster: videoUrl("/posters/opr-dave-and-rubble-the-portion-poster.jpg"),
     transcript:
       "Dave: “Just a modest little helping.”\nRubble: “Modest compared to what, a wheelbarrow?”\nDave: “I have had a long day.”",
@@ -121,7 +121,7 @@ const filmsUnordered: Film[] = [
   },
   {
     title: "Dave & Rubble | The Leftovers",
-    video: videoUrl("/videos/opr-dave-and-rubble-the-leftovers.mp4"),
+    video: videoUrl("/videos/opr-dave-and-rubble-the-leftovers-v2.mp4"),
     poster: videoUrl("/posters/opr-dave-and-rubble-the-leftovers-poster.jpg"),
     transcript:
       "Dave: “There we are. Worth the wait.”\nRubble: “You said that before you put the lid on.”\nDave: “It needed time.”",
