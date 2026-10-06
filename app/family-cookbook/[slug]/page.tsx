@@ -9,6 +9,7 @@ import RecipeFaqs from "../../components/RecipeFaqs";
 import RecipeVisualGuide from "../../components/RecipeVisualGuide";
 import CommunityCookForm from "../../components/CommunityCookForm";
 import FamiliesWhoMadeThis from "../../components/FamiliesWhoMadeThis";
+import AllergenNotice from "../../components/AllergenNotice";
 import { getFeaturedRecipe } from "../../../lib/recipes";
 import { buildFaqPageJsonLd } from "../../../lib/recipe-faqs";
 import { getApprovedCommunityCooks } from "../../../lib/community-cooks";
@@ -257,6 +258,7 @@ export default async function RecipePage({
             <RecipeActions title={recipe.title} imageUrl={recipe.image} />
           </div>
           <IngredientMeasurements ingredients={recipe.ingredients} />
+          <AllergenNotice />
         </aside>
       </section>
 

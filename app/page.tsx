@@ -114,7 +114,7 @@ export default async function Home() {
             behind them.
           </p>
 
-          <div className="mt-8 flex justify-center">
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
             <TrackedLink
               href="/family-cookbook"
               eventKey="home_cookbook"
@@ -122,6 +122,12 @@ export default async function Home() {
             >
               Open the Living Cookbook
             </TrackedLink>
+            <Link
+              href="/share"
+              className="inline-flex min-h-12 items-center justify-center rounded-full border border-[#FFF3DF]/80 bg-[#123C39]/65 px-8 py-3.5 text-base font-medium leading-tight transition hover:scale-105 hover:bg-[#1C5A50] sm:px-10 sm:py-4 sm:text-lg"
+            >
+              Share a family recipe
+            </Link>
           </div>
         </div>
       </HomeHero>

@@ -9,6 +9,7 @@ import RecipeFaqs from "../../../components/RecipeFaqs";
 import RecipeVisualGuide from "../../../components/RecipeVisualGuide";
 import CommunityCookForm from "../../../components/CommunityCookForm";
 import FamiliesWhoMadeThis from "../../../components/FamiliesWhoMadeThis";
+import AllergenNotice from "../../../components/AllergenNotice";
 import {
   fallbackImageForCommunityRecipe,
   fallbackOriginalImageForCommunityRecipe,
@@ -320,6 +321,7 @@ export default async function CommunityRecipePage({
           <div className="mt-7">
             <IngredientMeasurements ingredients={ingredients} size="regular" />
           </div>
+          <AllergenNotice />
         </aside>
       </section>
       {audioStoryUrl ? (
