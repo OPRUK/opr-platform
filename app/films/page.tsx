@@ -4,7 +4,7 @@ import DecorativeHeroVideo from "../components/DecorativeHeroVideo";
 import Navigation from "../components/Navigation";
 import VideoBrandMark from "../components/VideoBrandMark";
 import TrackedLink from "../components/TrackedLink";
-import { filmSlug, films } from "../../lib/films";
+import { defaultFilmPoster, filmSlug, films } from "../../lib/films";
 import { getFeaturedRecipe } from "../../lib/recipes";
 import { buildMetadata } from "../../lib/metadata";
 import { cookalongEvent } from "../../lib/cookalong-event";
@@ -97,7 +97,7 @@ export default function FilmsPage() {
                   className="group relative block aspect-video overflow-hidden bg-[#123C39]"
                 >
                   <img
-                    src={film.poster ?? "/images/recipes/barbaras-beef-casserole-wide.webp"}
+                    src={film.poster ?? defaultFilmPoster}
                     alt={`Still from ${film.title}`}
                     className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
                   />

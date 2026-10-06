@@ -6,7 +6,7 @@ import { buildMetadata } from "../../lib/metadata";
 import { cookalongEvent } from "../../lib/cookalong-event";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Cook With Dave | Other People's Recipes",
+  title: "Cook With Dave",
   description:
     cookalongEvent.public.livePage.summary,
   path: "/live-with-dave",

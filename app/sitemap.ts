@@ -11,12 +11,12 @@ const staticRoutes: Array<{ path: string; lastModified: string; changeFrequency:
   { path: "/family-cookbook", lastModified: "2026-10-05", changeFrequency: "weekly", priority: 0.9 },
   { path: "/founder", lastModified: "2026-08-01", changeFrequency: "yearly", priority: 0.5 },
   { path: "/films", lastModified: "2026-10-05", changeFrequency: "monthly", priority: 0.6 },
-  { path: "/dave-and-rubble", lastModified: "2026-09-22", changeFrequency: "weekly", priority: 0.8 },
+  { path: "/dave-and-rubble", lastModified: "2026-10-06", changeFrequency: "weekly", priority: 0.8 },
   ...(cookalongEvent.evergreenPage
     ? [{ path: "/live-with-dave", lastModified: cookalongEvent.lastMeaningfulUpdate, changeFrequency: "monthly" as const, priority: 0.6 }]
     : []),
   { path: "/join-our-table", lastModified: "2026-10-05", changeFrequency: "monthly", priority: 0.7 },
-  { path: "/share", lastModified: "2026-08-01", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/share", lastModified: "2026-10-05", changeFrequency: "monthly", priority: 0.8 },
   { path: "/accessibility", lastModified: "2026-08-01", changeFrequency: "yearly", priority: 0.4 },
 ];
 

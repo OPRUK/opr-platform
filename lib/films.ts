@@ -71,6 +71,7 @@ export function getRelatedFilms(currentFilm: Film, limit = 3): Film[] {
 }
 
 export const defaultFilmUploadDate = "2026-08-01T12:00:00+00:00";
+export const defaultFilmPoster = "/opengraph-image";
 
 export function filmUploadDate(film: Pick<Film, "uploadDate">): string {
   if (!film.uploadDate) return defaultFilmUploadDate;
@@ -79,8 +80,25 @@ export function filmUploadDate(film: Pick<Film, "uploadDate">): string {
     : film.uploadDate;
 }
 
-export function filmDescription(film: Pick<Film, "title" | "description">): string {
-  return film.description ?? `Watch ${film.title}, a short OPR film about food, family and recipes worth passing on.`;
+export function filmDescription(film: Pick<Film, "title" | "description" | "transcript">): string {
+  if (film.description) return film.description;
+
+  // Older films predate editorial summaries. Their transcript is the most
+  // faithful source for a distinct, useful description; this avoids showing
+  // the same generic sentence across the collection.
+  const excerpt = film.transcript
+    ?.split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .slice(0, 2)
+    .join(" ");
+  const candidate = excerpt
+    ? `${film.title}. ${excerpt}`
+    : `Watch ${film.title}, a short OPR film about food, family and recipes worth passing on.`;
+
+  if (candidate.length <= 160) return candidate;
+  const shortened = candidate.slice(0, 157).replace(/\s+\S*$/, "").trim();
+  return `${shortened}…`;
 }
 
 function film(

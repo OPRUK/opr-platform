@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import Navigation from "../../components/Navigation";
 import TrackedLink from "../../components/TrackedLink";
-import { filmDescription, filmSlug, films, filmUploadDate, getFilmBySlug, getRelatedFilms } from "../../../lib/films";
+import { defaultFilmPoster, filmDescription, filmSlug, films, filmUploadDate, getFilmBySlug, getRelatedFilms } from "../../../lib/films";
 import { buildMetadata } from "../../../lib/metadata";
 import { getFeaturedRecipe } from "../../../lib/recipes";
 import { absoluteUrl } from "../../../lib/site";
@@ -41,7 +41,7 @@ export default async function FilmWatchPage({ params }: FilmPageProps) {
     "@id": `${absoluteUrl(`/films/${slug}`)}#video`,
     name: film.title,
     description,
-    thumbnailUrl: [absoluteUrl(film.poster ?? "/images/recipes/barbaras-beef-casserole-wide.webp")],
+    thumbnailUrl: [absoluteUrl(film.poster ?? defaultFilmPoster)],
     uploadDate: filmUploadDate(film),
     contentUrl: absoluteUrl(film.video),
     transcript: film.transcript,
@@ -82,7 +82,7 @@ export default async function FilmWatchPage({ params }: FilmPageProps) {
             controls
             playsInline
             preload="none"
-            poster={film.poster ?? "/images/recipes/barbaras-beef-casserole-wide.webp"}
+            poster={film.poster ?? defaultFilmPoster}
           >
             <source src={film.video} type="video/mp4" />
             {film.captions ? <track kind="captions" src={film.captions} srcLang="en" label="English captions" default /> : null}

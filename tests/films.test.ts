@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import test from "node:test";
-import { filmDescription, filmSlug, films, filmUploadDate, getFilmBySlug, getFilmsForRecipe, getRelatedFilms } from "../lib/films.ts";
+import { defaultFilmPoster, filmDescription, filmSlug, films, filmUploadDate, getFilmBySlug, getFilmsForRecipe, getRelatedFilms } from "../lib/films.ts";
 
 const videoOrigin = "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/";
 const posterOrigin = "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/posters/";
@@ -134,6 +134,17 @@ test("every film has concise search metadata", () => {
   for (const film of films) {
     assert.ok(film.title.length <= 70, `${film.title} should fit an absolute search title`);
     assert.ok(filmDescription(film).length <= 160, `${film.title} should have a concise description`);
+  }
+});
+
+test("older films without a bespoke still use neutral artwork and a distinct transcript-led description", () => {
+  const filmsWithoutPosters = films.filter((film) => !film.poster);
+
+  assert.ok(filmsWithoutPosters.length > 0);
+  assert.equal(defaultFilmPoster, "/opengraph-image");
+  for (const film of filmsWithoutPosters) {
+    assert.ok(filmDescription(film).startsWith(`${film.title}.`));
+    assert.doesNotMatch(filmDescription(film), /Watch .*a short OPR film about food/i);
   }
 });
 

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Navigation from "../components/Navigation";
-import { filmDescription, filmSlug, films } from "../../lib/films";
+import { defaultFilmPoster, filmDescription, filmSlug, films } from "../../lib/films";
 import { buildMetadata } from "../../lib/metadata";
 
 const daveAndRubbleFilms = films.filter((film) => film.title.startsWith("Dave & Rubble |"));
@@ -34,7 +34,7 @@ export default function DaveAndRubblePage() {
               <article key={film.video} className="overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/10">
                 <Link href={`/films/${filmSlug(film)}`} className="group relative block aspect-video overflow-hidden bg-[#123C39]">
                   <img
-                    src={film.poster ?? "/images/recipes/barbaras-beef-casserole-wide.webp"}
+                    src={film.poster ?? defaultFilmPoster}
                     alt={`Still from ${film.title}`}
                     className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
                   />

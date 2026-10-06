@@ -8,7 +8,7 @@ export const cookalongEvent = {
   status: "planning" as CookalongStatus,
   title: "The next OPR cook-along",
   startsAt: null as string | null,
-  lastMeaningfulUpdate: "2026-10-05",
+  lastMeaningfulUpdate: "2026-10-06",
   evergreenPage: true,
   cta: {
     href: "/join-our-table",
@@ -25,8 +25,8 @@ export const cookalongEvent = {
     },
     livePage: {
       eyebrow: "Cook with Dave",
-      title: "This cook-along has now finished.",
-      summary: "Thank you to everyone who joined Dave in the kitchen. We’re planning the next chance to cook together.",
+      title: "Cook with Dave.",
+      summary: "The first OPR cook-along has finished. Cook Dave’s Butter Chicken at home, and be first to hear about the next chance to cook together.",
       nextSessionHeading: "Be first to hear when we cook together again.",
       nextSessionCopy: "We’ll share the next cook-along date, recipe and any replay details with the OPR community once they’re confirmed.",
       inviteHeading: "Get future invitations from OPR.",

@@ -117,6 +117,10 @@ export default function Footer() {
             Other People&apos;s Recipes™ and OPR™ are trade marks of OTHER PEOPLES
             RECIPES LTD. UK trade mark applications pending.
           </p>
+          <p className="mt-2 max-w-xl text-xs leading-5 text-[#BFA77B]">
+            OTHER PEOPLES RECIPES LTD · Company no. 17370145 · Registered office:
+            1a Bazalgette Close, New Malden, England, KT3 5HG.
+          </p>
         </div>
         <p className="flex flex-wrap gap-4">
           <Link href="/accessibility" className="transition hover:text-[#DDB765]">Accessibility</Link>
