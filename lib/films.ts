@@ -143,6 +143,39 @@ const filmsUnordered: Film[] = [
     uploadDate: "2026-10-05T19:18:00+01:00",
   },
   {
+    title: "Dave & Rubble | The First Bite",
+    video: videoUrl("/videos/opr-dave-and-rubble-the-first-bite.mp4"),
+    poster: videoUrl("/posters/opr-dave-and-rubble-the-first-bite-poster.jpg"),
+    transcript:
+      "Dave: “That is genuinely very good.”\nRubble: “You made it.”\nDave: “Exactly.”",
+    description:
+      "Dave takes the first bite and declares it genuinely very good. Rubble quickly points out who made it, in this short OPR kitchen comedy.",
+    captions: "/captions/opr-dave-and-rubble-the-first-bite.vtt",
+    uploadDate: "2026-09-22T15:38:00+01:00",
+  },
+  {
+    title: "Dave & Rubble | The Lemon",
+    video: videoUrl("/videos/opr-dave-and-rubble-the-lemon.mp4"),
+    poster: videoUrl("/posters/opr-dave-and-rubble-the-lemon-poster.jpg"),
+    transcript:
+      "Dave: “A squeeze of lemon wakes everything up.”\nRubble: “Even you?”\nDave: “I’m already awake.”",
+    description:
+      "Dave says a squeeze of lemon wakes everything up. Rubble has one pointed question, in this short OPR kitchen comedy.",
+    captions: "/captions/opr-dave-and-rubble-the-lemon.vtt",
+    uploadDate: "2026-09-22T15:33:00+01:00",
+  },
+  {
+    title: "Dave & Rubble | The Garnish",
+    video: videoUrl("/videos/opr-dave-and-rubble-the-garnish.mp4"),
+    poster: videoUrl("/posters/opr-dave-and-rubble-the-garnish-poster.jpg"),
+    transcript:
+      "Dave: “Now, a little garnish.”\nRubble: “Is that the bit we pretend tastes nice?”\nDave: “It makes it look finished.”",
+    description:
+      "Dave finishes a bowl of soup with garnish while Rubble questions its purpose, in this short OPR kitchen comedy.",
+    captions: "/captions/opr-dave-and-rubble-the-garnish.vtt",
+    uploadDate: "2026-09-22T15:28:00+01:00",
+  },
+  {
     title: "Dave & Rubble | The Timer",
     video: videoUrl("/videos/opr-dave-and-rubble-the-timer.mp4"),
     poster: videoUrl("/posters/opr-dave-and-rubble-the-timer-poster.jpg"),
