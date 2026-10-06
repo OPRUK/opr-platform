@@ -100,7 +100,7 @@ export default function PrivacyPolicyPage() {
 
             <div>
               <h2 className="text-2xl font-bold text-[#123C39]">9. Cookies and changes to this notice</h2>
-              <p className="mt-3">OPR uses Vercel Web Analytics to understand aggregated page visits. We also count visits from OPR&apos;s own social links and selected actions on the site without assigning a visitor identifier. We do not use advertising, marketing or cross-site tracking cookies. Read our <a className="underline underline-offset-4" href="/cookies">Cookie Notice</a> for more information.</p>
+              <p className="mt-3">OPR uses Vercel Web Analytics to understand aggregated page visits. We also count visits from OPR&apos;s own social links and selected actions on the site without assigning a visitor identifier. If you choose to accept analytics, OPR also uses Google Analytics to understand website use. We do not use advertising, marketing or cross-site tracking cookies. Read our <a className="underline underline-offset-4" href="/cookies">Cookie Notice</a> for more information or to change your analytics choice.</p>
               <p className="mt-3">We may update this notice when our services or legal obligations change. The effective date at the top tells you when it was last updated.</p>
             </div>
           </div>

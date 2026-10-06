@@ -5,6 +5,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { SITE_NAME, SITE_URL, absoluteUrl } from "../lib/site";
 import AttributionCapture from "./components/AttributionCapture";
+import GoogleAnalytics from "./components/GoogleAnalytics";
 import SiteFooter from "./components/SiteFooter";
 
 const caveat = localFont({
@@ -89,6 +90,7 @@ export default function RootLayout({
           Skip to main content
         </a>
         <AttributionCapture />
+        <GoogleAnalytics />
         {children}
         <SiteFooter />
         <script
