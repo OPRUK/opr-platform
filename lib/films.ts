@@ -109,6 +109,28 @@ function film(
 
 const filmsUnordered: Film[] = [
   {
+    title: "Dave & Rubble | The Portion",
+    video: videoUrl("/videos/opr-dave-and-rubble-the-portion.mp4"),
+    poster: videoUrl("/posters/opr-dave-and-rubble-the-portion-poster.jpg"),
+    transcript:
+      "Dave: “Just a modest little helping.”\nRubble: “Modest compared to what, a wheelbarrow?”\nDave: “I have had a long day.”",
+    description:
+      "Dave serves a modest helping, according to Dave. Rubble has a more accurate comparison, in this short OPR kitchen comedy.",
+    captions: "/captions/opr-dave-and-rubble-the-portion.vtt",
+    uploadDate: "2026-10-06T15:07:00+01:00",
+  },
+  {
+    title: "Dave & Rubble | The Leftovers",
+    video: videoUrl("/videos/opr-dave-and-rubble-the-leftovers.mp4"),
+    poster: videoUrl("/posters/opr-dave-and-rubble-the-leftovers-poster.jpg"),
+    transcript:
+      "Dave: “There we are. Worth the wait.”\nRubble: “You said that before you put the lid on.”\nDave: “It needed time.”",
+    description:
+      "Dave says the dish was worth the wait. Rubble remembers his earlier confidence, in this short OPR kitchen comedy.",
+    captions: "/captions/opr-dave-and-rubble-the-leftovers.vtt",
+    uploadDate: "2026-10-06T15:07:00+01:00",
+  },
+  {
     title: "Ada & Rubble | Party Jollof",
     video: videoUrl("/videos/opr-ada-and-rubble-party-jollof-with-audio-v2.mp4"),
     poster: videoUrl("/posters/opr-ada-and-rubble-party-jollof-poster.jpg"),

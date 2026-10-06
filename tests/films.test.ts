@@ -34,6 +34,11 @@ const newestFilmTitles = [
   "Dave & Rubble | Taste Test",
 ];
 
+const OctoberFilmTitles = [
+  "Dave & Rubble | The Portion",
+  "Dave & Rubble | The Leftovers",
+];
+
 test("the new Dave and Rubble films have complete website assets", () => {
   for (const title of newFilmTitles) {
     const film = films.find((candidate) => candidate.title === title);
@@ -86,6 +91,23 @@ test("the newest Dave and Rubble films are crawlable, accessible watch-page asse
 
     assert.ok(film, `${title} should be present in the film collection`);
     assert.match(film.uploadDate ?? "", /^2026-09-21T14:1[3-5]:00\+01:00$/);
+    assert.ok(film.description);
+    assert.ok(film.transcript?.includes("Dave:"));
+    assert.ok(film.transcript?.includes("Rubble:"));
+    assert.ok(film.poster);
+    assert.ok(film.captions);
+    assertHostedVideo(film.video);
+    assertHostedPoster(film.poster);
+    assert.ok(existsSync(resolve(`public${film.captions}`)), `${film.captions} should exist`);
+  }
+});
+
+test("the October Dave and Rubble films have hosted masters, captions and search metadata", () => {
+  for (const title of OctoberFilmTitles) {
+    const film = films.find((candidate) => candidate.title === title);
+
+    assert.ok(film, `${title} should be present in the film collection`);
+    assert.equal(film.uploadDate, "2026-10-06T15:07:00+01:00");
     assert.ok(film.description);
     assert.ok(film.transcript?.includes("Dave:"));
     assert.ok(film.transcript?.includes("Rubble:"));
