@@ -1,28 +1,24 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import {
+  GOOGLE_ANALYTICS_CONSENT_KEY,
+  GOOGLE_ANALYTICS_MEASUREMENT_ID,
+} from "../../lib/google-analytics-client";
 
-const MEASUREMENT_ID = "G-KRYXGNPZES";
-const CONSENT_KEY = "opr-google-analytics-consent-v1";
-
-declare global {
-  interface Window {
-    dataLayer?: unknown[];
-    gtag?: (...args: unknown[]) => void;
-    [key: `ga-disable-${string}`]: boolean | undefined;
-  }
-}
+const MEASUREMENT_ID = GOOGLE_ANALYTICS_MEASUREMENT_ID;
+const CONSENT_KEY = GOOGLE_ANALYTICS_CONSENT_KEY;
 
 function enableGoogleAnalytics() {
   window[`ga-disable-${MEASUREMENT_ID}`] = false;
-  if (document.querySelector(`script[data-opr-google-analytics="${MEASUREMENT_ID}"]`)) return;
-
   window.dataLayer = window.dataLayer || [];
   window.gtag = function gtag(...args: unknown[]) {
     window.dataLayer?.push(args);
   };
   window.gtag("js", new Date());
   window.gtag("config", MEASUREMENT_ID);
+
+  if (document.querySelector(`script[data-opr-google-analytics="${MEASUREMENT_ID}"]`)) return;
 
   const script = document.createElement("script");
   script.async = true;

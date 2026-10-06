@@ -6,6 +6,7 @@ import {
   hasAttribution,
   normaliseAttribution,
 } from "./attribution";
+import { sendGoogleAnalyticsEvent } from "./google-analytics-client";
 
 const attributionStorageKey = "opr-session-attribution";
 
@@ -51,6 +52,7 @@ export function sendAnalyticsEvent(eventKey: AnalyticsEventKey, destination: str
       { type: "application/json" },
     );
     navigator.sendBeacon("/api/analytics/event", body);
+    sendGoogleAnalyticsEvent(eventKey, destination);
   } catch {
     // A missed event must never stop the visitor following a link.
   }
