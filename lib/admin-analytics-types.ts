@@ -72,6 +72,7 @@ export type AnalyticsSnapshotPlatform = {
 import type { AnalyticsReport } from "./analytics-report-types";
 import type { GoogleIndexAudit } from "./google-index-audit-core";
 import type { PageSpeedSummary } from "./pagespeed-data";
+import type { GoogleAnalyticsSummary } from "./google-analytics";
 export type { AnalyticsReport } from "./analytics-report-types";
 
 export type AnalyticsSnapshot = {
@@ -133,6 +134,7 @@ export type AdminAnalyticsResponse = {
   unmatchedSocialPosts: UnmatchedSocialPost[];
   socialConnectionStatus: SocialConnectionStatus[];
   snapshot: AnalyticsSnapshot | null;
+  googleAnalytics?: GoogleAnalyticsSummary | null;
   priorities: DashboardPriority[];
   // The full dated SEO/social analysis (see lib/analytics-report-data.ts).
   // Current headline figures stay in snapshot above; live website figures are

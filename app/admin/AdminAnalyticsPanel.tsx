@@ -207,6 +207,7 @@ export default function AdminAnalyticsPanel({
   );
   const websiteCurrent = isCurrentData(snapshot?.website.fetchedAt ?? null);
   const googleCurrent = isCurrentData(snapshot?.google.fetchedAt ?? null);
+  const googleAnalytics = analytics?.googleAnalytics ?? null;
   const currentSocial = snapshot?.social.filter((platform) => isCurrentData(platform.fetchedAt)) ?? [];
   const socialExposures = currentSocial.reduce(
     (total, platform) => total + (platform.exposures ?? 0),
@@ -723,6 +724,70 @@ export default function AdminAnalyticsPanel({
                     note={googleCurrent ? `Average position ${formatNumber(snapshot.google.averagePosition, 1)} · Live from Search Console` : "No historical rate shown"}
                   />
                 </div>
+              </section>
+
+              <section aria-labelledby="ga4-heading" className="mx-auto mt-12 max-w-7xl rounded-[2rem] bg-[#123C39] p-6 text-[#FFF3DF] shadow-xl shadow-[#1C5A50]/20 md:p-9">
+                <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+                  <div>
+                    <p className="text-sm font-bold uppercase tracking-[0.3em] text-[#DDB765]">GA4</p>
+                    <h2 id="ga4-heading" className="mt-3 text-3xl font-bold text-white">Consented website journeys</h2>
+                  </div>
+                  <p className="max-w-xl text-sm leading-6 text-[#EED8B2]">
+                    {googleAnalytics
+                      ? `${googleAnalytics.period} · refreshed ${formatDateTime(googleAnalytics.fetchedAt)}`
+                      : "Awaiting a successful GA4 Data API connection or the first completed GA4 report."}
+                  </p>
+                </div>
+                {googleAnalytics ? (
+                  <>
+                    <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+                      <MetricCard label="Active users" value={formatNumber(googleAnalytics.activeUsers)} note="People who accepted analytics" />
+                      <MetricCard label="Sessions" value={formatNumber(googleAnalytics.sessions)} note="GA4 reporting" />
+                      <MetricCard label="Views" value={formatNumber(googleAnalytics.views)} note="Page and screen views" />
+                      <MetricCard label="Engagement" value={formatPercent(googleAnalytics.engagementRate)} note="Engaged-session rate" />
+                      <MetricCard label="Events" value={formatNumber(googleAnalytics.eventCount)} note="Page, journey and OPR events" />
+                    </div>
+                    <div className="mt-8 grid gap-7 xl:grid-cols-3">
+                      <div>
+                        <SubHeading eyebrow="GA4" title="Top pages" />
+                        <DataTable<(typeof googleAnalytics.topPages)[number]>
+                          keyFn={(row) => row.label}
+                          rows={googleAnalytics.topPages}
+                          columns={[
+                            { header: "Page", render: (row) => row.label },
+                            { header: "Views", render: (row) => formatNumber(row.value) },
+                          ]}
+                        />
+                      </div>
+                      <div>
+                        <SubHeading eyebrow="GA4" title="Acquisition" />
+                        <DataTable<(typeof googleAnalytics.channels)[number]>
+                          keyFn={(row) => row.label}
+                          rows={googleAnalytics.channels}
+                          columns={[
+                            { header: "Channel", render: (row) => row.label },
+                            { header: "Sessions", render: (row) => formatNumber(row.value) },
+                          ]}
+                        />
+                      </div>
+                      <div>
+                        <SubHeading eyebrow="GA4" title="Events" />
+                        <DataTable<(typeof googleAnalytics.events)[number]>
+                          keyFn={(row) => row.label}
+                          rows={googleAnalytics.events}
+                          columns={[
+                            { header: "Event", render: (row) => row.label },
+                            { header: "Count", render: (row) => formatNumber(row.value) },
+                          ]}
+                        />
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <p className="mt-6 max-w-3xl rounded-2xl border border-[#DDB765]/60 bg-white/10 p-5 leading-7 text-[#FFF3DF]">
+                    GA4 is installed on OPR and begins collecting only after a visitor accepts analytics. This dashboard will show the live GA4 figures once the Analytics Data API is authorised for the OPR property and Google has processed the first visits.
+                  </p>
+                )}
               </section>
 
               <section aria-labelledby="social-heading" className="mx-auto mt-12 max-w-7xl">

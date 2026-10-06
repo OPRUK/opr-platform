@@ -33,14 +33,14 @@ function base64url(input: Buffer) {
   return input.toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
 
-async function getAccessToken(clientEmail: string, privateKey: string): Promise<string | null> {
+async function getAccessToken(clientEmail: string, privateKey: string, scope: string): Promise<string | null> {
   const nowSeconds = Math.floor(Date.now() / 1000);
   const encodedHeader = base64url(Buffer.from(JSON.stringify({ alg: "RS256", typ: "JWT" })));
   const encodedClaims = base64url(
     Buffer.from(
       JSON.stringify({
         iss: clientEmail,
-        scope: "https://www.googleapis.com/auth/webmasters.readonly",
+        scope,
         aud: "https://oauth2.googleapis.com/token",
         iat: nowSeconds,
         exp: nowSeconds + 3600,
@@ -73,6 +73,10 @@ async function getAccessToken(clientEmail: string, privateKey: string): Promise<
 }
 
 export async function getSearchConsoleAccessToken(): Promise<string | null> {
+  return getGoogleServiceAccountAccessToken("https://www.googleapis.com/auth/webmasters.readonly");
+}
+
+export async function getGoogleServiceAccountAccessToken(scope: string): Promise<string | null> {
   const clientEmail = process.env.GOOGLE_SEARCH_CONSOLE_CLIENT_EMAIL;
   // Vercel environment variables are single strings, so restore the private
   // key's escaped newlines before using it to sign the service-account JWT.
@@ -80,7 +84,7 @@ export async function getSearchConsoleAccessToken(): Promise<string | null> {
   if (!clientEmail || !privateKey) return null;
 
   try {
-    return await getAccessToken(clientEmail, privateKey);
+    return await getAccessToken(clientEmail, privateKey, scope);
   } catch (error) {
     console.error("OPR Search Console access token could not be created", error);
     return null;

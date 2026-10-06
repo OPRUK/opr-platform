@@ -18,6 +18,7 @@ import { getPinterestFilmViews, getPinterestSummary, type PinterestFilmViews, ty
 import { getLinkedInSummary, type LinkedInSummary } from "./linkedin";
 import { getFacebookSummary, type FacebookSummary } from "./facebook";
 import { getVercelAnalyticsSummary, type VercelAnalyticsSummary } from "./vercel-analytics";
+import { getGoogleAnalyticsSummary, type GoogleAnalyticsSummary } from "./google-analytics";
 import { getPageSpeedSummary, type PageSpeedSummary } from "./pagespeed";
 import { analyticsReport } from "./analytics-report-data";
 import { loadLatestDailySnapshot, saveDailySnapshot } from "./analytics-daily-snapshots";
@@ -222,6 +223,7 @@ function withLatestTikTokSnapshot(snapshot: AnalyticsSnapshot | null): Analytics
 
 type LiveSources = {
   website: VercelAnalyticsSummary | null;
+  googleAnalytics: GoogleAnalyticsSummary | null;
   searchConsole: SearchConsoleSummary | null;
   facebook: FacebookSummary | null;
   instagram: InstagramSummary | null;
@@ -235,8 +237,9 @@ type LiveSources = {
 
 async function loadLiveSources(forceRefresh: boolean): Promise<LiveSources> {
   const options = { forceRefresh };
-  const [website, searchConsole, facebook, instagram, tiktok, youtube, pinterest, pinterestFilms, linkedIn, pageSpeed] = await Promise.all([
+  const [website, googleAnalytics, searchConsole, facebook, instagram, tiktok, youtube, pinterest, pinterestFilms, linkedIn, pageSpeed] = await Promise.all([
     getVercelAnalyticsSummary(options),
+    getGoogleAnalyticsSummary(options),
     getSearchConsoleSummary(options),
     getFacebookSummary(options),
     getInstagramSummary(options),
@@ -247,7 +250,7 @@ async function loadLiveSources(forceRefresh: boolean): Promise<LiveSources> {
     getLinkedInSummary(options),
     getPageSpeedSummary(options),
   ]);
-  return { website, searchConsole, facebook, instagram, tiktok, youtube, pinterest, pinterestFilms, linkedIn, pageSpeed };
+  return { website, googleAnalytics, searchConsole, facebook, instagram, tiktok, youtube, pinterest, pinterestFilms, linkedIn, pageSpeed };
 }
 
 function applyLiveSources(snapshot: AnalyticsSnapshot | null, live: LiveSources): AnalyticsSnapshot | null {
@@ -1283,6 +1286,7 @@ export async function loadAdminAnalytics(
     unmatchedSocialPosts: socialFilmData.unmatched,
     socialConnectionStatus: socialFilmData.connections,
     snapshot: snapshotWithPageSpeed,
+    googleAnalytics: liveSources.googleAnalytics,
     priorities,
     report,
   };
