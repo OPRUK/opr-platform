@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import {
   GOOGLE_ANALYTICS_CONSENT_KEY,
   GOOGLE_ANALYTICS_MEASUREMENT_ID,
@@ -8,6 +8,21 @@ import {
 
 const MEASUREMENT_ID = GOOGLE_ANALYTICS_MEASUREMENT_ID;
 const CONSENT_KEY = GOOGLE_ANALYTICS_CONSENT_KEY;
+type ConsentChoice = "accepted" | "rejected";
+const subscribeToHydration = () => () => {};
+const getClientSnapshot = () => true;
+const getServerSnapshot = () => false;
+
+function getStoredConsent(): ConsentChoice | null {
+  if (typeof window === "undefined") return null;
+
+  try {
+    const storedValue = window.localStorage.getItem(CONSENT_KEY);
+    return storedValue === "accepted" || storedValue === "rejected" ? storedValue : null;
+  } catch {
+    return null;
+  }
+}
 
 function enableGoogleAnalytics() {
   window[`ga-disable-${MEASUREMENT_ID}`] = false;
@@ -44,29 +59,39 @@ export function openAnalyticsPreferences() {
 }
 
 export default function GoogleAnalytics() {
-  const [ready, setReady] = useState(false);
+  const hydrated = useSyncExternalStore(subscribeToHydration, getClientSnapshot, getServerSnapshot);
+  const [consent, setConsent] = useState<ConsentChoice | null>(getStoredConsent);
   const [showPreferences, setShowPreferences] = useState(false);
 
   useEffect(() => {
-    const consent = window.localStorage.getItem(CONSENT_KEY);
     if (consent === "accepted") enableGoogleAnalytics();
-    setReady(true);
+  }, [consent]);
 
+  useEffect(() => {
     const openPreferences = () => setShowPreferences(true);
     window.addEventListener("opr:open-analytics-preferences", openPreferences);
     return () => window.removeEventListener("opr:open-analytics-preferences", openPreferences);
   }, []);
 
-  if (!ready || (!showPreferences && window.localStorage.getItem(CONSENT_KEY))) return null;
+  if (!hydrated || (!showPreferences && consent)) return null;
 
-  function saveConsent(consent: "accepted" | "rejected") {
-    window.localStorage.setItem(CONSENT_KEY, consent);
-    if (consent === "accepted") {
-      enableGoogleAnalytics();
-    } else {
-      disableGoogleAnalytics();
+  function saveConsent(choice: ConsentChoice) {
+    try {
+      window.localStorage.setItem(CONSENT_KEY, choice);
+    } catch {
+      // Keep the choice for this visit if the browser cannot persist it.
     }
-    setShowPreferences(false);
+
+    try {
+      if (choice === "accepted") {
+        enableGoogleAnalytics();
+      } else {
+        disableGoogleAnalytics();
+      }
+    } finally {
+      setConsent(choice);
+      setShowPreferences(false);
+    }
   }
 
   return (
