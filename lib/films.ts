@@ -127,6 +127,39 @@ function film(
 
 const filmsUnordered: Film[] = [
   {
+    title: "Dave & Rubble | The Finishing Touch",
+    video: videoUrl("/videos/opr-dave-and-rubble-the-finishing-touch-v1.mp4"),
+    poster: videoUrl("/posters/opr-dave-and-rubble-the-finishing-touch-poster.jpg"),
+    transcript:
+      "Dave: “Now, a little garnish.”\nRubble: “Is that the bit we pretend tastes nice?”\nDave: “It makes it look finished.”",
+    description:
+      "Dave adds one final garnish to pasta. Rubble questions whether it is there for flavour or appearances, in this short OPR kitchen comedy.",
+    captions: "/captions/opr-dave-and-rubble-the-finishing-touch.vtt",
+    uploadDate: "2026-10-10T14:00:00+01:00",
+  },
+  {
+    title: "Dave & Rubble | The Carrot",
+    video: videoUrl("/videos/opr-dave-and-rubble-the-carrot-v1.mp4"),
+    poster: videoUrl("/posters/opr-dave-and-rubble-the-carrot-poster.jpg"),
+    transcript:
+      "Dave: “You can have a carrot.”\nRubble: “I thought we were friends.”\nDave: “We are.”",
+    description:
+      "Dave offers Rubble a carrot from Sunday lunch. Rubble has a fair question about the state of their friendship, in this short OPR kitchen comedy.",
+    captions: "/captions/opr-dave-and-rubble-the-carrot.vtt",
+    uploadDate: "2026-10-10T14:00:00+01:00",
+  },
+  {
+    title: "Dave & Rubble | The Simmer",
+    video: videoUrl("/videos/opr-dave-and-rubble-the-simmer-v1.mp4"),
+    poster: videoUrl("/posters/opr-dave-and-rubble-the-simmer-poster.jpg"),
+    transcript:
+      "Dave: “Now we let it simmer.”\nRubble: “For how long?”\nDave: “Until it knows what it’s doing.”",
+    description:
+      "Dave turns down the heat and lets dinner simmer. Rubble asks the question every hungry cook has asked, in this short OPR kitchen comedy.",
+    captions: "/captions/opr-dave-and-rubble-the-simmer.vtt",
+    uploadDate: "2026-10-10T14:00:00+01:00",
+  },
+  {
     title: "Dave & Rubble | The Portion",
     video: videoUrl("/videos/opr-dave-and-rubble-the-portion-v2.mp4"),
     poster: videoUrl("/posters/opr-dave-and-rubble-the-portion-poster.jpg"),
