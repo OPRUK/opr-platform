@@ -6,6 +6,12 @@ function normalise(value: string): string {
 }
 
 const aliases: Record<string, string> = {
+  "dave says a little garnish makes it look finished": "Dave & Rubble | The Finishing Touch",
+  "the finishing touch": "Dave & Rubble | The Finishing Touch",
+  "rubble thought they were friends": "Dave & Rubble | The Carrot",
+  "the carrot": "Dave & Rubble | The Carrot",
+  "dave says now we let it simmer": "Dave & Rubble | The Simmer",
+  "the simmer": "Dave & Rubble | The Simmer",
   "just a modest little helping": "Dave & Rubble | The Portion",
   "the portion": "Dave & Rubble | The Portion",
   "there we are worth the wait": "Dave & Rubble | The Leftovers",
@@ -103,36 +109,42 @@ export function matchSocialFilmTitle(rawTitle: string): string | null {
 }
 
 export const pinterestFilmImpressions = [
-  { title: "Dave & Rubble | Dave's Butter Chicken", views: 11 },
-  { title: "The Secret Ingredient", views: 11 },
-  { title: "Sam & Nadine’s Shepherd’s Pie | OPR", views: 10 },
-  { title: "Dave and Rubbles Souffle", views: 8 },
-  { title: "Some recipes never leave you.", views: 8 },
-  { title: "Dave & Rubble | A Recipe Worth Passing On", views: 7 },
-  { title: "Mummy Morris & Rubble | Dave’s Mum’s Beef Casserole", views: 5 },
-  { title: "Dave and Rubble Butter Chicken Recipe", views: 4 },
-  { title: "Quality Control", views: 12 },
-  { title: "OPR Dave and Rubble's steak story", views: 12 },
-  { title: "Dave & Rubble | Just a Taste", views: 9 },
-  { title: "Dave & Rubble | The Story Behind It", views: 8 },
-  { title: "Dave & Rubble | The Handwritten Recipe", views: 8 },
-  { title: "Dave & Rubble | The Chicken Nomination", views: 7 },
-  { title: "Dave & Rubble | Patience Is the Secret Ingredient", views: 9 },
-  { title: "Dave & Rubble | Your Nomination", views: 7 },
-  { title: "Dave & Rubble | Dish of the Week: Gautam & Shobha", views: 7 },
-  { title: "Dave & Rubble | Five Generations", views: 1 },
-  { title: "Dave & Rubble | Before Your Time", views: 0 },
-  { title: "Dave & Rubble | The Measuring Spoon", views: 1 },
-  { title: "Dave & Rubble | The Family Vote", views: 1 },
-  { title: "Dave & Rubble | Ten Out of Ten", views: 1 },
-  { title: "Dave & Rubble | The Substitution", views: 1 },
-  { title: "Dave & Rubble | Room at the Table", views: 1 },
+  { title: "Dave & Rubble | Dave's Butter Chicken", views: 14 },
+  { title: "Dave & Rubble | Just a Taste", views: 19 },
+  { title: "Dave & Rubble | Some Recipes Are Made with a Little Extra Company", views: 16 },
+  { title: "Dave & Rubble | The Chicken Nomination", views: 10 },
+  { title: "Dave & Rubble | The Story Behind It", views: 10 },
+  { title: "Dave & Rubble | The Handwritten Recipe", views: 11 },
+  { title: "Dave & Rubble | The Measuring Spoon", views: 9 },
+  { title: "Dave & Rubble | The Substitution", views: 9 },
+  { title: "Dave & Rubble | Ten Out of Ten", views: 8 },
+  { title: "Dave & Rubble | The Family Vote", views: 7 },
+  { title: "Dave & Rubble | Five Generations", views: 6 },
+  { title: "Dave & Rubble | Before Your Time", views: 3 },
+  { title: "Dave & Rubble | A Recipe Worth Passing On", views: 2 },
+  { title: "Dave & Rubble | Some Recipes Never Leave You", views: 2 },
+  { title: "Dave & Rubble | Quality Control", views: 2 },
 ] as const;
+
+// Verified directly in Pinterest Analytics. These figures are deliberately
+// stored separately from the pending API connection, and represent the
+// selected 30-day window rather than an automatic feed.
+export const manualPinterestSnapshot = {
+  capturedAt: "2026-09-22T16:32:19+01:00",
+  period: "23 Aug–22 Sep 2026 · last 30 days",
+  impressions: 480,
+  engagements: 15,
+  saves: 1,
+  outboundClicks: 0,
+  totalAudience: 264,
+  engagedAudience: 11,
+  pins: 46,
+} as const;
 
 // Verified directly in each channel's creator dashboard. These figures provide
 // a fallback when an API is unavailable or a post caption does not match the
 // website title. Live API totals override them when available.
-export const socialFilmAuditCapturedAt = "2026-08-25T13:45:00+01:00";
+export const socialFilmAuditCapturedAt = manualPinterestSnapshot.capturedAt;
 
 export const facebookFilmViews = [
   { title: "Sam & Nadine’s Shepherd’s Pie | A Recipe Worth Passing On", views: 293 },

@@ -38,6 +38,9 @@ test("matches live social captions and channel-specific titles", () => {
 });
 
 test("matches the new Dave and Rubble films from their social caption openings", () => {
+  assert.equal(matchSocialFilmTitle("Dave says a little garnish makes it look finished."), "Dave & Rubble | The Finishing Touch");
+  assert.equal(matchSocialFilmTitle("Rubble thought they were friends."), "Dave & Rubble | The Carrot");
+  assert.equal(matchSocialFilmTitle("Dave says now we let it simmer."), "Dave & Rubble | The Simmer");
   assert.equal(matchSocialFilmTitle("Some recipes are too important to lose."), "Dave & Rubble | The Handwritten Recipe");
   assert.equal(matchSocialFilmTitle("A recipe tells you what to cook."), "Dave & Rubble | The Story Behind It");
   assert.equal(matchSocialFilmTitle("The recipe tells you what to cook."), "Dave & Rubble | The Story Behind It");
