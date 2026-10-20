@@ -109,6 +109,31 @@ function film(
 
 const filmsUnordered: Film[] = [
   {
+      "title": "Amy & Rubble | Pat’s Haddock & Tomato Bake",
+      "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-amy-rubble-pats-haddock-tomato-bake.mp4",
+      "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/posters/opr-amy-rubble-pats-haddock-tomato-bake-poster.jpg",
+      "description": "Amy remembers her mum Pat through a dish made with love. People before recipes. Stories before ingredients.",
+      "transcript": "Visual description: Amy prepares Pat’s haddock and tomato bake in a home kitchen with Rubble beside her. A cream recipe title card is followed by the green and gold OPR social card.",
+      "uploadDate": "2026-10-20T13:10:00+01:00"
+  },
+  {
+      "title": "Robin & Rubble | Mum’s Gingerbread",
+      "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-robin-rubble-mums-gingerbread.mp4",
+      "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/posters/opr-robin-rubble-mums-gingerbread-poster.jpg",
+      "description": "Robin remembers his mum’s gingerbread, with a little help from Rubble. Some memories don’t need a photograph.",
+      "transcript": "Visual description: Robin places a square of gingerbread on the kitchen worktop. Rubble watches, and Robin holds a piece beside him. The film closes on Robin’s mum’s gingerbread title and the OPR social card.",
+      "uploadDate": "2026-10-20T13:11:00+01:00",
+      "recipeSlug": "robin-vaughans-gingerbread"
+  },
+  {
+      "title": "John & Rubble | Grandad’s Steak & Ale Pie",
+      "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-john-rubble-grandads-steak-ale-pie.mp4",
+      "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/posters/opr-john-rubble-grandads-steak-ale-pie-poster.jpg",
+      "description": "John shares his grandad’s steak and ale pie with Rubble. A family recipe and the memories that make it worth passing on.",
+      "transcript": "Visual description: John pours Guinness into a pan of steak filling. He smiles with Rubble beside him in the kitchen. A cream recipe title card is followed by the OPR social card.",
+      "uploadDate": "2026-10-20T13:12:00+01:00"
+  },
+  {
     title: "Ada & Rubble | Party Jollof",
     video: videoUrl("/videos/opr-ada-and-rubble-party-jollof-with-audio-v2.mp4"),
     poster: videoUrl("/posters/opr-ada-and-rubble-party-jollof-poster.jpg"),
