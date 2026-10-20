@@ -380,7 +380,13 @@ function applyLiveSources(snapshot: AnalyticsSnapshot | null, live: LiveSources)
     });
   }
 
-  return { ...current, social: socialRows, pageSpeed: live.pageSpeed ?? current.pageSpeed };
+  const linkedInFilmPosts = new Map((current.linkedInFilmPosts ?? []).map((post) => [post.id, post]));
+  for (const post of live.linkedIn?.films ?? []) {
+    linkedInFilmPosts.set(post.id, { ...post, fetchedAt: live.linkedIn!.fetchedAt });
+  }
+  return { ...current, social: socialRows, pageSpeed: live.pageSpeed ?? current.pageSpeed,
+    linkedInFilmPosts: [...linkedInFilmPosts.values()] };
+
 }
 
 function changeRate(current: number, previous: number): number | null {
@@ -940,6 +946,7 @@ async function buildSocialFilmViews(
   client: SupabaseClient,
   website: AnalyticsFilmSummary[],
   live: LiveSources,
+  savedLinkedInPosts: NonNullable<AnalyticsSnapshot["linkedInFilmPosts"]> = [],
 ): Promise<{
   films: AnalyticsSocialFilmSummary[];
   unmatched: UnmatchedSocialPost[];
@@ -1004,6 +1011,8 @@ async function buildSocialFilmViews(
     });
     if (syncResult.error) console.error("OPR social-film actuals could not be saved", syncResult.error);
   }
+  const linkedInFilms = live.linkedIn?.films ?? [];
+  const linkedInTotals = reconciledSocialFilmTotals("linkedin", savedLinkedInPosts, linkedInFilms);
   const websiteByTitle = new Map(website.map((row) => [row.title, row]));
   const youtubePublishedByTitle = earliestPublishedByTitle(youtube?.films ?? []);
 
@@ -1022,6 +1031,7 @@ async function buildSocialFilmViews(
       instagramViews: sources.instagram.get(film.title) ?? null,
       tiktokViews: sources.tiktok.get(film.title) ?? null,
       youtubeViews: sources.youtube.get(film.title) ?? null,
+      linkedinViews: linkedInTotals.get(film.title) ?? null,
       pinterestImpressions: sources.pinterest.get(film.title) ?? null,
       uploadDate,
       daysOnline,
@@ -1039,6 +1049,13 @@ async function buildSocialFilmViews(
         unresolvedPosts,
       };
     });
+  connections.push({
+    platform: "linkedin", connected: Boolean(live.linkedIn && !live.linkedIn.filmError),
+    fetchedAt: live.linkedIn?.fetchedAt ?? null,
+    matchedPosts: linkedInFilms.filter((row) => matchSocialFilmId("linkedin", row.id) || matchSocialFilmTitle(row.title)).length,
+    unresolvedPosts: linkedInFilms.filter((row) => !matchSocialFilmId("linkedin", row.id) && !matchSocialFilmTitle(row.title)).length,
+    error: live.linkedIn?.filmError ?? null,
+  });
   return { films: filmRows, unmatched, connections };
 }
 
@@ -1162,7 +1179,7 @@ export async function loadAdminAnalytics(
   ]);
   if (refreshedAudit) indexAudit = refreshedAudit;
 
-  const socialFilmData = await buildSocialFilmViews(client, filmViews, liveSources);
+  const socialFilmData = await buildSocialFilmViews(client, filmViews, liveSources, savedSnapshot?.linkedInFilmPosts);
   const socialFilmViews = socialFilmData.films;
 
   const currentSnapshot = applyLiveSources(savedSnapshot, liveSources);

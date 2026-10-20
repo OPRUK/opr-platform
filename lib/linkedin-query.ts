@@ -37,3 +37,21 @@ export function buildLinkedInShareStatisticsUrl({
     `${SHARE_STATISTICS_ENDPOINT}?q=organizationalEntity&organizationalEntity=${encodeURIComponent(organizationUrn)}&timeIntervals=${timeIntervals}`,
   );
 }
+
+
+export function buildLinkedInVideoStatisticsUrl(postUrn: string): URL {
+  if (!/^urn:li:ugcPost:\d+$/.test(postUrn)) throw new Error("An organization video post URN is required");
+  const url = new URL("https://api.linkedin.com/rest/videoAnalytics");
+  url.searchParams.set("q", "entity");
+  url.searchParams.set("entity", postUrn);
+  url.searchParams.set("type", "VIDEO_VIEW");
+  url.searchParams.set("aggregation", "ALL");
+  return url;
+}
+
+export function linkedInVideoViewCount(payload: { elements?: Array<{ value?: unknown }> }): number | null {
+  if (!Array.isArray(payload.elements) || payload.elements.length === 0) return null;
+  const values = payload.elements.map((row) => row.value);
+  return values.every((value): value is number => typeof value === "number" && Number.isFinite(value) && value >= 0)
+    ? values.reduce((sum, value) => sum + value, 0) : null;
+}

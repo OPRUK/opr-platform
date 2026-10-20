@@ -27,10 +27,10 @@ function formatNumber(value: number | null, digits = 0) {
   }).format(value);
 }
 
-type FilmChannel = "Facebook" | "Instagram" | "TikTok" | "YouTube";
+type FilmChannel = "Facebook" | "Instagram" | "TikTok" | "YouTube" | "LinkedIn";
 
 function socialTotal(film: AdminAnalyticsResponse["socialFilmViews"][number]) {
-  return [film.facebookViews, film.instagramViews, film.tiktokViews, film.youtubeViews]
+  return [film.facebookViews, film.instagramViews, film.tiktokViews, film.youtubeViews, film.linkedinViews]
     .reduce<number>((total, value) => total + (value ?? 0), 0);
 }
 
@@ -40,6 +40,7 @@ function bestFilmChannel(film: AdminAnalyticsResponse["socialFilmViews"][number]
     ["Instagram", film.instagramViews],
     ["TikTok", film.tiktokViews],
     ["YouTube", film.youtubeViews],
+    ["LinkedIn", film.linkedinViews],
   ];
   const reported = channels.filter((entry): entry is [FilmChannel, number] => entry[1] !== null && entry[1] > 0);
   if (!reported.length) return null;
@@ -214,7 +215,7 @@ export default function AdminAnalyticsPanel({
   );
   const filmRows = [...(analytics?.socialFilmViews ?? [])]
     .filter((film) => {
-      const allChannelsReported = [film.facebookViews, film.instagramViews, film.tiktokViews, film.youtubeViews, film.pinterestImpressions]
+      const allChannelsReported = [film.facebookViews, film.instagramViews, film.tiktokViews, film.youtubeViews, film.linkedinViews, film.pinterestImpressions]
         .every((value) => value !== null);
       if (filmFilter === "published") return allChannelsReported;
       if (filmFilter === "missing") return !allChannelsReported;
@@ -391,12 +392,13 @@ export default function AdminAnalyticsPanel({
                 </div>
                 <p className="max-w-xl text-sm leading-6 text-stone-600">Post IDs and latest actual metrics are saved after every refresh. Caption changes and temporary API outages no longer break an established match.</p>
               </div>
-              <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+              <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-6">
                 {analytics.socialConnectionStatus.map((connection) => (
                   <article key={connection.platform} className={`rounded-2xl border p-4 ${connection.connected ? "border-[#8CB9A8] bg-[#E6F1EB]" : "border-[#C98F80] bg-[#F8E5DF]"}`}>
                     <p className="font-bold capitalize">{connection.platform}</p>
                     <p className="mt-2 text-sm">{connection.connected ? `${connection.matchedPosts} posts matched` : "Connection needs attention"}</p>
                     <p className="mt-1 text-xs text-stone-600">{connection.unresolvedPosts} unresolved</p>
+                    {connection.error ? <p className="mt-2 text-xs text-stone-600">{connection.error}</p> : null}
                     {(connection.platform === "youtube" || connection.platform === "pinterest") ? (
                       <button
                         type="button"
@@ -529,7 +531,7 @@ export default function AdminAnalyticsPanel({
             <div className="mt-6 overflow-hidden rounded-3xl border border-[#DDB765]/70 bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/10">
               <div className="border-b border-[#DDB765]/60 px-6 py-5">
                 <h3 className="text-xl font-bold">Film performance by channel</h3>
-                <p className="mt-2 text-sm leading-6 text-stone-600">Every website film under one consistent name. Social columns show views; Pinterest shows impressions. LinkedIn videos are published, but per-video LinkedIn analytics are not connected here. Missing figures are not zero views.</p>
+                <p className="mt-2 text-sm leading-6 text-stone-600">Every website film under one consistent name. Social columns show views; Pinterest shows impressions. LinkedIn shows organization video views of at least three seconds. Missing figures are not zero views.</p>
                 <p className="mt-1 text-xs text-stone-500">Latest saved post metrics are reconciled with each successful API refresh. Cached figures can lag the platform. Historical manual audit totals are excluded.</p>
                 <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
                   <label className="w-full text-sm font-semibold text-[#6B431E] sm:w-auto">
@@ -555,6 +557,7 @@ export default function AdminAnalyticsPanel({
                     { label: "Instagram", value: filmMetricLabel(film.instagramViews), status: "Dynamic" },
                     { label: "TikTok", value: filmMetricLabel(film.tiktokViews), status: "Dynamic" },
                     { label: "YouTube", value: filmMetricLabel(film.youtubeViews, youtubeUnavailableLabel), status: "Dynamic" },
+                    { label: "LinkedIn", value: filmMetricLabel(film.linkedinViews), status: "Dynamic · 3-second views" },
                     { label: "Pinterest", value: filmMetricLabel(film.pinterestImpressions, pinterestUnavailableLabel), status: "Dynamic · impressions" },
                   ];
                   return (
@@ -587,16 +590,17 @@ export default function AdminAnalyticsPanel({
               <div className="hidden overflow-x-auto md:block">
                 <table className="w-full min-w-[1120px] table-fixed border-collapse text-left text-xs xl:text-sm">
                   <colgroup>
-                    <col className="w-[21%]" />
+                    <col className="w-[20%]" />
                     <col className="w-[7%]" />
-                    <col className="w-[8%]" />
-                    <col className="w-[8%]" />
-                    <col className="w-[8%]" />
-                    <col className="w-[8%]" />
-                    <col className="w-[8%]" />
+                    <col className="w-[7%]" />
+                    <col className="w-[7%]" />
+                    <col className="w-[7%]" />
+                    <col className="w-[7%]" />
+                    <col className="w-[7%]" />
+                    <col className="w-[7%]" />
                     <col className="w-[10%]" />
-                    <col className="w-[11%]" />
-                    <col className="w-[11%]" />
+                    <col className="w-[9%]" />
+                    <col className="w-[12%]" />
                   </colgroup>
                   <thead>
                     <tr className="border-b border-[#DDB765] text-[#6B431E]">
@@ -607,6 +611,7 @@ export default function AdminAnalyticsPanel({
                       <th className="px-2 py-4 font-semibold leading-5">Instagram<br />views <span className="block font-normal text-[#1C5A50]">Dynamic</span></th>
                       <th className="px-2 py-4 font-semibold leading-5">TikTok<br />views <span className="block font-normal text-[#1C5A50]">Dynamic</span></th>
                       <th className="px-2 py-4 font-semibold leading-5">YouTube<br />views <span className="block font-normal text-[#1C5A50]">Dynamic</span></th>
+                      <th className="px-2 py-4 font-semibold leading-5">LinkedIn<br />views <span className="block font-normal text-[#1C5A50]">Dynamic</span></th>
                       <th className="px-2 py-4 font-semibold leading-5">Total social<br />views <span className="block font-normal text-stone-500">No Pinterest</span></th>
                       <th className="px-2 py-4 font-semibold leading-5">Strongest<br />channel</th>
                       <th className="px-3 py-4 font-semibold leading-5">Pinterest<br />impressions <span className="block font-normal text-[#1C5A50]">Dynamic</span></th>
@@ -625,12 +630,13 @@ export default function AdminAnalyticsPanel({
                         <td className={`px-2 py-4 ${bestChannel === "Instagram" ? "bg-[#DDEBE4] font-bold" : ""}`}>{filmMetricLabel(film.instagramViews)}</td>
                         <td className={`px-2 py-4 ${bestChannel === "TikTok" ? "bg-[#DDEBE4] font-bold" : ""}`}>{filmMetricLabel(film.tiktokViews)}</td>
                         <td className={`px-2 py-4 ${bestChannel === "YouTube" ? "bg-[#DDEBE4] font-bold" : ""}`}>{filmMetricLabel(film.youtubeViews, youtubeUnavailableLabel)}</td>
+                        <td className={`px-2 py-4 ${bestChannel === "LinkedIn" ? "bg-[#DDEBE4] font-bold" : ""}`}>{filmMetricLabel(film.linkedinViews)}</td>
                         <td className="px-2 py-4 font-bold">{formatNumber(socialTotal(film))}</td>
                         <td className="px-2 py-4 break-words">{bestChannel ?? "—"}</td>
                         <td className="px-3 py-4">{filmMetricLabel(film.pinterestImpressions, pinterestUnavailableLabel)}</td>
                       </tr>
                     );}) : (
-                      <tr><td colSpan={10} className="px-6 py-6 text-stone-600">No films match this filter.</td></tr>
+                      <tr><td colSpan={11} className="px-6 py-6 text-stone-600">No films match this filter.</td></tr>
                     )}
                   </tbody>
                 </table>
@@ -843,7 +849,7 @@ export default function AdminAnalyticsPanel({
 
             <div className="mt-8 rounded-[1.5rem] bg-[#EED8B2] p-5 text-[#123C39] shadow-inner md:p-7">
               <SubHeading eyebrow="Executive summary" title="Headline KPIs" note={reportUpdateNote ?? undefined} />
-              <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+              <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-6">
                 {report.executiveSummary.kpis.map((kpi) => (
                   <div key={kpi.label} className="rounded-2xl border border-[#DDB765]/60 bg-[#FFF3DF] px-4 py-3 shadow shadow-[#1C5A50]/10">
                     <p className="text-xs font-bold uppercase tracking-[0.15em] text-[#9A622A]">{kpi.label}</p>

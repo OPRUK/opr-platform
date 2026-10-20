@@ -1,6 +1,6 @@
 import "server-only";
 
-import { buildLinkedInPageStatisticsUrl, buildLinkedInShareStatisticsUrl } from "./linkedin-query";
+import { buildLinkedInVideoStatisticsUrl, linkedInVideoViewCount, buildLinkedInPageStatisticsUrl, buildLinkedInShareStatisticsUrl } from "./linkedin-query";
 
 const API_VERSION = "202608";
 const CACHE_MS = 15 * 60 * 1000;
@@ -16,6 +16,8 @@ export type LinkedInSummary = {
   pageButtonClicks28d: number | null;
   postClicks28d: number | null;
   fetchedAt: string;
+  films: Array<{ id: string; title: string; views: number }>;
+  filmError: string | null;
 };
 
 // Module-scope cache: best-effort within a warm serverless instance, not a
@@ -156,6 +158,10 @@ export async function getLinkedInSummary(
       console.warn("OPR LinkedIn post statistics query failed", await shareStatsResponse.text());
     }
 
+    const videoReporting = await loadLinkedInFilmViews(authHeaders).catch(() => ({
+      films: [], error: "LinkedIn video analytics could not be reached. Page statistics remain available.",
+    }));
+
     const summary: LinkedInSummary = {
       period: `${REPORT_WINDOW_DAYS} days to ${isoDate(endDate)}`,
       followers: followers.firstDegreeSize ?? 0,
@@ -164,6 +170,8 @@ export async function getLinkedInSummary(
       pageButtonClicks28d: pageButtonClicks,
       postClicks28d: postClicks,
       fetchedAt: new Date().toISOString(),
+      films: videoReporting.films,
+      filmError: videoReporting.error,
     };
 
     cached = { data: summary, expiresAt: Date.now() + CACHE_MS };
@@ -172,4 +180,43 @@ export async function getLinkedInSummary(
     console.error("OPR LinkedIn summary could not be loaded", error);
     return null;
   }
+}
+
+
+async function loadLinkedInFilmViews(headers: Record<string, string>): Promise<{
+  films: Array<{ id: string; title: string; views: number }>;
+  error: string | null;
+}> {
+  const posts: Array<{ id: string; commentary?: string; author?: string; content?: { media?: { id?: string; title?: string } } }> = [];
+  for (let start = 0; start < 500; start += 100) {
+    const url = new URL("https://api.linkedin.com/rest/posts");
+    url.searchParams.set("q", "author");
+    url.searchParams.set("author", ORGANIZATION_URN);
+    url.searchParams.set("count", "100");
+    url.searchParams.set("start", String(start));
+    const response = await fetch(url, { headers, signal: AbortSignal.timeout(12000) });
+    if (!response.ok) return { films: [], error: `LinkedIn video discovery returned ${response.status}. Check r_organization_social access.` };
+    const payload = await response.json();
+    const elements = Array.isArray(payload.elements) ? payload.elements : [];
+    posts.push(...elements);
+    if (elements.length < 100) break;
+  }
+  const videos = posts.filter((post) => post.author === ORGANIZATION_URN
+    && /^urn:li:ugcPost:\d+$/.test(post.id)
+    && /^urn:li:(video|digitalmediaAsset):/.test(post.content?.media?.id ?? ""));
+  const films: Array<{ id: string; title: string; views: number }> = [];
+  let failed = 0;
+  // Bound concurrency to avoid throttling the organization's API allowance.
+  for (let offset = 0; offset < videos.length; offset += 5) {
+    const batch = await Promise.all(videos.slice(offset, offset + 5).map(async (post) => {
+      const url = buildLinkedInVideoStatisticsUrl(post.id);
+      const response = await fetch(url, { headers, signal: AbortSignal.timeout(12000) });
+      if (!response.ok) { failed += 1; return null; }
+      const value = linkedInVideoViewCount(await response.json());
+      if (value === null) { failed += 1; return null; }
+      return { id: post.id, title: post.content?.media?.title || post.commentary || "Untitled video", views: value };
+    }));
+    films.push(...batch.filter((row): row is { id: string; title: string; views: number } => row !== null));
+  }
+  return { films, error: failed ? `${failed} LinkedIn videos did not return a view metric; saved values are retained.` : null };
 }

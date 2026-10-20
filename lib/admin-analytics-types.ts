@@ -31,6 +31,7 @@ export type AnalyticsSocialFilmSummary = AnalyticsFilmSummary & {
   instagramViews: number | null;
   tiktokViews: number | null;
   youtubeViews: number | null;
+  linkedinViews: number | null;
   pinterestImpressions: number | null;
   uploadDate: string | null;
   daysOnline: number | null;
@@ -44,7 +45,8 @@ export type UnmatchedSocialPost = {
 };
 
 export type SocialConnectionStatus = {
-  platform: "facebook" | "instagram" | "tiktok" | "youtube" | "pinterest";
+  platform: "facebook" | "instagram" | "tiktok" | "youtube" | "pinterest" | "linkedin";
+  error?: string | null;
   connected: boolean;
   fetchedAt: string | null;
   matchedPosts: number;
@@ -99,6 +101,7 @@ export type AnalyticsSnapshot = {
   };
   social: AnalyticsSnapshotPlatform[];
   indexAudit?: GoogleIndexAudit | null;
+  linkedInFilmPosts?: Array<{ id: string; title: string; views: number; fetchedAt: string }>;
   pageSpeed: PageSpeedSummary | null;
   recommendations: Array<{
     title: string;

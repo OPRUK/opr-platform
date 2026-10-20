@@ -185,13 +185,14 @@ export async function GET(request: Request) {
       { header: "Instagram views", key: "instagramViews", width: 20 },
       { header: "TikTok views", key: "tiktokViews", width: 20 },
       { header: "YouTube views", key: "youtubeViews", width: 20 },
+      { header: "LinkedIn views (3s)", key: "linkedinViews", width: 24 },
       { header: "Pinterest impressions", key: "pinterestImpressions", width: 25 },
       { header: "Report generated", key: "generatedAt", width: 28 },
       { header: "Metric context", key: "context", width: 85 },
     ];
     filmPerformance.addRows(analytics.socialFilmViews.map((film) => ({
       ...film, generatedAt: analytics.generatedAt,
-      context: "Social post lifetime totals; latest saved API actuals. Blanks mean unavailable. Pinterest is impressions, not video views. LinkedIn per-film API unavailable.",
+      context: "Social post lifetime totals; latest saved API actuals. Blanks mean unavailable. Pinterest is impressions, not video views. LinkedIn uses organization video views of at least three seconds.",
     })));
     styleSheet(filmPerformance);
 

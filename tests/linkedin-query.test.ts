@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { buildLinkedInPageStatisticsUrl, buildLinkedInShareStatisticsUrl } from "../lib/linkedin-query.ts";
+import { buildLinkedInPageStatisticsUrl, buildLinkedInShareStatisticsUrl, buildLinkedInVideoStatisticsUrl, linkedInVideoViewCount } from "../lib/linkedin-query.ts";
 
 test("preserves LinkedIn's documented Rest.li 2.0 time interval syntax", () => {
   const url = buildLinkedInPageStatisticsUrl({
@@ -38,4 +38,22 @@ test("preserves LinkedIn's documented share-statistics query syntax", () => {
     url.toString(),
     /timeIntervals=\(timeRange:\(start:1785801600000,end:1788220799999\),timeGranularityType:DAY\)$/,
   );
+});
+
+
+test("requests lifetime organization video views without substituting impressions", () => {
+  const url = buildLinkedInVideoStatisticsUrl("urn:li:ugcPost:7518292422653775872");
+  assert.equal(url.searchParams.get("entity"), "urn:li:ugcPost:7518292422653775872");
+  assert.equal(url.searchParams.get("type"), "VIDEO_VIEW");
+  assert.equal(url.searchParams.get("aggregation"), "ALL");
+  assert.equal(url.searchParams.has("timeRange"), false);
+  assert.throws(() => buildLinkedInVideoStatisticsUrl("urn:li:person:123"));
+});
+
+test("retains unavailable LinkedIn metrics as missing and accepts a genuine zero", () => {
+  assert.equal(linkedInVideoViewCount({ elements: [{ value: 11 }] }), 11);
+  assert.equal(linkedInVideoViewCount({ elements: [{ value: 0 }] }), 0);
+  assert.equal(linkedInVideoViewCount({ elements: [] }), null);
+  assert.equal(linkedInVideoViewCount({ elements: [{}] }), null);
+  assert.equal(linkedInVideoViewCount({ elements: [{ value: -1 }] }), null);
 });

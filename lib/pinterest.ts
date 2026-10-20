@@ -3,7 +3,8 @@ import {
   configuredPinterestAccessToken,
   configuredPinterestOAuthCredentials,
 } from "./pinterest-auth";
-import { getSocialRefreshToken } from "./social-connections";
+import { pinterestLifetimeImpressions } from "./pinterest-metrics";
+import { getSocialRefreshToken, saveSocialConnection } from "./social-connections";
 
 const CACHE_MS = 15 * 60 * 1000;
 const REPORT_LAG_DAYS = 1;
@@ -22,6 +23,8 @@ export type PinterestSummary = {
 // shared/persistent cache across instances — same trade-off as the other
 // live integrations (Search Console, YouTube, Instagram, TikTok).
 let cached: { data: PinterestSummary; expiresAt: number } | null = null;
+let tokenCache: { value: string; expiresAt: number } | null = null;
+let tokenRequest: Promise<string | null> | null = null;
 
 async function getAccessToken(clientId: string, clientSecret: string, refreshToken: string): Promise<string | null> {
   const response = await fetch("https://api.pinterest.com/v5/oauth/token", {
@@ -42,21 +45,27 @@ async function getAccessToken(clientId: string, clientSecret: string, refreshTok
   }
 
   const payload = await response.json();
-  return typeof payload.access_token === "string" ? payload.access_token : null;
+  if (typeof payload.access_token !== "string") return null;
+  if (typeof payload.refresh_token === "string" && payload.refresh_token !== refreshToken) {
+    await saveSocialConnection("pinterest", payload.refresh_token, String(payload.scope ?? ""));
+  }
+  tokenCache = { value: payload.access_token, expiresAt: Date.now() + Math.max(0, Number(payload.expires_in ?? 3600) - 60) * 1000 };
+  return payload.access_token;
 }
 
 async function resolvePinterestAccessToken(): Promise<string | null> {
-  // Production-limited Pinterest tokens are a short-lived bridge while the
-  // app awaits OAuth approval. Prefer one when explicitly configured, then
-  // fall back to the durable refresh-token connection.
-  const configuredAccessToken = configuredPinterestAccessToken();
-  if (configuredAccessToken) return configuredAccessToken;
-
-  const refreshToken = (await getSocialRefreshToken("pinterest")) ?? process.env.PINTEREST_REFRESH_TOKEN ?? null;
-  const credentials = configuredPinterestOAuthCredentials(refreshToken);
-  if (!credentials) return null;
-
-  return getAccessToken(credentials.clientId, credentials.clientSecret, credentials.refreshToken);
+  if (tokenCache && tokenCache.expiresAt > Date.now()) return tokenCache.value;
+  if (tokenRequest) return tokenRequest;
+  tokenRequest = (async () => {
+    const refreshToken = (await getSocialRefreshToken("pinterest")) ?? process.env.PINTEREST_REFRESH_TOKEN ?? null;
+    const credentials = configuredPinterestOAuthCredentials(refreshToken);
+    if (credentials) {
+      const token = await getAccessToken(credentials.clientId, credentials.clientSecret, credentials.refreshToken);
+      if (token) return token;
+    }
+    return configuredPinterestAccessToken();
+  })();
+  try { return await tokenRequest; } finally { tokenRequest = null; }
 }
 
 function isoDate(date: Date) {
@@ -108,6 +117,7 @@ export async function getPinterestSummary(
       outboundClicks = totals?.OUTBOUND_CLICK ?? 0;
     } else {
       console.error("OPR Pinterest analytics query failed", await analyticsResponse.text());
+      return null;
     }
 
     const summary: PinterestSummary = {
@@ -163,16 +173,17 @@ export async function getPinterestFilmViews(
       const response = await fetch(pinsUrl, { headers: authHeaders });
       if (!response.ok) {
         console.error("OPR Pinterest pins list failed", await response.text());
-        break;
+        return page === 0 ? null : { fetchedAt: new Date().toISOString(), films };
       }
 
       const payload = await response.json();
       for (const pin of payload.items ?? []) {
-        const impressions = pin.pin_metrics?.["90d"]?.impression;
+        const impressions = pinterestLifetimeImpressions(pin);
+        if (impressions === null) continue;
         films.push({
           id: pin.id ?? "",
           title: pin.title || pin.description || "Untitled pin",
-          views: Number(impressions ?? 0),
+          views: impressions,
         });
       }
 

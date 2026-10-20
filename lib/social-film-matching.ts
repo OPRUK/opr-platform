@@ -76,12 +76,15 @@ const aliases: Record<string, string> = {
   "room at the table": "Dave & Rubble | Room at the Table",
 };
 
-type SocialPlatform = "facebook" | "instagram" | "tiktok" | "youtube" | "pinterest";
+type SocialPlatform = "facebook" | "instagram" | "tiktok" | "youtube" | "pinterest" | "linkedin";
 
 // Stable IDs are the primary match when supplied. This optional JSON map lets
 // OPR add IDs without a code release, for example:
 // {"youtube:MkSF7Ky8Ybc":"Dave & Rubble | The Handwritten Recipe"}
 const publishedPostIds: Record<string, string> = {
+  "linkedin:urn:li:ugcPost:7518277577028022272": "Amy & Rubble | Pat’s Haddock & Tomato Bake",
+  "linkedin:urn:li:ugcPost:7518291992439767040": "Robin & Rubble | Mum’s Gingerbread",
+  "linkedin:urn:li:ugcPost:7518292422653775872": "John & Rubble | Grandad’s Steak & Ale Pie",
   "tiktok:7695098233483300118": "Dave & Rubble | The Finishing Touch",
   "facebook:972144875955764": "Amy & Rubble | Pat’s Haddock & Tomato Bake",
   "instagram:4012076930433721307": "Amy & Rubble | Pat’s Haddock & Tomato Bake",
