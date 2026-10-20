@@ -38,6 +38,7 @@ export type FeaturedRecipe = {
   /** ISO 8601 date, e.g. "2026-01-15". Omit if unknown. */
   datePublished?: string;
   contributorName?: string;
+  source?: { name: string; author: string; url: string };
   /** Optional consented portrait of the contributor or family behind the recipe. */
   contributorImage?: string;
   contributorImageAlt?: string;
@@ -55,6 +56,61 @@ export type FeaturedRecipe = {
 };
 
 export const featuredRecipes: FeaturedRecipe[] = [
+  {
+      "slug": "lesleys-italian-cherry-pound-cake",
+      "title": "Italian Cherry Pound Cake",
+      "place": "Shared by Lesley, via her friend Pauline",
+      "story": "My friend Pauline has just given me this recipe. The cake is delicious. I wondered if it might be suitable for your online recipe venture?",
+      "ingredients": [
+          "½ cup unsalted butter (1 US stick)",
+          "1 cup sugar",
+          "1 cup sour cream",
+          "3 eggs, at room temperature",
+          "¾ tsp vanilla extract",
+          "¼ tsp almond extract",
+          "1¾ cups plain flour, plus 2 tbsp for the cherries",
+          "1½ tsp baking powder",
+          "½ tsp kosher salt",
+          "2 heaped cups pitted cherries",
+          "Icing sugar, to finish",
+          "Amarena cherries, optional, to serve"
+      ],
+      "method": [
+          "Heat the oven to 350°F (about 175°C conventional). Grease and line a 9 × 5 inch loaf tin.",
+          "Cream butter and sugar for 3 minutes. Mix in sour cream, then eggs individually. Add both extracts. Fold in flour, baking powder and salt without overmixing.",
+          "Reserve ⅓ cup cherries and halve them. Coat the rest with the extra flour.",
+          "Layer thirds of batter with halves of the coated cherries. Finish with the reserved cherries.",
+          "Bake for 65 to 80 minutes, until a skewer comes out clean. Cool for at least 30 minutes. Dust with icing sugar."
+      ],
+      "image": "/images/recipes/lesleys-italian-cherry-pound-cake.webp",
+      "category": "Dessert or baking",
+      "number": "13",
+      "prepTime": "PT25M",
+      "cookTime": "PT1H20M",
+      "datePublished": "2026-10-20",
+      "contributorName": "Lesley",
+      "source": {
+          "name": "Giadzy",
+          "author": "Giada De Laurentiis",
+          "url": "https://giadzy.com/blogs/recipes/italian-cherry-pound-cake"
+      },
+      "notes": [
+          {
+              "title": "Passed from friend to friend",
+              "text": "Pauline shared this recipe with Lesley, who recommended it to OPR. The original recipe is by Giada De Laurentiis on Giadzy."
+          },
+          {
+              "title": "Frozen cherries",
+              "text": "Thaw fully and drain before using."
+          }
+      ],
+      "faqs": [
+      { "question": "Who shared this cake with OPR?", "answer": "Lesley sent it to Chaten after her friend Pauline had given her the recipe and she had enjoyed the cake." },
+      { "question": "Who created the original recipe?", "answer": "The original recipe is by Giada De Laurentiis on Giadzy, linked above." },
+      { "question": "What did Lesley say about the cake?", "answer": "Lesley called the cake delicious and wondered whether it would be suitable for Chaten’s online recipe venture." },
+      { "question": "Is this described as Lesley’s own original recipe?", "answer": "Lesley shared a recipe she received from Pauline. OPR records that chain of friendship and credits its published creator." }
+    ]
+  },
   {
     slug: "robin-vaughans-gingerbread",
     title: "Robin Vaughan's Gingerbread",

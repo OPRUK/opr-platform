@@ -102,7 +102,8 @@ export default async function RecipePage({
     inLanguage: "en-GB",
     image: [absoluteUrl(recipe.image)],
     description: truncate(recipe.story, 300),
-    author: { "@type": "Person", name: recipe.contributorName ?? SITE_NAME },
+    author: { "@type": "Person", name: recipe.source?.author ?? recipe.contributorName ?? SITE_NAME },
+    ...(recipe.source ? { isBasedOn: recipe.source.url, creditText: `Recipe by ${recipe.source.author}, ${recipe.source.name}. Shared with OPR by ${recipe.contributorName}.` } : {}),
     ...(recipe.category ? { recipeCategory: recipe.category } : {}),
     ...(recipe.cuisine ? { recipeCuisine: recipe.cuisine } : {}),
     keywords: buildRecipeKeywords([
@@ -205,8 +206,13 @@ export default async function RecipePage({
               <p className="mt-7 text-2xl leading-relaxed text-[#123C39]">
                 “{recipe.story}”
               </p>
+              {recipe.source ? (
+                <a href={recipe.source.url} className="mt-6 inline-flex rounded-full bg-[#123C39] px-6 py-3 font-bold text-[#FFF3DF] underline underline-offset-4">
+                  View the original recipe on {recipe.source.name} →
+                </a>
+              ) : null}
               <p className="mt-10 border-t border-[#DDB765] pt-6 text-sm italic text-stone-600">
-                This recipe now belongs to every family who cooks it.
+                {recipe.source ? `Shared by ${recipe.contributorName}, via Pauline. Recipe by ${recipe.source.author}.` : "This recipe now belongs to every family who cooks it."}
               </p>
             </div>
             {recipe.contributorImage ? (

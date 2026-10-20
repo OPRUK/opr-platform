@@ -64,6 +64,7 @@ const collectionDefinitions: RecipeCollectionDefinition[] = [
       "Use the individual recipe pages for measurements, step-by-step methods, helpful answers and the story behind each dish.",
     ],
     recipeSlugs: [
+      "lesleys-italian-cherry-pound-cake",
       "nana-serbs-sunday-rice-pudding",
       "krishna-anands-baingan-ka-bharta",
       "sudeshs-bhindi",
