@@ -359,7 +359,7 @@ export default function AdminDashboard({
     return true;
   }
 
-  async function reconnectSocial(platform: "youtube" | "pinterest") {
+  async function reconnectSocial(platform: "youtube" | "pinterest" | "linkedin") {
     setMessage("");
     const response = await adminRequest("/api/admin/social-connect", {
       method: "POST",

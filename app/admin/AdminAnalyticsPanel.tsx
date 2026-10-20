@@ -14,7 +14,7 @@ type AdminAnalyticsPanelProps = {
   onDownload: () => void;
   onRefresh: () => void;
   onMapSocialPost: (platform: string, postId: string, filmVideo: string | null) => Promise<boolean>;
-  onReconnectSocial: (platform: "youtube" | "pinterest") => Promise<void>;
+  onReconnectSocial: (platform: "youtube" | "pinterest" | "linkedin") => Promise<void>;
   onOpenSecurity: () => void;
   onSignOut: () => void;
 };
@@ -399,13 +399,13 @@ export default function AdminAnalyticsPanel({
                     <p className="mt-2 text-sm">{connection.connected ? `${connection.matchedPosts} posts matched` : "Connection needs attention"}</p>
                     <p className="mt-1 text-xs text-stone-600">{connection.unresolvedPosts} unresolved</p>
                     {connection.error ? <p className="mt-2 text-xs text-stone-600">{connection.error}</p> : null}
-                    {(connection.platform === "youtube" || connection.platform === "pinterest") ? (
+                    {(connection.platform === "youtube" || connection.platform === "pinterest" || connection.platform === "linkedin") ? (
                       <button
                         type="button"
                         disabled={connectingPlatform === connection.platform}
                         onClick={async () => {
                           setConnectingPlatform(connection.platform);
-                          await onReconnectSocial(connection.platform as "youtube" | "pinterest");
+                          await onReconnectSocial(connection.platform as "youtube" | "pinterest" | "linkedin");
                           setConnectingPlatform("");
                         }}
                         className="mt-3 rounded-full border border-[#123C39] px-3 py-1.5 text-xs font-bold disabled:opacity-50"
