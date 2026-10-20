@@ -151,7 +151,7 @@ export async function GET(request: Request) {
       { header: `Conversions (${analytics.windowDays}d)`, key: "conversions", width: 22 },
     ];
     campaigns.addRows(analytics.campaigns);
-    styleSheet(sources);
+    styleSheet(campaigns);
 
     const social = workbook.addWorksheet("Social Latest");
     social.columns = [
@@ -175,6 +175,25 @@ export async function GET(request: Request) {
       })));
     }
     styleSheet(social);
+
+    const filmPerformance = workbook.addWorksheet("Film Performance");
+    filmPerformance.columns = [
+      { header: "Film", key: "title", width: 62 },
+      { header: "Website plays (90d)", key: "plays", width: 23 },
+      { header: "Website completions (90d)", key: "completions", width: 28 },
+      { header: "Facebook views", key: "facebookViews", width: 20 },
+      { header: "Instagram views", key: "instagramViews", width: 20 },
+      { header: "TikTok views", key: "tiktokViews", width: 20 },
+      { header: "YouTube views", key: "youtubeViews", width: 20 },
+      { header: "Pinterest impressions", key: "pinterestImpressions", width: 25 },
+      { header: "Report generated", key: "generatedAt", width: 28 },
+      { header: "Metric context", key: "context", width: 85 },
+    ];
+    filmPerformance.addRows(analytics.socialFilmViews.map((film) => ({
+      ...film, generatedAt: analytics.generatedAt,
+      context: "Social post lifetime totals; latest saved API actuals. Blanks mean unavailable. Pinterest is impressions, not video views. LinkedIn per-film API unavailable.",
+    })));
+    styleSheet(filmPerformance);
 
     const pageSpeed = workbook.addWorksheet("PageSpeed Lab");
     pageSpeed.columns = [

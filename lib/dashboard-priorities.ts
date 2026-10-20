@@ -150,8 +150,8 @@ export function buildDashboardPriorities(input: PriorityInputs): DashboardPriori
       id: "film-reporting-coverage",
       priority: "P2",
       area: "Film reporting",
-      title: "Review unmatched film metrics",
-      evidence: `${missingFilmCoverage.length} of ${input.films.length} films have at least one unmatched channel metric.`,
+      title: "Review film measurement coverage",
+      evidence: `${missingFilmCoverage.length} of ${input.films.length} films have at least one unavailable channel metric. This can mean unpublished content or a disconnected source, not an incorrect match.`,
       action: "Confirm whether each film was published on that channel; add a stable platform ID or caption alias only where a post genuinely exists.",
       source: "live data",
     });

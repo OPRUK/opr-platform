@@ -26,14 +26,10 @@ import { featuredRecipes } from "./recipes";
 import { buildDashboardPriorities } from "./dashboard-priorities";
 import { buildSubmissionFunnel } from "./submission-funnel";
 import {
-  facebookFilmViews,
-  instagramFilmViews,
   matchSocialFilmId,
   matchSocialFilmTitle,
-  pinterestFilmImpressions,
+  reconciledSocialFilmTotals,
   socialFilmAuditCapturedAt,
-  tiktokFilmViews,
-  youtubeFilmViews,
 } from "./social-film-matching";
 import type {
   AdminAnalyticsResponse,
@@ -922,26 +918,6 @@ type SavedSocialPost = {
   ignored: boolean;
 };
 
-function socialFilmTotals(
-  rows: readonly PlatformFilm[],
-  platform: string,
-  stablePlatform?: SocialPlatform,
-  savedMatches: Map<string, string> = new Map(),
-): Map<string, number> {
-  const totals = new Map<string, number>();
-  for (const row of rows) {
-    const title = (stablePlatform && row.id ? savedMatches.get(`${stablePlatform}:${row.id}`) : null)
-      ?? (stablePlatform ? matchSocialFilmId(stablePlatform, row.id) : null)
-      ?? matchSocialFilmTitle(row.title);
-    if (!title) {
-      console.warn(`OPR ${platform} film title needs matching: ${row.title.slice(0, 100)}`);
-      continue;
-    }
-    totals.set(title, (totals.get(title) ?? 0) + row.views);
-  }
-  return totals;
-}
-
 // A film with no explicit uploadDate falls back to the earliest date we can
 // verify it went live anywhere, rather than a shared placeholder — showing a
 // fabricated-looking specific date for films we don't actually have one for
@@ -985,46 +961,19 @@ async function buildSocialFilmViews(
   const ignoredPostIds = new Set(
     savedPosts.filter((row) => row.ignored).map((row) => `${row.platform}:${row.post_id}`),
   );
-  const auditedSources = {
-    facebook: socialFilmTotals(facebookFilmViews, "Facebook audit"),
-    instagram: socialFilmTotals(instagramFilmViews, "Instagram audit"),
-    tiktok: socialFilmTotals(tiktokFilmViews, "TikTok audit"),
-    youtube: socialFilmTotals(youtubeFilmViews, "YouTube audit"),
-    pinterest: socialFilmTotals(pinterestFilmImpressions, "Pinterest audit"),
-  };
-  const liveSources = {
-    facebook: socialFilmTotals(facebook?.films ?? [], "Facebook", "facebook", savedMatches),
-    instagram: socialFilmTotals(instagram?.films ?? [], "Instagram", "instagram", savedMatches),
-    tiktok: socialFilmTotals(tiktok?.films ?? [], "TikTok", "tiktok", savedMatches),
-    youtube: socialFilmTotals(youtube?.films ?? [], "YouTube", "youtube", savedMatches),
-    pinterest: socialFilmTotals(pinterest?.films ?? [], "Pinterest", "pinterest", savedMatches),
-  };
-  const savedSources = Object.fromEntries(
-    (["facebook", "instagram", "tiktok", "youtube", "pinterest"] as const).map((platform) => [
-      platform,
-      socialFilmTotals(
-        savedPosts.filter((row) => row.platform === platform && row.film_video).map((row) => ({
-          id: row.post_id,
-          title: row.post_title,
-          views: Number(row.metric_value),
-        })),
-        `${platform} saved actuals`,
-        platform,
-        savedMatches,
-      ),
-    ]),
-  ) as Record<SocialPlatform, Map<string, number>>;
-  const sources = {
-    facebook: new Map([...auditedSources.facebook, ...savedSources.facebook, ...liveSources.facebook]),
-    instagram: new Map([...auditedSources.instagram, ...savedSources.instagram, ...liveSources.instagram]),
-    tiktok: new Map([...auditedSources.tiktok, ...savedSources.tiktok, ...liveSources.tiktok]),
-    youtube: new Map([...auditedSources.youtube, ...savedSources.youtube, ...liveSources.youtube]),
-    pinterest: new Map([...auditedSources.pinterest, ...savedSources.pinterest, ...liveSources.pinterest]),
-  };
   const liveByPlatform: Record<SocialPlatform, PlatformFilm[]> = {
     facebook: facebook?.films ?? [], instagram: instagram?.films ?? [], tiktok: tiktok?.films ?? [],
     youtube: youtube?.films ?? [], pinterest: pinterest?.films ?? [],
   };
+  const sources = Object.fromEntries(
+    (Object.keys(liveByPlatform) as SocialPlatform[]).map((platform) => [platform, reconciledSocialFilmTotals(
+        platform,
+        savedPosts.filter((row) => row.platform === platform).map((row) => ({
+          id: row.post_id, title: row.post_title, views: Number(row.metric_value),
+        })),
+        liveByPlatform[platform], savedMatches, ignoredPostIds,
+      )]),
+  ) as Record<SocialPlatform, Map<string, number>>;
   const unmatched: UnmatchedSocialPost[] = [];
   const syncedRows: Array<Record<string, unknown>> = [];
   for (const [platform, rows] of Object.entries(liveByPlatform) as Array<[SocialPlatform, PlatformFilm[]]>) {

@@ -26,6 +26,6 @@ export function buildSubmissionFunnel(
     completed,
     abandonedBeforeAttempt: Math.max(0, started - attempted),
     unsuccessfulAttempts: Math.max(0, attempted - completed),
-    startToCompletionRate: started > 0 ? completed / started : null,
+    startToCompletionRate: started > 0 && completed <= started ? completed / started : null,
   };
 }

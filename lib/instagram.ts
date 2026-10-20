@@ -79,14 +79,14 @@ export async function getInstagramSummary(
         const response = await fetch(
           `https://graph.facebook.com/${GRAPH_API_VERSION}/${item.id}/insights?metric=views&access_token=${accessToken}`,
         );
-        if (!response.ok) return { id: item.id, title: item.caption ?? "Untitled video", views: 0 };
+        if (!response.ok) return null;
         const payload = await response.json();
         return {
           id: item.id,
           title: item.caption ?? "Untitled video",
           views: Number(payload.data?.[0]?.values?.[0]?.value ?? payload.data?.[0]?.total_value?.value ?? 0),
         };
-      }))).filter((film) => film.views >= 0);
+      }))).filter((film): film is { id: string; title: string; views: number } => film !== null && Number.isFinite(film.views) && film.views >= 0);
     }
 
     const summary: InstagramSummary = {

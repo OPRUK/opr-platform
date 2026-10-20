@@ -6,6 +6,19 @@ function normalise(value: string): string {
 }
 
 const aliases: Record<string, string> = {
+  "dave says it was worth the wait": "Dave & Rubble | The Leftovers",
+  "dave calls it a modest helping": "Dave & Rubble | The Portion",
+  "my mum pat actually hated cooking": "Amy & Rubble | Pat’s Haddock & Tomato Bake",
+  "a mum who hated cooking": "Amy & Rubble | Pat’s Haddock & Tomato Bake",
+  "amy remembers her mum pat": "Amy & Rubble | Pat’s Haddock & Tomato Bake",
+  "pats haddock and tomato bake amys family food story": "Amy & Rubble | Pat’s Haddock & Tomato Bake",
+  "no old photographs plenty of memories": "Robin & Rubble | Mum’s Gingerbread",
+  "some memories dont need a photograph": "Robin & Rubble | Mum’s Gingerbread",
+  "robins mums gingerbread a family food story": "Robin & Rubble | Mum’s Gingerbread",
+  "the secret was guinness": "John & Rubble | Grandad’s Steak & Ale Pie",
+  "every family recipe has its little secrets": "John & Rubble | Grandad’s Steak & Ale Pie",
+  "johns grandads steak and ale pie a family food story": "John & Rubble | Grandad’s Steak & Ale Pie",
+
   "some recipes are too important to lose": "Dave & Rubble | The Handwritten Recipe",
   "the handwritten recipe": "Dave & Rubble | The Handwritten Recipe",
   "a recipe tells you what to cook": "Dave & Rubble | The Story Behind It",
@@ -68,6 +81,27 @@ type SocialPlatform = "facebook" | "instagram" | "tiktok" | "youtube" | "pintere
 // Stable IDs are the primary match when supplied. This optional JSON map lets
 // OPR add IDs without a code release, for example:
 // {"youtube:MkSF7Ky8Ybc":"Dave & Rubble | The Handwritten Recipe"}
+const publishedPostIds: Record<string, string> = {
+  "facebook:972144875955764": "Amy & Rubble | Pat’s Haddock & Tomato Bake",
+  "instagram:4012076930433721307": "Amy & Rubble | Pat’s Haddock & Tomato Bake",
+  "instagram:DetwrYaCqPb": "Amy & Rubble | Pat’s Haddock & Tomato Bake",
+  "tiktok:7698720517422976278": "Amy & Rubble | Pat’s Haddock & Tomato Bake",
+  "youtube:8nLygxUlKSI": "Amy & Rubble | Pat’s Haddock & Tomato Bake",
+  "pinterest:1090997079025485320": "Amy & Rubble | Pat’s Haddock & Tomato Bake",
+  "facebook:1468100748496559": "Robin & Rubble | Mum’s Gingerbread",
+  "instagram:Det_NLki1_q": "Robin & Rubble | Mum’s Gingerbread",
+  "tiktok:7698749689704844566": "Robin & Rubble | Mum’s Gingerbread",
+  "youtube:k9vY-K06ctw": "Robin & Rubble | Mum’s Gingerbread",
+  "pinterest:1090997079025486914": "Robin & Rubble | Mum’s Gingerbread",
+  "facebook:2161588158102130": "John & Rubble | Grandad’s Steak & Ale Pie",
+  "instagram:4012143021331608558": "John & Rubble | Grandad’s Steak & Ale Pie",
+  "instagram:4012140825764650986": "Robin & Rubble | Mum’s Gingerbread",
+  "instagram:Det_tIWiHPu": "John & Rubble | Grandad’s Steak & Ale Pie",
+  "tiktok:7698750562623294742": "John & Rubble | Grandad’s Steak & Ale Pie",
+  "youtube:odhJL4QTMzM": "John & Rubble | Grandad’s Steak & Ale Pie",
+  "pinterest:1090997079025487112": "John & Rubble | Grandad’s Steak & Ale Pie"
+};
+
 function configuredIdAliases(): Record<string, string> {
   try {
     return JSON.parse(process.env.OPR_SOCIAL_FILM_IDS ?? "{}") as Record<string, string>;
@@ -79,7 +113,7 @@ function configuredIdAliases(): Record<string, string> {
 
 export function matchSocialFilmId(platform: SocialPlatform, id: string | undefined): string | null {
   if (!id) return null;
-  const matched = configuredIdAliases()[`${platform}:${id}`];
+  const matched = configuredIdAliases()[`${platform}:${id}`] ?? publishedPostIds[`${platform}:${id}`];
   return matched && films.some((film) => film.title === matched) ? matched : null;
 }
 
@@ -212,3 +246,30 @@ export const youtubeFilmViews = [
   { title: "Dave & Rubble | The Substitution", views: 0 },
   { title: "Dave & Rubble | Room at the Table", views: 0 },
 ] as const;
+
+export type SocialFilmMetricPost = { id?: string; title: string; views: number };
+
+// Reconcile individual posts before summing films. A partial live response must
+// not replace the cached total for a film with several posts. Each post is
+// counted once; the live value replaces its saved value rather than adding it.
+export function reconciledSocialFilmTotals(
+  platform: SocialPlatform,
+  saved: readonly SocialFilmMetricPost[],
+  live: readonly SocialFilmMetricPost[],
+  matches: ReadonlyMap<string, string> = new Map(),
+  ignored: ReadonlySet<string> = new Set(),
+): Map<string, number> {
+  const posts = new Map<string, SocialFilmMetricPost>();
+  for (const row of [...saved, ...live]) {
+    if (row.id) posts.set(row.id, row);
+  }
+  const totals = new Map<string, number>();
+  for (const row of posts.values()) {
+    const key = `${platform}:${row.id}`;
+    if (ignored.has(key)) continue;
+    const title = matches.get(key) ?? matchSocialFilmId(platform, row.id) ?? matchSocialFilmTitle(row.title);
+    if (!title || !Number.isFinite(row.views) || row.views < 0) continue;
+    totals.set(title, (totals.get(title) ?? 0) + row.views);
+  }
+  return totals;
+}

@@ -316,7 +316,11 @@ export default function AdminAnalyticsPanel({
                 <MetricCard label="Started" value={formatNumber(analytics.submissionFunnel.started)} note="Entered at least one core form field." />
                 <MetricCard label="Recipe ready" value={formatNumber(analytics.submissionFunnel.recipeReady)} note="Added a title, story, ingredients and method." />
                 <MetricCard label="Submit attempts" value={formatNumber(analytics.submissionFunnel.attempted)} note="Pressed the final share button." />
-                <MetricCard label="Completed" value={formatNumber(analytics.submissionFunnel.completed)} note={`${analytics.submissionFunnel.startToCompletionRate === null ? "No starts measured yet" : `${formatPercent(analytics.submissionFunnel.startToCompletionRate)} of starts`} completed successfully.`} />
+                <MetricCard label="Completed" value={formatNumber(analytics.submissionFunnel.completed)} note={analytics.submissionFunnel.startToCompletionRate === null
+                  ? analytics.submissionFunnel.started > 0
+                    ? "Completion rate unavailable: starts and completions have different tracking coverage."
+                    : "No starts measured yet."
+                  : `${formatPercent(analytics.submissionFunnel.startToCompletionRate)} of starts completed successfully.`} />
               </div>
               <p className="mt-5 text-sm leading-6 text-stone-600">
                 Estimated drop-off: {formatNumber(analytics.submissionFunnel.abandonedBeforeAttempt)} starts did not reach submit and {formatNumber(analytics.submissionFunnel.unsuccessfulAttempts)} attempts did not complete. These are aggregate event differences, not identified visitors.
@@ -525,8 +529,8 @@ export default function AdminAnalyticsPanel({
             <div className="mt-6 overflow-hidden rounded-3xl border border-[#DDB765]/70 bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/10">
               <div className="border-b border-[#DDB765]/60 px-6 py-5">
                 <h3 className="text-xl font-bold">Film performance by channel</h3>
-                <p className="mt-2 text-sm leading-6 text-stone-600">Every website film under one consistent name. Social columns show views; Pinterest shows impressions. LinkedIn is omitted because OPR has no LinkedIn videos.</p>
-                <p className="mt-1 text-xs text-stone-500">Dynamic channels refreshed {formatDateTime(analytics.generatedAt)}, with the {formatDateTime(analytics.pinterestAuditCapturedAt)} audit as a fallback for any pin the live API can&apos;t match.</p>
+                <p className="mt-2 text-sm leading-6 text-stone-600">Every website film under one consistent name. Social columns show views; Pinterest shows impressions. LinkedIn videos are published, but per-video LinkedIn analytics are not connected here. Missing figures are not zero views.</p>
+                <p className="mt-1 text-xs text-stone-500">Latest saved post metrics are reconciled with each successful API refresh. Cached figures can lag the platform. Historical manual audit totals are excluded.</p>
                 <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
                   <label className="w-full text-sm font-semibold text-[#6B431E] sm:w-auto">
                     <span className="block sm:inline">Show films</span>

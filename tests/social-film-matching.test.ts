@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { matchSocialFilmId, matchSocialFilmTitle } from "../lib/social-film-matching.ts";
+import { matchSocialFilmId, matchSocialFilmTitle, reconciledSocialFilmTotals } from "../lib/social-film-matching.ts";
 
 test("matches approved Pinterest aliases to canonical website film names", () => {
   assert.equal(matchSocialFilmTitle("Quality Control"), "Dave & Rubble | Quality Control");
@@ -53,4 +53,20 @@ test("stable platform IDs override inconsistent post titles", () => {
   });
   assert.equal(matchSocialFilmId("youtube", "MkSF7Ky8Ybc"), "Dave & Rubble | The Handwritten Recipe");
   delete process.env.OPR_SOCIAL_FILM_IDS;
+});
+
+
+test("matches today's contributor captions and stable IDs", () => {
+  assert.equal(matchSocialFilmTitle("“My mum Pat actually hated cooking.” ❤️"), "Amy & Rubble | Pat’s Haddock & Tomato Bake");
+  assert.equal(matchSocialFilmTitle("No old photographs. Plenty of memories. ❤️"), "Robin & Rubble | Mum’s Gingerbread");
+  assert.equal(matchSocialFilmId("tiktok", "7698750562623294742"), "John & Rubble | Grandad’s Steak & Ale Pie");
+});
+
+test("reconciles post IDs before totals, preserving posts missing from partial refreshes", () => {
+  const title = "Dave & Rubble | Quality Control";
+  const saved = [{ id: "a", title, views: 100 }, { id: "b", title, views: 200 }];
+  const live = [{ id: "a", title, views: 110 }];
+  assert.equal(reconciledSocialFilmTotals("facebook", saved, live).get(title), 310);
+  assert.equal(reconciledSocialFilmTotals("facebook", saved, live, new Map(), new Set(["facebook:a"])).get(title), 200);
+  assert.equal(reconciledSocialFilmTotals("facebook", [], [{ id: "x", title, views: NaN }]).size, 0);
 });

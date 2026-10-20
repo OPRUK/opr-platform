@@ -33,3 +33,13 @@ test("clamps aggregate drop-off estimates when historical completions exceed new
   assert.equal(funnel.unsuccessfulAttempts, 0);
   assert.equal(funnel.startToCompletionRate, null);
 });
+
+
+test("does not claim a conversion rate above 100 percent across different tracking coverage", () => {
+  const funnel = buildSubmissionFunnel([
+    { event_key: "recipe_submission_started", page_path: "/share" },
+    ...Array.from({ length: 6 }, () => ({ event_key: "recipe_submission_success", page_path: "/share" })),
+  ]);
+  assert.equal(funnel.completed, 6);
+  assert.equal(funnel.startToCompletionRate, null);
+});
