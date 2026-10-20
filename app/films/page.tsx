@@ -83,7 +83,8 @@ export default function FilmsPage() {
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {films.map((film) => {
             const recipe = film.recipeSlug ? getFeaturedRecipe(film.recipeSlug) : null;
-            const recipeHref = recipe ? `/family-cookbook/${recipe.slug}` : null;
+            const recipeHref = film.recipeLink?.href ?? (recipe ? `/family-cookbook/${recipe.slug}` : null);
+            const recipeTitle = film.recipeLink?.title ?? recipe?.title;
 
             return (
               <article
@@ -124,13 +125,13 @@ export default function FilmsPage() {
                       <div className="mt-3 whitespace-pre-wrap leading-7 text-stone-700">{film.transcript}</div>
                     </details>
                   ) : null}
-                  {recipe && recipeHref ? (
+                  {recipeTitle && recipeHref ? (
                     <TrackedLink
                       href={recipeHref}
                       eventKey="film_recipe"
                       className="mt-5 inline-flex rounded-full bg-[#123C39] px-5 py-3 font-medium text-white transition hover:scale-105 hover:bg-[#08231F]"
                     >
-                      Cook {recipe.title} →
+                      Cook {recipeTitle} →
                     </TrackedLink>
                   ) : null}
                 </div>

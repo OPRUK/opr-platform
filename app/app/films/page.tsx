@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Eyebrow } from "../_components/primitives";
 import MobileTabBar from "../_components/MobileTabBar";
 import FilmEmbed from "../../components/FilmEmbed";
@@ -20,6 +21,11 @@ export default function FilmsScreen() {
             <article key={film.video}>
               <FilmEmbed video={film.video} poster={film.poster} captions={film.captions} title={film.title} className="aspect-video w-full" />
               <h2 className="mt-3 text-[17px] font-bold leading-snug">{film.title}</h2>
+              {film.recipeLink ? (
+                <Link href={film.recipeLink.href} className="mt-4 inline-flex rounded-full bg-[#123C39] px-5 py-3 font-semibold text-white">
+                  Cook {film.recipeLink.title} →
+                </Link>
+              ) : null}
               {film.transcript ? (
                 <details className="mt-3 border-t border-[#123C39]/25 pt-3 text-base">
                   <summary className="cursor-pointer font-semibold">Read transcript</summary>
