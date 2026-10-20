@@ -3,7 +3,6 @@ import "server-only";
 import { NextRequest, NextResponse } from "next/server";
 
 const REDIRECT_URI = "https://otherpeoplesrecipes.co.uk/api/linkedin/callback";
-const SETUP_STATE = "opr-linkedin-setup";
 
 function htmlResponse(body: string, status = 200) {
   return new NextResponse(body, {
@@ -38,7 +37,8 @@ export async function GET(request: NextRequest) {
       400,
     );
   }
-  if (state !== SETUP_STATE) {
+  const expectedState = request.cookies.get("opr_linkedin_oauth_state")?.value;
+  if (!state || !expectedState || state !== expectedState) {
     return htmlResponse("<p>LinkedIn authorization state did not match.</p>", 400);
   }
   if (!code) {
@@ -81,7 +81,7 @@ export async function GET(request: NextRequest) {
   const serializedToken = JSON.stringify(token).replaceAll("<", "\\u003c");
   const scope = String(payload.scope ?? "");
 
-  return htmlResponse(`<!doctype html>
+  const result = htmlResponse(`<!doctype html>
 <html>
   <body style="font-family: sans-serif; max-width: 40rem; margin: 3rem auto; padding: 0 1rem;">
     <h1>LinkedIn authorized</h1>
@@ -107,4 +107,6 @@ export async function GET(request: NextRequest) {
     </script>
   </body>
 </html>`);
+  result.cookies.delete({ name: "opr_linkedin_oauth_state", path: "/api/linkedin" });
+  return result;
 }

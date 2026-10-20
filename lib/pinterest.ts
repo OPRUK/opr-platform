@@ -178,6 +178,10 @@ export async function getPinterestFilmViews(
 
       const payload = await response.json();
       for (const pin of payload.items ?? []) {
+        const mediaType = String(pin.media?.media_type ?? "");
+        if (!mediaType.includes("video")) continue;
+        // The agreed generic brand cards have no corresponding website film.
+        if (/^every recipe has a story/i.test(pin.title ?? "")) continue;
         const impressions = pinterestLifetimeImpressions(pin);
         if (impressions === null) continue;
         films.push({
