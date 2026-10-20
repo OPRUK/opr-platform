@@ -46,7 +46,7 @@ function bestFilmChannel(film: AdminAnalyticsResponse["socialFilmViews"][number]
   return reported.reduce((best, current) => current[1] > best[1] ? current : best)[0];
 }
 
-function filmMetricLabel(value: number | null, unavailableLabel = "Not published") {
+function filmMetricLabel(value: number | null, unavailableLabel = "Not reported") {
   return value === null ? unavailableLabel : formatNumber(value);
 }
 
@@ -224,8 +224,8 @@ export default function AdminAnalyticsPanel({
   const connectionByPlatform = new Map(
     (analytics?.socialConnectionStatus ?? []).map((connection) => [connection.platform, connection.connected]),
   );
-  const youtubeUnavailableLabel = connectionByPlatform.get("youtube") ? "Not published" : "Awaiting connection";
-  const pinterestUnavailableLabel = connectionByPlatform.get("pinterest") ? "Not published" : "Awaiting approval";
+  const youtubeUnavailableLabel = connectionByPlatform.get("youtube") ? "Not reported" : "Connection unavailable";
+  const pinterestUnavailableLabel = connectionByPlatform.get("pinterest") ? "Not reported" : "Connection unavailable";
 
   return (
     <main id="main-content" tabIndex={-1} className="min-h-screen overflow-x-hidden bg-[#EED8B2] px-4 py-6 text-[#123C39] sm:px-5 sm:py-8 md:px-10 md:py-10">
@@ -541,7 +541,7 @@ export default function AdminAnalyticsPanel({
                       <option value="highest">Highest performing</option>
                     </select>
                   </label>
-                  <p className="max-w-xl text-xs leading-5 text-stone-500">Pinterest figures are impressions, not video views, and are excluded from total social views and strongest-channel comparisons. Platform view definitions also differ.</p>
+                  <p className="max-w-xl text-xs leading-5 text-stone-500">Pinterest figures are impressions, not video views, and are excluded from total social views and strongest-channel comparisons. Platform view definitions also differ. YouTube’s processed API counts can lag Studio’s provisional figures. Totals cover reported channels only.</p>
                 </div>
               </div>
               <div className="divide-y divide-[#DDB765]/50 md:hidden">

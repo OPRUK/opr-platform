@@ -82,6 +82,7 @@ type SocialPlatform = "facebook" | "instagram" | "tiktok" | "youtube" | "pintere
 // OPR add IDs without a code release, for example:
 // {"youtube:MkSF7Ky8Ybc":"Dave & Rubble | The Handwritten Recipe"}
 const publishedPostIds: Record<string, string> = {
+  "tiktok:7695098233483300118": "Dave & Rubble | The Finishing Touch",
   "facebook:972144875955764": "Amy & Rubble | Pat’s Haddock & Tomato Bake",
   "instagram:4012076930433721307": "Amy & Rubble | Pat’s Haddock & Tomato Bake",
   "instagram:DetwrYaCqPb": "Amy & Rubble | Pat’s Haddock & Tomato Bake",
