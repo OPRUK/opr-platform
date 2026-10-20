@@ -33,6 +33,7 @@ export default async function FilmWatchPage({ params }: FilmPageProps) {
 
   const slug = filmSlug(film);
   const recipe = film.recipeSlug ? getFeaturedRecipe(film.recipeSlug) : null;
+  const recipeLink = film.recipeLink ?? (recipe ? { href: `/family-cookbook/${recipe.slug}`, title: recipe.title } : null);
   const relatedFilms = getRelatedFilms(film);
   const description = filmDescription(film);
   const videoJsonLd = {
@@ -96,11 +97,11 @@ export default async function FilmWatchPage({ params }: FilmPageProps) {
           <div className="mt-6 whitespace-pre-wrap text-lg leading-8 text-stone-700">{film.transcript}</div>
         </section>
 
-        {recipe ? (
+        {recipeLink ? (
           <section className="mx-auto mt-10 max-w-3xl rounded-3xl bg-[#123C39] p-8 text-center text-white">
             <p className="text-sm uppercase tracking-[0.3em] text-amber-200">From film to table</p>
-            <h2 className="mt-3 text-3xl font-bold">Cook {recipe.title}</h2>
-            <TrackedLink href={`/family-cookbook/${recipe.slug}`} eventKey="film_recipe" className="mt-6 inline-flex rounded-full bg-[#DDB765] px-6 py-3 font-bold text-[#123C39] transition hover:bg-[#FFF3DF]">
+            <h2 className="mt-3 text-3xl font-bold">Cook {recipeLink.title}</h2>
+            <TrackedLink href={recipeLink.href} eventKey="film_recipe" className="mt-6 inline-flex rounded-full bg-[#DDB765] px-6 py-3 font-bold text-[#123C39] transition hover:bg-[#FFF3DF]">
               Open the recipe →
             </TrackedLink>
           </section>

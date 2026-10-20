@@ -12,6 +12,7 @@ export type Film = {
   transcript?: string;
   description?: string;
   recipeSlug?: string;
+  recipeLink?: { href: string; title: string };
   uploadDate?: string;
 };
 
@@ -113,7 +114,8 @@ const filmsUnordered: Film[] = [
       "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-amy-rubble-pats-haddock-tomato-bake.mp4",
       "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/posters/opr-amy-rubble-pats-haddock-tomato-bake-poster.jpg",
       "description": "Amy remembers her mum Pat through a dish made with love. People before recipes. Stories before ingredients.",
-      "transcript": "Visual description: Amy prepares Pat’s haddock and tomato bake in a home kitchen with Rubble beside her. A cream recipe title card is followed by the green and gold OPR social card.",
+      "transcript": "Amy: “My mum Pat actually hated cooking.”\nRubble: “And this is her recipe?”\nAmy: “Everything she made was delicious and always made with love.”\nRubble: “That counts.”",
+      "recipeLink": { "href": "/family-cookbook/community/45", "title": "Pat’s Haddock and Tomato Bake" },
       "uploadDate": "2026-10-20T13:10:00+01:00"
   },
   {
@@ -130,7 +132,8 @@ const filmsUnordered: Film[] = [
       "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-john-rubble-grandads-steak-ale-pie.mp4",
       "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/posters/opr-john-rubble-grandads-steak-ale-pie-poster.jpg",
       "description": "John shares his grandad’s steak and ale pie with Rubble. A family recipe and the memories that make it worth passing on.",
-      "transcript": "Visual description: John pours Guinness into a pan of steak filling. He smiles with Rubble beside him in the kitchen. A cream recipe title card is followed by the OPR social card.",
+      "transcript": "John: “Grandad always used Guinness instead of red wine.”\nRubble: “So that was his secret?”\nJohn: “Partly. He always finished the rest of the can.”\nRubble: “Clever man.”",
+      "recipeLink": { "href": "/family-cookbook/community/41", "title": "Grandad’s Steak and Ale Pie" },
       "uploadDate": "2026-10-20T13:12:00+01:00"
   },
   {
