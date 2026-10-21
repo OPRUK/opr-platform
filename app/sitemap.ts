@@ -5,10 +5,11 @@ import { recipeCollections } from "../lib/recipe-collections";
 import { filmSlug, films, filmsLastUpdated } from "../lib/films";
 import { SITE_URL } from "../lib/site";
 import { cookalongEvent } from "../lib/cookalong-event";
+import { featuredRecipePublishedAt, recipeLastModified, recipeSeoUpdatedAt } from "../lib/recipe-publication";
 
 const staticRoutes: Array<{ path: string; lastModified: string; changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"]; priority: number }> = [
   { path: "/", lastModified: "2026-10-05", changeFrequency: "monthly", priority: 1 },
-  { path: "/family-cookbook", lastModified: "2026-10-05", changeFrequency: "weekly", priority: 0.9 },
+  { path: "/family-cookbook", lastModified: recipeSeoUpdatedAt, changeFrequency: "weekly", priority: 0.9 },
   { path: "/founder", lastModified: "2026-08-01", changeFrequency: "yearly", priority: 0.5 },
   { path: "/films", lastModified: filmsLastUpdated, changeFrequency: "weekly", priority: 0.6 },
   { path: "/dave-and-rubble", lastModified: filmsLastUpdated, changeFrequency: "weekly", priority: 0.8 },
@@ -22,11 +23,6 @@ const staticRoutes: Array<{ path: string; lastModified: string; changeFrequency:
   { path: "/accessibility", lastModified: "2026-08-01", changeFrequency: "yearly", priority: 0.4 },
 ];
 
-const siteLaunchDate = new Date("2026-08-01");
-const collectionLastModified: Record<string, string> = {
-  "british-family-recipes": "2026-10-05",
-};
-
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = staticRoutes.map((route) => ({
     url: `${SITE_URL}${route.path}`,
@@ -38,7 +34,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   for (const recipe of featuredRecipes) {
     entries.push({
       url: `${SITE_URL}/family-cookbook/${recipe.slug}`,
-      lastModified: recipe.datePublished ? new Date(recipe.datePublished) : siteLaunchDate,
+      lastModified: new Date(recipeLastModified(featuredRecipePublishedAt(recipe))),
       changeFrequency: "monthly",
       priority: 0.8,
     });
@@ -47,7 +43,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   for (const collection of recipeCollections) {
     entries.push({
       url: `${SITE_URL}/family-cookbook/collections/${collection.slug}`,
-      lastModified: new Date(collectionLastModified[collection.slug] ?? "2026-09-04"),
+      lastModified: new Date(recipeSeoUpdatedAt),
       changeFrequency: "monthly",
       priority: 0.7,
     });
@@ -81,7 +77,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (recipe.id === 1) continue;
     entries.push({
       url: `${SITE_URL}/family-cookbook/community/${recipe.id}`,
-      lastModified: recipe.published_at ? new Date(recipe.published_at) : siteLaunchDate,
+      lastModified: new Date(recipeLastModified(recipe.published_at)),
       changeFrequency: "monthly",
       priority: 0.7,
     });

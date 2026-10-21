@@ -16,7 +16,9 @@ import { SITE_NAME, absoluteUrl } from "../../../lib/site";
 import { filmSlug, getFilmsForRecipe } from "../../../lib/films";
 import { getFeaturedRecipeSeo } from "../../../lib/recipe-seo";
 import { getRecipeCollectionsForRecipe } from "../../../lib/recipe-collections";
-import { buildRecipeKeywords, recipeInstructionUrl } from "../../../lib/recipe-schema";
+import { buildRecipeAuthor, buildRecipeKeywords, recipeInstructionUrl } from "../../../lib/recipe-schema";
+import { featuredRecipePublishedAt, formatRecipeDate, recipeLastModified } from "../../../lib/recipe-publication";
+import { getRecipeImageDimensions } from "../../../lib/recipe-images";
 
 export const dynamic = "force-dynamic";
 
@@ -50,15 +52,21 @@ export async function generateMetadata({
   const seo = getFeaturedRecipeSeo(recipe);
   const url = `/family-cookbook/${recipe.slug}`;
   const ogImage = `${url}/opengraph-image`;
+  const publishedAt = featuredRecipePublishedAt(recipe);
+  const authorNames = recipe.authorNames ?? [recipe.source?.author ?? recipe.contributorName].filter((name): name is string => Boolean(name));
 
   return {
     title: { absolute: seo.title },
     description: seo.description,
     alternates: { canonical: url },
+    authors: authorNames.map((name) => ({ name })),
+    robots: { index: true, follow: true, googleBot: { "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } },
     openGraph: {
       title: seo.title,
       description: seo.description,
       type: "article",
+      ...(publishedAt ? { publishedTime: publishedAt } : {}),
+      modifiedTime: recipeLastModified(publishedAt),
       url,
       images: [{ url: ogImage, width: 1200, height: 630, alt: recipe.title }],
     },
@@ -92,6 +100,10 @@ export default async function RecipePage({
   });
 
   const recipeUrl = absoluteUrl(`/family-cookbook/${recipe.slug}`);
+  const seo = getFeaturedRecipeSeo(recipe);
+  const publishedAt = featuredRecipePublishedAt(recipe);
+  const authorNames = recipe.authorNames ?? [recipe.source?.author ?? recipe.contributorName].filter((name): name is string => Boolean(name));
+  const imageDimensions = getRecipeImageDimensions(recipe.image);
   const recipeJsonLd = {
     "@context": "https://schema.org",
     "@type": "Recipe",
@@ -101,16 +113,15 @@ export default async function RecipePage({
     mainEntityOfPage: recipeUrl,
     inLanguage: "en-GB",
     image: [absoluteUrl(recipe.image)],
-    description: truncate(recipe.story, 300),
-    author: { "@type": "Person", name: recipe.source?.author ?? recipe.contributorName ?? SITE_NAME },
+    description: seo.description,
+    author: buildRecipeAuthor(authorNames, SITE_NAME, absoluteUrl("/")),
+    publisher: { "@type": "Organization", name: SITE_NAME, url: absoluteUrl("/") },
     ...(recipe.source ? { isBasedOn: recipe.source.url, creditText: `Recipe by ${recipe.source.author}, ${recipe.source.name}. Shared with OPR by ${recipe.contributorName}.` } : {}),
     ...(recipe.category ? { recipeCategory: recipe.category } : {}),
     ...(recipe.cuisine ? { recipeCuisine: recipe.cuisine } : {}),
     keywords: buildRecipeKeywords([
       recipe.title,
       `${recipe.title} recipe`,
-      recipe.category,
-      recipe.cuisine,
       recipe.place,
       "family recipe",
     ]),
@@ -130,7 +141,8 @@ export default async function RecipePage({
         ...(methodPhoto ? { image: absoluteUrl(methodPhoto.src) } : {}),
       };
     }),
-    ...(recipe.datePublished ? { datePublished: recipe.datePublished } : {}),
+    ...(publishedAt ? { datePublished: publishedAt } : {}),
+    dateModified: recipeLastModified(publishedAt),
   };
 
   const breadcrumbJsonLd = {
@@ -189,11 +201,21 @@ export default async function RecipePage({
         <p className="mt-4 text-sm uppercase tracking-[0.25em] text-stone-300">
           {recipe.place}
         </p>
+        <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-stone-200">{seo.description}</p>
         {metaStripItems.length > 0 ? (
           <p className="mt-3 text-sm uppercase tracking-[0.2em] text-amber-200">
             {metaStripItems.join(" · ")}
           </p>
         ) : null}
+        <p className="mt-4 text-sm leading-7 text-stone-300">
+          Recipe by {authorNames.join(" & ") || SITE_NAME}
+          {publishedAt ? <> · Published <time dateTime={publishedAt}>{formatRecipeDate(publishedAt)}</time></> : null}
+          {" · Updated "}<time dateTime={recipeLastModified(publishedAt)}>{formatRecipeDate(recipeLastModified(publishedAt))}</time>
+        </p>
+        <nav aria-label="Recipe sections" className="mt-5 flex flex-wrap justify-center gap-4 text-sm font-semibold text-amber-200">
+          <a href="#ingredients" className="underline underline-offset-4">Jump to ingredients</a>
+          <a href="#method" className="underline underline-offset-4">Jump to method</a>
+        </nav>
       </section>
 
       <section className="mx-auto max-w-7xl space-y-8 px-6 py-12 md:px-8 md:py-16">
@@ -251,13 +273,14 @@ export default async function RecipePage({
           ) : null}
         </article>
 
-        <aside className="recipe-card-paper w-full p-8 md:p-10">
+        <aside id="ingredients" className="recipe-card-paper w-full scroll-mt-24 p-8 md:p-10">
           <div className="mb-8 flex items-start gap-3">
             <Image
               src={recipe.image}
-              alt={recipe.title}
-              width={1200}
-              height={900}
+              alt={`Finished dish of ${recipe.title}`}
+              width={imageDimensions?.width ?? 1200}
+              height={imageDimensions?.height ?? 900}
+              sizes="(min-width: 1280px) 1088px, (min-width: 768px) calc(100vw - 144px), calc(100vw - 112px)"
               className="min-w-0 flex-1 aspect-[4/3] rounded-2xl object-cover"
             />
             <RecipeActions title={recipe.title} imageUrl={recipe.image} />
@@ -266,7 +289,7 @@ export default async function RecipePage({
         </aside>
       </section>
 
-      <section className="bg-[#FFF3DF] px-6 py-20">
+      <section id="method" className="scroll-mt-24 bg-[#FFF3DF] px-6 py-20">
         <div className="mx-auto max-w-4xl">
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
             The method

@@ -10,6 +10,7 @@ import { featuredRecipes } from "../../lib/recipes";
 import { recipeCollections } from "../../lib/recipe-collections";
 import { absoluteUrl } from "../../lib/site";
 import { supabase } from "../../lib/supabase/client";
+import { cookbookRecipeEntries } from "../../lib/cookbook-index";
 
 export const dynamic = "force-dynamic";
 
@@ -18,6 +19,7 @@ export const metadata: Metadata = {
   description:
     "Discover real family recipes passed down through generations, with the people, memories and stories behind every dish.",
   alternates: { canonical: "/family-cookbook" },
+  robots: { index: true, follow: true, googleBot: { "max-image-preview": "large" } },
   openGraph: {
     title: "Family Recipes & Traditional Home Cooking | The Living Cookbook",
     description:
@@ -71,24 +73,27 @@ async function getPublishedCommunityRecipes() {
   );
 }
 
-const cookbookJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "ItemList",
-  name: "The Living Cookbook",
-  description:
-    "Real recipes from real family kitchens, each one saved with the memory that made it matter.",
-  url: absoluteUrl("/family-cookbook"),
-  numberOfItems: recipes.length,
-  itemListElement: recipes.map((recipe, index) => ({
-    "@type": "ListItem",
-    position: index + 1,
-    name: recipe.title,
-    url: absoluteUrl(`/family-cookbook/${recipe.slug}`),
-  })),
-};
+function buildCookbookJsonLd(entries: ReturnType<typeof cookbookRecipeEntries>) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "The Living Cookbook",
+    description:
+      "Real recipes from real family kitchens, each one saved with the memory that made it matter.",
+    url: absoluteUrl("/family-cookbook"),
+    numberOfItems: entries.length,
+    itemListElement: entries.map((recipe, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: recipe.title,
+      url: absoluteUrl(recipe.href),
+    })),
+  };
+}
 
 export default async function FamilyCookbook() {
   const communityRecipes = await getPublishedCommunityRecipes();
+  const cookbookJsonLd = buildCookbookJsonLd(cookbookRecipeEntries(recipes, communityRecipes));
 
   return (
     <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] text-[#123C39]">

@@ -1,6 +1,7 @@
 type CommunityRecipeEditorialFields = {
   title: string;
   name: string;
+  category: string;
   story: string;
   ingredients: string | null;
   method: string | null;
@@ -45,6 +46,7 @@ const communityRecipeEditorialOverrides: Record<
       "You can use a mix of cod and haddock, or smoked and unsmoked haddock, but smoked haddock gives the dish the most flavour.",
   },
   47: {
+    category: "Condiment",
     name: "Georgina Hovanessian",
     story:
       "I scribbled this recipe down from a falling-apart book of recipes belonging to my mum. She had scribbled it down from her mum. It's quite an imprecise recipe, which suits our style of cooking just fine. It always turns out differently, and it is always delicious. You can be certain that in the kitchen cupboard of every family member there is an open jar of Mum's chutney and at least one in reserve. It is a staple for us. Of course, we all eat it with cheesy snacks, sides and meals, but also with sausage suppers. I've been cooking my own batches since moving to a place with two loaded apple and pear trees in the back garden. We can't possibly eat all the sour apples, and the pears fall off and smash before they are ripe, so chutney-making in autumn is a satisfying activity that keeps on giving for the rest of the year as we crack open jars months later.",

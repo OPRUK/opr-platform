@@ -14,6 +14,13 @@ export function recipeInstructionUrl(recipeUrl: string, position: number): strin
   return `${recipeUrl}#method-step-${position}`;
 }
 
+export function buildRecipeAuthor(names: string[], publisherName: string, publisherUrl: string) {
+  const people = [...new Set(names.map((name) => name.trim()).filter(Boolean))]
+    .map((name) => ({ "@type": "Person" as const, name }));
+  // An organization must not be presented as a person when a cook is unknown.
+  return people.length ? people : { "@type": "Organization" as const, name: publisherName, url: publisherUrl };
+}
+
 export function buildRecipeVideoJsonLd({
   name,
   description,

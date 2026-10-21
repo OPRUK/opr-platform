@@ -8,6 +8,7 @@ import {
   recipeCollections,
 } from "../../../../lib/recipe-collections";
 import { SITE_NAME, absoluteUrl } from "../../../../lib/site";
+import { getRecipeImageDimensions } from "../../../../lib/recipe-images";
 
 type CollectionPageProps = {
   params: Promise<{ slug: string }>;
@@ -31,6 +32,7 @@ export async function generateMetadata({
     title: { absolute: collection.metaTitle },
     description: collection.description,
     alternates: { canonical: path },
+    robots: { index: true, follow: true, googleBot: { "max-image-preview": "large" } },
     openGraph: {
       title: collection.metaTitle,
       description: collection.description,
@@ -38,7 +40,7 @@ export async function generateMetadata({
       siteName: SITE_NAME,
       locale: "en_GB",
       type: "website",
-      images: [{ url: image, width: 1200, height: 675, alt: collection.title }],
+      images: [{ url: image, ...getRecipeImageDimensions(image), alt: collection.title }],
     },
     twitter: {
       card: "summary_large_image",

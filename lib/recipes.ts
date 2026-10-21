@@ -38,6 +38,8 @@ export type FeaturedRecipe = {
   /** ISO 8601 date, e.g. "2026-01-15". Omit if unknown. */
   datePublished?: string;
   contributorName?: string;
+  /** Recipe authors, distinct from the person who submitted the family story. */
+  authorNames?: string[];
   source?: { name: string; author: string; url: string };
   /** Optional consented portrait of the contributor or family behind the recipe. */
   contributorImage?: string;
@@ -84,6 +86,31 @@ export const featuredRecipes: FeaturedRecipe[] = [
       ],
       "image": "/images/recipes/lesleys-italian-cherry-pound-cake.webp",
       "category": "Dessert or baking",
+      "cuisine": "Italian",
+      "relatedRecipeSlugs": ["robin-vaughans-gingerbread", "nana-serbs-sunday-rice-pudding"],
+      "methodPhotos": [
+        {
+                "src": "/images/recipes/lesleys-italian-cherry-pound-cake-step-2.webp",
+                "alt": "Thick pale sour-cream cake batter in a mixing bowl with a wooden spoon",
+                "title": "Fold gently for a tender crumb",
+                "caption": "Cream the butter and sugar, add the sour cream, eggs and extracts, then fold in the dry ingredients without overmixing.",
+                "step": 2
+        },
+        {
+                "src": "/images/recipes/lesleys-italian-cherry-pound-cake-step-4.webp",
+                "alt": "Pitted cherries lightly coated in flour being layered with batter in a lined loaf tin",
+                "title": "Layer the cherries through the batter",
+                "caption": "Coat the cherries with the extra flour and alternate them with thirds of the batter. Finish with the reserved cherry halves.",
+                "step": 4
+        },
+        {
+                "src": "/images/recipes/lesleys-italian-cherry-pound-cake-step-5.webp",
+                "alt": "Golden cherry loaf cake cooling in its lined tin on a wire rack, with a clean skewer beside it",
+                "title": "Check the centre, then let it cool",
+                "caption": "Bake for 65–80 minutes, until a skewer comes out clean. Leave the cake to cool for at least 30 minutes before finishing with icing sugar.",
+                "step": 5
+        }
+],
       "number": "13",
       "prepTime": "PT25M",
       "cookTime": "PT1H20M",
@@ -203,6 +230,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
   },
   {
     slug: "nana-serbs-sunday-rice-pudding",
+    authorNames: ["Nana Serb"],
     title: "Nana Serb's Sunday Rice Pudding",
     place: "Birmingham, England",
     story:
@@ -286,6 +314,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
   },
   {
     slug: "daves-butter-chicken",
+    authorNames: ["Dave"],
     title: "Dave's Butter Chicken",
     place: "New Malden, England",
     story:
@@ -383,6 +412,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
   },
   {
     slug: "barbaras-beef-casserole",
+    authorNames: ["Barbara"],
     title: "Barbara's Beef Casserole",
     place: "Swansea, Wales",
     story:
@@ -467,6 +497,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
   },
   {
     slug: "krishna-anands-baingan-ka-bharta",
+    authorNames: ["Krishna Anand"],
     title: "Krishna Anand's Baingan ka Bharta",
     place: "New Delhi, India",
     story:
@@ -845,6 +876,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
   },
   {
     slug: "phils-and-serbs-three-cheese-souffle",
+    authorNames: ["Phil", "Serb"],
     title: "Phil & Serb's Three-Cheese Soufflé",
     place: "New Malden, England",
     story:
@@ -938,6 +970,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
   },
   {
     slug: "gautam-and-shobhas-tandoori-aloo-nazakat",
+    authorNames: ["Gautam Arora", "Shobha"],
     title: "Gautam & Shobha's Tandoori Aloo Nazakat",
     place: "New Delhi, India",
     story:

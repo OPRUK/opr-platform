@@ -17,6 +17,16 @@ export type RecipeSeo = {
 };
 
 const featuredRecipeSeo: Record<string, RecipeSeo> = {
+  "lesleys-italian-cherry-pound-cake": {
+    title: "Italian Cherry Pound Cake Recipe | Shared by Lesley",
+    description:
+      "Bake a moist Italian cherry pound cake with sour cream, vanilla and almond. Shared by Lesley via Pauline, from Giada De Laurentiis’s Giadzy recipe.",
+  },
+  "robin-vaughans-gingerbread": {
+    title: "Robin Vaughan’s Gingerbread Recipe | Mum’s Family Favourite",
+    description:
+      "Bake Robin Vaughan’s mum’s moist gingerbread with golden syrup, brown sugar and ground ginger, saved from her original clipping in Mumbles, Wales.",
+  },
   "nana-serbs-sunday-rice-pudding": {
     title: "Nana Serb’s Rice Pudding Recipe | Traditional Baked Rice Pudding",
     description:

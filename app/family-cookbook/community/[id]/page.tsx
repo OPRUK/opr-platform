@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cache } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -20,7 +21,10 @@ import { communityRecipeMethodPhotos } from "../../../../lib/community-recipe-vi
 import { buildFaqPageJsonLd, communityRecipeFaqs } from "../../../../lib/recipe-faqs";
 import { SITE_NAME, absoluteUrl } from "../../../../lib/site";
 import { getCommunityRecipeSeo } from "../../../../lib/recipe-seo";
+import { formatRecipeDate, recipeLastModified } from "../../../../lib/recipe-publication";
+import { getRecipeImageDimensions } from "../../../../lib/recipe-images";
 import {
+  buildRecipeAuthor,
   buildRecipeKeywords,
   buildRecipeVideoJsonLd,
   recipeInstructionUrl,
@@ -46,6 +50,7 @@ type CommunityRecipe = {
   original_recipe_path: string | null;
   audio_story_path: string | null;
   recipe_video_path: string | null;
+  published_at: string | null;
 };
 
 function truncate(text: string, maxLength: number): string {
@@ -64,10 +69,10 @@ function splitRecipeLines(value: string | null): string[] {
     : [];
 }
 
-async function getCommunityRecipe(id: string): Promise<CommunityRecipe | null> {
+const getCommunityRecipe = cache(async (id: string): Promise<CommunityRecipe | null> => {
   const { data } = await supabase
     .from("recipe_submissions")
-    .select("id, title, name, location, category, servings, prep_time_minutes, cook_time_minutes, story, ingredients, method, cook_notes, photo_path, contributor_photo_path, original_recipe_path, audio_story_path, recipe_video_path")
+    .select("id, title, name, location, category, servings, prep_time_minutes, cook_time_minutes, story, ingredients, method, cook_notes, photo_path, contributor_photo_path, original_recipe_path, audio_story_path, recipe_video_path, published_at")
     .eq("id", id)
     .eq("is_published", true)
     .maybeSingle();
@@ -75,7 +80,7 @@ async function getCommunityRecipe(id: string): Promise<CommunityRecipe | null> {
   return data
     ? applyCommunityRecipeEditorialOverride(data as CommunityRecipe)
     : null;
-}
+});
 
 function imageUrlFor(recipe: CommunityRecipe): string | null {
   if (recipe.photo_path) {
@@ -133,17 +138,22 @@ export async function generateMetadata({
   const seo = getCommunityRecipeSeo(recipe);
   const url = `/family-cookbook/community/${recipe.id}`;
   const image = imageUrlFor(recipe);
+  const imageDimensions = image ? getRecipeImageDimensions(image) : undefined;
 
   return {
     title: { absolute: seo.title },
     description: seo.description,
     alternates: { canonical: url },
+    authors: recipe.name ? [{ name: recipe.name }] : undefined,
+    robots: { index: true, follow: true, googleBot: { "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } },
     openGraph: {
       title: seo.title,
       description: seo.description,
       type: "article",
+      ...(recipe.published_at ? { publishedTime: recipe.published_at } : {}),
+      modifiedTime: recipeLastModified(recipe.published_at),
       url,
-      images: image ? [{ url: image, width: 1200, height: 900, alt: recipe.title }] : undefined,
+      images: image ? [{ url: absoluteUrl(image), ...imageDimensions, alt: recipe.title }] : undefined,
     },
     twitter: {
       card: "summary_large_image",
@@ -178,6 +188,8 @@ export default async function CommunityRecipePage({
   const faqs = communityRecipeFaqs[recipe.id] ?? [];
 
   const recipeUrl = absoluteUrl(`/family-cookbook/community/${recipe.id}`);
+  const seo = getCommunityRecipeSeo(recipe);
+  const imageDimensions = imageUrl ? getRecipeImageDimensions(imageUrl) : undefined;
   const recipeJsonLd = {
     "@context": "https://schema.org",
     "@type": "Recipe",
@@ -186,14 +198,16 @@ export default async function CommunityRecipePage({
     url: recipeUrl,
     mainEntityOfPage: recipeUrl,
     inLanguage: "en-GB",
-    ...(imageUrl ? { image: [imageUrl] } : {}),
-    description: truncate(recipe.story, 300),
-    author: { "@type": "Person", name: recipe.name || SITE_NAME },
+    ...(imageUrl ? { image: [absoluteUrl(imageUrl)] } : {}),
+    description: seo.description,
+    author: buildRecipeAuthor([recipe.name], SITE_NAME, absoluteUrl("/")),
+    publisher: { "@type": "Organization", name: SITE_NAME, url: absoluteUrl("/") },
+    ...(recipe.published_at ? { datePublished: recipe.published_at } : {}),
+    dateModified: recipeLastModified(recipe.published_at),
     ...(recipe.category ? { recipeCategory: recipe.category } : {}),
     keywords: buildRecipeKeywords([
       recipe.title,
       `${recipe.title} recipe`,
-      recipe.category,
       recipe.location,
       "family recipe",
     ]),
@@ -263,6 +277,15 @@ export default async function CommunityRecipePage({
         <p className="text-sm uppercase tracking-[0.4em] text-amber-300">A page from the Living Cookbook</p>
         <h1 className="font-display mx-auto mt-3 max-w-4xl text-5xl font-bold leading-tight md:text-7xl">{recipe.title}</h1>
         <p className="mt-4 text-sm uppercase tracking-[0.25em] text-stone-300">Shared by {recipe.name}{recipe.location ? ` · ${recipe.location}` : ""}</p>
+        <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-stone-200">{seo.description}</p>
+        <p className="mt-4 text-sm leading-7 text-stone-300">
+          {recipe.published_at ? <>Published <time dateTime={recipe.published_at}>{formatRecipeDate(recipe.published_at)}</time>{" · "}</> : null}
+          Updated <time dateTime={recipeLastModified(recipe.published_at)}>{formatRecipeDate(recipeLastModified(recipe.published_at))}</time>
+        </p>
+        <nav aria-label="Recipe sections" className="mt-5 flex flex-wrap justify-center gap-4 text-sm font-semibold text-amber-200">
+          <a href="#ingredients" className="underline underline-offset-4">Jump to ingredients</a>
+          <a href="#method" className="underline underline-offset-4">Jump to method</a>
+        </nav>
       </section>
       <section className="mx-auto max-w-6xl space-y-6 px-4 py-8 sm:px-6 md:px-8 md:py-10">
         <article className="rounded-3xl bg-[#FFF3DF] p-6 shadow-xl shadow-[#1C5A50]/15 md:p-8">
@@ -287,15 +310,16 @@ export default async function CommunityRecipePage({
           ) : null}
           <p className="mt-7 border-t border-[#DDB765] pt-5 text-sm italic text-stone-600">Shared with the Other People&apos;s Recipes community.</p>
         </article>
-        <aside className="recipe-card-paper w-full p-5 sm:p-7 md:p-9">
+        <aside id="ingredients" className="recipe-card-paper w-full scroll-mt-24 p-5 sm:p-7 md:p-9">
           <div className="mb-6 flex flex-col gap-4 md:mb-8 md:flex-row md:items-start md:gap-3">
             {imageUrl ? (
               <Image
                 src={imageUrl}
-                alt={recipe.title}
-                width={1200}
-                height={675}
-                unoptimized
+                alt={`Finished dish of ${recipe.title}`}
+                width={imageDimensions?.width ?? 1200}
+                height={imageDimensions?.height ?? 675}
+                sizes="(min-width: 1152px) 944px, (min-width: 768px) calc(100vw - 208px), calc(100vw - 72px)"
+                unoptimized={!imageUrl.startsWith("/")}
                 className="aspect-video min-w-0 flex-1 rounded-2xl object-cover shadow-md"
               />
             ) : (
@@ -366,7 +390,7 @@ export default async function CommunityRecipePage({
           </div>
         </section>
       ) : null}
-      <section className="bg-[#FFF3DF] px-4 py-12 sm:px-6 md:py-16">
+      <section id="method" className="scroll-mt-24 bg-[#FFF3DF] px-4 py-12 sm:px-6 md:py-16">
         <div className="mx-auto max-w-4xl">
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">The method</p>
           <ol className="mt-7 space-y-4">
