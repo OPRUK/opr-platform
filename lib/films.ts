@@ -123,43 +123,43 @@ function film(
 const filmsUnordered: Film[] = [
 {
   "title": "Dave & Rubble | The Finishing Touch",
-  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-dave-and-rubble-the-finishing-touch-v1.mp4",
+  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/optimized-2026-10-21/dave-and-rubble-the-finishing-touch.mp4",
   "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/posters/opr-dave-and-rubble-the-finishing-touch-poster.jpg",
   "transcript": "That's what makes it look finished. I thought cooking it made it finished."
 },{
   "title": "Dave & Rubble | The Carrot",
-  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-dave-and-rubble-the-carrot-v1.mp4",
+  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/optimized-2026-10-21/dave-and-rubble-the-carrot.mp4",
   "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/posters/opr-dave-and-rubble-the-carrot-poster.jpg",
   "transcript": "It's about quality, not quantity. That's good, because there isn't any quantity."
 },{
   "title": "Dave & Rubble | The Simmer",
-  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-dave-and-rubble-the-simmer-v1.mp4",
+  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/optimized-2026-10-21/dave-and-rubble-the-simmer.mp4",
   "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/posters/opr-dave-and-rubble-the-simmer-poster.jpg",
   "transcript": "That is genuinely restaurant quality. Then why are we eating in the kitchen?"
 },
 {
   "title": "Dave & Rubble | The Leftovers",
-  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-dave-and-rubble-the-leftovers-v2.mp4",
+  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/optimized-2026-10-21/dave-and-rubble-the-leftovers.mp4",
   "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/posters/opr-dave-and-rubble-the-leftovers-poster.jpg",
   "transcript": "Right washing up. You missed the bit where I licked the plate. You always say that."
 },{
   "title": "Dave & Rubble | The Portion",
-  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-dave-and-rubble-the-portion-v2.mp4",
+  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/optimized-2026-10-21/dave-and-rubble-the-portion.mp4",
   "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/posters/opr-dave-and-rubble-the-portion-poster.jpg",
   "transcript": "Just a modest little helping. Modest compared to what, a wheelbarrow? I have had a long day."
 },{
   "title": "Dave & Rubble | The Garnish",
-  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-dave-and-rubble-the-garnish.mp4",
+  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/optimized-2026-10-21/dave-and-rubble-the-garnish.mp4",
   "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/posters/opr-dave-and-rubble-the-garnish-poster.jpg",
   "transcript": "Now a little garnish. Is that the bit we pretend tastes nice? It makes it look finished."
 },{
   "title": "Dave & Rubble | The Lemon",
-  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-dave-and-rubble-the-lemon.mp4",
+  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/optimized-2026-10-21/dave-and-rubble-the-lemon.mp4",
   "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/posters/opr-dave-and-rubble-the-lemon-poster.jpg",
   "transcript": "A squeeze of lemon wakes everything up. Even you. I'm already awake."
 },{
   "title": "Dave & Rubble | The First Bite",
-  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-dave-and-rubble-the-first-bite.mp4",
+  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/optimized-2026-10-21/dave-and-rubble-the-first-bite.mp4",
   "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/posters/opr-dave-and-rubble-the-first-bite-poster.jpg",
   "transcript": "That is genuinely very good. That is genuinely very good. Exactly."
 },
@@ -192,7 +192,7 @@ const filmsUnordered: Film[] = [
   },
   {
     title: "Ada & Rubble | Party Jollof",
-    video: videoUrl("/videos/opr-ada-and-rubble-party-jollof-with-audio-v2.mp4"),
+    video: videoUrl("/videos/optimized-2026-10-21/ada-and-rubble-party-jollof.mp4"),
     poster: videoUrl("/posters/opr-ada-and-rubble-party-jollof-poster.jpg"),
     transcript:
       "Ada: “Ada’s party Jollof. The smoky bit is the secret. Not for you, Rubble. Too much Scotch bonnet.”",
@@ -204,7 +204,7 @@ const filmsUnordered: Film[] = [
   },
   {
     title: "Dave & Rubble | The Timer",
-    video: videoUrl("/videos/opr-dave-and-rubble-the-timer.mp4"),
+    video: videoUrl("/videos/optimized-2026-10-21/dave-and-rubble-the-timer.mp4"),
     poster: videoUrl("/posters/opr-dave-and-rubble-the-timer-poster.jpg"),
     transcript:
       "Dave: “Twenty minutes. Then dinner.”\nRubble: “I’ve been ready since breakfast.”\nDave: “That was eight hours ago.”",
@@ -215,7 +215,7 @@ const filmsUnordered: Film[] = [
   },
   {
     title: "Dave & Rubble | Does It Mention Me?",
-    video: videoUrl("/videos/opr-dave-and-rubble-does-it-mention-me.mp4"),
+    video: videoUrl("/videos/optimized-2026-10-21/dave-and-rubble-does-it-mention-me.mp4"),
     poster: videoUrl("/posters/opr-dave-and-rubble-does-it-mention-me-poster.jpg"),
     transcript:
       "Dave: “This has been in the family for years.”\nRubble: “Does it mention me?”\nDave: “It’s from 1984.”",
@@ -226,7 +226,7 @@ const filmsUnordered: Film[] = [
   },
   {
     title: "Dave & Rubble | Taste Test",
-    video: videoUrl("/videos/opr-dave-and-rubble-taste-test.mp4"),
+    video: videoUrl("/videos/optimized-2026-10-21/dave-and-rubble-taste-test.mp4"),
     poster: videoUrl("/posters/opr-dave-and-rubble-taste-test-poster.jpg"),
     transcript:
       "Dave: “Needs a second opinion.”\nRubble: “Finally.”\nDave: “Mine.”",
@@ -237,7 +237,7 @@ const filmsUnordered: Film[] = [
   },
   {
     title: "Dave & Rubble | The Guest List",
-    video: videoUrl("/videos/opr-dave-and-rubble-the-guest-list.mp4"),
+    video: videoUrl("/videos/optimized-2026-10-21/dave-and-rubble-the-guest-list.mp4"),
     poster: "/images/opr-dave-and-rubble-the-guest-list-poster.jpg",
     captions: "/captions/opr-dave-and-rubble-the-guest-list.vtt",
     transcript:
@@ -246,7 +246,7 @@ const filmsUnordered: Film[] = [
   },
   {
     title: "Dave & Rubble | More Chicken",
-    video: videoUrl("/videos/opr-dave-and-rubble-more-chicken.mp4"),
+    video: videoUrl("/videos/optimized-2026-10-21/dave-and-rubble-more-chicken.mp4"),
     poster: "/images/opr-dave-and-rubble-more-chicken-poster.jpg",
     captions: "/captions/opr-dave-and-rubble-more-chicken.vtt",
     transcript:
@@ -255,7 +255,7 @@ const filmsUnordered: Film[] = [
   },
   {
     title: "Dave & Rubble | The Inheritance",
-    video: videoUrl("/videos/opr-dave-and-rubble-the-inheritance.mp4"),
+    video: videoUrl("/videos/optimized-2026-10-21/dave-and-rubble-the-inheritance.mp4"),
     poster: "/images/opr-dave-and-rubble-the-inheritance-poster.jpg",
     captions: "/captions/opr-dave-and-rubble-the-inheritance.vtt",
     transcript:
