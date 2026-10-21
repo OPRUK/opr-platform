@@ -114,6 +114,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
       "number": "13",
       "prepTime": "PT25M",
       "cookTime": "PT1H20M",
+      "serves": "6",
       "datePublished": "2026-10-20",
       "contributorName": "Lesley",
       "source": {
