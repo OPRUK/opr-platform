@@ -1018,7 +1018,12 @@ async function buildSocialFilmViews(
 
   const filmRows = films.map((film) => {
     const site = websiteByTitle.get(film.title);
-    const uploadDate = film.uploadDate ? filmUploadDate(film) : (youtubePublishedByTitle.get(film.title) ?? null);
+    // An older public YouTube release can predate the first documented
+    // website/asset release. Keep that earlier evidence in the admin.
+    const knownDates = [film.uploadDate ? filmUploadDate(film) : null, youtubePublishedByTitle.get(film.title)]
+      .filter((date): date is string => Boolean(date) && Number.isFinite(Date.parse(date!)))
+      .sort((a, b) => Date.parse(a) - Date.parse(b));
+    const uploadDate = knownDates[0] ?? null;
     const daysOnline = uploadDate
       ? Math.max(0, Math.floor((Date.now() - new Date(uploadDate).getTime()) / (1000 * 60 * 60 * 24)))
       : null;

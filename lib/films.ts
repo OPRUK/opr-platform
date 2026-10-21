@@ -2,6 +2,8 @@
 // Blob store so each deployment does not bundle another copy. Some poster
 // images remain in the public Supabase Storage bucket. Both /films (desktop)
 // and /app/films (mobile) read from this one list.
+import { filmEnrichment } from "./film-enrichment.ts";
+
 const storageBase = "https://gtvgjymbmtaplvxdrnln.supabase.co/storage/v1/object/public/films";
 
 export type Film = {
@@ -14,6 +16,12 @@ export type Film = {
   recipeSlug?: string;
   recipeLink?: { href: string; title: string };
   uploadDate?: string;
+  uploadDateSource?: string;
+  durationSeconds?: number;
+  width?: number;
+  height?: number;
+  posterWidth?: number;
+  posterHeight?: number;
 };
 
 const VIDEO_ORIGIN = "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com";
@@ -71,10 +79,10 @@ export function getRelatedFilms(currentFilm: Film, limit = 3): Film[] {
   return selected;
 }
 
-export const defaultFilmUploadDate = "2026-08-01T12:00:00+00:00";
+export const filmsLastUpdated = "2026-10-21";
 
 export function filmUploadDate(film: Pick<Film, "uploadDate">): string {
-  if (!film.uploadDate) return defaultFilmUploadDate;
+  if (!film.uploadDate) throw new Error("A documented film publication date is required.");
   return /^\d{4}-\d{2}-\d{2}$/.test(film.uploadDate)
     ? `${film.uploadDate}T12:00:00+00:00`
     : film.uploadDate;
@@ -82,6 +90,10 @@ export function filmUploadDate(film: Pick<Film, "uploadDate">): string {
 
 export function filmDescription(film: Pick<Film, "title" | "description">): string {
   return film.description ?? `Watch ${film.title}, a short OPR film about food, family and recipes worth passing on.`;
+}
+
+export function filmDuration(film: Pick<Film, "durationSeconds">): string | undefined {
+  return film.durationSeconds && film.durationSeconds > 0 ? `PT${film.durationSeconds}S` : undefined;
 }
 
 function film(
@@ -523,6 +535,9 @@ const filmsUnordered: Film[] = [
 // Newest first — actual publish order, not the order entries happen to sit
 // in the array above. Every page that lists films relies on this ordering
 // rather than sorting itself.
-export const films: Film[] = [...filmsUnordered].sort(
+export const films: Film[] = filmsUnordered.map((entry) => ({
+  ...entry,
+  ...filmEnrichment[filmSlug(entry)],
+})).sort(
   (a, b) => new Date(filmUploadDate(b)).getTime() - new Date(filmUploadDate(a)).getTime(),
 );

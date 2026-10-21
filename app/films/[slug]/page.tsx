@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import Navigation from "../../components/Navigation";
 import TrackedLink from "../../components/TrackedLink";
-import { filmDescription, filmSlug, films, filmUploadDate, getFilmBySlug, getRelatedFilms } from "../../../lib/films";
+import { filmDescription, filmDuration, filmSlug, films, filmUploadDate, getFilmBySlug, getRelatedFilms } from "../../../lib/films";
 import { buildMetadata } from "../../../lib/metadata";
 import { getFeaturedRecipe } from "../../../lib/recipes";
 import { absoluteUrl } from "../../../lib/site";
@@ -18,13 +18,23 @@ export async function generateMetadata({ params }: FilmPageProps): Promise<Metad
   const film = getFilmBySlug((await params).slug);
   if (!film) return {};
 
-  return buildMetadata({
+  const metadata = buildMetadata({
     title: film.title,
     absoluteTitle: true,
     description: filmDescription(film),
     path: `/films/${filmSlug(film)}`,
     image: film.poster,
   });
+  return {
+    ...metadata,
+    openGraph: {
+      ...metadata.openGraph,
+      type: "video.other",
+      images: [{ url: absoluteUrl(film.poster!), width: film.posterWidth, height: film.posterHeight, alt: film.title }],
+      videos: [{ url: absoluteUrl(film.video), secureUrl: absoluteUrl(film.video), type: "video/mp4", width: film.width, height: film.height }],
+    },
+    twitter: { card: "summary_large_image", title: film.title, description: filmDescription(film), images: [absoluteUrl(film.poster!)] },
+  };
 }
 
 export default async function FilmWatchPage({ params }: FilmPageProps) {
@@ -45,6 +55,12 @@ export default async function FilmWatchPage({ params }: FilmPageProps) {
     thumbnailUrl: [absoluteUrl(film.poster ?? "/images/recipes/barbaras-beef-casserole-wide.webp")],
     uploadDate: filmUploadDate(film),
     contentUrl: absoluteUrl(film.video),
+    duration: filmDuration(film),
+    width: film.width,
+    height: film.height,
+    isAccessibleForFree: true,
+    mainEntityOfPage: { "@type": "WebPage", "@id": absoluteUrl(`/films/${slug}`) },
+    caption: film.captions ? { "@type": "MediaObject", contentUrl: absoluteUrl(film.captions), encodingFormat: "text/vtt", inLanguage: "en-GB" } : undefined,
     transcript: film.transcript,
     inLanguage: "en-GB",
     isFamilyFriendly: true,
@@ -65,21 +81,22 @@ export default async function FilmWatchPage({ params }: FilmPageProps) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, "\\u003c") }} />
       <Navigation />
 
-      <article className="mx-auto max-w-6xl px-6 pb-24 pt-32 md:px-8">
+      <article className="mx-auto max-w-6xl px-4 pb-20 pt-28 sm:px-6 md:px-8">
         <Link href="/films" className="font-semibold text-[#1C5A50] underline decoration-[#DDB765] decoration-2 underline-offset-4">
           ← The OPR Film Collection
         </Link>
 
-        <header className="mx-auto mt-10 max-w-4xl text-center">
-          <p className="text-sm uppercase tracking-[0.35em] text-amber-800">Watch the story</p>
-          <h1 className="mt-5 font-display text-4xl font-bold leading-tight md:text-6xl">{film.title}</h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-stone-700">{description}</p>
+        <header className="mx-auto mt-4 max-w-5xl text-center">
+          <h1 className="font-display text-2xl font-bold leading-tight md:text-4xl">{film.title}</h1>
         </header>
 
-        <div className="relative mt-12 overflow-hidden rounded-3xl bg-black shadow-2xl shadow-[#123C39]/25">
+        <div style={{ width: `min(100%, ${68 * (film.width ?? 16) / (film.height ?? 9)}svh)` }} className="relative mx-auto mt-5 max-w-full overflow-hidden rounded-2xl bg-black shadow-xl shadow-[#123C39]/20">
           <video
             aria-label={film.title}
-            className="aspect-video w-full bg-black object-contain"
+            className="block h-auto w-full bg-black object-contain"
+            style={{ aspectRatio: `${film.width ?? 16} / ${film.height ?? 9}` }}
+            width={film.width}
+            height={film.height}
             controls
             playsInline
             preload="none"
@@ -91,11 +108,8 @@ export default async function FilmWatchPage({ params }: FilmPageProps) {
           </video>
         </div>
 
-        <section aria-labelledby="transcript-heading" className="mx-auto mt-12 max-w-3xl rounded-3xl bg-[#FFF3DF] p-7 shadow-lg shadow-[#1C5A50]/10 md:p-10">
-          <p className="text-sm uppercase tracking-[0.3em] text-amber-800">Accessible transcript</p>
-          <h2 id="transcript-heading" className="mt-3 text-3xl font-bold">Read the film</h2>
-          <div className="mt-6 whitespace-pre-wrap text-lg leading-8 text-stone-700">{film.transcript}</div>
-        </section>
+        <p className="mx-auto mt-5 max-w-3xl text-center text-lg leading-8 text-stone-700">{description}</p>
+        <p className="mt-3 text-center text-sm text-stone-600">{Math.ceil(film.durationSeconds ?? 0)} seconds · English captions available</p>
 
         {recipeLink ? (
           <section className="mx-auto mt-10 max-w-3xl rounded-3xl bg-[#123C39] p-8 text-center text-white">
@@ -105,7 +119,20 @@ export default async function FilmWatchPage({ params }: FilmPageProps) {
               Open the recipe →
             </TrackedLink>
           </section>
-        ) : null}
+        ) : (
+          <section className="mx-auto mt-8 max-w-3xl rounded-3xl bg-[#123C39] p-7 text-center text-white">
+            <h2 className="text-2xl font-bold">Bring a family recipe to your table</h2>
+            <p className="mt-3 leading-7">Discover the dishes and people in the Living Cookbook, or share a story of your own.</p>
+            <TrackedLink href="/family-cookbook" eventKey="film_recipe" className="mt-5 inline-flex rounded-full bg-[#DDB765] px-6 py-3 font-bold text-[#123C39]">Find a recipe to cook →</TrackedLink>
+            <Link href="/share" className="ml-4 mt-5 inline-block font-semibold underline underline-offset-4">Tell us yours</Link>
+          </section>
+        )}
+
+        <section aria-labelledby="transcript-heading" className="mx-auto mt-12 max-w-3xl rounded-3xl bg-[#FFF3DF] p-7 shadow-lg shadow-[#1C5A50]/10 md:p-10">
+          <p className="text-sm uppercase tracking-[0.3em] text-amber-800">Accessible transcript</p>
+          <h2 id="transcript-heading" className="mt-3 text-3xl font-bold">Read the film</h2>
+          <div className="mt-6 whitespace-pre-wrap text-lg leading-8 text-stone-700">{film.transcript}</div>
+        </section>
 
         {relatedFilms.length ? (
           <nav aria-labelledby="more-film-stories-heading" className="mx-auto mt-12 max-w-5xl">

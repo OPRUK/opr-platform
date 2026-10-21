@@ -25,8 +25,10 @@ export function GET() {
       <video:title>${xml(film.title)}</video:title>
       <video:description>${xml(description)}</video:description>
       <video:content_loc>${xml(absoluteUrl(film.video))}</video:content_loc>
+      <video:duration>${Math.round(film.durationSeconds ?? 0)}</video:duration>
       <video:publication_date>${xml(filmUploadDate(film))}</video:publication_date>
       <video:family_friendly>yes</video:family_friendly>
+      <video:live>no</video:live>
     </video:video>
   </url>`;
   });

@@ -43,7 +43,7 @@ test("the new Dave and Rubble films have complete website assets", () => {
       assert.equal(film.recipeSlug, "daves-butter-chicken");
     }
     assert.equal(film.uploadDate, "2026-08-20T12:00:00+00:00");
-    assert.ok(film.transcript?.startsWith("Visual description:"));
+    assert.ok(film.transcript?.includes(title === "Dave & Rubble | Butter Chicken Recipe" ? "mother-in-law" : "Ten minutes"));
     assert.ok(film.poster);
     assertHostedVideo(film.video);
     assert.ok(existsSync(resolve(`public${film.poster}`)), `${film.poster} should exist`);

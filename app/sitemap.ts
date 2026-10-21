@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { createClient } from "@supabase/supabase-js";
 import { featuredRecipes } from "../lib/recipes";
 import { recipeCollections } from "../lib/recipe-collections";
-import { filmSlug, films } from "../lib/films";
+import { filmSlug, films, filmsLastUpdated } from "../lib/films";
 import { SITE_URL } from "../lib/site";
 import { cookalongEvent } from "../lib/cookalong-event";
 
@@ -10,8 +10,8 @@ const staticRoutes: Array<{ path: string; lastModified: string; changeFrequency:
   { path: "/", lastModified: "2026-10-05", changeFrequency: "monthly", priority: 1 },
   { path: "/family-cookbook", lastModified: "2026-10-05", changeFrequency: "weekly", priority: 0.9 },
   { path: "/founder", lastModified: "2026-08-01", changeFrequency: "yearly", priority: 0.5 },
-  { path: "/films", lastModified: "2026-10-05", changeFrequency: "monthly", priority: 0.6 },
-  { path: "/dave-and-rubble", lastModified: "2026-09-22", changeFrequency: "weekly", priority: 0.8 },
+  { path: "/films", lastModified: filmsLastUpdated, changeFrequency: "weekly", priority: 0.6 },
+  { path: "/dave-and-rubble", lastModified: filmsLastUpdated, changeFrequency: "weekly", priority: 0.8 },
   ...(cookalongEvent.evergreenPage
     ? [{ path: "/live-with-dave", lastModified: cookalongEvent.lastMeaningfulUpdate, changeFrequency: "monthly" as const, priority: 0.6 }]
     : []),
@@ -56,7 +56,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   for (const film of films) {
     entries.push({
       url: `${SITE_URL}/films/${filmSlug(film)}`,
-      lastModified: film.uploadDate ? new Date(film.uploadDate) : siteLaunchDate,
+      lastModified: new Date(filmsLastUpdated),
       changeFrequency: "yearly",
       priority: 0.7,
     });
