@@ -17,6 +17,8 @@ const staticRoutes: Array<{ path: string; lastModified: string; changeFrequency:
     : []),
   { path: "/join-our-table", lastModified: "2026-10-05", changeFrequency: "monthly", priority: 0.7 },
   { path: "/share", lastModified: "2026-08-01", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/preserve-family-recipes", lastModified: "2026-10-21", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/press", lastModified: "2026-10-21", changeFrequency: "monthly", priority: 0.5 },
   { path: "/accessibility", lastModified: "2026-08-01", changeFrequency: "yearly", priority: 0.4 },
 ];
 

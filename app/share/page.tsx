@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import Navigation from "../components/Navigation";
 import RecipeForm from "./RecipeForm";
 
@@ -38,6 +39,7 @@ export default function ShareYourStory() {
       </section>
 
       <section className="mx-auto max-w-3xl px-6 py-20 md:px-8">
+        <p className="mb-8 rounded-2xl bg-[#FFF3DF] p-6 leading-7">Still gathering the story? Our <Link href="/preserve-family-recipes" className="font-semibold underline underline-offset-4">free family-recipe recording guide and worksheet</Link> can help you ask the questions, capture the cooking details and keep the person behind the dish in the story.</p>
         <RecipeForm />
       </section>
 

@@ -25,6 +25,8 @@ export default function Footer() {
             <li><Link href="/founder" className="transition hover:text-[#DDB765]">Founder</Link></li>
             <li><Link href="/family-cookbook" className="transition hover:text-[#DDB765]">Living Cookbook</Link></li>
             <li><Link href="/films" className="transition hover:text-[#DDB765]">Films</Link></li>
+            <li><Link href="/preserve-family-recipes" className="transition hover:text-[#DDB765]">Preserve a family recipe</Link></li>
+            <li><Link href="/press" className="transition hover:text-[#DDB765]">Press & community</Link></li>
           </ul>
         </div>
 
