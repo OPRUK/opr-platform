@@ -913,7 +913,7 @@ function buildFilmViews(
 }
 
 type SocialPlatform = "facebook" | "instagram" | "tiktok" | "youtube" | "pinterest";
-type PlatformFilm = { id?: string; title: string; views: number; publishedAt?: string };
+type PlatformFilm = { id?: string; title: string; views: number; publishedAt?: string; permalink?: string };
 type SavedSocialPost = {
   platform: SocialPlatform;
   post_id: string;
@@ -990,7 +990,11 @@ async function buildSocialFilmViews(
         ?? matchSocialFilmTitle(row.title);
       const matchedFilm = matchedTitle ? films.find((film) => film.title === matchedTitle) : null;
       if (!matchedFilm && !ignoredPostIds.has(`${platform}:${row.id}`)) {
-        unmatched.push({ platform, postId: row.id, title: row.title, metricValue: row.views });
+        const sourceUrl = platform === "facebook" && /^\d+$/.test(row.id)
+          ? `https://www.facebook.com/watch/?v=${row.id}`
+          : platform === "instagram" && row.permalink?.startsWith("https://www.instagram.com/")
+            ? row.permalink : undefined;
+        unmatched.push({ platform, postId: row.id, title: row.title, metricValue: row.views, sourceUrl });
       }
       syncedRows.push({
         platform,

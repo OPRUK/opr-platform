@@ -424,7 +424,11 @@ export default function AdminAnalyticsPanel({
                     return (
                       <div key={key} className="grid gap-3 rounded-2xl border border-[#DDB765]/60 bg-white/55 p-4 lg:grid-cols-[8rem_minmax(0,1fr)_minmax(16rem,1fr)_auto_auto] lg:items-center">
                         <p className="font-bold capitalize">{post.platform}</p>
-                        <p className="line-clamp-3 text-sm leading-5 text-stone-700">{post.title || "Untitled post"} · {formatNumber(post.metricValue)}</p>
+                        <div className="text-sm leading-5 text-stone-700">
+                          <p className="line-clamp-3">{post.title || "Untitled post"} · {formatNumber(post.metricValue)}</p>
+                          <p className="mt-1 break-all text-xs">Post ID: {post.postId}</p>
+                          {post.sourceUrl ? <a className="mt-1 inline-block font-semibold underline" href={post.sourceUrl} target="_blank" rel="noopener noreferrer">Review source post →</a> : null}
+                        </div>
                         <select
                           aria-label={`Match ${post.platform} post to film`}
                           value={postMatches[key] ?? ""}

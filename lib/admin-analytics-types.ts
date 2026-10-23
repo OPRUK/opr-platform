@@ -42,6 +42,7 @@ export type UnmatchedSocialPost = {
   postId: string;
   title: string;
   metricValue: number;
+  sourceUrl?: string;
 };
 
 export type SocialConnectionStatus = {

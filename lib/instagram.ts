@@ -12,7 +12,7 @@ export type InstagramSummary = {
   views28d: number;
   profileViews28d: number;
   fetchedAt: string;
-  films: Array<{ id: string; title: string; views: number }>;
+  films: Array<{ id: string; title: string; views: number; permalink?: string }>;
 };
 
 // Module-scope cache: best-effort within a warm serverless instance, not a
@@ -47,7 +47,7 @@ export async function getInstagramSummary(
         `https://graph.facebook.com/${GRAPH_API_VERSION}/${accountId}/insights?metric=views,profile_views&period=day&metric_type=total_value&since=${isoDate(startDate)}&until=${isoDate(endDate)}&access_token=${accessToken}`,
       ),
       fetch(
-        `https://graph.facebook.com/${GRAPH_API_VERSION}/${accountId}/media?fields=id,caption,media_type,media_product_type&limit=100&access_token=${accessToken}`,
+        `https://graph.facebook.com/${GRAPH_API_VERSION}/${accountId}/media?fields=id,caption,media_type,media_product_type,permalink&limit=100&access_token=${accessToken}`,
       ),
     ]);
 
@@ -69,13 +69,13 @@ export async function getInstagramSummary(
       console.error("OPR Instagram insights query failed", await insightsResponse.text());
     }
 
-    let films: Array<{ id: string; title: string; views: number }> = [];
+    let films: Array<{ id: string; title: string; views: number; permalink?: string }> = [];
     if (mediaResponse.ok) {
       const mediaPayload = await mediaResponse.json();
       const videos = (mediaPayload.data ?? []).filter((item: { media_type?: string; media_product_type?: string }) =>
         item.media_type === "VIDEO" || item.media_product_type === "REELS",
       );
-      films = (await Promise.all(videos.map(async (item: { id: string; caption?: string }) => {
+      films = (await Promise.all(videos.map(async (item: { id: string; caption?: string; permalink?: string }) => {
         const response = await fetch(
           `https://graph.facebook.com/${GRAPH_API_VERSION}/${item.id}/insights?metric=views&access_token=${accessToken}`,
         );
@@ -84,9 +84,10 @@ export async function getInstagramSummary(
         return {
           id: item.id,
           title: item.caption ?? "Untitled video",
+          permalink: item.permalink,
           views: Number(payload.data?.[0]?.values?.[0]?.value ?? payload.data?.[0]?.total_value?.value ?? 0),
         };
-      }))).filter((film): film is { id: string; title: string; views: number } => film !== null && Number.isFinite(film.views) && film.views >= 0);
+      }))).filter((film): film is NonNullable<typeof film> => film !== null && Number.isFinite(film.views) && film.views >= 0);
     }
 
     const summary: InstagramSummary = {
