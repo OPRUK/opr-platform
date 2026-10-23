@@ -79,7 +79,7 @@ export function getRelatedFilms(currentFilm: Film, limit = 3): Film[] {
   return selected;
 }
 
-export const filmsLastUpdated = "2026-10-21";
+export const filmsLastUpdated = "2026-10-23";
 
 export function filmUploadDate(film: Pick<Film, "uploadDate">): string {
   if (!film.uploadDate) throw new Error("A documented film publication date is required.");
@@ -166,7 +166,7 @@ const filmsUnordered: Film[] = [
   {
       "title": "Amy & Rubble | Pat’s Haddock & Tomato Bake",
       "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-amy-rubble-pats-haddock-tomato-bake.mp4",
-      "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/posters/opr-amy-rubble-pats-haddock-tomato-bake-poster.jpg",
+      "poster": "/images/films/opr-amy-rubble-pats-haddock-tomato-bake-poster.jpg",
       "description": "Amy remembers her mum Pat through a dish made with love. People before recipes. Stories before ingredients.",
       "transcript": "Amy: “My mum Pat actually hated cooking.”\nRubble: “And this is her recipe?”\nAmy: “Everything she made was delicious and always made with love.”\nRubble: “That counts.”",
       "recipeLink": { "href": "/family-cookbook/community/45", "title": "Pat’s Haddock and Tomato Bake" },
@@ -175,7 +175,7 @@ const filmsUnordered: Film[] = [
   {
       "title": "Robin & Rubble | Mum’s Gingerbread",
       "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-robin-rubble-mums-gingerbread.mp4",
-      "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/posters/opr-robin-rubble-mums-gingerbread-poster.jpg",
+      "poster": "/images/films/opr-robin-rubble-mums-gingerbread-poster.jpg",
       "description": "Robin remembers his mum’s gingerbread, with a little help from Rubble. Some memories don’t need a photograph.",
       "transcript": "Visual description: Robin places a square of gingerbread on the kitchen worktop. Rubble watches, and Robin holds a piece beside him. The film closes on Robin’s mum’s gingerbread title and the OPR social card.",
       "uploadDate": "2026-10-20T13:11:00+01:00",
@@ -184,7 +184,7 @@ const filmsUnordered: Film[] = [
   {
       "title": "John & Rubble | Grandad’s Steak & Ale Pie",
       "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-john-rubble-grandads-steak-ale-pie.mp4",
-      "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/posters/opr-john-rubble-grandads-steak-ale-pie-poster.jpg",
+      "poster": "/images/films/opr-john-rubble-grandads-steak-ale-pie-poster.jpg",
       "description": "John shares his grandad’s steak and ale pie with Rubble. A family recipe and the memories that make it worth passing on.",
       "transcript": "John: “Grandad always used Guinness instead of red wine.”\nRubble: “So that was his secret?”\nJohn: “Partly. He always finished the rest of the can.”\nRubble: “Clever man.”",
       "recipeLink": { "href": "/family-cookbook/community/41", "title": "Grandad’s Steak and Ale Pie" },

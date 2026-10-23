@@ -22,6 +22,7 @@ import { getPageSpeedSummary, type PageSpeedSummary } from "./pagespeed";
 import { analyticsReport } from "./analytics-report-data";
 import { loadLatestDailySnapshot, saveDailySnapshot } from "./analytics-daily-snapshots";
 import { films, filmUploadDate } from "./films";
+import { filmForReference, filmIdentity } from "./film-identity";
 import { featuredRecipes } from "./recipes";
 import { buildDashboardPriorities } from "./dashboard-priorities";
 import { buildSubmissionFunnel } from "./submission-funnel";
@@ -885,8 +886,6 @@ async function loadParticipation(
   );
 }
 
-const filmTitleByVideo = new Map(films.map((film) => [film.video, film.title]));
-
 function buildFilmViews(
   events: Array<{ event_key: string; destination: string | null }>,
 ): AnalyticsFilmSummary[] {
@@ -894,17 +893,18 @@ function buildFilmViews(
 
   for (const event of events) {
     if (event.event_key !== "film_play" && event.event_key !== "film_watched") continue;
-    if (!event.destination || !filmTitleByVideo.has(event.destination)) continue;
+    const film = filmForReference(event.destination);
+    if (!film) continue;
 
-    const existing = counts.get(event.destination) ?? { plays: 0, completions: 0 };
+    const existing = counts.get(film.video) ?? { plays: 0, completions: 0 };
     if (event.event_key === "film_play") existing.plays += 1;
     else existing.completions += 1;
-    counts.set(event.destination, existing);
+    counts.set(film.video, existing);
   }
 
   return Array.from(counts.entries())
     .map(([video, { plays, completions }]) => ({
-      title: filmTitleByVideo.get(video) ?? video,
+      title: filmForReference(video)?.title ?? video,
       video,
       plays,
       completions,
@@ -958,10 +958,9 @@ async function buildSocialFilmViews(
     .select("platform, post_id, film_video, post_title, metric_value, published_at, ignored");
   const savedPosts = savedResult.error ? [] : (savedResult.data ?? []) as SavedSocialPost[];
   if (savedResult.error) console.error("OPR saved social-film mappings could not load", savedResult.error);
-  const filmTitleByVideoPath = new Map(films.map((film) => [film.video, film.title]));
   const savedMatches = new Map(
     savedPosts.flatMap((row) => {
-      const title = row.film_video ? filmTitleByVideoPath.get(row.film_video) : null;
+      const title = filmForReference(row.film_video)?.title;
       return title ? [[`${row.platform}:${row.post_id}`, title] as const] : [];
     }),
   );
@@ -996,7 +995,7 @@ async function buildSocialFilmViews(
       syncedRows.push({
         platform,
         post_id: row.id,
-        film_video: matchedFilm?.video ?? null,
+        film_video: matchedFilm ? filmIdentity(matchedFilm) : (savedPosts.find((saved) => saved.platform === platform && saved.post_id === row.id)?.film_video ?? null),
         post_title: row.title,
         metric_value: row.views,
         published_at: row.publishedAt ?? null,

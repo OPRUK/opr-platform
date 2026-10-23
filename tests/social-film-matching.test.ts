@@ -70,3 +70,9 @@ test("reconciles post IDs before totals, preserving posts missing from partial r
   assert.equal(reconciledSocialFilmTotals("facebook", saved, live, new Map(), new Set(["facebook:a"])).get(title), 200);
   assert.equal(reconciledSocialFilmTotals("facebook", [], [{ id: "x", title, views: NaN }]).size, 0);
 });
+
+test("matches the current Meta caption openings after media replacement", () => {
+  assert.equal(matchSocialFilmTitle("Dave asked for a second opinion. Rubble was ready. Dave had other ideas. 🍲"), "Dave & Rubble | Taste Test");
+  assert.equal(matchSocialFilmTitle("A family recipe passed down for years… and Rubble still wants to know whether he made the notes."), "Dave & Rubble | Does It Mention Me?");
+  assert.equal(matchSocialFilmTitle("Rubble’s been ready for dinner since breakfast. ⏲️"), "Dave & Rubble | The Timer");
+});

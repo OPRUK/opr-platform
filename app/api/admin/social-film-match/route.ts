@@ -1,5 +1,5 @@
 import { requireAdmin } from "../../../../lib/admin-auth";
-import { films } from "../../../../lib/films";
+import { filmForReference, filmIdentity } from "../../../../lib/film-identity";
 
 export const runtime = "nodejs";
 
@@ -14,13 +14,14 @@ export async function PATCH(request: Request) {
   const postId = typeof body?.postId === "string" ? body.postId.trim() : "";
   const ignored = body?.ignored === true;
   const filmVideo = typeof body?.filmVideo === "string" ? body.filmVideo : "";
-  if (!platforms.has(platform) || !postId || (!ignored && !films.some((film) => film.video === filmVideo))) {
+  const film = filmForReference(filmVideo);
+  if (!platforms.has(platform) || !postId || (!ignored && !film)) {
     return Response.json({ error: "Choose a valid social post and OPR film." }, { status: 400 });
   }
 
   const result = await client
     .from("social_film_posts")
-    .update({ film_video: ignored ? null : filmVideo, ignored })
+    .update({ film_video: ignored || !film ? null : filmIdentity(film), ignored })
     .eq("platform", platform)
     .eq("post_id", postId);
   if (result.error) return Response.json({ error: "The post match could not be saved." }, { status: 400 });

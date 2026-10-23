@@ -66,6 +66,16 @@ export default async function FilmWatchPage({ params }: FilmPageProps) {
     isFamilyFriendly: true,
   };
 
+  const watchPageJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": absoluteUrl(`/films/${slug}`),
+    url: absoluteUrl(`/films/${slug}`),
+    name: film.title,
+    description,
+    mainEntity: { "@id": `${absoluteUrl(`/films/${slug}`)}#video` },
+  };
+
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -79,6 +89,8 @@ export default async function FilmWatchPage({ params }: FilmPageProps) {
     <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] text-[#123C39]">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(videoJsonLd).replace(/</g, "\\u003c") }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, "\\u003c") }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(watchPageJsonLd).replace(/</g, "\\u003c") }} />
+      <link rel="preload" as="image" href={film.poster} fetchPriority="high" />
       <Navigation />
 
       <article className="mx-auto max-w-6xl px-4 pb-20 pt-28 sm:px-6 md:px-8">
@@ -92,6 +104,8 @@ export default async function FilmWatchPage({ params }: FilmPageProps) {
 
         <div style={{ width: `min(100%, ${68 * (film.width ?? 16) / (film.height ?? 9)}svh)` }} className="relative mx-auto mt-5 max-w-full overflow-hidden rounded-2xl bg-black shadow-xl shadow-[#123C39]/20">
           <video
+            id="film-player"
+            src={film.video}
             aria-label={film.title}
             className="block h-auto w-full bg-black object-contain"
             style={{ aspectRatio: `${film.width ?? 16} / ${film.height ?? 9}` }}

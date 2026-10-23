@@ -6,6 +6,9 @@ function normalise(value: string): string {
 }
 
 const aliases: Record<string, string> = {
+  "dave asked for a second opinion": "Dave & Rubble | Taste Test",
+  "a family recipe passed down for years": "Dave & Rubble | Does It Mention Me?",
+  "rubbles been ready for dinner since breakfast": "Dave & Rubble | The Timer",
   "smoky celebratory and made to share": "Ada & Rubble | Party Jollof",
   "dave and rubbles taste test": "Dave & Rubble | Taste Test",
   "adas party jollof rice opr": "Ada’s Party Jollof Rice | A Recipe to Bring People Together",
