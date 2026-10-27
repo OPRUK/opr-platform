@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import DecorativeHeroVideo from "../components/DecorativeHeroVideo";
+import Image from "next/image";
 import Navigation from "../components/Navigation";
-import VideoBrandMark from "../components/VideoBrandMark";
 import TrackedLink from "../components/TrackedLink";
 import { filmSlug, films } from "../../lib/films";
 import { getFeaturedRecipe } from "../../lib/recipes";
@@ -22,12 +21,14 @@ export default function FilmsPage() {
       <Navigation />
 
       <section className="relative isolate overflow-hidden bg-[#123C39] px-6 pb-24 pt-40 text-center text-white">
-        <DecorativeHeroVideo
-          className="absolute inset-0 -z-20 h-full w-full object-cover"
-          poster="/images/recipes/barbaras-beef-casserole-wide.webp"
-          src="https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-recipe-stories-film-v2.mp4"
+        <Image
+          className="absolute inset-0 -z-20 object-cover"
+          src="/images/recipes/barbaras-beef-casserole-wide.webp"
+          alt=""
+          fill
+          sizes="100vw"
+          preload
         />
-        <VideoBrandMark />
         <div className="absolute inset-0 -z-10 bg-[#123C39]/75" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#08231F]/65 via-[#123C39]/45 to-[#08231F]/80" />
 
