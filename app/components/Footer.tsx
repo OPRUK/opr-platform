@@ -116,7 +116,7 @@ export default function Footer() {
         <div>
           <p>© {new Date().getFullYear()} Other People&apos;s Recipes. Every Recipe has a Story.</p>
           <p className="mt-2 max-w-xl text-xs leading-5 text-[#BFA77B]">
-            Other People&apos;s Recipes™ and OPR™ are trade marks of OTHER PEOPLES
+            Other People&apos;s Recipes™ and OPR® are trade marks of OTHER PEOPLES
             RECIPES LTD. UK trade mark applications pending.
           </p>
         </div>
