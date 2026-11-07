@@ -79,7 +79,7 @@ export function getRelatedFilms(currentFilm: Film, limit = 3): Film[] {
   return selected;
 }
 
-export const filmsLastUpdated = "2026-10-23";
+export const filmsLastUpdated = "2026-11-07";
 
 export function filmUploadDate(film: Pick<Film, "uploadDate">): string {
   if (!film.uploadDate) throw new Error("A documented film publication date is required.");
@@ -121,6 +121,20 @@ function film(
 }
 
 const filmsUnordered: Film[] = [
+{
+  "title": "Dave & Rubble | Missing Persons Appeal",
+  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-dave-and-rubble-missing-persons-appeal.mp4",
+  "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/posters/opr-dave-and-rubble-missing-persons-appeal-poster.jpg",
+  "description": "Dave trusts Rubble with a family recipe secret. Rubble has a different explanation for telling everyone about the chicken.",
+  "transcript": "Dave: “This recipe’s been a family secret for years.”\nRubble: “I can keep a secret.”\nDave: “You told everyone about the chicken.”\nRubble: “That was a missing persons appeal.”",
+  "captions": "/captions/dave-and-rubble-missing-persons-appeal.vtt",
+  "uploadDate": "2026-11-07T11:49:00+00:00",
+  "durationSeconds": 13,
+  "width": 720,
+  "height": 1280,
+  "posterWidth": 720,
+  "posterHeight": 1280
+},
 {
   "title": "Dave & Rubble | The Finishing Touch",
   "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/optimized-2026-10-21/dave-and-rubble-the-finishing-touch.mp4",
