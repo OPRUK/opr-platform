@@ -122,6 +122,20 @@ function film(
 
 const filmsUnordered: Film[] = [
 {
+  "title": "Dave & Rubble | The Recipe Card",
+  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-dave-and-rubble-the-recipe-card.mp4",
+  "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/posters/opr-dave-and-rubble-the-recipe-card-poster.jpg",
+  "description": "Dave reads “a good handful” from Mum’s recipe card. Rubble hopes it means chicken, then offers his verdict on the parsley.",
+  "transcript": "Dave: “Mum’s written ‘a good handful’.”\nRubble: “Of chicken?”\nDave: “Parsley.”\nRubble: “Even the best cooks make mistakes.”",
+  "captions": "/captions/dave-and-rubble-the-recipe-card.vtt",
+  "uploadDate": "2026-11-07T16:20:00+00:00",
+  "durationSeconds": 13,
+  "width": 720,
+  "height": 1280,
+  "posterWidth": 720,
+  "posterHeight": 1280
+},
+{
   "title": "Dave & Rubble | Missing Persons Appeal",
   "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-dave-and-rubble-missing-persons-appeal.mp4",
   "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/posters/opr-dave-and-rubble-missing-persons-appeal-poster.jpg",
