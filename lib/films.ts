@@ -79,7 +79,7 @@ export function getRelatedFilms(currentFilm: Film, limit = 3): Film[] {
   return selected;
 }
 
-export const filmsLastUpdated = "2026-11-07";
+export const filmsLastUpdated = "2026-11-09";
 
 export function filmUploadDate(film: Pick<Film, "uploadDate">): string {
   if (!film.uploadDate) throw new Error("A documented film publication date is required.");
@@ -121,6 +121,34 @@ function film(
 }
 
 const filmsUnordered: Film[] = [
+{
+  "title": "Dave & Rubble | The Overnight Marinade",
+  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-dave-and-rubble-the-overnight-marinade.mp4",
+  "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/posters/opr-dave-and-rubble-the-overnight-marinade-poster.jpg",
+  "description": "Dave reads that the chicken needs to be left overnight. Rubble volunteers to keep it company.",
+  "transcript": "Dave: It says leave the chicken overnight.\nRubble: On its own?\nDave: In the fridge.\nRubble: I could keep it company.",
+  "captions": "/captions/dave-and-rubble-the-overnight-marinade.vtt",
+  "uploadDate": "2026-11-09T10:00:00+00:00",
+  "durationSeconds": 13,
+  "width": 720,
+  "height": 1280,
+  "posterWidth": 720,
+  "posterHeight": 1280
+},
+{
+  "title": "Dave & Rubble | The Washing-Up",
+  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-dave-and-rubble-the-washing-up.mp4",
+  "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/posters/opr-dave-and-rubble-the-washing-up-poster.jpg",
+  "description": "Dave asks Rubble to help with the washing-up. Rubble considers the plates already done, although their methods differ.",
+  "transcript": "Dave: Your turn to wash up.\nRubble: I did the plates.\nDave: You licked them.\nRubble: We have different methods.",
+  "captions": "/captions/dave-and-rubble-the-washing-up.vtt",
+  "uploadDate": "2026-11-09T10:00:00+00:00",
+  "durationSeconds": 13,
+  "width": 720,
+  "height": 1280,
+  "posterWidth": 720,
+  "posterHeight": 1280
+},
 {
   "title": "Dave & Rubble | The Recipe Card",
   "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-dave-and-rubble-the-recipe-card.mp4",
