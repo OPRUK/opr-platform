@@ -8,7 +8,7 @@ export const metadata: Metadata = buildMetadata({
   path: "/privacy",
 });
 
-const effectiveDate = "17 August 2026";
+const effectiveDate = "9 November 2026";
 
 export default function PrivacyPolicyPage() {
   return (
@@ -41,7 +41,8 @@ export default function PrivacyPolicyPage() {
                 <li>the recipe, ingredients, method, notes and story or memory you share;</li>
                 <li>photos of a finished dish, a contributor, or an original handwritten recipe card, plus any optional audio you provide;</li>
                 <li>comments, photos or notes you share after cooking another family&apos;s recipe;</li>
-                <li>your table-signup details and marketing choices; and</li>
+                <li>your table-signup details and marketing choices;</li>
+                <li>if you accept analytics cookies, Google Analytics visit and session information, including pages viewed, referring websites, browser and device details, and approximate location; and</li>
                 <li>privacy-safe counts showing which OPR social link or campaign brought a visit and which site action was selected. These attribution records do not contain names, email addresses or a visitor identifier.</li>
               </ul>
               <p className="mt-3">Please do not include someone else&apos;s private information unless you have their permission to share it. Recipe submissions are currently for adults aged 18 and over. We do not knowingly collect recipe submissions from children.</p>
@@ -53,6 +54,7 @@ export default function PrivacyPolicyPage() {
                 <li><strong>To receive, assess, administer and contact you about a recipe submission or enquiry:</strong> this is necessary for our legitimate interests in operating OPR and responding to people who choose to contact us.</li>
                 <li><strong>To publish and celebrate a recipe, story, image or audio:</strong> we do this where you have submitted it and granted the contributor licence shown on the submission form.</li>
                 <li><strong>To send OPR news, events and invitations:</strong> we rely on your consent. You can withdraw it at any time by using the unsubscribe link in an email or contacting us.</li>
+                <li><strong>To measure visits using Google Analytics:</strong> we rely on your consent. Google’s tag loads only after acceptance. You can withdraw through Cookie settings at the bottom of any page.</li>
                 <li><strong>To keep the site secure, working and useful:</strong> we rely on our legitimate interests in running, protecting and improving OPR.</li>
                 <li><strong>To understand which OPR links lead to participation:</strong> we use privacy-safe source, campaign and action counts to improve our recipes and invitations. We do not use these records to identify individual visitors.</li>
               </ul>
@@ -69,6 +71,7 @@ export default function PrivacyPolicyPage() {
               <p className="mt-3">We use carefully selected service providers to help run OPR:</p>
               <ul className="mt-3 list-disc space-y-2 pl-6">
                 <li>Vercel, which hosts the website and provides privacy-focused website analytics;</li>
+                <li>Google, which provides Google Analytics only if you accept analytics cookies; see <a className="underline underline-offset-4" href="https://policies.google.com/privacy">Google’s Privacy Policy</a>;</li>
                 <li>Supabase, which provides our database, secure form processing and file storage;</li>
                 <li>Resend, which delivers OPR emails and manages unsubscribe requests; and</li>
                 <li>OpenAI, only when you choose to use the optional recipe-card transcription helper.</li>
@@ -100,7 +103,7 @@ export default function PrivacyPolicyPage() {
 
             <div>
               <h2 className="text-2xl font-bold text-[#123C39]">9. Cookies and changes to this notice</h2>
-              <p className="mt-3">OPR uses Vercel Web Analytics to understand aggregated page visits. We also count visits from OPR&apos;s own social links and selected actions on the site without assigning a visitor identifier. We do not use advertising, marketing or cross-site tracking cookies. Read our <a className="underline underline-offset-4" href="/cookies">Cookie Notice</a> for more information.</p>
+              <p className="mt-3">OPR uses Vercel Web Analytics to understand aggregated page visits. We also count visits from OPR&apos;s own social links and selected actions on the site without assigning a visitor identifier. With your consent, we also use Google Analytics cookies to understand visits and sessions. Google receives technical visit data; we do not intentionally send names, email addresses, recipe form contents or other directly identifying information to Analytics. Advertising features are disabled. You can reject or withdraw analytics consent through Cookie settings at the bottom of any page. Withdrawing stops future tracking; it does not automatically delete information already collected. Read our <a className="underline underline-offset-4" href="/cookies">Cookie Notice</a> for more information.</p>
               <p className="mt-3">We may update this notice when our services or legal obligations change. The effective date at the top tells you when it was last updated.</p>
             </div>
           </div>

@@ -6,6 +6,7 @@ import "./globals.css";
 import { SITE_NAME, SITE_URL, absoluteUrl } from "../lib/site";
 import AttributionCapture from "./components/AttributionCapture";
 import SiteFooter from "./components/SiteFooter";
+import AnalyticsConsent from "./components/AnalyticsConsent";
 
 const caveat = localFont({
   src: "./fonts/Caveat-Variable.ttf",
@@ -91,6 +92,7 @@ export default function RootLayout({
         <AttributionCapture />
         {children}
         <SiteFooter />
+        <AnalyticsConsent />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
