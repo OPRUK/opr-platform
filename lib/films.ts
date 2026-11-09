@@ -122,6 +122,20 @@ function film(
 
 const filmsUnordered: Film[] = [
 {
+  "title": "Dave & Rubble | The Missing Ingredient",
+  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-dave-and-rubble-the-missing-ingredient.mp4",
+  "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/posters/opr-dave-and-rubble-the-missing-ingredient-poster.jpg",
+  "description": "Mum said the secret was patience. Rubble wants to know where to buy it, and worries that they are missing an ingredient.",
+  "transcript": "Dave: Mum said the secret was patience.\nRubble: Can you buy that?\nDave: No.\nRubble: We’re missing an ingredient.",
+  "captions": "/captions/dave-and-rubble-the-missing-ingredient.vtt",
+  "uploadDate": "2026-11-09T15:25:00+00:00",
+  "durationSeconds": 13,
+  "width": 720,
+  "height": 1280,
+  "posterWidth": 720,
+  "posterHeight": 1280
+},
+{
   "title": "Dave & Rubble | The Overnight Marinade",
   "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-dave-and-rubble-the-overnight-marinade.mp4",
   "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/posters/opr-dave-and-rubble-the-overnight-marinade-poster.jpg",
