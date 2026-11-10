@@ -79,7 +79,7 @@ export function getRelatedFilms(currentFilm: Film, limit = 3): Film[] {
   return selected;
 }
 
-export const filmsLastUpdated = "2026-11-09";
+export const filmsLastUpdated = "2026-11-10";
 
 export function filmUploadDate(film: Pick<Film, "uploadDate">): string {
   if (!film.uploadDate) throw new Error("A documented film publication date is required.");
@@ -121,6 +121,20 @@ function film(
 }
 
 const filmsUnordered: Film[] = [
+{
+  "title": "Sudesh & Rubble | Butter Chicken",
+  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-sudesh-and-rubble-butter-chicken.mp4",
+  "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/posters/opr-sudesh-and-rubble-butter-chicken-poster.jpg",
+  "description": "Sudesh is cooking butter chicken for Rubble. She says his daddy makes the best, but Rubble will be the judge of that.",
+  "transcript": "Rubble: Finally, I have the master of butter chicken making me dinner tonight.\nSudesh: Rubble, your daddy makes the best butter chicken.\nRubble: I will be the judge of that.",
+  "captions": "/captions/sudesh-and-rubble-butter-chicken.vtt",
+  "uploadDate": "2026-11-10T12:37:00+00:00",
+  "durationSeconds": 13,
+  "width": 720,
+  "height": 1280,
+  "posterWidth": 720,
+  "posterHeight": 1280
+},
 {
   "title": "Dave & Rubble | The Missing Ingredient",
   "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-dave-and-rubble-the-missing-ingredient.mp4",
