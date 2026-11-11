@@ -214,8 +214,8 @@ export default async function Home() {
         <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2">
           <div className="relative min-h-[360px] overflow-hidden rounded-[2rem] shadow-2xl md:min-h-[530px]">
             <Image
-              src="/images/recipes/georginas-mums-apple-pear-chutney.webp"
-              alt="Jars of Mum's Apple/Pear Chutney"
+              src="/images/recipes/barbaras-beef-casserole-wide.webp"
+              alt="Barbara's beef casserole with rich gravy"
               fill
               sizes="(min-width: 768px) 50vw, 100vw"
               className="object-cover"
@@ -227,26 +227,26 @@ export default async function Home() {
               From the kitchen drawer
             </p>
             <h2 className="mt-5 max-w-xl text-4xl font-bold leading-tight md:text-6xl">
-              Mum&apos;s Apple/Pear Chutney
+              Barbara&apos;s Beef Casserole
             </h2>
             <div className="font-founder-hand mt-8 space-y-2 text-2xl leading-[1.35] text-[#EED8B2] md:text-3xl">
-              <p>windfall apples or pears</p>
-              <p>onions, sultanas &amp; brown sugar</p>
-              <p>vinegar, ginger &amp; garlic</p>
-              <p>simmer until thick and brown</p>
-              <p className="pl-6">spoon into prepared jars while hot</p>
+              <p>braising steak, onions &amp; carrots</p>
+              <p>dark ale &amp; beef stock</p>
+              <p>a spoonful of Bovril</p>
+              <p>simmer gently until tender</p>
+              <p className="pl-6">serve with mash and extra gravy</p>
             </div>
             <p className="font-founder-hand mt-7 text-2xl italic text-[#DDB765] md:text-3xl">
-              Label it, then let the flavours mellow.
+              Good things are worth waiting for.
             </p>
             <Link
-              href="/family-cookbook/community/47"
+              href="/family-cookbook/barbaras-beef-casserole"
               className="mt-10 inline-flex w-fit items-center rounded-full bg-[#DDB765] px-8 py-4 text-lg font-bold text-[#123C39] shadow-lg transition hover:scale-105 hover:bg-[#EED8B2]"
             >
-              Cook Mum&apos;s chutney recipe →
+              Cook Barbara&apos;s casserole →
             </Link>
             <p className="mt-5 max-w-xl text-sm italic leading-6 text-[#DABF91]">
-              A family staple, passed from Georgina&apos;s grandmother to her mum and into kitchens across the family.
+              Passed from Pat to Barbara, made her own with Bovril and always prepared the day before.
             </p>
           </div>
         </div>
