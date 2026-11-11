@@ -79,7 +79,7 @@ export function getRelatedFilms(currentFilm: Film, limit = 3): Film[] {
   return selected;
 }
 
-export const filmsLastUpdated = "2026-11-10";
+export const filmsLastUpdated = "2026-11-11";
 
 export function filmUploadDate(film: Pick<Film, "uploadDate">): string {
   if (!film.uploadDate) throw new Error("A documented film publication date is required.");
@@ -121,6 +121,20 @@ function film(
 }
 
 const filmsUnordered: Film[] = [
+{
+  "title": "The Butter Chicken Verdict | Part 2 - The Competition",
+  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-butter-chicken-verdict-part-2-the-competition.mp4",
+  "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/posters/opr-butter-chicken-verdict-part-2-the-competition-poster.jpg",
+  "description": "Dave asks who makes the best butter chicken. Rubble backs Sudesh, and she agrees he has a point. Part 2 of The Butter Chicken Verdict.",
+  "transcript": "Dave: So, who makes the best butter chicken?\nRubble: Sudesh is winning. You haven’t arrived with dinner.\nSudesh: He has a point, Dave.",
+  "captions": "/captions/the-butter-chicken-verdict-part-2-the-competition.vtt",
+  "uploadDate": "2026-11-11T14:04:00+00:00",
+  "durationSeconds": 13,
+  "width": 720,
+  "height": 1280,
+  "posterWidth": 720,
+  "posterHeight": 1280
+},
 {
   "title": "Sudesh & Rubble | Butter Chicken",
   "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-sudesh-and-rubble-butter-chicken.mp4",
