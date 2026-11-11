@@ -27,6 +27,7 @@ export default function Footer() {
             <li><Link href="/films" className="transition hover:text-[#DDB765]">Films</Link></li>
             <li><Link href="/preserve-family-recipes" className="transition hover:text-[#DDB765]">Preserve a family recipe</Link></li>
             <li><Link href="/press" className="transition hover:text-[#DDB765]">Press & community</Link></li>
+            <li><a href="https://otherpeoplescocktails.co.uk/" className="transition hover:text-[#DDB765]">Meet Other People&apos;s Cocktails</a></li>
           </ul>
         </div>
 
@@ -37,6 +38,7 @@ export default function Footer() {
           <ul className="mt-5 space-y-3 text-[#FFF3DF]">
             <li><Link href="/share" className="transition hover:text-[#DDB765]">Share your recipe</Link></li>
             <li><Link href="/join-our-table" className="transition hover:text-[#DDB765]">Join Our Table</Link></li>
+            <li><a href="https://otherpeoplescocktails.co.uk/share" className="transition hover:text-[#DDB765]">Share a cocktail with OPC</a></li>
             <li><a href="mailto:info@otherpeoplesrecipes.co.uk" className="transition hover:text-[#DDB765]">Contact OPR</a></li>
             <li className="flex flex-wrap items-center gap-4 pt-2">
               <a

@@ -113,6 +113,20 @@ export default async function Home() {
         </div>
       </section>
 
+      <section aria-labelledby="opc-launch-heading" className="bg-[#FFF3DF] px-6 py-12 md:py-16">
+        <div className="mx-auto grid max-w-6xl items-center gap-8 rounded-[2rem] border border-[#DDB765]/50 p-7 sm:p-10 md:grid-cols-[1fr_180px]">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#8D6520]">A new chapter from the OPR family</p>
+            <h2 id="opc-launch-heading" className="mt-4 font-display text-3xl font-bold leading-tight text-[#123C39] sm:text-4xl">Meet Other People&apos;s Cocktails.</h2>
+            <p className="mt-5 max-w-3xl text-lg leading-8 text-stone-700">Every cocktail has a story. Our sister community, OPC, is now open: a place for the drinks you love, the people who introduced you to them and the memories worth passing on.</p>
+            <p className="mt-3 max-w-3xl text-lg leading-8 text-stone-700">Discover cocktails and alcohol-free recipes, meet our first Cocktail of the Month, or share your own signature drink and its story. Join us at the bar.</p>
+            <a href="https://otherpeoplescocktails.co.uk/" className="mt-6 inline-flex min-h-12 items-center justify-center rounded-full bg-[#123C39] px-7 py-3 font-semibold text-[#FFF3DF] transition hover:bg-[#1C5A50]">Explore Other People&apos;s Cocktails</a>
+            <p className="mt-4 text-sm leading-6 text-stone-600">Other People&apos;s Cocktails is a trading name of OTHER PEOPLES RECIPES LTD. Alcoholic recipes are intended for adults aged 18+. Drink responsibly.</p>
+          </div>
+          <Image src="/images/opc-sister-community.svg" alt="Other People's Cocktails" width={180} height={180} className="mx-auto w-32 md:w-44" />
+        </div>
+      </section>
+
       <section className="bg-[#EED8B2] px-6 py-10 md:py-14">
         <div className="mx-auto grid max-w-6xl overflow-hidden rounded-[2rem] bg-[#FFF3DF] shadow-xl shadow-[#1C5A50]/15 md:grid-cols-[0.9fr_1.1fr]">
           <div className="relative min-h-72 md:min-h-[22rem]">
