@@ -87,7 +87,7 @@ export default function HomeRecipePoll({
               Which recipe should take the table this {results ? monthName(results.monthKey) : initialMonthName}?
             </h2>
             <p className="mt-4 max-w-2xl text-lg leading-8 text-[#EED8B2]">
-              Choose the family recipe you would most like to cook. The winning story becomes OPR&apos;s Recipe of the Month.
+              Choose the family recipe you would most like to cook. Your votes help us choose future Recipe of the Month features.
             </p>
           </div>
 
@@ -97,7 +97,7 @@ export default function HomeRecipePoll({
                 <p className="text-sm font-semibold text-[#DDB765]">Your October choice</p>
                 <p className="mt-2 text-2xl font-bold">{selectedCandidate.title}</p>
                 <p className="mt-1 text-sm text-[#EED8B2]">{selectedCandidate.place}</p>
-                <p className="mt-4 text-sm leading-6 text-[#EED8B2]">Your vote is safely recorded. Thank you for helping choose this month&apos;s recipe.</p>
+                <p className="mt-4 text-sm leading-6 text-[#EED8B2]">Your vote is safely recorded. Thank you for helping shape future features.</p>
               </div>
             ) : (
               <>

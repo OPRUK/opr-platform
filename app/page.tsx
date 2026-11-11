@@ -362,8 +362,8 @@ function RecipeOfWeekFallback() {
       <div className="mx-auto grid max-w-6xl overflow-hidden rounded-[2rem] bg-[#1C5A50] shadow-2xl md:grid-cols-2">
         <div className="relative min-h-[340px]">
           <Image
-            src="/images/recipes/robin-vaughans-gingerbread-wide.png"
-            alt="Robin Vaughan's gingerbread, cut into squares with a moist open crumb"
+            src="/images/recipes/jennifers-ginger-cream-ice.webp"
+            alt="Cream ice with small golden pieces of stem ginger in a ceramic bowl"
             fill
             sizes="(min-width: 768px) 50vw, 100vw"
             className="object-cover"
@@ -372,22 +372,22 @@ function RecipeOfWeekFallback() {
 
         <div className="flex flex-col justify-center p-9 text-[#FFF3DF] md:p-14">
           <p className="text-sm uppercase tracking-[0.35em] text-[#FFF3DF]">
-            This month&apos;s story from the OPR cookbook
+            November Recipe of the Month · OPR’s editorial choice
           </p>
           <h2 className="mt-5 text-4xl font-bold leading-tight md:text-5xl">
-            Robin Vaughan&apos;s Gingerbread
+            Jennifer&apos;s Ginger Cream Ice
           </h2>
           <p className="mt-3 text-sm uppercase tracking-[0.25em] text-[#FFF3DF]">
-            Mumbles, Wales
+            Shared by Jennifer Benyon Tinker
           </p>
           <p className="mt-7 text-lg leading-8 text-[#FFF3DF]">
-            Robin Vaughan from Mumbles shared his mum&apos;s gingerbread recipe with OPR. It is the moistest and tastiest gingerbread he remembers. There are no photographs of the original because it was usually eaten long before camera phones were even imagined.
+            A treasured no-churn cream ice, inspired by Sonia Allison’s 1968 cookbook and made Jennifer’s own with little pieces of stem ginger. No ice cream machine or freezer bowl needed.
           </p>
           <Link
-            href="/family-cookbook/robin-vaughans-gingerbread"
+            href="/family-cookbook/jennifers-ginger-cream-ice"
             className="mt-9 inline-flex w-fit items-center rounded-full bg-[#DDB765] px-7 py-4 font-medium text-[#08231F] transition hover:scale-105 hover:bg-[#DDB765]"
           >
-            Cook Robin&apos;s gingerbread →
+            Make Jennifer&apos;s ginger cream ice
           </Link>
         </div>
       </div>

@@ -58,6 +58,76 @@ export type FeaturedRecipe = {
 };
 
 export const featuredRecipes: FeaturedRecipe[] = [
+{
+  "slug": "jennifers-ginger-cream-ice",
+  "title": "Jennifer’s Ginger Cream Ice",
+  "place": "Shared by Jennifer Benyon Tinker",
+  "contributorName": "Jennifer Benyon Tinker",
+  "authorNames": [
+    "Jennifer Benyon Tinker"
+  ],
+  "story": "Jennifer bases this on the Italian Cream Ice recipe in the 1968 edition of The Dairy Book of Home Cookery by Sonia Allison. “It is a very quick and easy recipe and you can add anything you fancy to the basic recipe. It doesn’t need any fancy ice cream machine nor freezing bowls in the freezer which would never fit in most peoples’ freezers!” Her version folds small pieces of stem ginger into the cream ice once it is partly frozen, so they stay suspended rather than sinking to the bottom.",
+  "ingredients": [
+    "Yolks of 2 medium eggs (use pasteurised yolks or eggs suitable for lightly cooked recipes; see the egg note)",
+    "50 g icing sugar",
+    "300 ml double cream",
+    "2 tbsp milk",
+    "About 5 pieces stem ginger in syrup, finely chopped",
+    "A little syrup from the stem ginger jar, to taste"
+  ],
+  "method": [
+    "Chill the cream bowl and beaters in the fridge. Chop the stem ginger into small pieces; Jennifer leaves the amount and size to your taste, but avoid large pieces that will become hard when frozen.",
+    "Put the egg yolks and icing sugar in a heatproof bowl over a saucepan of gently simmering water, without letting the bowl touch the water. Beat until thick, creamy and pale straw-coloured, with a sauce-like consistency. Heat gently and do not let the mixture scramble.",
+    "Remove the bowl from the heat and continue beating until cool. Stir in a little stem ginger syrup for a gentle background flavour, leaving enough syrup in the jar to cover any remaining ginger.",
+    "Whisk the chilled cream and milk until softly stiff, taking care not to over-whisk. Fold in the cooled egg mixture.",
+    "Transfer to a freezer-safe container and cover with cling film. Freeze for at least an hour, then check the texture: it needs to be thick enough to support the ginger pieces. This is a partly frozen stage, not the final freezing time.",
+    "When the mixture is sufficiently thick, stir it with a fork and fold in the chopped stem ginger. Fit the container lid and return to the freezer until fully frozen and ready to serve."
+  ],
+  "image": "/images/recipes/jennifers-ginger-cream-ice.webp",
+  "category": "Dessert or baking",
+  "number": "14",
+  "datePublished": "2026-11-11",
+  "notes": [
+    {
+      "title": "Jennifer’s cream measure",
+      "text": "The original recipe says half a pint of double cream. Jennifer uses a carton and says anything from 300 ml to 450 ml is fine; the main ingredients list uses 300 ml."
+    },
+    {
+      "title": "Keep the ginger suspended",
+      "text": "Wait until the ice cream is partly frozen before adding the finely chopped ginger. If you add it too soon, it will sink to the bottom."
+    },
+    {
+      "title": "Make it your own",
+      "text": "Jennifer suggests replacing the stem ginger with another flavour you enjoy. For a plain version, omit the ginger and syrup and add a dessertspoon of vanilla essence."
+    },
+    {
+      "title": "Use the egg whites",
+      "text": "Jennifer suggests making meringues with the two egg whites."
+    },
+    {
+      "title": "Egg and dairy note",
+      "text": "This method gently heats the yolks without specifying a fully cooked custard temperature. Use pasteurised yolks or in-date UK hen eggs carrying the British Lion mark or Laid in Britain assurance. Use pasteurised cream and milk. This recipe contains egg and milk. Official egg guidance: https://www.gov.uk/guidance/advice-on-safe-storage-handling-and-use-of-eggs-for-catering"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "Do I need an ice cream machine?",
+      "answer": "No. Jennifer’s method uses a bowl, whisk and freezer-safe container."
+    },
+    {
+      "question": "When should I add the stem ginger?",
+      "answer": "Add it after the mixture has partly frozen and is thick enough to support the pieces. Stir with a fork, fold in the ginger and return to the freezer until fully frozen."
+    },
+    {
+      "question": "Can I use more cream?",
+      "answer": "Jennifer says a 300–450 ml carton of double cream works for her version. The main recipe quantities use 300 ml."
+    }
+  ],
+  "relatedRecipeSlugs": [
+    "nana-serbs-sunday-rice-pudding",
+    "robin-vaughans-gingerbread"
+  ]
+},
   {
       "slug": "lesleys-italian-cherry-pound-cake",
       "title": "Italian Cherry Pound Cake",
