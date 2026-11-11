@@ -59,6 +59,109 @@ export type FeaturedRecipe = {
 
 export const featuredRecipes: FeaturedRecipe[] = [
 {
+  "place": "Shared by Jennifer Benyon Tinker",
+  "contributorName": "Jennifer Benyon Tinker",
+  "datePublished": "2026-11-11",
+  "faqs": [],
+  "slug": "jennifers-tuna-fish-pie",
+  "title": "Jennifer’s Tuna Fish Pie",
+  "authorNames": [
+    "Jennifer Benyon Tinker"
+  ],
+  "number": "15",
+  "category": "Main",
+  "image": "/images/recipes/jennifers-tuna-fish-pie.webp",
+  "story": "Jennifer adapted a crab flan from the All in One Cook Book produced for Oxo & Stork, a book she has owned for more than 40 years. Crab was difficult to buy and expensive, so she substituted tinned tuna. Her version is still a family favourite.",
+  "ingredients": [
+    "225 g shortcrust pastry, homemade or ready-made",
+    "A little beaten egg or milk, for glazing",
+    "25 g slightly salted butter",
+    "20 g plain flour",
+    "1 Onion Oxo cube dissolved in 150 ml water, or Jennifer’s alternative of a vegetable stock cube in 150 ml water and finely chopped spring onions",
+    "150 ml single cream",
+    "1 tin tuna in spring water (225 g)",
+    "2 medium eggs, beaten",
+    "3 gherkins, chopped",
+    "½ tsp mustard",
+    "A pinch of cayenne pepper",
+    "Juice of ½ lemon",
+    "Salt and pepper",
+    "Grated cheese, for the top",
+    "Gherkin slices, to garnish"
+  ],
+  "method": [
+    "Heat the oven to 200°C. Roll out most of the pastry on a lightly floured board and line a 20 cm flan ring or dish. Reserve the rest for the lattice. Prick the base, line with foil and bake for 15 minutes. Remove the foil.",
+    "Melt the butter in a saucepan. If using Jennifer’s spring-onion variation, gently soften the finely chopped spring onions in it. Stir in the flour, then whisk in the stock. Bring to the boil, whisking continuously, and cook for 2–3 minutes until thick, smooth and glossy.",
+    "Remove from the heat and stir in the cream, tuna, beaten eggs, chopped gherkins, mustard, cayenne, lemon juice and seasoning. Spoon into the partly baked pastry case.",
+    "Roll out the remaining pastry and cut into strips. Arrange a lattice over the flan. Brush the strips with beaten egg or milk and sprinkle grated cheese over the top.",
+    "Return to the oven for 30–35 minutes, until the filling is set and the pastry is golden brown. Garnish the lattice windows with gherkin slices."
+  ],
+  "notes": [
+    {
+      "title": "Jennifer’s stock variation",
+      "text": "Jennifer uses a vegetable stock cube with finely chopped spring onions instead of the Onion Oxo cube. She did not specify the quantity of spring onions or grated cheese; add these to taste."
+    },
+    {
+      "title": "Serve hot or cold",
+      "text": "Jennifer serves this hot or cold. If keeping it for later, cool promptly, refrigerate within two hours and use within 48 hours. Contains fish, egg, milk and wheat; check pastry, stock and mustard labels for additional allergens."
+    }
+  ],
+  "relatedRecipeSlugs": [
+    "barbaras-beef-casserole",
+    "jennifers-ginger-cream-ice"
+  ]
+},
+{
+  "place": "Shared by Jennifer Benyon Tinker",
+  "contributorName": "Jennifer Benyon Tinker",
+  "datePublished": "2026-11-11",
+  "faqs": [],
+  "slug": "valeries-chicken-liver-pate",
+  "title": "Valerie’s Chicken Liver Pâté",
+  "authorNames": [
+    "Valerie"
+  ],
+  "number": "16",
+  "category": "Starter",
+  "image": "/images/recipes/valeries-chicken-liver-pate.webp",
+  "story": "Shared by Jennifer Benyon Tinker. Valerie was married to Jennifer’s ex-husband’s Uncle Nick. They lived in a villa high on the outskirts of Saint-Raphaël in the South of France, and later moved to Cannes Marina. Valerie was a good cook who entertained often; this is the one recipe Jennifer kept from her.",
+  "ingredients": [
+    "1 large onion, chopped",
+    "3 cloves garlic, chopped",
+    "80 g butter, divided",
+    "450 g chicken livers",
+    "50 g streaky bacon, chopped",
+    "1 bay leaf",
+    "A pinch of mixed herbs, optional",
+    "Salt and pepper",
+    "1 or more tbsp brandy, to taste"
+  ],
+  "method": [
+    "Soften the chopped onion and garlic in half the butter for about 5 minutes.",
+    "Add the chicken livers, chopped bacon, bay leaf and optional mixed herbs. Cook thoroughly: use a clean probe thermometer to check that the centre of the thickest livers reaches 70°C and stays at that temperature for at least 2 minutes. Cook the bacon through too. Do not rely on the original five-minute timing alone.",
+    "Remove and discard the bay leaf. Allow the mixture to cool briefly, then blend to your preferred coarse or smooth texture.",
+    "Melt the remaining butter and blend it in with the brandy. Season to taste. Transfer to a clean container, cool promptly and refrigerate within two hours. Serve chilled."
+  ],
+  "notes": [
+    {
+      "title": "A cooking safety update",
+      "text": "The submitted recipe says to cook the livers for a further five minutes. We have replaced that timing with a checked core temperature: 70°C for at least 2 minutes, following Food Standards Agency guidance. Chicken livers must be cooked through. https://www.food.gov.uk/safety-hygiene/cooking-your-food"
+    },
+    {
+      "title": "Jennifer’s flexible version",
+      "text": "Jennifer omits the mixed herbs and uses a stick blender. She likes being able to choose a coarse or smooth pâté. Without blending, the thoroughly cooked mixture can be served hot as a lunchtime dish."
+    },
+    {
+      "title": "Make ahead",
+      "text": "Keep refrigerated and use within 48 hours, or freeze promptly in portions. Jennifer often makes a double batch to freeze. Defrost in the fridge and use within 24 hours of fully defrosting. Contains milk; check bacon and other ingredient labels for additional allergens."
+    }
+  ],
+  "relatedRecipeSlugs": [
+    "jennifers-tuna-fish-pie",
+    "jennifers-ginger-cream-ice"
+  ]
+},
+{
   "slug": "jennifers-ginger-cream-ice",
   "title": "Jennifer’s Ginger Cream Ice",
   "place": "Shared by Jennifer Benyon Tinker",

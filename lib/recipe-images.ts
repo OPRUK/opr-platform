@@ -1,6 +1,8 @@
 // Intrinsic dimensions measured from the published finished-dish images.
 // Unknown future uploads omit social dimensions rather than claiming a ratio.
 const recipeImageDimensions: Record<string, { width: number; height: number }> = {
+  "/images/recipes/jennifers-tuna-fish-pie.webp": {width:1672,height:941},
+  "/images/recipes/valeries-chicken-liver-pate.webp": {width:1672,height:941},
   "/images/recipes/jennifers-ginger-cream-ice.webp": {width:1672,height:941},
   "/images/recipes/lesleys-italian-cherry-pound-cake.webp": {
     "width": 1200,
