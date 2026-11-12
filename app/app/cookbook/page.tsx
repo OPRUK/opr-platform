@@ -45,7 +45,7 @@ export default async function CookbookScreen() {
                     <span className="text-xs text-[#123C39]/80">{recipe.place}</span>
                   </div>
                   <div className="text-[19px] font-bold leading-tight">{recipe.title}</div>
-                  <div className="line-clamp-2 text-base opacity-80">{recipe.story}</div>
+                  <div className="text-base opacity-80">{recipe.story}</div>
                 </div>
               </Link>
             ))}
