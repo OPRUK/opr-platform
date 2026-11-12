@@ -71,7 +71,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
   "number": "15",
   "category": "Main",
   "image": "/images/recipes/jennifers-tuna-fish-pie.webp",
-  "story": "Jennifer adapted a crab flan from the All in One Cook Book produced for Oxo & Stork, a book she has owned for more than 40 years. Crab was difficult to buy and expensive, so she substituted tinned tuna. Her version is still a family favourite.",
+  "story": "This recipe is based on a crab flan recipe from the All in One Cook Book produced for Oxo & Stork. I have had it for over 40 years, so I’m not sure when it was published. Crab was difficult to buy at that time and expensive, so I substituted tinned tuna, and it is still a favourite in my family.",
   "ingredients": [
     "225 g shortcrust pastry, homemade or ready-made",
     "A little beaten egg or milk, for glazing",
@@ -124,7 +124,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
   "number": "16",
   "category": "Starter",
   "image": "/images/recipes/valeries-chicken-liver-pate.webp",
-  "story": "Shared by Jennifer Benyon Tinker. Valerie was married to Jennifer’s ex-husband’s Uncle Nick. They lived in a villa high on the outskirts of Saint-Raphaël in the South of France, and later moved to Cannes Marina. Valerie was a good cook who entertained often; this is the one recipe Jennifer kept from her.",
+  "story": "Valerie was married to my ex-husband’s uncle, Nick, and they lived in the South of France. They had a villa high up on the outskirts of Saint-Raphaël and later moved to Cannes Marina when Uncle Nick developed dementia. Valerie was a good cook and did a lot of entertaining, but unfortunately this is the only recipe I have from her.",
   "ingredients": [
     "1 large onion, chopped",
     "3 cloves garlic, chopped",
@@ -169,7 +169,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
   "authorNames": [
     "Jennifer Benyon Tinker"
   ],
-  "story": "Jennifer bases this on the Italian Cream Ice recipe in the 1968 edition of The Dairy Book of Home Cookery by Sonia Allison. “It is a very quick and easy recipe and you can add anything you fancy to the basic recipe. It doesn’t need any fancy ice cream machine nor freezing bowls in the freezer which would never fit in most peoples’ freezers!” Her version folds small pieces of stem ginger into the cream ice once it is partly frozen, so they stay suspended rather than sinking to the bottom.",
+  "story": "This is based on an Italian Cream Ice recipe published in the 1968 edition of The Dairy Book of Home Cookery by Sonia Allison. It is a very quick and easy recipe, and you can add anything you fancy to the basic recipe. It doesn’t need any fancy ice cream machine or bowls that need freezing beforehand, which would never fit in most people’s freezers!",
   "ingredients": [
     "Yolks of 2 medium eggs (use pasteurised yolks or eggs suitable for lightly cooked recipes; see the egg note)",
     "50 g icing sugar",
