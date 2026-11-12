@@ -97,21 +97,35 @@ export default async function Home() {
           </div>
         </div>
       </HomeHero>
-      <section className="px-6 py-16 text-center"><p className="text-sm uppercase tracking-[.2em]">Something good, already at home</p><h2 className="font-display my-5 text-5xl">Make me a meal.</h2><p className="mb-7 text-lg">Tell us what’s in your cupboard and fridge.</p><Link href="/make-me-a-meal" className="inline-block rounded bg-[#123C39] px-7 py-4 text-[#FFF3DF]">Make me a meal</Link></section>
-
-      <section className="at-home-cookbook-link"><p className="at-home-kicker">EVERYDAY COOKING</p><h2>At home recipes.</h2><p>100 ideas for 15 minute meals, family dinners and date night.</p><Link href="/at-home-recipes">Explore At home recipes</Link></section>
-      <section className="bg-[#123C39] px-6 py-8 md:py-9">
-        <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 text-center text-[#FFF3DF] sm:flex-row sm:justify-between sm:text-left">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#DDB765]">{cookalongEvent.public.home.eyebrow}</p>
-            <p className="mt-2 text-xl font-bold leading-snug sm:text-2xl">{cookalongEvent.public.home.message}</p>
+      <section className="home-cooking" aria-label="More ways to cook with OPR">
+        <div className="home-cooking-grid">
+          <article className="home-cooking-card">
+            <Image src="/images/meal-maker/cupboard-kitchen.webp" alt="" fill sizes="(max-width: 767px) 100vw, 50vw" className="home-cooking-photo" />
+            <div className="home-cooking-copy">
+              <p className="home-cooking-eyebrow">Something good, already at home</p>
+              <h2>Make me a <em>meal.</em></h2>
+              <p>Tell us what’s in your cupboard and fridge. Find something good to cook with what you have.</p>
+              <Link href="/make-me-a-meal" className="home-cooking-button">Make me a meal</Link>
+            </div>
+          </article>
+          <article className="home-cooking-card">
+            <Image src="/images/at-home/at-home-lemon-and-pea-pasta.webp" alt="" fill sizes="(max-width: 767px) 100vw, 50vw" className="home-cooking-photo" />
+            <div className="home-cooking-copy">
+              <p className="home-cooking-eyebrow">Everyday cooking</p>
+              <h2>At home <em>recipes.</em></h2>
+              <p>100 ideas for 15 minute meals, family dinners and date night. A little inspiration for every day.</p>
+              <Link href="/at-home-recipes" className="home-cooking-button">Explore At home recipes</Link>
+            </div>
+          </article>
+        </div>
+        <div className="home-cookalong">
+          <div className="home-cookalong-photo"><Image src="/images/recipes/daves-butter-chicken-wide.webp" alt="" fill sizes="180px" /></div>
+          <div className="home-cookalong-copy">
+            <p className="home-cooking-eyebrow">{cookalongEvent.public.home.eyebrow}</p>
+            <h2>Let’s cook <em>together.</em></h2>
+            <p>{cookalongEvent.public.home.message} Join our table to hear when it’s ready.</p>
           </div>
-          <Link
-            href={cookalongEvent.cta.href}
-            className="inline-flex shrink-0 rounded-full bg-[#DDB765] px-7 py-3.5 font-bold text-[#08231F] transition hover:scale-105 hover:bg-[#DDB765]"
-          >
-            {cookalongEvent.cta.label}
-          </Link>
+          <Link href={cookalongEvent.cta.href} className="home-cooking-button">Join Our Table</Link>
         </div>
       </section>
 

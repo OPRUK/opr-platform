@@ -9,7 +9,7 @@ import { cookalongEvent } from "../lib/cookalong-event";
 import { featuredRecipePublishedAt, recipeLastModified, recipeSeoUpdatedAt } from "../lib/recipe-publication";
 
 const staticRoutes: Array<{ path: string; lastModified: string; changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"]; priority: number }> = [
-  { path: "/", lastModified: "2026-10-05", changeFrequency: "monthly", priority: 1 },
+  { path: "/", lastModified: "2026-11-12", changeFrequency: "monthly", priority: 1 },
   { path: "/family-cookbook", lastModified: recipeSeoUpdatedAt, changeFrequency: "weekly", priority: 0.9 },
   { path: "/at-home-recipes", lastModified: "2026-11-12", changeFrequency: "weekly", priority: 0.8 },
   { path: "/make-me-a-meal", lastModified: "2026-11-12", changeFrequency: "monthly", priority: 0.7 },
