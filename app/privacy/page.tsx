@@ -8,7 +8,7 @@ export const metadata: Metadata = buildMetadata({
   path: "/privacy",
 });
 
-const effectiveDate = "9 November 2026";
+const effectiveDate = "12 November 2026";
 
 export default function PrivacyPolicyPage() {
   return (
@@ -62,7 +62,8 @@ export default function PrivacyPolicyPage() {
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold text-[#123C39]">4. Optional AI recipe reader</h2>
+              <h2 className="text-2xl font-bold text-[#123C39]">4. Optional recipe tools</h2>
+              <p className="mt-3">When you use Make me a meal, the written suggestion is assembled from supported ingredients in your browser. To create cooking illustrations, we send the suggestion’s recognised ingredients, servings, dietary preference, cuisine and written method to OpenAI. Do not enter personal information. The image request is optional: you can use the written recipe even if images fail. Images stay in the current page session and are not automatically published. We store a pseudonymous network identifier and request time in our existing service database to limit image requests and control usage. These rate-limit records contain no ingredient list or generated image.</p>
               <p className="mt-3">If you select “Read my recipe with AI”, we send the image you choose to our AI provider, OpenAI, solely to create an editable draft of the title, ingredients and method. This processing happens at your request. OpenAI does not use API inputs or outputs to train its models by default, but may retain them for abuse monitoring for up to 30 days unless legally required to keep them longer. You remain responsible for checking and correcting the draft before you submit it. The tool does not make decisions about you and does not automatically publish anything.</p>
             </div>
 
@@ -74,7 +75,7 @@ export default function PrivacyPolicyPage() {
                 <li>Google, which provides Google Analytics only if you accept analytics cookies; see <a className="underline underline-offset-4" href="https://policies.google.com/privacy">Google’s Privacy Policy</a>;</li>
                 <li>Supabase, which provides our database, secure form processing and file storage;</li>
                 <li>Resend, which delivers OPR emails and manages unsubscribe requests; and</li>
-                <li>OpenAI, only when you choose to use the optional recipe-card transcription helper.</li>
+                <li>OpenAI, when you choose the recipe-card transcription helper or request cooking illustrations in Make me a meal.</li>
               </ul>
               <p className="mt-3">We require providers to handle personal information securely and only for the services they provide to us. Some providers may process information outside the UK. Where they do, we use appropriate transfer safeguards, such as an adequacy regulation or approved contractual safeguards. You can ask us for more information. We do not sell personal information.</p>
             </div>
