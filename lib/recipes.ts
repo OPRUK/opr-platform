@@ -149,7 +149,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
     },
     {
       "title": "Jennifer’s flexible version",
-      "text": "Jennifer omits the mixed herbs and uses a stick blender. She likes being able to choose a coarse or smooth pâté. Without blending, the thoroughly cooked mixture can be served hot as a lunchtime dish."
+      "text": "This is a very flexible recipe, and without blending it makes a good lunchtime dish. I do not add the mixed herbs, but that is just a personal choice. I use a stick blender, but again anything goes, and you can make it as coarse or smooth as you like. Chicken livers usually come prepacked, so again it doesn’t have to be exact. It also freezes well, so it is handy to make a double batch and put some in the freezer."
     },
     {
       "title": "Make ahead",
