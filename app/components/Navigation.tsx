@@ -13,6 +13,7 @@ export default function Navigation() {
     { href: "/founder", label: "Founder" },
     { href: "/family-cookbook", label: "Living Cookbook" },
     { href: "/films", label: "Films" },
+    { href: "/make-me-a-meal", label: "Make me a meal" },
     { href: "/live-with-dave", label: "Cook Along" },
     { href: "/join-our-table", label: "Join Our Table" },
     { href: "/share", label: "Share" },
@@ -34,7 +35,7 @@ export default function Navigation() {
         </Link>
 
         <div className="flex items-center gap-2 sm:gap-3">
-          <ul className="hidden gap-6 text-sm font-medium lg:flex">
+          <ul className="hidden gap-4 text-sm font-medium xl:flex">
             {links.map((link) => (
               <li key={link.href}>
                 <Link
@@ -52,7 +53,7 @@ export default function Navigation() {
           <button
             type="button"
             onClick={() => setMenuOpen((open) => !open)}
-            className="flex min-h-11 min-w-11 items-center justify-center rounded-lg px-2 py-2 text-[#123C39] transition hover:bg-[#EED8B2] focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#9A622A] lg:hidden"
+            className="flex min-h-11 min-w-11 items-center justify-center rounded-lg px-2 py-2 text-[#123C39] transition hover:bg-[#EED8B2] focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#9A622A] xl:hidden"
             aria-label="Toggle navigation menu"
             aria-expanded={menuOpen}
           >
@@ -70,7 +71,7 @@ export default function Navigation() {
       </nav>
 
       {menuOpen && (
-        <div className="border-t border-[#DDB765]/70 bg-[#FFF3DF] px-8 py-5 lg:hidden">
+        <div className="border-t border-[#DDB765]/70 bg-[#FFF3DF] px-8 py-5 xl:hidden">
           <ul className="space-y-4 text-base font-medium">
             {links.map((link) => (
               <li key={link.href}>

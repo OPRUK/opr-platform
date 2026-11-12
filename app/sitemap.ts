@@ -10,6 +10,7 @@ import { featuredRecipePublishedAt, recipeLastModified, recipeSeoUpdatedAt } fro
 const staticRoutes: Array<{ path: string; lastModified: string; changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"]; priority: number }> = [
   { path: "/", lastModified: "2026-10-05", changeFrequency: "monthly", priority: 1 },
   { path: "/family-cookbook", lastModified: recipeSeoUpdatedAt, changeFrequency: "weekly", priority: 0.9 },
+  { path: "/make-me-a-meal", lastModified: "2026-11-12", changeFrequency: "monthly", priority: 0.7 },
   { path: "/founder", lastModified: "2026-08-01", changeFrequency: "yearly", priority: 0.5 },
   { path: "/films", lastModified: filmsLastUpdated, changeFrequency: "weekly", priority: 0.6 },
   { path: "/dave-and-rubble", lastModified: filmsLastUpdated, changeFrequency: "weekly", priority: 0.8 },
