@@ -112,7 +112,7 @@ function truncate(text: string, maxLength: number): string {
 export function getFeaturedRecipeSeo(recipe: RecipeSeoInput): RecipeSeo {
   return featuredRecipeSeo[recipe.slug] ?? {
     title: `${recipe.title} Recipe`,
-    description: truncate(recipe.story, 155),
+    description: recipe.story,
   };
 }
 
@@ -125,7 +125,7 @@ export function getCommunityRecipeSeo(recipe: CommunityRecipeSeoInput): RecipeSe
     title: recipe.location
       ? `${fallbackTitle} | A Family Recipe from ${recipe.location}`
       : `${fallbackTitle} | A Real Family Recipe`,
-    description: truncate(recipe.story, 155),
+    description: recipe.story,
   };
 }
 
