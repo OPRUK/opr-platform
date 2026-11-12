@@ -190,10 +190,11 @@ export default async function RecipePage({
         }}
       />
       <Navigation />
+      {recipe.editorialLabel&&<Link className="at-home-back" href="/at-home-recipes">Back to At home recipes</Link>}
 
-      <section className="bg-[#123C39] px-6 pb-12 pt-32 text-center text-white">
+      <section className="bg-[#123C39] px-6 pb-12 pt-44 text-center text-white">
         <p className="mb-3 text-sm uppercase tracking-[0.4em] text-amber-300">
-          A page from the living cookbook
+          {recipe.editorialLabel || "A page from the living cookbook"}
         </p>
         <h1 className="font-display mx-auto max-w-4xl text-5xl font-bold leading-tight md:text-7xl">
           {recipe.title}
@@ -223,10 +224,10 @@ export default async function RecipePage({
           <div className={recipe.contributorImage ? "grid items-center gap-8 md:grid-cols-[minmax(0,1fr)_18rem]" : undefined}>
             <div>
               <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
-                The story
+                {recipe.editorialLabel ? "From the OPR kitchen" : "The story"}
               </p>
               <p className="mt-7 text-2xl leading-relaxed text-[#123C39]">
-                “{recipe.story}”
+                {recipe.editorialLabel ? recipe.story : <>“{recipe.story}”</>}
               </p>
               {recipe.source ? (
                 <a href={recipe.source.url} className="mt-6 inline-flex rounded-full bg-[#123C39] px-6 py-3 font-bold text-[#FFF3DF] underline underline-offset-4">
@@ -234,7 +235,7 @@ export default async function RecipePage({
                 </a>
               ) : null}
               <p className="mt-10 border-t border-[#DDB765] pt-6 text-sm italic text-stone-600">
-                {recipe.source ? `Shared by ${recipe.contributorName}, via Pauline. Recipe by ${recipe.source.author}.` : "This recipe now belongs to every family who cooks it."}
+                {recipe.editorialLabel ? "An OPR editorial recipe for home cooking. The photograph is a serving illustration." : recipe.source ? `Shared by ${recipe.contributorName}, via Pauline. Recipe by ${recipe.source.author}.` : "This recipe now belongs to every family who cooks it."}
               </p>
             </div>
             {recipe.contributorImage ? (
@@ -277,7 +278,7 @@ export default async function RecipePage({
           <div className="mb-8 flex items-start gap-3">
             <Image
               src={recipe.image}
-              alt={`Finished dish of ${recipe.title}`}
+              alt={recipe.editorialLabel ? `${recipe.title} serving illustration` : `Finished dish of ${recipe.title}`}
               width={imageDimensions?.width ?? 1200}
               height={imageDimensions?.height ?? 900}
               sizes="(min-width: 1280px) 1088px, (min-width: 768px) calc(100vw - 144px), calc(100vw - 112px)"

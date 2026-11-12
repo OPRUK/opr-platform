@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { createClient } from "@supabase/supabase-js";
+import {atHomeRecipes} from "../lib/at-home-recipes";
 import { featuredRecipes } from "../lib/recipes";
 import { recipeCollections } from "../lib/recipe-collections";
 import { filmSlug, films, filmsLastUpdated } from "../lib/films";
@@ -10,6 +11,7 @@ import { featuredRecipePublishedAt, recipeLastModified, recipeSeoUpdatedAt } fro
 const staticRoutes: Array<{ path: string; lastModified: string; changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"]; priority: number }> = [
   { path: "/", lastModified: "2026-10-05", changeFrequency: "monthly", priority: 1 },
   { path: "/family-cookbook", lastModified: recipeSeoUpdatedAt, changeFrequency: "weekly", priority: 0.9 },
+  { path: "/at-home-recipes", lastModified: "2026-11-12", changeFrequency: "weekly", priority: 0.8 },
   { path: "/make-me-a-meal", lastModified: "2026-11-12", changeFrequency: "monthly", priority: 0.7 },
   { path: "/founder", lastModified: "2026-08-01", changeFrequency: "yearly", priority: 0.5 },
   { path: "/films", lastModified: filmsLastUpdated, changeFrequency: "weekly", priority: 0.6 },
@@ -32,7 +34,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: route.priority,
   }));
 
-  for (const recipe of featuredRecipes) {
+  for (const recipe of [...featuredRecipes,...atHomeRecipes]) {
     entries.push({
       url: `${SITE_URL}/family-cookbook/${recipe.slug}`,
       lastModified: new Date(recipeLastModified(featuredRecipePublishedAt(recipe))),

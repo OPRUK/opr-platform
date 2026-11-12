@@ -99,6 +99,7 @@ export default async function Home() {
       </HomeHero>
       <section className="px-6 py-16 text-center"><p className="text-sm uppercase tracking-[.2em]">Something good, already at home</p><h2 className="font-display my-5 text-5xl">Make me a meal.</h2><p className="mb-7 text-lg">Tell us what’s in your cupboard and fridge.</p><Link href="/make-me-a-meal" className="inline-block rounded bg-[#123C39] px-7 py-4 text-[#FFF3DF]">Make me a meal</Link></section>
 
+      <section className="at-home-cookbook-link"><p className="at-home-kicker">EVERYDAY COOKING</p><h2>At home recipes.</h2><p>100 ideas for 15 minute meals, family dinners and date night.</p><Link href="/at-home-recipes">Explore At home recipes</Link></section>
       <section className="bg-[#123C39] px-6 py-8 md:py-9">
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 text-center text-[#FFF3DF] sm:flex-row sm:justify-between sm:text-left">
           <div>

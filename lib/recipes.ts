@@ -1,3 +1,4 @@
+import {atHomeRecipes} from "./at-home-recipes";
 import type { RecipeFaq } from "./recipe-faqs";
 
 // Featured recipes from the original OPR collection.
@@ -55,6 +56,8 @@ export type FeaturedRecipe = {
   methodPhotos?: RecipeMethodPhoto[];
   /** Canonical recipe slugs used for contextual internal links. */
   relatedRecipeSlugs?: string[];
+  atHomeCategory?: "15 minute"|"Family"|"Date night";
+  editorialLabel?: string;
 };
 
 export const featuredRecipes: FeaturedRecipe[] = [
@@ -1457,5 +1460,5 @@ export const featuredRecipes: FeaturedRecipe[] = [
 ];
 
 export function getFeaturedRecipe(slug: string): FeaturedRecipe | undefined {
-  return featuredRecipes.find((recipe) => recipe.slug === slug);
+  return [...featuredRecipes,...atHomeRecipes].find((recipe) => recipe.slug === slug);
 }

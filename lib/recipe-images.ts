@@ -71,5 +71,6 @@ const recipeImageDimensions: Record<string, { width: number; height: number }> =
 };
 
 export function getRecipeImageDimensions(path: string) {
+  if (path.startsWith('/images/at-home/')) return { width: 1200, height: 800 };
   return recipeImageDimensions[path];
 }

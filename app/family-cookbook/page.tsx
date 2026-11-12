@@ -104,6 +104,7 @@ export default async function FamilyCookbook() {
       />
       <Navigation />
 
+
       <section className="relative isolate overflow-hidden bg-[#123C39] px-6 pb-12 pt-40 text-center text-white">
         <Image
           className="-z-20 object-cover"
@@ -138,6 +139,7 @@ export default async function FamilyCookbook() {
           </h1>
         </div>
       </section>
+      <section className="at-home-cookbook-link"><h2>Everyday cooking, at home.</h2><p>100 recipes for 15 minute meals, family dinners and date night.</p><Link href="/at-home-recipes">Explore At home recipes</Link></section>
 
       <section className="bg-[#FFF3DF] px-6 py-12 md:px-8 md:py-16">
         <div className="mx-auto max-w-6xl">
