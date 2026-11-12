@@ -180,7 +180,7 @@ export default async function RecipeCollectionPage({ params }: CollectionPagePro
                     {recipe.title}
                   </h3>
                   <p className="mt-4 flex-1 leading-7 text-stone-700">
-                    {truncate(recipe.story, 170)}
+                    {recipe.story}
                   </p>
                   <span className="mt-5 font-semibold text-[#1C5A50] group-hover:underline">
                     Open recipe →
