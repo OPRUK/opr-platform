@@ -42,6 +42,7 @@ export default function AccessibilityControls() {
   const textSize = useSyncExternalStore(subscribeToPreferences, getTextSizeSnapshot, () => "default");
   const readableFont = useSyncExternalStore(subscribeToPreferences, getReadableFontSnapshot, () => false);
   const panelRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     document.documentElement.dataset.textSize = textSize;
@@ -52,7 +53,7 @@ export default function AccessibilityControls() {
     if (!open) return;
 
     function closeOnEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") setOpen(false);
+      if (event.key === "Escape") { setOpen(false); triggerRef.current?.focus(); }
     }
 
     function closeOnOutsideClick(event: MouseEvent) {
@@ -81,6 +82,7 @@ export default function AccessibilityControls() {
   return (
     <div ref={panelRef} className="relative shrink-0">
       <button
+        ref={triggerRef}
         type="button"
         onClick={() => setOpen((current) => !current)}
         className="flex min-h-11 min-w-11 items-center justify-center rounded-full border border-[#123C39]/35 bg-white/70 px-3 font-bold text-[#123C39] transition hover:bg-[#EED8B2] focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#9A622A]"

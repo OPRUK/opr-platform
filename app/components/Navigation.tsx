@@ -1,12 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import AccessibilityControls from "./AccessibilityControls";
 import OprBadge from "./OprBadge";
 
 export default function Navigation() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuButton = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (!menuOpen) return;
+    const close = (event: KeyboardEvent) => { if (event.key === 'Escape') { setMenuOpen(false); menuButton.current?.focus(); } };
+    document.addEventListener('keydown', close);
+    return () => document.removeEventListener('keydown', close);
+  }, [menuOpen]);
 
   const links = [
     { href: "/", label: "Home" },
@@ -21,7 +28,7 @@ export default function Navigation() {
 
   return (
     <header className="absolute top-0 left-0 z-50 w-full border-b border-[#DDB765]/70 bg-[#FFF3DF]/95 shadow-sm shadow-[#1C5A50]/10 backdrop-blur-sm">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-5 sm:px-8">
+      <nav className="mx-auto flex max-w-[1600px] items-center justify-between px-4 py-5 sm:px-8">
         <Link
           href="/"
           aria-label="Other People's Recipes home"
@@ -35,7 +42,7 @@ export default function Navigation() {
         </Link>
 
         <div className="flex items-center gap-2 sm:gap-3">
-          <ul className="hidden gap-4 text-sm font-medium xl:flex">
+          <ul className="hidden gap-4 text-sm font-medium 2xl:flex">
             {links.map((link) => (
               <li key={link.href}>
                 <Link
@@ -51,11 +58,13 @@ export default function Navigation() {
           <AccessibilityControls />
 
           <button
+            ref={menuButton}
             type="button"
             onClick={() => setMenuOpen((open) => !open)}
-            className="flex min-h-11 min-w-11 items-center justify-center rounded-lg px-2 py-2 text-[#123C39] transition hover:bg-[#EED8B2] focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#9A622A] xl:hidden"
+            className="flex min-h-11 min-w-11 items-center justify-center rounded-lg px-2 py-2 text-[#123C39] transition hover:bg-[#EED8B2] focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#9A622A] 2xl:hidden"
             aria-label="Toggle navigation menu"
             aria-expanded={menuOpen}
+            aria-controls="opr-mobile-navigation"
           >
             {menuOpen ? (
               <svg aria-hidden="true" viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
@@ -71,14 +80,14 @@ export default function Navigation() {
       </nav>
 
       {menuOpen && (
-        <div className="border-t border-[#DDB765]/70 bg-[#FFF3DF] px-8 py-5 xl:hidden">
+        <div id="opr-mobile-navigation" className="border-t border-[#DDB765]/70 bg-[#FFF3DF] px-8 py-5 2xl:hidden">
           <ul className="space-y-4 text-base font-medium">
             {links.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
                   onClick={() => setMenuOpen(false)}
-                  className="block text-[#123C39] transition hover:text-[#9A622A]"
+                  className="flex min-h-11 items-center text-[#123C39] transition hover:text-[#9A622A]"
                 >
                   {link.label}
                 </Link>
