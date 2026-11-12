@@ -55,5 +55,5 @@ export function makeIndianMeal(items:string[],n:number,diet:MealDiet):MealIdea|n
  if(meat)method.push('Check the thickest pieces reach 75°C for at least 30 seconds with a clean food thermometer. Keep cooking if needed; do not rely on time or colour alone.');
  if(has('spinach'))method.push('Stir in the spinach and cook until wilted and piping hot.');
  method.push((has('rice')?'Cook the dry rice following the packet instructions and serve freshly cooked alongside the curry. ':'')+'Taste before serving. Adjust only with seasonings you have listed.');
- return {name:title,time:'Allow 35–50 minutes; check tenderness and doneness',ingredients,method};
+ return {name:title,time:'Allow 35–50 minutes; check ingredients are tender and cooked through',ingredients,method};
 }
