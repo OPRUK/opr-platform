@@ -24,7 +24,7 @@ export default function PreserveFamilyRecipesPage() {
       <Navigation />
       <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] text-[#123C39]">
 
-        <article className="mx-auto max-w-4xl px-6 pb-20 pt-36 md:px-8">
+        <article className="mx-auto max-w-4xl px-6 pb-20 pt-36 md:px-8 lg:pt-48 2xl:pt-36">
           <p className="text-sm uppercase tracking-[0.25em] text-amber-900">A free OPR guide</p>
           <h1 className="mt-5 font-display text-4xl font-bold leading-tight md:text-6xl">Keep the recipe. Keep the person in the story.</h1>
           <p className="mt-7 text-xl leading-9">The ingredients tell you how to make it. The person tells you why it matters. Here is a simple way to record both, one conversation and one dish at a time.</p>

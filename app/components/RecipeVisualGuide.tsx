@@ -3,8 +3,10 @@ import type { RecipeMethodPhoto } from "../../lib/recipes";
 
 export default function RecipeVisualGuide({
   photos,
+  illustrative = false,
 }: {
   photos: RecipeMethodPhoto[];
+  illustrative?: boolean;
 }) {
   if (!photos.length) return null;
 
@@ -33,6 +35,7 @@ export default function RecipeVisualGuide({
         </h2>
         <p className="mx-auto mt-5 max-w-3xl text-center text-base leading-7 text-stone-700">
           Key moments to look for as you cook. Use these visual cues alongside the written method.
+          {illustrative ? " These AI-generated stage illustrations were developed by OPR to help the community follow the recipe; they are not photographs supplied by the contributor." : ""}
         </p>
         <div className={`mt-9 grid gap-6 ${gridColumns}`}>
           {photos.map((photo) => (

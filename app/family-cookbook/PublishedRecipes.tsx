@@ -189,7 +189,8 @@ export default function PublishedRecipes({
           (recipe) =>
             recipe.location &&
             !recipe.location.toLowerCase().startsWith("from the opr") &&
-            !recipe.location.toLowerCase().startsWith("from the family"),
+            !recipe.location.toLowerCase().startsWith("from the family") &&
+            coordinatesForLocation(recipe.location) !== null,
         )
         .map((recipe) => [`${recipe.location}-${recipe.href}`, recipe]),
     ).values(),
@@ -373,12 +374,12 @@ export default function PublishedRecipes({
         </div>
       )}
 
-      <section className="mt-6 overflow-hidden rounded-3xl border border-[#DDB765]/70 bg-[#123C39] p-6 text-[#FFF3DF] shadow-xl shadow-[#1C5A50]/20 md:p-10">
+      <section id="recipe-map" className="mt-6 scroll-mt-6 overflow-hidden rounded-3xl border border-[#DDB765]/70 bg-[#123C39] p-6 text-[#FFF3DF] shadow-xl shadow-[#1C5A50]/20 md:p-10">
         <div className="max-w-3xl">
           <p className="text-sm uppercase tracking-[0.28em] text-[#DDB765]">From kitchen to kitchen</p>
           <h2 className="mt-3 text-4xl font-bold leading-tight md:text-5xl">The OPR recipe map</h2>
           <p className="mt-4 max-w-2xl leading-7 text-[#EED8B2]">
-            Every pin begins with a person, a place and a recipe worth passing on. Explore the kitchens that make up the OPR cookbook so far.
+            Every pin begins with a person, a place and a recipe worth passing on. Explore the kitchens that make up the OPR cookbook so far. Country-only locations are approximate; recipes without a confirmed place are not pinned.
           </p>
         </div>
 
@@ -386,7 +387,7 @@ export default function PublishedRecipes({
             map needs overflow-hidden to keep its rounded corners, but a
             cluster popover must be able to spill outside the map's own
             bounds without getting clipped by that same rule. */}
-        <div className="relative mt-6">
+        <div className="relative mt-6" onKeyDown={(event) => { if (event.key === "Escape") setExpandedClusterKey(null); }}>
           <div className="overflow-hidden rounded-3xl border border-[#DDB765]/60 bg-[#08231F]">
             <svg viewBox={WORLD_MAP_VIEWBOX} className="block w-full" aria-hidden="true">
               <rect width="960" height="480" fill="#08231F" />
@@ -404,13 +405,13 @@ export default function PublishedRecipes({
                   key={cluster.key}
                   href={recipe.href}
                   style={{ left, top }}
-                  className="group absolute -translate-x-1/2 -translate-y-1/2"
+                  className="group absolute -translate-x-1/2 -translate-y-1/2 focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-[#DDB765]"
                   aria-label={`Open ${recipe.title}, from ${recipe.location}`}
                 >
                   <span className="flex h-8 w-8 items-center justify-center rounded-full border-[3px] border-[#FFF3DF] bg-[#123C39] text-sm text-[#DDB765] shadow-lg transition duration-200 group-hover:scale-125 sm:h-9 sm:w-9 sm:text-base">
                     ✦
                   </span>
-                  <span className="pointer-events-none absolute left-1/2 top-10 z-10 w-max max-w-40 -translate-x-1/2 rounded-lg bg-[#123C39] px-3 py-2 text-center text-xs font-semibold leading-4 text-[#FFF3DF] opacity-0 shadow-lg transition group-hover:opacity-100 sm:top-11">
+                  <span className="pointer-events-none absolute left-1/2 top-10 z-10 w-max max-w-40 -translate-x-1/2 rounded-lg bg-[#123C39] px-3 py-2 text-center text-xs font-semibold leading-4 text-[#FFF3DF] opacity-0 shadow-lg transition group-hover:opacity-100 group-focus-visible:opacity-100 sm:top-11">
                     {recipe.title}
                     <br />
                     <span className="font-normal text-[#DDB765]">{recipe.location}</span>
@@ -437,7 +438,7 @@ export default function PublishedRecipes({
                 </button>
 
                 {expanded ? (
-                  <div className="absolute left-1/2 top-11 z-20 w-56 -translate-x-1/2 rounded-2xl border border-[#DDB765]/60 bg-[#123C39] p-3 text-left shadow-2xl sm:top-12">
+                  <div className="absolute left-1/2 top-11 z-20 max-h-72 w-56 overflow-y-auto -translate-x-1/2 rounded-2xl border border-[#DDB765]/60 bg-[#123C39] p-3 text-left shadow-2xl sm:top-12">
                     <p className="px-1 pb-2 text-[11px] uppercase tracking-[0.14em] text-[#DDB765]">
                       {cluster.recipes.length} recipes near here
                     </p>

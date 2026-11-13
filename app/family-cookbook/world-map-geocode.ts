@@ -27,13 +27,22 @@ const CITY_COORDINATES: Record<string, [number, number]> = {
   maidenhead: [-0.7161, 51.522],
   lagos: [3.3792, 6.5244],
   guildford: [-0.5704, 51.2362],
+  noida: [77.391, 28.5355],
+  mumbles: [-3.999, 51.573],
+  oxford: [-1.2577, 51.752],
+  bermondsey: [-0.0754, 51.4986],
 };
 
 export function coordinatesForLocation(location: string | null | undefined): [number, number] | null {
   if (!location) return null;
   const normalised = location.toLowerCase();
   const match = Object.keys(CITY_COORDINATES).find((city) => normalised.includes(city));
-  return match ? project(CITY_COORDINATES[match]) : null;
+  if (match) return project(CITY_COORDINATES[match]);
+  // Country-only submissions are deliberately approximate, never a guessed city.
+  if (/^(usa|u\.?s\.?a\.?|united states(?: of america)?)$/.test(normalised.trim())) {
+    return project([-98.5795, 39.8283]);
+  }
+  return null;
 }
 
 export function percentPosition([x, y]: [number, number]): { left: string; top: string } {

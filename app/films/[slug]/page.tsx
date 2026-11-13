@@ -95,7 +95,7 @@ export default async function FilmWatchPage({ params }: FilmPageProps) {
         <link rel="preload" as="image" href={film.poster} fetchPriority="high" />
 
 
-        <article className="mx-auto max-w-6xl px-4 pb-20 pt-28 sm:px-6 md:px-8">
+        <article className="mx-auto max-w-6xl px-4 pb-20 pt-36 sm:px-6 md:px-8 lg:pt-48 2xl:pt-36">
           <Link href="/films" className="font-semibold text-[#1C5A50] underline decoration-[#DDB765] decoration-2 underline-offset-4">
             ← The OPR Film Collection
           </Link>

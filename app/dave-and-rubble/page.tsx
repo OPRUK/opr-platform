@@ -19,7 +19,7 @@ export default function DaveAndRubblePage() {
       <Navigation />
       <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] text-[#123C39]">
 
-        <article className="mx-auto max-w-6xl px-6 pb-24 pt-32 md:px-8">
+        <article className="mx-auto max-w-6xl px-6 pb-24 pt-36 md:px-8 lg:pt-48 2xl:pt-36">
           <header className="mx-auto max-w-3xl text-center">
             <p className="text-sm font-bold uppercase tracking-[0.35em] text-amber-800">The OPR Film Collection</p>
             <h1 className="mt-5 font-display text-5xl font-bold leading-tight md:text-7xl">Dave &amp; Rubble</h1>

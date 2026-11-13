@@ -276,7 +276,7 @@ export default async function CommunityRecipePage({
           />
         ) : null}
 
-        <section className="bg-[#123C39] px-6 pb-12 pt-32 text-center text-white">
+        <section className="bg-[#123C39] px-6 pb-12 pt-36 lg:pt-48 2xl:pt-36 text-center text-white">
           <p className="text-sm uppercase tracking-[0.4em] text-amber-300">A page from the Living Cookbook</p>
           <h1 className="font-display mx-auto mt-3 max-w-4xl text-5xl font-bold leading-tight md:text-7xl">{recipe.title}</h1>
           <p className="mt-4 text-sm uppercase tracking-[0.25em] text-stone-300">Shared by {sourceCredit ? <a href={sourceCredit.url} className="underline underline-offset-4">{sourceCredit.label}</a> : recipe.name}{recipe.location ? ` · ${recipe.location}` : ""}</p>
@@ -406,7 +406,7 @@ export default async function CommunityRecipePage({
             </ol>
           </div>
         </section>
-        <RecipeVisualGuide photos={methodPhotos} />
+        <RecipeVisualGuide photos={methodPhotos} illustrative={recipe.id === 48} />
         {recipe.cook_notes ? (
           <section className="bg-[#EED8B2] px-6 py-10 md:py-12">
             <div className="mx-auto max-w-5xl rounded-[2rem] border border-[#DDB765] bg-[#FFF3DF] p-6 shadow-xl shadow-[#1C5A50]/10 md:p-8">
