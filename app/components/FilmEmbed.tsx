@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal, flushSync } from "react-dom";
 import VideoBrandMark from "./VideoBrandMark";
+import { filmPlaybackUrl } from "../../lib/film-playback";
 import { sendAnalyticsEvent } from "../../lib/attribution-client";
 
 function formatTime(seconds: number) {
@@ -29,7 +30,6 @@ export default function FilmEmbed({
   const triggerRef = useRef<HTMLButtonElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const ambientVideoRef = useRef<HTMLVideoElement>(null);
   const hideControlsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   // Guards against onPlay firing a "film_play" event every time a visitor
   // pauses and resumes — only the first play of a viewing session counts.
@@ -54,7 +54,6 @@ export default function FilmEmbed({
 
   function closeFilm() {
     videoRef.current?.pause();
-    ambientVideoRef.current?.pause();
     if (document.fullscreenElement === stageRef.current) {
       void document.exitFullscreen().catch(() => undefined);
     }
@@ -64,17 +63,6 @@ export default function FilmEmbed({
     setAutoplayMuted(false);
     hasSentPlayEvent.current = false;
     window.setTimeout(() => triggerRef.current?.focus(), 0);
-  }
-
-  function syncAmbientVideo() {
-    const player = videoRef.current;
-    const ambient = ambientVideoRef.current;
-    if (!player || !ambient) return;
-
-    if (Math.abs(ambient.currentTime - player.currentTime) > 0.2) {
-      ambient.currentTime = player.currentTime;
-    }
-    ambient.playbackRate = player.playbackRate;
   }
 
   async function toggleFullscreen() {
@@ -174,35 +162,25 @@ export default function FilmEmbed({
           keepControlsVisible();
         }}
       >
-        <video
-          ref={ambientVideoRef}
-          aria-hidden="true"
-          tabIndex={-1}
-          className="pointer-events-none absolute -inset-[8%] h-[116%] w-[116%] scale-110 object-cover opacity-55 blur-3xl"
-          src={video}
-          playsInline
-          muted
-          preload="none"
-          poster={resolvedPoster}
-          controls={false}
-        />
+        {/* A still blur keeps the same cinema backdrop without decoding a second film on phones. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={resolvedPoster} alt="" aria-hidden="true"
+          className="pointer-events-none absolute -inset-[8%] h-[116%] w-[116%] scale-110 object-cover opacity-55 blur-3xl" />
         <div className="pointer-events-none absolute inset-0 bg-[#041513]/55" aria-hidden="true" />
 
         <video
           ref={videoRef}
           aria-label={title}
           className="relative z-10 h-full w-full object-contain"
-          src={video}
+          src={filmPlaybackUrl(video)}
           playsInline
-          preload="none"
+          preload="metadata"
           poster={resolvedPoster}
           controls={false}
           controlsList="nodownload noremoteplayback"
           disablePictureInPicture
           onPlay={() => {
             setIsPlaying(true);
-            syncAmbientVideo();
-            void ambientVideoRef.current?.play().catch(() => undefined);
             if (!hasSentPlayEvent.current) {
               hasSentPlayEvent.current = true;
               sendAnalyticsEvent("film_play", video);
@@ -211,20 +189,15 @@ export default function FilmEmbed({
           onPause={() => {
             setIsPlaying(false);
             setControlsVisible(true);
-            ambientVideoRef.current?.pause();
-          }}
+                  }}
           onEnded={() => {
             setIsPlaying(false);
             setControlsVisible(true);
-            ambientVideoRef.current?.pause();
-            sendAnalyticsEvent("film_watched", video);
+                    sendAnalyticsEvent("film_watched", video);
           }}
           onTimeUpdate={(event) => {
             setCurrentTime(event.currentTarget.currentTime);
-            syncAmbientVideo();
           }}
-          onSeeking={syncAmbientVideo}
-          onRateChange={syncAmbientVideo}
           onDurationChange={(event) => setDuration(event.currentTarget.duration)}
         >
           {captions ? <track kind="captions" src={captions} srcLang="en" label="English captions" default /> : null}

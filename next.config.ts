@@ -4,6 +4,12 @@ const nextConfig: NextConfig = {
   images: {
     qualities: [65, 75],
   },
+  async rewrites() {
+    return [{
+      source: "/film-media/:path*",
+      destination: "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/:path*",
+    }];
+  },
   async redirects() {
     return [
       {

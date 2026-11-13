@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Navigation from "../../components/Navigation";
+import FilmPlayer from "../../components/FilmPlayer";
+import { filmPlaybackUrl } from "../../../lib/film-playback";
 import TrackedLink from "../../components/TrackedLink";
 import { filmDescription, filmDuration, filmSlug, films, filmUploadDate, getFilmBySlug, getRelatedFilms } from "../../../lib/films";
 import { buildMetadata } from "../../../lib/metadata";
@@ -31,7 +33,7 @@ export async function generateMetadata({ params }: FilmPageProps): Promise<Metad
       ...metadata.openGraph,
       type: "video.other",
       images: [{ url: absoluteUrl(film.poster!), width: film.posterWidth, height: film.posterHeight, alt: film.title }],
-      videos: [{ url: absoluteUrl(film.video), secureUrl: absoluteUrl(film.video), type: "video/mp4", width: film.width, height: film.height }],
+      videos: [{ url: absoluteUrl(filmPlaybackUrl(film.video)), secureUrl: absoluteUrl(filmPlaybackUrl(film.video)), type: "video/mp4", width: film.width, height: film.height }],
     },
     twitter: { card: "summary_large_image", title: film.title, description: filmDescription(film), images: [absoluteUrl(film.poster!)] },
   };
@@ -54,7 +56,7 @@ export default async function FilmWatchPage({ params }: FilmPageProps) {
     description,
     thumbnailUrl: [absoluteUrl(film.poster ?? "/images/recipes/barbaras-beef-casserole-wide.webp")],
     uploadDate: filmUploadDate(film),
-    contentUrl: absoluteUrl(film.video),
+    contentUrl: absoluteUrl(filmPlaybackUrl(film.video)),
     duration: filmDuration(film),
     width: film.width,
     height: film.height,
@@ -105,23 +107,8 @@ export default async function FilmWatchPage({ params }: FilmPageProps) {
           </header>
 
           <div style={{ width: `min(100%, ${68 * (film.width ?? 16) / (film.height ?? 9)}svh)` }} className="relative mx-auto mt-5 max-w-full overflow-hidden rounded-2xl bg-black shadow-xl shadow-[#123C39]/20">
-            <video
-              id="film-player"
-              src={film.video}
-              aria-label={film.title}
-              className="block h-auto w-full bg-black object-contain"
-              style={{ aspectRatio: `${film.width ?? 16} / ${film.height ?? 9}` }}
-              width={film.width}
-              height={film.height}
-              controls
-              playsInline
-              preload="none"
-              poster={film.poster ?? "/images/recipes/barbaras-beef-casserole-wide.webp"}
-            >
-              <source src={film.video} type="video/mp4" />
-              {film.captions ? <track kind="captions" src={film.captions} srcLang="en" label="English captions" default /> : null}
-              Your browser does not support video playback.
-            </video>
+            <FilmPlayer video={film.video} title={film.title} width={film.width} height={film.height}
+              poster={film.poster ?? "/images/recipes/barbaras-beef-casserole-wide.webp"} captions={film.captions} />
           </div>
 
           <p className="mx-auto mt-5 max-w-3xl text-center text-lg leading-8 text-stone-700">{description}</p>
