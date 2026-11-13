@@ -1,3 +1,4 @@
+import { designReviewEmail } from "./email-design-review.ts";
 import { cookalongEvent } from "./cookalong-event.ts";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://otherpeoplesrecipes.co.uk";
@@ -181,17 +182,7 @@ export async function sendEmail({
 }
 
 export function recipeReceivedEmail({ name, title }: { name: string; title: string }) {
-  return {
-    subject: `We've got "${title}"`,
-    html: emailShell(`
-      <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 32px; line-height: 1.2; text-align: center; color: #123C39; margin: 0 0 22px;">Thank you for sharing your recipe.</h1>
-      <p>Hi ${escapeHtml(name)},</p>
-      <p>Thank you for trusting us with <strong>${escapeHtml(title)}</strong> and the story behind it. That&apos;s exactly what Other People&apos;s Recipes is for.</p>
-      <p>I read every recipe that comes in myself. If it&apos;s selected for the Living Cookbook, the restaurant, or a future film, I&apos;ll be in touch.</p>
-      <p>Love a good drink too? Our sister site, <a href="https://otherpeoplescocktails.co.uk" style="color: #123C39; font-weight: bold;">Other People’s Cocktails</a>, celebrates cocktails, alcohol-free drinks and the stories behind them. Alcoholic recipes are for adults aged 18+. Drink responsibly.</p>
-      ${signatureBlock("Warmly,")}
-    `),
-  };
+  return designReviewEmail('recipe', { name, title });
 }
 
 export function newSubmissionEmail({ name, email, title, location }: { name: string; email: string; title: string; location?: string | null }) {
@@ -231,20 +222,7 @@ export function foundingTableWelcomeEmail({
   unsubscribeUrl: string | null;
   marketingOptIn: boolean;
 }) {
-  return {
-    subject: "You've got a seat at our table",
-    html: emailShell(`
-      <h1 style="font-family: Didot, 'Bodoni MT', Georgia, 'Times New Roman', serif; font-size: 32px; line-height: 1.2; text-align: center; color: #123C39; margin: 0 0 22px;">You&apos;ve got a seat at our table.</h1>
-      <p>Hi ${escapeHtml(name)},</p>
-      <p>Other People&apos;s Recipes started as a note I wrote myself back in 2000: one day, build the place where family recipes can live on. You just became one of the first people helping make that real.</p>
-      ${marketingOptIn ? "<p>You&apos;ll be the first to hear when a new family recipe goes up, when tasting events open, when Recipe of the Month voting starts, and whatever we build next.</p>" : "<p>Your place is saved. You didn&apos;t opt in to OPR news, so that&apos;s the last you&apos;ll hear from us unless you get in touch.</p>"}
-      <p>While you wait, the Living Cookbook is already open.</p>
-      <p><a href="${siteUrl}/family-cookbook" style="display: inline-block; background: #1C5A50; color: #FFF3DF; padding: 12px 18px; border-radius: 999px; text-decoration: none;">Explore the Living Cookbook</a></p>
-      <p>Love a good drink too? Our sister site, <a href="https://otherpeoplescocktails.co.uk" style="color: #123C39; font-weight: bold;">Other People’s Cocktails</a>, celebrates cocktails, alcohol-free drinks and the stories behind them. Alcoholic recipes are for adults aged 18+. Drink responsibly.</p>
-      ${signatureBlock("Warmly,")}
-      ${marketingFooter(unsubscribeUrl)}
-    `),
-  };
+  return designReviewEmail('welcome', { name, unsubscribeUrl: unsubscribeUrl || undefined, marketingOptIn });
 }
 
 export function cookalongSignupWelcomeEmail({
