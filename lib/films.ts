@@ -79,7 +79,7 @@ export function getRelatedFilms(currentFilm: Film, limit = 3): Film[] {
   return selected;
 }
 
-export const filmsLastUpdated = "2026-11-11";
+export const filmsLastUpdated = "2026-11-13";
 
 export function filmUploadDate(film: Pick<Film, "uploadDate">): string {
   if (!film.uploadDate) throw new Error("A documented film publication date is required.");
@@ -121,6 +121,21 @@ function film(
 }
 
 const filmsUnordered: Film[] = [
+{
+  "title": "The Butter Chicken Verdict | Part 3: The Taste Test",
+  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-butter-chicken-verdict-part-3-the-taste-test.mp4",
+  "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/posters/opr-butter-chicken-verdict-part-3-the-taste-test-poster.jpg",
+  "description": "Dave asks Rubble whose butter chicken wins. Rubble needs another bowl before delivering his cheeky verdict. With Sudesh and Dave, Part 3 of The Butter Chicken Verdict.",
+  "transcript": "Well, Rubble? Whose butter chicken wins? I need another bowl before I decide. Of mine? Obviously, Daddy’s still practising.",
+  "captions": "/captions/the-butter-chicken-verdict-part-3-the-taste-test.vtt",
+  "uploadDate": "2026-11-13T10:31:21+00:00",
+  "durationSeconds": 13,
+  "width": 720,
+  "height": 1280,
+  "posterWidth": 720,
+  "posterHeight": 1280,
+  "recipeSlug": "daves-butter-chicken"
+},
 {
   "title": "The Butter Chicken Verdict | Part 2 - The Competition",
   "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-butter-chicken-verdict-part-2-the-competition.mp4",
