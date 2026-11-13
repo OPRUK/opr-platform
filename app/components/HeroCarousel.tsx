@@ -131,7 +131,7 @@ export default function HeroCarousel({ paused = false, priority = false }: HeroC
             // the fully opaque incoming image on top and look like hard cuts.
             style={{
               transitionDuration: `${reducedMotion ? 0 : CROSSFADE_MS}ms`,
-              objectPosition: "character" in slide ? "75% center" : "center",
+              objectPosition: "character" in slide ? "75% top" : "center",
               animation: "character" in slide && !paused && !reducedMotion ? "opr-character-zoom 8s ease-in-out infinite alternate" : undefined,
               transformOrigin: "75% center",
               zIndex: isOutgoing ? 1 : 0,
