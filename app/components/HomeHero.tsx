@@ -110,6 +110,18 @@ function playWithRecovery(el: HTMLVideoElement) {
 }
 
 export default function HomeHero({ children }: HomeHeroProps) {
+  const [headerHeight, setHeaderHeight] = useState(160);
+
+  useEffect(() => {
+    const header = document.querySelector("header");
+    if (!header) return;
+    const measureHeader = () => setHeaderHeight(Math.ceil(header.getBoundingClientRect().height));
+    measureHeader();
+    const observer = new ResizeObserver(measureHeader);
+    observer.observe(header);
+    return () => observer.disconnect();
+  }, []);
+
   // useSyncExternalStore supplies the same server snapshot during hydration,
   // then updates from browser-only preferences without a markup mismatch.
   const skipAutoplay = useSyncExternalStore(
@@ -288,8 +300,8 @@ export default function HomeHero({ children }: HomeHeroProps) {
                 onEnded={() => {
                   if (slot === activeSlot) moveToNextFilm();
                 }}
-                className="absolute inset-0 h-full w-full object-cover transition-opacity ease-in-out"
-                style={{ transitionDuration: `${CROSSFADE_MS}ms`, opacity: isVisible ? 1 : 0, objectPosition: "center top" }}
+                className="absolute inset-x-0 bottom-0 w-full object-contain transition-opacity ease-in-out"
+                style={{ transitionDuration: `${CROSSFADE_MS}ms`, opacity: isVisible ? 1 : 0, top: headerHeight, height: `calc(100% - ${headerHeight}px)`, objectPosition: "center center" }}
                 aria-label={film.label}
                 aria-hidden={!isVisible}
               >
