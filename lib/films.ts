@@ -3,6 +3,7 @@
 // images remain in the public Supabase Storage bucket. Both /films (desktop)
 // and /app/films (mobile) read from this one list.
 import { filmEnrichment } from "./film-enrichment.ts";
+import { filmVideoRevisions } from "./film-video-revisions.ts";
 
 const storageBase = "https://gtvgjymbmtaplvxdrnln.supabase.co/storage/v1/object/public/films";
 
@@ -663,9 +664,15 @@ const filmsUnordered: Film[] = [
 // Newest first — actual publish order, not the order entries happen to sit
 // in the array above. Every page that lists films relies on this ordering
 // rather than sorting itself.
-export const films: Film[] = filmsUnordered.map((entry) => ({
-  ...entry,
-  ...filmEnrichment[filmSlug(entry)],
-})).sort(
+export const films: Film[] = filmsUnordered.map((entry) => {
+  const enriched = {...entry, ...filmEnrichment[filmSlug(entry)]};
+  const revision = filmVideoRevisions[filmSlug(entry)];
+  if (!revision) return enriched;
+  return {
+    ...enriched,
+    ...revision,
+    transcript: `${enriched.transcript ?? ""}\n\nEnd card: Other People’s Recipes. Every recipe has a story. otherpeoplesrecipes.co.uk. Instagram and TikTok: @opr_uk. YouTube and Facebook: Other People’s Recipes. Pinterest: @otherpeoplesrecipes. LinkedIn: /company/opr-uk. Love a good drink too? Discover Other People’s Cocktails at otherpeoplescocktails.co.uk. Alcoholic recipes are for adults aged 18+. Drink responsibly.`,
+  };
+}).sort(
   (a, b) => new Date(filmUploadDate(b)).getTime() - new Date(filmUploadDate(a)).getTime(),
 );
