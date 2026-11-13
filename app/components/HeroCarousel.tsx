@@ -133,7 +133,7 @@ export default function HeroCarousel({ paused = false, priority = false }: HeroC
               transitionDuration: `${reducedMotion ? 0 : CROSSFADE_MS}ms`,
               objectPosition: "character" in slide ? "75% top" : "center",
               animation: "character" in slide && !paused && !reducedMotion ? "opr-character-zoom 8s ease-in-out infinite alternate" : undefined,
-              transformOrigin: "75% center",
+              transformOrigin: "75% top",
               zIndex: isOutgoing ? 1 : 0,
             }}
           />
