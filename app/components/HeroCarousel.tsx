@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 
 const slides = [
   {
-    image: "/images/dave-and-rubble-home.webp",
-    alt: "Dave and Rubble sharing a handwritten recipe in the kitchen",
+    image: "/images/dave-and-rubble-home-landscape.webp",
+    alt: "Dave cooking butter chicken with Rubble beside him in the kitchen",
     label: "Dave and Rubble · Cook Along",
     href: "/live-with-dave",
     character: true,
@@ -123,7 +123,7 @@ export default function HeroCarousel({ paused = false, priority = false }: HeroC
             // actual LCP image via `priority`.
             priority={priority && index === activeSlide}
             sizes="100vw"
-            className={`${"character" in slide ? "object-contain" : "object-cover"} transition-opacity ease-in-out ${
+            className={`object-cover transition-opacity ease-in-out ${
               isOutgoing ? "opacity-0" : "opacity-100"
             }`}
             // The outgoing image must stay above the incoming image while it
@@ -131,6 +131,9 @@ export default function HeroCarousel({ paused = false, priority = false }: HeroC
             // the fully opaque incoming image on top and look like hard cuts.
             style={{
               transitionDuration: `${reducedMotion ? 0 : CROSSFADE_MS}ms`,
+              objectPosition: "character" in slide ? "75% center" : "center",
+              animation: "character" in slide && !paused && !reducedMotion ? "opr-character-zoom 8s ease-in-out infinite alternate" : undefined,
+              transformOrigin: "75% center",
               zIndex: isOutgoing ? 1 : 0,
             }}
           />

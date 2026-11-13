@@ -11,10 +11,10 @@ type HomeHeroProps = {
 
 const introductionFilms = [
   {
-    desktop: "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-add-your-recipe-promo.mp4",
-    mobile: "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-add-your-recipe-promo-mobile.mp4",
-    poster: optimizedPoster("/images/opr-add-your-recipe-promo-poster.jpg"),
-    label: "Add your family recipe to Other People's Recipes",
+    desktop: "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-dave-and-rubble-steak-story.mp4",
+    mobile: "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-dave-and-rubble-steak-story.mp4",
+    poster: "/images/dave-rubble-extra-company-poster.jpg",
+    label: "Dave and Rubble | Some Recipes Are Made with a Little Extra Company",
   },
   {
     desktop: "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-sam-and-nadines-shepherds-pie.mp4",
