@@ -15,6 +15,18 @@ const communityRecipeEditorialOverrides: Record<
   number,
   Partial<CommunityRecipeEditorialFields>
 > = {
+  48: {
+    title: "Baked Falafel with Parsley, Cumin and Tahini Sauce",
+    story: "This falafel became our Friday-night dinner at home. We set the tray in the middle of the table with warm pita, the tahini sauce and a chopped salad, and everyone builds their own plate. Baking instead of frying means I can make it on a busy weeknight without the mess, and it’s the recipe friends ask me for most.",
+    method: [
+      "Heat oven to 200°C (400°F) and brush a baking tray with 1 tbsp oil.",
+      "Pulse chickpeas, onion, garlic, herbs and spices in a food processor until coarse; stir in baking powder and flour.",
+      "Shape into 16 small patties, place on the tray and brush with remaining oil.",
+      "Bake 12 minutes, flip, then 10–12 minutes more until golden.",
+      "Whisk the sauce ingredients until smooth and serve.",
+    ].join("\n"),
+    cook_notes: "Use one 400 g can of chickpeas, drained and patted dry, as in the original submitted recipe. Makes 16 small patties; serve with warm pita, tahini sauce and a chopped salad.",
+  },
   45: {
     title: "Pat’s Haddock and Tomato Bake",
     story:
@@ -87,3 +99,7 @@ export function applyCommunityRecipeEditorialOverride<T extends { id: number }>(
 
   return edited as T;
 }
+
+export const communityRecipeSourceLinks: Record<number, { label: string; url: string }> = {
+  48: { label: "Vagner Carvalho (SkilletGlow)", url: "https://skilletglow.com/baked-falafel/" },
+};

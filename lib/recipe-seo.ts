@@ -85,6 +85,10 @@ const featuredRecipeSeo: Record<string, RecipeSeo> = {
 };
 
 const communityRecipeSeo: Record<number, RecipeSeo> = {
+  48: {
+    title: "Baked Falafel with Tahini Sauce | Vagner Carvalho (SkilletGlow)",
+    description: "Bake Vagner Carvalho’s chickpea falafel with parsley, cumin and lemony tahini sauce: a Friday-night family favourite shared by SkilletGlow.",
+  },
   41: {
     title: "Grandad’s Steak & Ale Pie Recipe | Traditional British Pie",
     description:
