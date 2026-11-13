@@ -1,5 +1,6 @@
 import { requireAdmin } from "../../../../lib/admin-auth";
-import { firstNewsletterEmail, novemberNewsletterEmail, recipeReceivedEmail, foundingTableWelcomeEmail, sendEmail } from "../../../../lib/email";
+import { sendEmail } from "../../../../lib/email";
+import { designReviewEmail, type ReviewKind } from "../../../../lib/email-design-review";
 import { createUnsubscribeLink } from "../../../../lib/unsubscribe";
 
 export const runtime = "nodejs";
@@ -19,14 +20,14 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json().catch(() => ({})) as { preview?: string };
-  const content = body.preview === 'november-2026' ? novemberNewsletterEmail({name:'Chaten',unsubscribeUrl})
-    : body.preview === 'welcome' ? foundingTableWelcomeEmail({name:'Chaten',unsubscribeUrl,marketingOptIn:true})
-    : body.preview === 'recipe' ? recipeReceivedEmail({name:'Chaten',title:'Your family favourite'})
-    : firstNewsletterEmail({name:'Chaten',unsubscribeUrl});
+  const allowed: ReviewKind[] = ['first','november-2026','welcome','recipe','opc-welcome','opc-recipe'];
+  const kind = (body.preview || 'first') as ReviewKind;
+  if (!allowed.includes(kind)) return Response.json({error:'Unknown design preview.'},{status:400});
+  const content = designReviewEmail(kind,{name:'Chaten',title:kind==='opc-recipe'?'Your favourite cocktail':'Your family favourite',unsubscribeUrl});
   const { sent } = await sendEmail({
     to: TEST_RECIPIENT,
     ...content,
-    subject: "[DESIGN PREVIEW] " + content.subject,
+    subject: "[REDESIGN REVIEW] " + content.subject,
   });
 
   if (!sent) {

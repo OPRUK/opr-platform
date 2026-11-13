@@ -871,7 +871,7 @@ export default function AdminDashboard({
             >
               {sendingNewsletterTest ? "Sending test…" : "Send test to Chaten"}
             </button>
-            {([['november-2026','November newsletter design'],['welcome','Welcome acknowledgement'],['recipe','Recipe acknowledgement']] as const).map(([preview,label]) => <button key={preview} type="button" onClick={() => void sendNewsletterTest(preview)} disabled={sendingNewsletterTest || sendingNewsletter} className="mt-4 ml-3 rounded-full border border-[#123C39] px-5 py-2.5 text-sm font-medium disabled:opacity-40">{label}: send preview</button>)}
+            {([['november-2026','November newsletter design'],['welcome','Welcome acknowledgement'],['recipe','Recipe acknowledgement'],['opc-welcome','OPC welcome acknowledgement'],['opc-recipe','OPC cocktail acknowledgement']] as const).map(([preview,label]) => <button key={preview} type="button" onClick={() => void sendNewsletterTest(preview)} disabled={sendingNewsletterTest || sendingNewsletter} className="mt-4 ml-3 rounded-full border border-[#123C39] px-5 py-2.5 text-sm font-medium disabled:opacity-40">{label}: send preview</button>)}
           </div>
 
           <label className="mt-6 block text-sm font-medium">
