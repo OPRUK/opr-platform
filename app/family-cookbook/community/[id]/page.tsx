@@ -278,7 +278,7 @@ export default async function CommunityRecipePage({
 
         <section className="bg-[#123C39] px-6 pb-12 pt-36 lg:pt-48 2xl:pt-36 text-center text-white">
           <p className="text-sm uppercase tracking-[0.4em] text-amber-300">A page from the Living Cookbook</p>
-          <h1 className="font-display mx-auto mt-3 max-w-4xl text-5xl font-bold leading-tight md:text-7xl">{recipe.title}</h1>
+          <h1 className="font-display mx-auto mt-3 max-w-4xl text-4xl font-bold leading-tight sm:text-5xl md:text-7xl">{recipe.title}</h1>
           <p className="mt-4 text-sm uppercase tracking-[0.25em] text-stone-300">Shared by {sourceCredit ? <a href={sourceCredit.url} className="underline underline-offset-4">{sourceCredit.label}</a> : recipe.name}{recipe.location ? ` · ${recipe.location}` : ""}</p>
           <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-stone-200">{seo.description}</p>
           <p className="mt-4 text-sm leading-7 text-stone-300">
