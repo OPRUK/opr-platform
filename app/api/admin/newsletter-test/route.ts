@@ -1,5 +1,5 @@
 import { requireAdmin } from "../../../../lib/admin-auth";
-import { firstNewsletterEmail, sendEmail } from "../../../../lib/email";
+import { firstNewsletterEmail, novemberNewsletterEmail, recipeReceivedEmail, foundingTableWelcomeEmail, sendEmail } from "../../../../lib/email";
 import { createUnsubscribeLink } from "../../../../lib/unsubscribe";
 
 export const runtime = "nodejs";
@@ -18,9 +18,15 @@ export async function POST(request: Request) {
     );
   }
 
+  const body = await request.json().catch(() => ({})) as { preview?: string };
+  const content = body.preview === 'november-2026' ? novemberNewsletterEmail({name:'Chaten',unsubscribeUrl})
+    : body.preview === 'welcome' ? foundingTableWelcomeEmail({name:'Chaten',unsubscribeUrl,marketingOptIn:true})
+    : body.preview === 'recipe' ? recipeReceivedEmail({name:'Chaten',title:'Your family favourite'})
+    : firstNewsletterEmail({name:'Chaten',unsubscribeUrl});
   const { sent } = await sendEmail({
     to: TEST_RECIPIENT,
-    ...firstNewsletterEmail({ name: "Chaten", unsubscribeUrl }),
+    ...content,
+    subject: "[DESIGN PREVIEW] " + content.subject,
   });
 
   if (!sent) {

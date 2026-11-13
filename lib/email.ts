@@ -188,6 +188,7 @@ export function recipeReceivedEmail({ name, title }: { name: string; title: stri
       <p>Hi ${escapeHtml(name)},</p>
       <p>Thank you for trusting us with <strong>${escapeHtml(title)}</strong> and the story behind it. That&apos;s exactly what Other People&apos;s Recipes is for.</p>
       <p>I read every recipe that comes in myself. If it&apos;s selected for the Living Cookbook, the restaurant, or a future film, I&apos;ll be in touch.</p>
+      <p>Love a good drink too? Our sister site, <a href="https://otherpeoplescocktails.co.uk" style="color: #123C39; font-weight: bold;">Other People’s Cocktails</a>, celebrates cocktails, alcohol-free drinks and the stories behind them. Alcoholic recipes are for adults aged 18+. Drink responsibly.</p>
       ${signatureBlock("Warmly,")}
     `),
   };
@@ -239,6 +240,7 @@ export function foundingTableWelcomeEmail({
       ${marketingOptIn ? "<p>You&apos;ll be the first to hear when a new family recipe goes up, when tasting events open, when Recipe of the Month voting starts, and whatever we build next.</p>" : "<p>Your place is saved. You didn&apos;t opt in to OPR news, so that&apos;s the last you&apos;ll hear from us unless you get in touch.</p>"}
       <p>While you wait, the Living Cookbook is already open.</p>
       <p><a href="${siteUrl}/family-cookbook" style="display: inline-block; background: #1C5A50; color: #FFF3DF; padding: 12px 18px; border-radius: 999px; text-decoration: none;">Explore the Living Cookbook</a></p>
+      <p>Love a good drink too? Our sister site, <a href="https://otherpeoplescocktails.co.uk" style="color: #123C39; font-weight: bold;">Other People’s Cocktails</a>, celebrates cocktails, alcohol-free drinks and the stories behind them. Alcoholic recipes are for adults aged 18+. Drink responsibly.</p>
       ${signatureBlock("Warmly,")}
       ${marketingFooter(unsubscribeUrl)}
     `),
@@ -414,4 +416,32 @@ export function firstNewsletterEmail({
       </div>
     `,
   };
+}
+
+/** November edition remains a design preview until the owner approves sending it. */
+export function novemberNewsletterEmail({name,unsubscribeUrl}:{name:string;unsubscribeUrl:string}) {
+ const button=(href:string,label:string)=>`<p><a href="${href}" style="display:inline-block;background:#123C39;color:#FFF3DF;padding:12px 20px;border-radius:999px;text-decoration:none;font-weight:bold;font-size:16px">${label}</a></p>`;
+ return {subject:'A new recipe, a final verdict and something for your glass',html:emailShell(`
+ <p style="font-size:12px;letter-spacing:2px;color:#78522A">NOVEMBER AT OUR TABLE</p>
+ <p>Hi ${escapeHtml(name)},</p>
+ <p>There’s always room for another story at our table. This month, we have a new family favourite to cook, a kitchen debate to settle, and a new place to find something for your glass.</p>
+ <h2 style="font-family:Georgia,serif;color:#123C39">A Friday-night favourite from Vagner</h2>
+ <img src="https://gtvgjymbmtaplvxdrnln.supabase.co/storage/v1/object/public/recipe-published/dish/940f16d6-d1fb-4942-91f7-c5cdfdd7c6ef.jpg" alt="Vagner’s baked falafel" width="560" style="display:block;width:100%;max-width:560px;height:auto;border-radius:12px"/>
+ <p>Vagner Carvalho of SkilletGlow has shared his Baked Falafel with Parsley, Cumin and Tahini Sauce. At home, the tray goes in the middle of the table with warm pita, tahini sauce and chopped salad, and everyone builds their own plate. It’s the recipe his friends ask him for most.</p>
+ ${button(siteUrl+'/family-cookbook/community/48','Read Vagner’s story & recipe')}
+ <h2 style="font-family:Georgia,serif;color:#123C39">The Butter Chicken Verdict: the final word</h2>
+ <p>Dave wants a winner. Rubble has an opinion. Sudesh is quietly confident. The final part of their butter chicken debate is ready to watch. I’ll leave Rubble to deliver the verdict.</p>
+ ${button(siteUrl+'/films/the-butter-chicken-verdict-part-4-the-final-verdict','Watch the final film')}
+ <div style="background:#34212F;color:#FFF3DF;border-radius:12px;padding:24px;margin:30px 0"><h2 style="font-family:Georgia,serif;margin-top:0">Meet Other People’s Cocktails</h2>
+ <p>The stories don’t have to stop at the kitchen door. Our sister site brings together cocktails, alcohol-free drinks and the people and moments behind them.</p>
+ <p>With Christmas approaching, the new Christmas Collection includes festive serves and Irish cream favourites, with alcohol-free choices too. Suki and Olive are also waiting at the bar, although Olive’s welcome may come with conditions.</p>
+ <p><a href="https://otherpeoplescocktails.co.uk/christmas-cocktails" style="color:#FFF3DF;font-weight:bold">Explore the Christmas Collection →</a></p></div>
+ <h2 style="font-family:Georgia,serif;color:#123C39">What belongs at your family table?</h2>
+ <p>A handwritten recipe. A dish you learned by watching. Something everyone asks you to bring. If it carries a memory, we’d love to help preserve it.</p>
+ ${button(siteUrl+'/share','Share your recipe & story')}
+ <p>Or <a href="https://otherpeoplescocktails.co.uk/share" style="color:#123C39;font-weight:bold">share a cocktail and its story</a>. Please pass this invitation to friends and family. Their recipes deserve a place at the table too.</p>
+ ${signatureBlock('Warmly,')}
+ <p style="font-size:13px">Alcoholic recipes are for adults aged 18+. Drink responsibly.</p>
+ ${marketingFooter(unsubscribeUrl)}
+ `)};
 }

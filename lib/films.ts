@@ -127,7 +127,7 @@ const filmsUnordered: Film[] = [
   "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-butter-chicken-verdict-part-4-the-final-verdict.mp4",
   "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/posters/opr-butter-chicken-verdict-part-4-the-final-verdict-poster.jpg",
   "description": "Rubble has chosen his butter chicken champion. Dave has been given a different job. The final part of Dave, Sudesh and Rubble’s kitchen debate.",
-  "transcript": "Dave: Come on then, who’s the butter chicken champion?\nRubble: Nanny Sudesh, obviously.\nDave: So what’s my job?\nSudesh: You can wash up.\nRubble: Finally, a clear winner.\n\nEnd card: Other People’s Recipes and its social accounts. Love a good drink too? Discover Other People’s Cocktails at otherpeoplescocktails.co.uk.",
+  "transcript": "Dave: Come on then, who’s the butter chicken champion?\nRubble: Nanny Sudesh, obviously.\nDave: So what’s my job?\nSudesh: You can wash up.\nRubble: Finally, a clear winner.\n\nEnd card: Other People’s Recipes. otherpeoplesrecipes.co.uk. Instagram and TikTok: @opr_uk. All our socials: otherpeoplesrecipes.co.uk/links. Love a good drink too? otherpeoplescocktails.co.uk. 18+ for alcoholic recipes. Drink responsibly.",
   "captions": "/captions/the-butter-chicken-verdict-part-4-the-final-verdict.vtt",
   "uploadDate": "2026-11-13T16:20:00+00:00",
   "durationSeconds": 13,
@@ -671,7 +671,7 @@ export const films: Film[] = filmsUnordered.map((entry) => {
   return {
     ...enriched,
     ...revision,
-    transcript: `${enriched.transcript ?? ""}\n\nEnd card: Other People’s Recipes. Every recipe has a story. otherpeoplesrecipes.co.uk. Instagram and TikTok: @opr_uk. YouTube and Facebook: Other People’s Recipes. Pinterest: @otherpeoplesrecipes. LinkedIn: /company/opr-uk. Love a good drink too? Discover Other People’s Cocktails at otherpeoplescocktails.co.uk. Alcoholic recipes are for adults aged 18+. Drink responsibly.`,
+    transcript: `${enriched.transcript ?? ""}\n\nEnd card: Other People’s Recipes. otherpeoplesrecipes.co.uk. Instagram and TikTok: @opr_uk. All our socials: otherpeoplesrecipes.co.uk/links. Love a good drink too? otherpeoplescocktails.co.uk. 18+ for alcoholic recipes. Drink responsibly.`,
   };
 }).sort(
   (a, b) => new Date(filmUploadDate(b)).getTime() - new Date(filmUploadDate(a)).getTime(),
