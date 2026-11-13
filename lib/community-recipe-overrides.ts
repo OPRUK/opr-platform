@@ -6,6 +6,9 @@ type CommunityRecipeEditorialFields = {
   ingredients: string | null;
   method: string | null;
   cook_notes: string | null;
+  servings: string | null;
+  prep_time_minutes: number | null;
+  cook_time_minutes: number | null;
 };
 
 // The database keeps the contributor's original submission intact. These
@@ -18,14 +21,34 @@ const communityRecipeEditorialOverrides: Record<
   48: {
     title: "Baked Falafel with Parsley, Cumin and Tahini Sauce",
     story: "This falafel became our Friday-night dinner at home. We set the tray in the middle of the table with warm pita, the tahini sauce and a chopped salad, and everyone builds their own plate. Baking instead of frying means I can make it on a busy weeknight without the mess, and it’s the recipe friends ask me for most.",
+    // Definitive correction supplied by Vagner Carvalho on 13 November 2026.
+    ingredients: [
+      "200 g dried chickpeas (1 cup), not canned",
+      "1/2 small onion, roughly chopped",
+      "3 garlic cloves",
+      "1 cup loosely packed parsley leaves",
+      "1/2 cup loosely packed coriander (cilantro) leaves",
+      "1 tsp ground cumin",
+      "1 tsp ground coriander",
+      "1/2 tsp kosher salt",
+      "1/4 tsp black pepper",
+      "2 tbsp plain (all-purpose) flour",
+      "1/2 tsp baking powder",
+      "3 tbsp olive oil, divided",
+      "60 g tahini (1/4 cup)",
+      "2 tbsp lemon juice",
+      "3–5 tbsp cold water"
+].join("\n"),
     method: [
-      "Heat oven to 200°C (400°F) and brush a baking tray with 1 tbsp oil.",
-      "Pulse chickpeas, onion, garlic, herbs and spices in a food processor until coarse; stir in baking powder and flour.",
-      "Shape into 16 small patties, place on the tray and brush with remaining oil.",
-      "Bake 12 minutes, flip, then 10–12 minutes more until golden.",
-      "Whisk the sauce ingredients until smooth and serve.",
-    ].join("\n"),
-    cook_notes: "Use one 400 g can of chickpeas, drained and patted dry, as in the original submitted recipe. Makes 16 small patties; serve with warm pita, tahini sauce and a chopped salad.",
+      "Cover the dried chickpeas with several inches of cold water and refrigerate for 12–18 hours. Drain and dry thoroughly (about 420–440 g). Do not cook them before grinding.",
+      "Pulse the chickpeas, onion, garlic, herbs, spices and salt in a food processor until finely minced and able to clump, scraping the bowl. Don’t turn it into smooth hummus. Stir in the flour, baking powder and 1 tbsp oil, then refrigerate for 30 minutes.",
+      "Heat the oven to 200°C (400°F). Brush a rimmed pan with 1 tbsp oil. Shape 16 compact patties, about 35 g each, 5 cm across and 1 cm thick, and brush the tops with the remaining oil. Bake for 25–30 minutes, turning carefully halfway, until browned and cooked through.",
+      "Whisk the tahini and lemon juice, then add cold water gradually until smooth and pourable. Serve the falafel with the sauce."
+].join("\n"),
+    servings: "4 people (16 patties)",
+    prep_time_minutes: null,
+    cook_time_minutes: null,
+    cook_notes: "Use dried chickpeas, not canned: canned chickpeas make this mixture too soft. Allow 12–18 hours for refrigerated soaking and 30 minutes for chilling the mixture, then bake for 25–30 minutes. The soaked, drained chickpeas weigh about 420–440 g. Makes 16 patties, each about 35 g, 5 cm across and 1 cm thick. Serve with warm pita, tahini sauce and chopped salad.",
   },
   45: {
     title: "Pat’s Haddock and Tomato Bake",

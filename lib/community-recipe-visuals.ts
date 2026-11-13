@@ -5,11 +5,35 @@ import type { RecipeMethodPhoto } from "./recipes";
 // public URL and approved submission remain the source of truth.
 export const communityRecipeMethodPhotos: Record<number, RecipeMethodPhoto[]> = {
   48: [
-    {"src": "/images/recipes/vagners-falafel-stage-1-ai.webp", "alt": "AI-generated illustration: Coarsely pulsed chickpeas and herbs in a food processor", "title": "The coarse mixture", "caption": "Pulse until coarse, keeping some texture rather than making a smooth paste.", "step": 2},
-    {"src": "/images/recipes/vagners-falafel-stage-2-ai.webp", "alt": "AI-generated illustration: Sixteen small herb-flecked falafel patties on an oiled baking tray", "title": "Shape the patties", "caption": "Shape 16 compact, flat patties and brush them with the remaining oil.", "step": 3},
-    {"src": "/images/recipes/vagners-falafel-stage-3-ai.webp", "alt": "AI-generated illustration: Golden baked falafel patties, with one turned to show its browned underside", "title": "Bake until golden", "caption": "Turn the patties after 12 minutes, then bake for another 10–12 minutes until golden.", "step": 4},
-    {"src": "/images/recipes/vagners-falafel-stage-4-ai.webp", "alt": "AI-generated illustration: Smooth tahini sauce falling from a spoon in a ribbon", "title": "Whisk the tahini sauce", "caption": "Add the water gradually while whisking until the sauce is smooth and pourable.", "step": 5},
-  ],
+    {
+        "src": "/images/recipes/vagners-falafel-stage-1-ai.webp",
+        "alt": "AI-generated illustration: Minced chickpeas and herbs in a food processor",
+        "title": "Mince, then chill",
+        "caption": "Use soaked, dried chickpeas. Pulse until finely minced and able to clump, not smooth. Stir in flour, baking powder and 1 tbsp oil, then chill for 30 minutes.",
+        "step": 2
+    },
+    {
+        "src": "/images/recipes/vagners-falafel-stage-2-ai.webp",
+        "alt": "AI-generated illustration: Sixteen small herb-flecked falafel patties on an oiled baking tray",
+        "title": "Shape the patties",
+        "caption": "Shape 16 compact patties, about 35 g each, 5 cm across and 1 cm thick. Oil the pan and brush the tops as directed.",
+        "step": 3
+    },
+    {
+        "src": "/images/recipes/vagners-falafel-stage-3-ai.webp",
+        "alt": "AI-generated illustration: Golden baked falafel patties, with one turned to show its browned underside",
+        "title": "Bake until cooked through",
+        "caption": "Bake at 200°C (400°F) for 25–30 minutes, turning carefully halfway, until browned and cooked through.",
+        "step": 3
+    },
+    {
+        "src": "/images/recipes/vagners-falafel-stage-4-ai.webp",
+        "alt": "AI-generated illustration: Smooth tahini sauce falling from a spoon in a ribbon",
+        "title": "Whisk the tahini sauce",
+        "caption": "Whisk 60 g tahini with 2 tbsp lemon juice. Add 3–5 tbsp cold water gradually until smooth and pourable.",
+        "step": 4
+    }
+],
   45: [
     {
       src: "/images/recipes/pats-haddock-tomato-bake-step-1.webp",
