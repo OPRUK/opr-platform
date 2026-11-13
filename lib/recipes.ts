@@ -167,6 +167,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
 {
   "slug": "jennifers-ginger-cream-ice",
   "title": "Jennifer’s Ginger Cream Ice",
+  "cookTime": "PT5M",
   "place": "Shared by Jennifer Benyon Tinker",
   "contributorName": "Jennifer Benyon Tinker",
   "authorNames": [
@@ -183,7 +184,7 @@ export const featuredRecipes: FeaturedRecipe[] = [
   ],
   "method": [
     "Chill the cream bowl and beaters in the fridge. Chop the stem ginger into small pieces; Jennifer leaves the amount and size to your taste, but avoid large pieces that will become hard when frozen.",
-    "Put the egg yolks and icing sugar in a heatproof bowl over a saucepan of gently simmering water, without letting the bowl touch the water. Beat until thick, creamy and pale straw-coloured, with a sauce-like consistency. Heat gently and do not let the mixture scramble.",
+    "Put the egg yolks and icing sugar in a heatproof bowl over a saucepan of gently simmering water, without letting the bowl touch the water. Beat for about 5 minutes, until thick, creamy and pale straw-coloured, with a sauce-like consistency. Heat gently and do not let the mixture scramble.",
     "Remove the bowl from the heat and continue beating until cool. Stir in a little stem ginger syrup for a gentle background flavour, leaving enough syrup in the jar to cover any remaining ginger.",
     "Whisk the chilled cream and milk until softly stiff, taking care not to over-whisk. Fold in the cooled egg mixture.",
     "Transfer to a freezer-safe container and cover with cling film. Freeze for at least an hour, then check the texture: it needs to be thick enough to support the ginger pieces. This is a partly frozen stage, not the final freezing time.",
