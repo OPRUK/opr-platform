@@ -5,6 +5,13 @@ import { useEffect, useState } from "react";
 
 const slides = [
   {
+    image: "/images/dave-and-rubble-home.webp",
+    alt: "Dave and Rubble sharing a handwritten recipe in the kitchen",
+    label: "Dave and Rubble · Cook Along",
+    href: "/live-with-dave",
+    character: true,
+  },
+  {
     image: "/images/hero-kitchen-wide.webp",
     alt: "The Other People's Recipes kitchen table",
     label: "Other People's Recipes · Every Recipe has a Story",
@@ -49,6 +56,14 @@ type HeroCarouselProps = {
 
 export default function HeroCarousel({ paused = false, priority = false }: HeroCarouselProps) {
   const [activeSlide, setActiveSlide] = useState(0);
+  const [reducedMotion, setReducedMotion] = useState(true);
+  useEffect(() => {
+    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setReducedMotion(query.matches);
+    sync();
+    query.addEventListener("change", sync);
+    return () => query.removeEventListener("change", sync);
+  }, []);
   // The slide being faded out. Kept mounted only for the duration of the
   // crossfade so the incoming slide always has something to fade over —
   // without it, swapping which index counts as "active" unmounts the
@@ -64,7 +79,7 @@ export default function HeroCarousel({ paused = false, priority = false }: HeroC
   }
 
   useEffect(() => {
-    if (paused || isTransitioning) return;
+    if (paused || reducedMotion || isTransitioning) return;
 
     // Schedule from the end of the previous transition. A timeout avoids an
     // automatic change landing halfway through a visitor's manual change.
@@ -74,7 +89,7 @@ export default function HeroCarousel({ paused = false, priority = false }: HeroC
     }, SLIDE_HOLD_MS);
 
     return () => window.clearTimeout(timer);
-  }, [activeSlide, isTransitioning, paused]);
+  }, [activeSlide, isTransitioning, paused, reducedMotion]);
 
   useEffect(() => {
     if (previousSlide === null) return;
@@ -108,14 +123,14 @@ export default function HeroCarousel({ paused = false, priority = false }: HeroC
             // actual LCP image via `priority`.
             priority={priority && index === activeSlide}
             sizes="100vw"
-            className={`object-cover transition-opacity ease-in-out ${
+            className={`${"character" in slide ? "object-contain" : "object-cover"} transition-opacity ease-in-out ${
               isOutgoing ? "opacity-0" : "opacity-100"
             }`}
             // The outgoing image must stay above the incoming image while it
             // fades. Without fixed layer ordering, forward transitions mount
             // the fully opaque incoming image on top and look like hard cuts.
             style={{
-              transitionDuration: `${CROSSFADE_MS}ms`,
+              transitionDuration: `${reducedMotion ? 0 : CROSSFADE_MS}ms`,
               zIndex: isOutgoing ? 1 : 0,
             }}
           />
@@ -126,7 +141,7 @@ export default function HeroCarousel({ paused = false, priority = false }: HeroC
       <div className="absolute inset-0 z-[2] bg-gradient-to-b from-[#08231F]/35 via-transparent to-[#08231F]/60" />
 
       <div className="absolute bottom-7 left-1/2 z-10 flex w-full max-w-4xl -translate-x-1/2 flex-col items-center justify-center gap-3 px-6 text-center text-xs font-medium leading-5 tracking-wide text-[#FFF3DF] sm:bottom-10 sm:flex-row sm:gap-4">
-        <span className="hidden text-balance sm:inline">{slides[activeSlide].label}</span>
+        {"href" in slides[activeSlide] ? <a className="text-balance underline underline-offset-4" href={slides[activeSlide].href}>{slides[activeSlide].label}</a> : <span className="hidden text-balance sm:inline">{slides[activeSlide].label}</span>}
         <div
           className="flex shrink-0 gap-2"
           role="group"
