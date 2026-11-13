@@ -1,41 +1,17 @@
+import Image from "next/image";
 import Link from "next/link";
 import Navigation from "../components/Navigation";
 import { buildMetadata } from "../../lib/metadata";
-
-export const metadata = buildMetadata({ title: "Press and Community Enquiries", description: "The story behind Other People's Recipes, useful links for journalists and community groups, and how to contact the OPR team.", path: "/press" });
-
-export default function PressPage() {
-  return (
-    <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] text-[#123C39]">
-      <Navigation />
-      <article className="mx-auto max-w-4xl px-6 pb-24 pt-36 md:px-8">
-        <p className="text-sm uppercase tracking-[0.25em] text-amber-900">Press and community enquiries</p>
-        <h1 className="mt-5 font-display text-4xl font-bold leading-tight md:text-6xl">People before recipes. Stories before ingredients.</h1>
-        <p className="mt-7 text-xl leading-9">Other People’s Recipes is a living cookbook for family recipes and the people, memories and traditions behind them.</p>
-        <section className="mt-12 rounded-3xl bg-[#FFF3DF] p-7 md:p-10">
-          <h2 className="text-3xl font-bold">The OPR story</h2>
-          <p className="mt-5 text-lg leading-8">Founder Chaten Oberoi-Morris first wrote down the idea in 2000: build a place where family recipes can live on. OPR brings that idea to life through a growing cookbook, contributor stories and short films.</p>
-          <p className="mt-5 text-lg leading-8">Dave’s Butter Chicken, learnt from Chaten’s mum and made his own, captures the idea: recipes change as they pass between people, while keeping a connection to the person who taught them.</p>
-          <p className="mt-5 text-lg leading-8">Every Recipe Has a Story. Tell Us Yours.</p>
-        </section>
-        <section className="mt-12">
-          <h2 className="text-3xl font-bold">Useful starting points</h2>
-          <ul className="mt-6 space-y-4 text-lg underline underline-offset-4">
-            <li><Link href="/founder">Read Chaten’s founder’s letter</Link></li>
-            <li><Link href="/family-cookbook/daves-butter-chicken">Dave’s Butter Chicken: a family recipe passed on</Link></li>
-            <li><Link href="/family-cookbook/robin-vaughans-gingerbread">Robin Vaughan’s Gingerbread</Link></li>
-            <li><Link href="/films">Watch the OPR Film Collection</Link></li>
-            <li><Link href="/preserve-family-recipes">Free guide: how to preserve family recipes and their stories</Link></li>
-            <li><Link href="/share">Share a recipe with the Living Cookbook</Link></li>
-          </ul>
-        </section>
-        <section className="mt-12 rounded-3xl bg-[#123C39] p-8 text-[#FFF3DF]">
-          <h2 className="text-3xl font-bold">Talk to OPR</h2>
-          <p className="mt-4 text-lg leading-8">For founder interviews, story enquiries, image permissions or community collaboration enquiries, email <a href="mailto:info@otherpeoplesrecipes.co.uk" className="font-semibold underline underline-offset-4">info@otherpeoplesrecipes.co.uk</a>.</p>
-          <p className="mt-4 leading-7">Please ask before reproducing photographs, films or contributors’ words. The team can discuss availability and seek the relevant permissions.</p>
-        </section>
-        <p className="mt-8 text-sm leading-7">Other People’s Recipes is operated by OTHER PEOPLES RECIPES LTD, company number 17370145. Updated 21 October 2026.</p>
-      </article>
-    </main>
-  );
-}
+import "./press.css";
+export const metadata = buildMetadata({title:"Press and Community Enquiries",description:"Meet Other People's Recipes. The founder story, recipe collection, useful links and press contact for interviews, image permissions and community enquiries.",path:"/press",image:"/images/hero-kitchen-wide.webp"});
+const links=[
+ ["/founder","The founder’s letter","Read Chaten’s story and the idea behind OPR."],
+ ["/family-cookbook/daves-butter-chicken","A recipe passed on","Dave’s Butter Chicken, learnt from Chaten’s mum and made his own."],
+ ["/family-cookbook/robin-vaughans-gingerbread","From the kitchen drawer","Robin Vaughan’s Gingerbread and the family story behind it."],
+ ["/films","Meet the people","Explore the OPR Film Collection, including Dave and Rubble."],
+ ["/at-home-recipes","Everyday cooking","100 At home recipes for 15 minute meals, family dinners and date night."],
+ ["/make-me-a-meal","Make me a meal","Turn ingredients from the cupboard and fridge into a meal suggestion."],
+ ["/preserve-family-recipes","Keep a family recipe","A free guide to preserving recipes and the stories that belong with them."],
+ ["/share","Add a story to the cookbook","How contributors can share a recipe with the Living Cookbook."]
+];
+export default function PressPage(){return <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] text-[#123C39]"><Navigation/><article className="press-room opr-press-room"><section className="press-hero"><div><p className="press-kicker">Press &amp; community</p><h1>Recipes worth keeping.<br/>Stories worth sharing.</h1><p className="press-lead">Other People’s Recipes is a living cookbook for family recipes and the people, memories and traditions behind them.</p><a className="press-cta" href="mailto:info@otherpeoplesrecipes.co.uk">Contact OPR</a></div><figure><Image src="/images/hero-kitchen-wide.webp" alt="An open recipe book and ingredients on a kitchen table" width={1672} height={941} sizes="(max-width:760px) 100vw, 50vw" priority/></figure></section><dl className="press-facts"><div><dt>The idea</dt><dd>A Living Cookbook</dd></div><div><dt>The founder</dt><dd>Chaten</dd></div><div><dt>The invitation</dt><dd>Every Recipe has a Story.</dd></div></dl><section className="press-story"><div><h2>The OPR story</h2><p>Founder Chaten first wrote down the idea in 2000: build a place where family recipes can live on. OPR brings that idea to life through a growing cookbook, contributor stories and short films.</p><p>Dave’s Butter Chicken, learnt from Chaten’s mum and made his own, captures the idea: recipes change as they pass between people, while keeping a connection to the person who taught them.</p><p>Every Recipe Has a Story. Tell Us Yours.</p></div><aside className="press-story-note"><h2>What to explore</h2><p>The Living Cookbook preserves contributor recipes and their stories. At home recipes adds ideas for everyday cooking, while Make me a meal starts with what you already have.</p><p>Our sister community, <a href="https://otherpeoplescocktails.co.uk/">Other People’s Cocktails</a>, brings the same idea to drinks and the memories behind them.</p></aside></section><section className="press-links"><h2>Useful starting points</h2><ul>{links.map(([href,title,text])=><li key={href}><Link href={href}><h3>{title}</h3><p>{text}</p></Link></li>)}</ul></section><section className="press-contact"><h2>Talk to OPR</h2><p>For founder interviews, story enquiries, image permissions or community collaborations, contact the team.</p><a className="press-email" href="mailto:info@otherpeoplesrecipes.co.uk">info@otherpeoplesrecipes.co.uk</a><p>Please ask before reproducing photographs, films or contributors’ words. We can discuss availability and seek the relevant permissions.</p></section><p className="press-updated">Other People’s Recipes is operated by OTHER PEOPLES RECIPES LTD, company number 17370145. Updated 13 November 2026.</p></article></main>}
