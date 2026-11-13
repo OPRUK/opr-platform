@@ -20,41 +20,44 @@ const steps = [
 
 export default function PreserveFamilyRecipesPage() {
   return (
-    <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] text-[#123C39]">
+    <>
       <Navigation />
-      <article className="mx-auto max-w-4xl px-6 pb-20 pt-36 md:px-8">
-        <p className="text-sm uppercase tracking-[0.25em] text-amber-900">A free OPR guide</p>
-        <h1 className="mt-5 font-display text-4xl font-bold leading-tight md:text-6xl">Keep the recipe. Keep the person in the story.</h1>
-        <p className="mt-7 text-xl leading-9">The ingredients tell you how to make it. The person tells you why it matters. Here is a simple way to record both, one conversation and one dish at a time.</p>
-        <div className="mt-8 rounded-2xl bg-[#FFF3DF] p-6">
-          <p className="leading-7">You only need a notebook, something to measure with and, if the cook agrees, a phone for photographs or audio. You can keep everything privately within your family.</p>
-          <a href="/downloads/family-recipe-interview-worksheet.txt" download className="mt-5 inline-block rounded-full bg-[#123C39] px-6 py-3 font-semibold text-white">Download the recipe interview worksheet</a>
-          <p className="mt-3 text-sm">A free text file you can edit, print or read aloud. No sign-up needed.</p>
-        </div>
-        <section aria-label="Seven steps to preserve a family recipe" className="mt-12 space-y-10">
-          {steps.map((step, index) => <section key={step.title}><h2 className="text-2xl font-bold">{index + 1}. {step.title}</h2><p className="mt-4 text-lg leading-8">{step.text}</p></section>)}
-        </section>
-        <section className="mt-12 rounded-3xl bg-[#FFF3DF] p-7 md:p-10">
-          <h2 className="text-3xl font-bold">Five questions to begin with</h2>
-          <ul className="mt-5 list-disc space-y-3 pl-6 text-lg leading-8">
-            <li>Who first made this for you?</li><li>What do you remember about their kitchen?</li><li>What have you changed, and what would you never change?</li><li>What should someone making it for the first time know?</li><li>Who would you like to cook it for next?</li>
-          </ul>
-        </section>
-        <section className="mt-12">
-          <h2 className="text-3xl font-bold">See how a family recipe travels</h2>
-          <p className="mt-4 text-lg leading-8"><Link href="/family-cookbook/daves-butter-chicken" className="font-semibold underline underline-offset-4">Dave’s Butter Chicken</Link> is one place to start. Explore the <Link href="/family-cookbook" className="font-semibold underline underline-offset-4">Living Cookbook</Link> for more recipes and the people who passed them on, or read <Link href="/founder" className="font-semibold underline underline-offset-4">why Chaten started OPR</Link>.</p>
-        </section>
-        <aside className="mt-12 border-t border-[#9A622A]/40 pt-8 text-lg leading-8">
-          <h2 className="text-2xl font-bold">For libraries and community groups</h2>
-          <p className="mt-4">You are welcome to print this guide and the worksheet for free, non-commercial family and community activities, with credit to Other People’s Recipes. Please link to this page so others can find the current version. For other uses, <a href="mailto:info@otherpeoplesrecipes.co.uk" className="font-semibold underline">contact OPR</a>.</p>
-        </aside>
-        <section className="mt-12 rounded-3xl bg-[#123C39] p-8 text-center text-[#FFF3DF]">
-          <h2 className="text-3xl font-bold">Every Recipe Has a Story. Tell Us Yours.</h2>
-          <p className="mt-4 text-lg leading-8">If you and the person behind the dish would like to share it, there is a place for your recipe at our table.</p>
-          <Link href="/share" className="mt-6 inline-block rounded-full bg-[#DDB765] px-7 py-3 font-bold text-[#08231F]">Share your family recipe</Link>
-        </section>
-        <p className="mt-8 text-sm">Written by the OPR team · Published 21 October 2026</p>
-      </article>
-    </main>
+      <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] text-[#123C39]">
+
+        <article className="mx-auto max-w-4xl px-6 pb-20 pt-36 md:px-8">
+          <p className="text-sm uppercase tracking-[0.25em] text-amber-900">A free OPR guide</p>
+          <h1 className="mt-5 font-display text-4xl font-bold leading-tight md:text-6xl">Keep the recipe. Keep the person in the story.</h1>
+          <p className="mt-7 text-xl leading-9">The ingredients tell you how to make it. The person tells you why it matters. Here is a simple way to record both, one conversation and one dish at a time.</p>
+          <div className="mt-8 rounded-2xl bg-[#FFF3DF] p-6">
+            <p className="leading-7">You only need a notebook, something to measure with and, if the cook agrees, a phone for photographs or audio. You can keep everything privately within your family.</p>
+            <a href="/downloads/family-recipe-interview-worksheet.txt" download className="mt-5 inline-block rounded-full bg-[#123C39] px-6 py-3 font-semibold text-white">Download the recipe interview worksheet</a>
+            <p className="mt-3 text-sm">A free text file you can edit, print or read aloud. No sign-up needed.</p>
+          </div>
+          <section aria-label="Seven steps to preserve a family recipe" className="mt-12 space-y-10">
+            {steps.map((step, index) => <section key={step.title}><h2 className="text-2xl font-bold">{index + 1}. {step.title}</h2><p className="mt-4 text-lg leading-8">{step.text}</p></section>)}
+          </section>
+          <section className="mt-12 rounded-3xl bg-[#FFF3DF] p-7 md:p-10">
+            <h2 className="text-3xl font-bold">Five questions to begin with</h2>
+            <ul className="mt-5 list-disc space-y-3 pl-6 text-lg leading-8">
+              <li>Who first made this for you?</li><li>What do you remember about their kitchen?</li><li>What have you changed, and what would you never change?</li><li>What should someone making it for the first time know?</li><li>Who would you like to cook it for next?</li>
+            </ul>
+          </section>
+          <section className="mt-12">
+            <h2 className="text-3xl font-bold">See how a family recipe travels</h2>
+            <p className="mt-4 text-lg leading-8"><Link href="/family-cookbook/daves-butter-chicken" className="font-semibold underline underline-offset-4">Dave’s Butter Chicken</Link> is one place to start. Explore the <Link href="/family-cookbook" className="font-semibold underline underline-offset-4">Living Cookbook</Link> for more recipes and the people who passed them on, or read <Link href="/founder" className="font-semibold underline underline-offset-4">why Chaten started OPR</Link>.</p>
+          </section>
+          <aside className="mt-12 border-t border-[#9A622A]/40 pt-8 text-lg leading-8">
+            <h2 className="text-2xl font-bold">For libraries and community groups</h2>
+            <p className="mt-4">You are welcome to print this guide and the worksheet for free, non-commercial family and community activities, with credit to Other People’s Recipes. Please link to this page so others can find the current version. For other uses, <a href="mailto:info@otherpeoplesrecipes.co.uk" className="font-semibold underline">contact OPR</a>.</p>
+          </aside>
+          <section className="mt-12 rounded-3xl bg-[#123C39] p-8 text-center text-[#FFF3DF]">
+            <h2 className="text-3xl font-bold">Every Recipe Has a Story. Tell Us Yours.</h2>
+            <p className="mt-4 text-lg leading-8">If you and the person behind the dish would like to share it, there is a place for your recipe at our table.</p>
+            <Link href="/share" className="mt-6 inline-block rounded-full bg-[#DDB765] px-7 py-3 font-bold text-[#08231F]">Share your family recipe</Link>
+          </section>
+          <p className="mt-8 text-sm">Written by the OPR team · Published 21 October 2026</p>
+        </article>
+      </main>
+    </>
   );
 }

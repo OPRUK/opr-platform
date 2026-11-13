@@ -125,7 +125,7 @@ const filmsUnordered: Film[] = [
   "title": "The Butter Chicken Verdict | Part 3: The Taste Test",
   "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-butter-chicken-verdict-part-3-the-taste-test.mp4",
   "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/posters/opr-butter-chicken-verdict-part-3-the-taste-test-poster.jpg",
-  "description": "Dave asks Rubble whose butter chicken wins. Rubble needs another bowl before delivering his cheeky verdict. With Sudesh and Dave, Part 3 of The Butter Chicken Verdict.",
+  "description": "Dave asks Rubble whose butter chicken wins. Rubble wants another bowl before deciding in Part 3 of The Butter Chicken Verdict, with Sudesh and Dave.",
   "transcript": "Well, Rubble? Whose butter chicken wins? I need another bowl before I decide. Of mine? Obviously, Daddy’s still practising.",
   "captions": "/captions/the-butter-chicken-verdict-part-3-the-taste-test.vtt",
   "uploadDate": "2026-11-13T10:31:21+00:00",

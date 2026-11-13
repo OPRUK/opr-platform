@@ -170,264 +170,267 @@ export default async function RecipePage({
   ].filter((item): item is string => Boolean(item));
 
   return (
-    <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] text-[#123C39]">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(recipeJsonLd).replace(/</g, "\\u003c"),
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, "\\u003c"),
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(faqJsonLd).replace(/</g, "\\u003c"),
-        }}
-      />
+    <>
       <Navigation />
-      {recipe.editorialLabel&&<Link className="at-home-back" href="/at-home-recipes">Back to At home recipes</Link>}
+      <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] text-[#123C39]">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(recipeJsonLd).replace(/</g, "\\u003c"),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, "\\u003c"),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(faqJsonLd).replace(/</g, "\\u003c"),
+          }}
+        />
 
-      <section className="bg-[#123C39] px-6 pb-12 pt-44 text-center text-white">
-        <p className="mb-3 text-sm uppercase tracking-[0.4em] text-amber-300">
-          {recipe.editorialLabel || "A page from the living cookbook"}
-        </p>
-        <h1 className="font-display mx-auto max-w-4xl text-5xl font-bold leading-tight md:text-7xl">
-          {recipe.title}
-        </h1>
-        <p className="mt-4 text-sm uppercase tracking-[0.25em] text-stone-300">
-          {recipe.place}
-        </p>
-        <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-stone-200">{seo.description}</p>
-        {metaStripItems.length > 0 ? (
-          <p className="mt-3 text-sm uppercase tracking-[0.2em] text-amber-200">
-            {metaStripItems.join(" · ")}
+        {recipe.editorialLabel&&<Link className="at-home-back" href="/at-home-recipes">Back to At home recipes</Link>}
+
+        <section className="bg-[#123C39] px-6 pb-12 pt-44 text-center text-white">
+          <p className="mb-3 text-sm uppercase tracking-[0.4em] text-amber-300">
+            {recipe.editorialLabel || "A page from the living cookbook"}
           </p>
-        ) : null}
-        <p className="mt-4 text-sm leading-7 text-stone-300">
-          Recipe by {authorNames.join(" & ") || SITE_NAME}
-          {publishedAt ? <> · Published <time dateTime={publishedAt}>{formatRecipeDate(publishedAt)}</time></> : null}
-          {" · Updated "}<time dateTime={recipeLastModified(publishedAt)}>{formatRecipeDate(recipeLastModified(publishedAt))}</time>
-        </p>
-        <nav aria-label="Recipe sections" className="mt-5 flex flex-wrap justify-center gap-4 text-sm font-semibold text-amber-200">
-          <a href="#ingredients" className="underline underline-offset-4">Jump to ingredients</a>
-          <a href="#method" className="underline underline-offset-4">Jump to method</a>
-        </nav>
-      </section>
+          <h1 className="font-display mx-auto max-w-4xl text-5xl font-bold leading-tight md:text-7xl">
+            {recipe.title}
+          </h1>
+          <p className="mt-4 text-sm uppercase tracking-[0.25em] text-stone-300">
+            {recipe.place}
+          </p>
+          <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-stone-200">{seo.description}</p>
+          {metaStripItems.length > 0 ? (
+            <p className="mt-3 text-sm uppercase tracking-[0.2em] text-amber-200">
+              {metaStripItems.join(" · ")}
+            </p>
+          ) : null}
+          <p className="mt-4 text-sm leading-7 text-stone-300">
+            Recipe by {authorNames.join(" & ") || SITE_NAME}
+            {publishedAt ? <> · Published <time dateTime={publishedAt}>{formatRecipeDate(publishedAt)}</time></> : null}
+            {" · Updated "}<time dateTime={recipeLastModified(publishedAt)}>{formatRecipeDate(recipeLastModified(publishedAt))}</time>
+          </p>
+          <nav aria-label="Recipe sections" className="mt-5 flex flex-wrap justify-center gap-4 text-sm font-semibold text-amber-200">
+            <a href="#ingredients" className="underline underline-offset-4">Jump to ingredients</a>
+            <a href="#method" className="underline underline-offset-4">Jump to method</a>
+          </nav>
+        </section>
 
-      <section className="mx-auto max-w-7xl space-y-8 px-6 py-12 md:px-8 md:py-16">
-        <article className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-10">
-          <div className={recipe.contributorImage ? "grid items-center gap-8 md:grid-cols-[minmax(0,1fr)_18rem]" : undefined}>
-            <div>
-              <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
-                {recipe.editorialLabel ? "From the OPR kitchen" : "The story"}
-              </p>
-              <p className="mt-7 text-2xl leading-relaxed text-[#123C39]">
-                {recipe.editorialLabel ? recipe.story : <>“{recipe.story}”</>}
-              </p>
-              {recipe.source ? (
-                <a href={recipe.source.url} className="mt-6 inline-flex rounded-full bg-[#123C39] px-6 py-3 font-bold text-[#FFF3DF] underline underline-offset-4">
-                  View the original recipe on {recipe.source.name} →
-                </a>
-              ) : null}
-              <p className="mt-10 border-t border-[#DDB765] pt-6 text-sm italic text-stone-600">
-                {recipe.editorialLabel ? "An OPR editorial recipe for home cooking. The photograph is a serving illustration." : recipe.source ? `Shared by ${recipe.contributorName}, via Pauline. Recipe by ${recipe.source.author}.` : "This recipe now belongs to every family who cooks it."}
-              </p>
-            </div>
-            {recipe.contributorImage ? (
-              <figure>
-                <Image
-                  src={recipe.contributorImage}
-                  alt={recipe.contributorImageAlt ?? recipe.contributorName ?? "Recipe contributor"}
-                  width={900}
-                  height={1200}
-                  sizes="(min-width: 768px) 288px, 100vw"
-                  className="aspect-[3/4] w-full rounded-2xl object-cover shadow-lg shadow-[#1C5A50]/15"
-                />
-                {recipe.contributorName ? (
-                  <figcaption className="mt-3 text-center text-sm font-medium text-stone-600">
-                    {recipe.contributorName}
-                  </figcaption>
+        <section className="mx-auto max-w-7xl space-y-8 px-6 py-12 md:px-8 md:py-16">
+          <article className="rounded-3xl bg-[#FFF3DF] p-8 shadow-xl shadow-[#1C5A50]/15 md:p-10">
+            <div className={recipe.contributorImage ? "grid items-center gap-8 md:grid-cols-[minmax(0,1fr)_18rem]" : undefined}>
+              <div>
+                <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
+                  {recipe.editorialLabel ? "From the OPR kitchen" : "The story"}
+                </p>
+                <p className="mt-7 text-2xl leading-relaxed text-[#123C39]">
+                  {recipe.editorialLabel ? recipe.story : <>“{recipe.story}”</>}
+                </p>
+                {recipe.source ? (
+                  <a href={recipe.source.url} className="mt-6 inline-flex rounded-full bg-[#123C39] px-6 py-3 font-bold text-[#FFF3DF] underline underline-offset-4">
+                    View the original recipe on {recipe.source.name} →
+                  </a>
                 ) : null}
+                <p className="mt-10 border-t border-[#DDB765] pt-6 text-sm italic text-stone-600">
+                  {recipe.editorialLabel ? "An OPR editorial recipe for home cooking. The photograph is a serving illustration." : recipe.source ? `Shared by ${recipe.contributorName}, via Pauline. Recipe by ${recipe.source.author}.` : "This recipe now belongs to every family who cooks it."}
+                </p>
+              </div>
+              {recipe.contributorImage ? (
+                <figure>
+                  <Image
+                    src={recipe.contributorImage}
+                    alt={recipe.contributorImageAlt ?? recipe.contributorName ?? "Recipe contributor"}
+                    width={900}
+                    height={1200}
+                    sizes="(min-width: 768px) 288px, 100vw"
+                    className="aspect-[3/4] w-full rounded-2xl object-cover shadow-lg shadow-[#1C5A50]/15"
+                  />
+                  {recipe.contributorName ? (
+                    <figcaption className="mt-3 text-center text-sm font-medium text-stone-600">
+                      {recipe.contributorName}
+                    </figcaption>
+                  ) : null}
+                </figure>
+              ) : null}
+            </div>
+            {recipe.originalRecipeImage ? (
+              <figure className="mt-8 border-t border-[#DDB765] pt-8">
+                <p className="text-sm uppercase tracking-[0.35em] text-amber-700">The original clipping</p>
+                <Image
+                  src={recipe.originalRecipeImage}
+                  alt={recipe.originalRecipeImageAlt ?? `Original recipe for ${recipe.title}`}
+                  width={1200}
+                  height={1600}
+                  sizes="(min-width: 1024px) 768px, 100vw"
+                  className="mt-5 max-h-[42rem] w-auto max-w-full rounded-2xl object-contain shadow-lg shadow-[#1C5A50]/15"
+                />
+                <figcaption className="mt-3 text-sm text-stone-600">
+                  Shared with OPR by {recipe.contributorName ?? "the contributor"}. Transcribed above with practical metric conversions.
+                </figcaption>
               </figure>
             ) : null}
-          </div>
-          {recipe.originalRecipeImage ? (
-            <figure className="mt-8 border-t border-[#DDB765] pt-8">
-              <p className="text-sm uppercase tracking-[0.35em] text-amber-700">The original clipping</p>
+          </article>
+
+          <aside id="ingredients" className="recipe-card-paper w-full scroll-mt-24 p-8 md:p-10">
+            <div className="mb-8 flex items-start gap-3">
               <Image
-                src={recipe.originalRecipeImage}
-                alt={recipe.originalRecipeImageAlt ?? `Original recipe for ${recipe.title}`}
-                width={1200}
-                height={1600}
-                sizes="(min-width: 1024px) 768px, 100vw"
-                className="mt-5 max-h-[42rem] w-auto max-w-full rounded-2xl object-contain shadow-lg shadow-[#1C5A50]/15"
+                src={recipe.image}
+                alt={recipe.editorialLabel ? `${recipe.title} serving illustration` : `Finished dish of ${recipe.title}`}
+                width={imageDimensions?.width ?? 1200}
+                height={imageDimensions?.height ?? 900}
+                sizes="(min-width: 1280px) 1088px, (min-width: 768px) calc(100vw - 144px), calc(100vw - 112px)"
+                className="min-w-0 flex-1 aspect-[4/3] rounded-2xl object-cover"
               />
-              <figcaption className="mt-3 text-sm text-stone-600">
-                Shared with OPR by {recipe.contributorName ?? "the contributor"}. Transcribed above with practical metric conversions.
-              </figcaption>
-            </figure>
-          ) : null}
-        </article>
-
-        <aside id="ingredients" className="recipe-card-paper w-full scroll-mt-24 p-8 md:p-10">
-          <div className="mb-8 flex items-start gap-3">
-            <Image
-              src={recipe.image}
-              alt={recipe.editorialLabel ? `${recipe.title} serving illustration` : `Finished dish of ${recipe.title}`}
-              width={imageDimensions?.width ?? 1200}
-              height={imageDimensions?.height ?? 900}
-              sizes="(min-width: 1280px) 1088px, (min-width: 768px) calc(100vw - 144px), calc(100vw - 112px)"
-              className="min-w-0 flex-1 aspect-[4/3] rounded-2xl object-cover"
-            />
-            <RecipeActions title={recipe.title} imageUrl={recipe.image} />
-          </div>
-          <IngredientMeasurements ingredients={recipe.ingredients} />
-        </aside>
-      </section>
-
-      <section id="method" className="scroll-mt-24 bg-[#FFF3DF] px-6 py-20">
-        <div className="mx-auto max-w-4xl">
-          <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
-            The method
-          </p>
-          <ol className="mt-9 space-y-7">
-            {recipe.method.map((step, index) => (
-              <li id={`method-step-${index + 1}`} key={step} className="flex gap-6 scroll-mt-24 text-lg leading-8 text-stone-700">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#123C39] text-sm font-bold text-white">
-                  {index + 1}
-                </span>
-                {step}
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
-
-      {recipe.methodPhotos ? <RecipeVisualGuide photos={recipe.methodPhotos} /> : null}
-
-      {recipe.notes?.length ? (
-        <section className="bg-[#EED8B2] px-6 pb-4 pt-10 md:pb-5 md:pt-12">
-          <div className="mx-auto max-w-5xl rounded-[2rem] border border-[#DDB765] bg-[#FFF3DF] p-6 shadow-xl shadow-[#1C5A50]/10 md:p-8">
-            <p className="text-sm font-bold uppercase tracking-[0.35em] text-[#9A622A]">
-              Cook&apos;s notes &amp; swaps
-            </p>
-            <h2 className="mt-3 text-4xl font-bold text-[#123C39]">
-              A little help from the OPR kitchen
-            </h2>
-            <p className="mt-3 max-w-3xl text-lg leading-8 text-stone-700">
-              These are optional pointers for making the recipe your own while
-              keeping the spirit of the original.
-            </p>
-            <div className="mt-6 grid gap-4 md:grid-cols-2">
-              {recipe.notes.map((note) => (
-                <article key={note.title} className="rounded-2xl border border-[#DDB765] bg-[#FFF3DF] p-5">
-                  <h3 className="text-xl font-bold text-[#123C39]">{note.title}</h3>
-                  <p className="mt-3 leading-7 text-stone-700">{note.text}</p>
-                </article>
-              ))}
+              <RecipeActions title={recipe.title} imageUrl={recipe.image} />
             </div>
+            <IngredientMeasurements ingredients={recipe.ingredients} />
+          </aside>
+        </section>
+
+        <section id="method" className="scroll-mt-24 bg-[#FFF3DF] px-6 py-20">
+          <div className="mx-auto max-w-4xl">
+            <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
+              The method
+            </p>
+            <ol className="mt-9 space-y-7">
+              {recipe.method.map((step, index) => (
+                <li id={`method-step-${index + 1}`} key={step} className="flex gap-6 scroll-mt-24 text-lg leading-8 text-stone-700">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#123C39] text-sm font-bold text-white">
+                    {index + 1}
+                  </span>
+                  {step}
+                </li>
+              ))}
+            </ol>
           </div>
         </section>
-      ) : null}
 
-      <FamiliesWhoMadeThis cooks={communityCooks} recipeTitle={recipe.title} />
-      <CommunityCookForm recipeSlug={recipe.slug} recipeTitle={recipe.title} />
+        {recipe.methodPhotos ? <RecipeVisualGuide photos={recipe.methodPhotos} /> : null}
 
-      <RecipeFaqs recipeTitle={recipe.title} faqs={recipe.faqs} />
+        {recipe.notes?.length ? (
+          <section className="bg-[#EED8B2] px-6 pb-4 pt-10 md:pb-5 md:pt-12">
+            <div className="mx-auto max-w-5xl rounded-[2rem] border border-[#DDB765] bg-[#FFF3DF] p-6 shadow-xl shadow-[#1C5A50]/10 md:p-8">
+              <p className="text-sm font-bold uppercase tracking-[0.35em] text-[#9A622A]">
+                Cook&apos;s notes &amp; swaps
+              </p>
+              <h2 className="mt-3 text-4xl font-bold text-[#123C39]">
+                A little help from the OPR kitchen
+              </h2>
+              <p className="mt-3 max-w-3xl text-lg leading-8 text-stone-700">
+                These are optional pointers for making the recipe your own while
+                keeping the spirit of the original.
+              </p>
+              <div className="mt-6 grid gap-4 md:grid-cols-2">
+                {recipe.notes.map((note) => (
+                  <article key={note.title} className="rounded-2xl border border-[#DDB765] bg-[#FFF3DF] p-5">
+                    <h3 className="text-xl font-bold text-[#123C39]">{note.title}</h3>
+                    <p className="mt-3 leading-7 text-stone-700">{note.text}</p>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </section>
+        ) : null}
 
-      {relatedCollections.length ? (
-        <section className="bg-[#EED8B2] px-6 py-12 text-center md:py-16">
-          <div className="mx-auto max-w-5xl">
-            <p className="text-sm font-bold uppercase tracking-[0.35em] text-[#9A622A]">
-              Explore by collection
-            </p>
-            <h2 className="font-display mt-4 text-4xl font-bold text-[#123C39]">
-              More recipes with a family thread
-            </h2>
-            <div className="mt-7 flex flex-wrap justify-center gap-3">
-              {relatedCollections.map((collection) => (
+        <FamiliesWhoMadeThis cooks={communityCooks} recipeTitle={recipe.title} />
+        <CommunityCookForm recipeSlug={recipe.slug} recipeTitle={recipe.title} />
+
+        <RecipeFaqs recipeTitle={recipe.title} faqs={recipe.faqs} />
+
+        {relatedCollections.length ? (
+          <section className="bg-[#EED8B2] px-6 py-12 text-center md:py-16">
+            <div className="mx-auto max-w-5xl">
+              <p className="text-sm font-bold uppercase tracking-[0.35em] text-[#9A622A]">
+                Explore by collection
+              </p>
+              <h2 className="font-display mt-4 text-4xl font-bold text-[#123C39]">
+                More recipes with a family thread
+              </h2>
+              <div className="mt-7 flex flex-wrap justify-center gap-3">
+                {relatedCollections.map((collection) => (
+                  <Link
+                    key={collection.slug}
+                    href={`/family-cookbook/collections/${collection.slug}`}
+                    className="rounded-full border border-[#9A622A]/40 bg-[#FFF3DF] px-5 py-3 font-semibold text-[#123C39] transition hover:border-[#123C39] hover:bg-white"
+                  >
+                    {collection.title}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        ) : null}
+
+        {relatedRecipes.length ? (
+          <section className="bg-[#FFF3DF] px-6 py-12 md:py-16">
+            <div className="mx-auto max-w-5xl">
+              <p className="text-center text-sm font-bold uppercase tracking-[0.35em] text-[#9A622A]">
+                Keep cooking
+              </p>
+              <h2 className="mt-3 text-center text-4xl font-bold text-[#123C39]">
+                More family recipes for your table
+              </h2>
+              <div className="mt-8 grid gap-6 md:grid-cols-2">
+                {relatedRecipes.map((relatedRecipe) => (
+                  <Link
+                    key={relatedRecipe.slug}
+                    href={`/family-cookbook/${relatedRecipe.slug}`}
+                    className="group overflow-hidden rounded-3xl bg-white shadow-md transition hover:-translate-y-1 hover:shadow-xl"
+                  >
+                    <Image
+                      src={relatedRecipe.image}
+                      alt=""
+                      width={720}
+                      height={480}
+                      className="aspect-[3/2] w-full object-cover"
+                    />
+                    <div className="p-6">
+                      <h3 className="text-2xl font-bold text-[#123C39]">{relatedRecipe.title}</h3>
+                      <p className="mt-2 text-stone-600">{relatedRecipe.place}</p>
+                      <p className="mt-4 font-semibold text-[#9A622A] group-hover:underline">
+                        Open this recipe →
+                      </p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        ) : null}
+
+        {relatedFilms.length ? (
+          <section className="bg-[#123C39] px-6 py-16 text-center text-white">
+            <p className="text-sm uppercase tracking-[0.35em] text-amber-300">Watch the story</p>
+            <h2 className="mx-auto mt-4 max-w-3xl text-3xl font-bold">Films connected to {recipe.title}</h2>
+            <div className="mx-auto mt-8 grid max-w-4xl gap-4 md:grid-cols-2">
+              {relatedFilms.map((relatedFilm) => (
                 <Link
-                  key={collection.slug}
-                  href={`/family-cookbook/collections/${collection.slug}`}
-                  className="rounded-full border border-[#9A622A]/40 bg-[#FFF3DF] px-5 py-3 font-semibold text-[#123C39] transition hover:border-[#123C39] hover:bg-white"
+                  key={relatedFilm.video}
+                  href={`/films/${filmSlug(relatedFilm)}`}
+                  className="group rounded-3xl bg-[#FFF3DF] px-7 py-6 text-left text-[#123C39] transition hover:-translate-y-1 hover:bg-white"
                 >
-                  {collection.title}
+                  <span className="block text-xl font-bold leading-snug">{relatedFilm.title}</span>
+                  <span className="mt-3 block font-semibold text-[#1C5A50] group-hover:underline">Watch this family recipe film →</span>
                 </Link>
               ))}
             </div>
-          </div>
-        </section>
-      ) : null}
+          </section>
+        ) : null}
 
-      {relatedRecipes.length ? (
-        <section className="bg-[#FFF3DF] px-6 py-12 md:py-16">
-          <div className="mx-auto max-w-5xl">
-            <p className="text-center text-sm font-bold uppercase tracking-[0.35em] text-[#9A622A]">
-              Keep cooking
-            </p>
-            <h2 className="mt-3 text-center text-4xl font-bold text-[#123C39]">
-              More family recipes for your table
-            </h2>
-            <div className="mt-8 grid gap-6 md:grid-cols-2">
-              {relatedRecipes.map((relatedRecipe) => (
-                <Link
-                  key={relatedRecipe.slug}
-                  href={`/family-cookbook/${relatedRecipe.slug}`}
-                  className="group overflow-hidden rounded-3xl bg-white shadow-md transition hover:-translate-y-1 hover:shadow-xl"
-                >
-                  <Image
-                    src={relatedRecipe.image}
-                    alt=""
-                    width={720}
-                    height={480}
-                    className="aspect-[3/2] w-full object-cover"
-                  />
-                  <div className="p-6">
-                    <h3 className="text-2xl font-bold text-[#123C39]">{relatedRecipe.title}</h3>
-                    <p className="mt-2 text-stone-600">{relatedRecipe.place}</p>
-                    <p className="mt-4 font-semibold text-[#9A622A] group-hover:underline">
-                      Open this recipe →
-                    </p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
+        <section className="px-6 py-8 text-center md:py-10">
+          <Link
+            href="/family-cookbook"
+            className="inline-block rounded-full bg-[#123C39] px-8 py-4 text-lg font-medium text-white transition hover:scale-105"
+          >
+            Return to the Living Cookbook
+          </Link>
         </section>
-      ) : null}
-
-      {relatedFilms.length ? (
-        <section className="bg-[#123C39] px-6 py-16 text-center text-white">
-          <p className="text-sm uppercase tracking-[0.35em] text-amber-300">Watch the story</p>
-          <h2 className="mx-auto mt-4 max-w-3xl text-3xl font-bold">Films connected to {recipe.title}</h2>
-          <div className="mx-auto mt-8 grid max-w-4xl gap-4 md:grid-cols-2">
-            {relatedFilms.map((relatedFilm) => (
-              <Link
-                key={relatedFilm.video}
-                href={`/films/${filmSlug(relatedFilm)}`}
-                className="group rounded-3xl bg-[#FFF3DF] px-7 py-6 text-left text-[#123C39] transition hover:-translate-y-1 hover:bg-white"
-              >
-                <span className="block text-xl font-bold leading-snug">{relatedFilm.title}</span>
-                <span className="mt-3 block font-semibold text-[#1C5A50] group-hover:underline">Watch this family recipe film →</span>
-              </Link>
-            ))}
-          </div>
-        </section>
-      ) : null}
-
-      <section className="px-6 py-8 text-center md:py-10">
-        <Link
-          href="/family-cookbook"
-          className="inline-block rounded-full bg-[#123C39] px-8 py-4 text-lg font-medium text-white transition hover:scale-105"
-        >
-          Return to the Living Cookbook
-        </Link>
-      </section>
-    </main>
+      </main>
+    </>
   );
 }

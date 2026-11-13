@@ -95,124 +95,127 @@ export default async function FamilyCookbook() {
   const cookbookJsonLd = buildCookbookJsonLd(cookbookRecipeEntries(recipes, communityRecipes));
 
   return (
-    <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] text-[#123C39]">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(cookbookJsonLd).replace(/</g, "\\u003c"),
-        }}
-      />
+    <>
       <Navigation />
-
-
-      <section className="relative isolate overflow-hidden bg-[#123C39] px-6 pb-12 pt-40 text-center text-white">
-        <Image
-          className="-z-20 object-cover"
-          src="/images/recipes/barbaras-beef-casserole-wide.webp"
-          alt=""
-          fill
-          sizes="100vw"
-          priority
+      <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] text-[#123C39]">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(cookbookJsonLd).replace(/</g, "\\u003c"),
+          }}
         />
-        <div className="absolute inset-0 -z-10 bg-[#123C39]/75" />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#08231F]/65 via-[#123C39]/45 to-[#08231F]/80" />
 
-        <div
-          className="font-founder-hand absolute right-6 top-24 hidden h-24 w-24 rotate-[8deg] items-center justify-center rounded-full border-2 border-[#DDB765] text-center text-[11px] font-bold uppercase leading-tight tracking-[0.04em] text-[#DDB765] sm:flex md:right-10 md:top-28"
-          aria-hidden="true"
-        >
-          Every
-          <br />
-          Recipe
-          <br />
-          Has A
-          <br />
-          Story
-        </div>
 
-        <div className="mx-auto max-w-4xl">
-          <p className="mb-5 text-sm uppercase tracking-[0.4em] text-amber-200">
-            The Living Cookbook
-          </p>
-          <h1 className="font-display text-5xl font-bold leading-tight drop-shadow-lg md:text-7xl">
-            Every recipe has travelled through time before finding its way here.
-          </h1>
-        </div>
-      </section>
-      <section className="at-home-cookbook-link"><h2>Everyday cooking, at home.</h2><p>100 recipes for 15 minute meals, family dinners and date night.</p><Link href="/at-home-recipes">Explore At home recipes</Link></section>
 
-      <section className="bg-[#FFF3DF] px-6 py-12 md:px-8 md:py-16">
-        <div className="mx-auto max-w-6xl">
-          <p className="text-sm font-bold uppercase tracking-[0.35em] text-[#9A622A]">
-            Explore by collection
-          </p>
-          <h2 className="font-display mt-4 max-w-3xl text-4xl font-bold md:text-5xl">
-            Find the family recipes you want to cook
-          </h2>
-          <p className="mt-5 max-w-3xl text-lg leading-8 text-stone-700">
-            Browse real recipes by tradition, ingredient and the kind of food
-            families return to.
-          </p>
-          <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {recipeCollections.map((collection) => (
-              <Link
-                key={collection.slug}
-                href={`/family-cookbook/collections/${collection.slug}`}
-                className="group rounded-3xl border border-[#DDB765]/70 bg-white/70 p-6 transition hover:-translate-y-1 hover:border-[#9A622A] hover:bg-white hover:shadow-lg"
-              >
-                <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#9A622A]">
-                  {collection.recipes.length} recipes
-                </p>
-                <h3 className="mt-3 text-2xl font-bold leading-tight text-[#123C39]">
-                  {collection.title}
-                </h3>
-                <p className="mt-4 leading-7 text-stone-700">
-                  {collection.description}
-                </p>
-                <span className="mt-5 inline-block font-semibold text-[#1C5A50] group-hover:underline">
-                  Explore this collection →
-                </span>
-              </Link>
-            ))}
+        <section className="relative isolate overflow-hidden bg-[#123C39] px-6 pb-12 pt-40 text-center text-white">
+          <Image
+            className="-z-20 object-cover"
+            src="/images/recipes/barbaras-beef-casserole-wide.webp"
+            alt=""
+            fill
+            sizes="100vw"
+            priority
+          />
+          <div className="absolute inset-0 -z-10 bg-[#123C39]/75" />
+          <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#08231F]/65 via-[#123C39]/45 to-[#08231F]/80" />
+
+          <div
+            className="font-founder-hand absolute right-6 top-24 hidden h-24 w-24 rotate-[8deg] items-center justify-center rounded-full border-2 border-[#DDB765] text-center text-[11px] font-bold uppercase leading-tight tracking-[0.04em] text-[#DDB765] sm:flex md:right-10 md:top-28"
+            aria-hidden="true"
+          >
+            Every
+            <br />
+            Recipe
+            <br />
+            Has A
+            <br />
+            Story
           </div>
-        </div>
-      </section>
 
-      <section className="mx-auto max-w-6xl px-6 py-10 md:px-8 md:py-12">
-        <div className="mb-7 max-w-2xl">
+          <div className="mx-auto max-w-4xl">
+            <p className="mb-5 text-sm uppercase tracking-[0.4em] text-amber-200">
+              The Living Cookbook
+            </p>
+            <h1 className="font-display text-5xl font-bold leading-tight drop-shadow-lg md:text-7xl">
+              Every recipe has travelled through time before finding its way here.
+            </h1>
+          </div>
+        </section>
+        <section className="at-home-cookbook-link"><h2>Everyday cooking, at home.</h2><p>100 recipes for 15 minute meals, family dinners and date night.</p><Link href="/at-home-recipes">Explore At home recipes</Link></section>
+
+        <section className="bg-[#FFF3DF] px-6 py-12 md:px-8 md:py-16">
+          <div className="mx-auto max-w-6xl">
+            <p className="text-sm font-bold uppercase tracking-[0.35em] text-[#9A622A]">
+              Explore by collection
+            </p>
+            <h2 className="font-display mt-4 max-w-3xl text-4xl font-bold md:text-5xl">
+              Find the family recipes you want to cook
+            </h2>
+            <p className="mt-5 max-w-3xl text-lg leading-8 text-stone-700">
+              Browse real recipes by tradition, ingredient and the kind of food
+              families return to.
+            </p>
+            <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {recipeCollections.map((collection) => (
+                <Link
+                  key={collection.slug}
+                  href={`/family-cookbook/collections/${collection.slug}`}
+                  className="group rounded-3xl border border-[#DDB765]/70 bg-white/70 p-6 transition hover:-translate-y-1 hover:border-[#9A622A] hover:bg-white hover:shadow-lg"
+                >
+                  <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#9A622A]">
+                    {collection.recipes.length} recipes
+                  </p>
+                  <h3 className="mt-3 text-2xl font-bold leading-tight text-[#123C39]">
+                    {collection.title}
+                  </h3>
+                  <p className="mt-4 leading-7 text-stone-700">
+                    {collection.description}
+                  </p>
+                  <span className="mt-5 inline-block font-semibold text-[#1C5A50] group-hover:underline">
+                    Explore this collection →
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-6xl px-6 py-10 md:px-8 md:py-12">
+          <div className="mb-7 max-w-2xl">
+            <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
+              Choose a recipe
+            </p>
+            <h2 className="font-display mt-4 text-4xl font-bold md:text-5xl">
+              Stories from family kitchens
+            </h2>
+            <p className="mt-6 text-lg leading-8 text-stone-700">
+              These are the first pages of the OPR cookbook: recipes shared with
+              love, and the memories that make them matter.
+            </p>
+          </div>
+
+          <PublishedRecipes
+            featuredRecipes={recipes}
+            initialCommunityRecipes={communityRecipes}
+          />
+        </section>
+
+        <section className="bg-[#FFF3DF] px-6 py-12 text-center">
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
-            Choose a recipe
+            Whet Our Appetite
           </p>
-          <h2 className="font-display mt-4 text-4xl font-bold md:text-5xl">
-            Stories from family kitchens
+          <h2 className="mx-auto mt-5 max-w-3xl text-4xl font-bold md:text-5xl">
+            Could your family&apos;s recipe be next?
           </h2>
-          <p className="mt-6 text-lg leading-8 text-stone-700">
-            These are the first pages of the OPR cookbook: recipes shared with
-            love, and the memories that make them matter.
-          </p>
-        </div>
-
-        <PublishedRecipes
-          featuredRecipes={recipes}
-          initialCommunityRecipes={communityRecipes}
-        />
-      </section>
-
-      <section className="bg-[#FFF3DF] px-6 py-12 text-center">
-        <p className="text-sm uppercase tracking-[0.35em] text-amber-700">
-          Whet Our Appetite
-        </p>
-        <h2 className="mx-auto mt-5 max-w-3xl text-4xl font-bold md:text-5xl">
-          Could your family&apos;s recipe be next?
-        </h2>
-        <TrackedLink
-          href="/share"
-          eventKey="cookbook_share"
-          className="mt-6 inline-block rounded-full bg-[#123C39] px-8 py-4 text-lg font-medium text-white transition hover:scale-105"
-        >
-          Share your recipe
-        </TrackedLink>
-      </section>
-    </main>
+          <TrackedLink
+            href="/share"
+            eventKey="cookbook_share"
+            className="mt-6 inline-block rounded-full bg-[#123C39] px-8 py-4 text-lg font-medium text-white transition hover:scale-105"
+          >
+            Share your recipe
+          </TrackedLink>
+        </section>
+      </main>
+    </>
   );
 }

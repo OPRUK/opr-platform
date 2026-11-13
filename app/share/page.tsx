@@ -22,47 +22,50 @@ export const metadata: Metadata = {
 
 export default function ShareYourStory() {
   return (
-    <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] text-[#123C39]">
+    <>
       <Navigation />
+      <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] text-[#123C39]">
 
-      <section className="bg-[#123C39] px-6 pb-24 pt-40 text-center text-white">
-        <p className="mb-5 text-sm uppercase tracking-[0.4em] text-amber-300">
-          Share your recipe to the Living Cookbook
-        </p>
-        <h1 className="mx-auto max-w-4xl text-5xl font-bold leading-tight md:text-7xl">
-          Share your family&apos;s recipe.
-        </h1>
-        <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-stone-200">
-          The ingredients matter, but the story matters too. Tell us both, in
-          your own words.
-        </p>
-      </section>
 
-      <section className="mx-auto max-w-3xl px-6 py-20 md:px-8">
-        <p className="mb-8 rounded-2xl bg-[#FFF3DF] p-6 leading-7">Still gathering the story? Our <Link href="/preserve-family-recipes" className="font-semibold underline underline-offset-4">free family-recipe recording guide and worksheet</Link> can help you ask the questions, capture the cooking details and keep the person behind the dish in the story.</p>
-        <RecipeForm />
-      </section>
-
-      <section className="border-t border-[#DDB765]/70 bg-[#FFF3DF] px-6 py-20">
-        <div className="mx-auto max-w-6xl">
-          <p className="text-center text-sm uppercase tracking-[0.35em] text-amber-700">
-            What happens next
+        <section className="bg-[#123C39] px-6 pb-24 pt-40 text-center text-white">
+          <p className="mb-5 text-sm uppercase tracking-[0.4em] text-amber-300">
+            Share your recipe to the Living Cookbook
           </p>
-          <div className="mt-10 grid gap-6 md:grid-cols-3">
-            {[
-              ["01", "Send your recipe", "Your recipe arrives directly with the OPR team."],
-              ["02", "We read the story", "We look for the people and memories behind every dish."],
-              ["03", "A recipe lives on", "Selected stories can appear in the living cookbook and beyond."],
-            ].map(([number, title, copy]) => (
-              <article key={number} className="rounded-3xl border border-[#DDB765]/70 bg-[#EED8B2]/60 p-7">
-                <p className="text-sm font-bold tracking-[0.25em] text-amber-800">{number}</p>
-                <h2 className="mt-5 text-2xl font-bold">{title}</h2>
-                <p className="mt-3 leading-7 text-stone-700">{copy}</p>
-              </article>
-            ))}
+          <h1 className="mx-auto max-w-4xl text-5xl font-bold leading-tight md:text-7xl">
+            Share your family&apos;s recipe.
+          </h1>
+          <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-stone-200">
+            The ingredients matter, but the story matters too. Tell us both, in
+            your own words.
+          </p>
+        </section>
+
+        <section className="mx-auto max-w-3xl px-6 py-20 md:px-8">
+          <p className="mb-8 rounded-2xl bg-[#FFF3DF] p-6 leading-7">Still gathering the story? Our <Link href="/preserve-family-recipes" className="font-semibold underline underline-offset-4">free family-recipe recording guide and worksheet</Link> can help you ask the questions, capture the cooking details and keep the person behind the dish in the story.</p>
+          <RecipeForm />
+        </section>
+
+        <section className="border-t border-[#DDB765]/70 bg-[#FFF3DF] px-6 py-20">
+          <div className="mx-auto max-w-6xl">
+            <p className="text-center text-sm uppercase tracking-[0.35em] text-amber-700">
+              What happens next
+            </p>
+            <div className="mt-10 grid gap-6 md:grid-cols-3">
+              {[
+                ["01", "Send your recipe", "Your recipe arrives directly with the OPR team."],
+                ["02", "We read the story", "We look for the people and memories behind every dish."],
+                ["03", "A recipe lives on", "Selected stories can appear in the living cookbook and beyond."],
+              ].map(([number, title, copy]) => (
+                <article key={number} className="rounded-3xl border border-[#DDB765]/70 bg-[#EED8B2]/60 p-7">
+                  <p className="text-sm font-bold tracking-[0.25em] text-amber-800">{number}</p>
+                  <h2 className="mt-5 text-2xl font-bold">{title}</h2>
+                  <p className="mt-3 leading-7 text-stone-700">{copy}</p>
+                </article>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
-    </main>
+        </section>
+      </main>
+    </>
   );
 }
