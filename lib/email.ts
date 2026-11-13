@@ -2,7 +2,7 @@ import { designReviewEmail } from "./email-design-review.ts";
 import { cookalongEvent } from "./cookalong-event.ts";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://otherpeoplesrecipes.co.uk";
-const from = process.env.EMAIL_FROM || "Other People's Recipes <onboarding@resend.dev>";
+const from = (process.env.EMAIL_FROM || "Other People's Recipes <onboarding@resend.dev>").replace(/Chaten\s+Oberoi(?:-|\s)Morris/gi, "Chaten");
 
 export const WELCOME_NEWSLETTER_SUBJECT = "Welcome to our table, our very first newsletter";
 
