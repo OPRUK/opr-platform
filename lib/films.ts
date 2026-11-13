@@ -122,6 +122,21 @@ function film(
 
 const filmsUnordered: Film[] = [
 {
+  "title": "The Butter Chicken Verdict | Part 4: The Final Verdict",
+  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-butter-chicken-verdict-part-4-the-final-verdict.mp4",
+  "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/posters/opr-butter-chicken-verdict-part-4-the-final-verdict-poster.jpg",
+  "description": "Rubble has chosen his butter chicken champion. Dave has been given a different job. The final part of Dave, Sudesh and Rubble’s kitchen debate.",
+  "transcript": "Dave: Come on then, who’s the butter chicken champion?\nRubble: Nanny Sudesh, obviously.\nDave: So what’s my job?\nSudesh: You can wash up.\nRubble: Finally, a clear winner.\n\nEnd card: Other People’s Recipes and its social accounts. Love a good drink too? Discover Other People’s Cocktails at otherpeoplescocktails.co.uk.",
+  "captions": "/captions/the-butter-chicken-verdict-part-4-the-final-verdict.vtt",
+  "uploadDate": "2026-11-13T16:20:00+00:00",
+  "durationSeconds": 13,
+  "width": 1080,
+  "height": 1920,
+  "posterWidth": 720,
+  "posterHeight": 1280,
+  "recipeSlug": "daves-butter-chicken"
+},
+{
   "title": "The Butter Chicken Verdict | Part 3: The Taste Test",
   "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-butter-chicken-verdict-part-3-the-taste-test.mp4",
   "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/posters/opr-butter-chicken-verdict-part-3-the-taste-test-poster.jpg",
