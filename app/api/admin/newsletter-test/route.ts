@@ -20,7 +20,7 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json().catch(() => ({})) as { preview?: string };
-  const allowed: ReviewKind[] = ['first','november-2026','welcome','recipe','opc-welcome','opc-recipe'];
+  const allowed: ReviewKind[] = ['first','november-2026','welcome','recipe','opc-welcome','opc-recipe','opc-newsletter'];
   const kind = (body.preview || 'first') as ReviewKind;
   if (!allowed.includes(kind)) return Response.json({error:'Unknown design preview.'},{status:400});
   const content = designReviewEmail(kind,{name:'Chaten',title:kind==='opc-recipe'?'Your favourite cocktail':'Your family favourite',unsubscribeUrl});
