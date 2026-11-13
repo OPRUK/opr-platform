@@ -224,3 +224,14 @@ body :is(main,footer) .text-xs{font-size:.875rem;line-height:1.65}.meal-maker-ey
 
 /* Long recipe names and film-credit URLs must reflow at narrow widths and enlarged text sizes. */
 main { overflow-wrap: anywhere; }
+
+/* Keep homepage content on shared edges, with a calm spacing rhythm. */
+.opr-home{--home-gutter:clamp(24px,5vw,72px);--home-space:64px}
+.opr-home>section:not(:first-child){padding:var(--home-space) var(--home-gutter)}
+.opr-home>section:not(:first-child)>div{max-width:1152px;margin-inline:auto}
+.opr-home>section[aria-labelledby="opc-launch-heading"],.opr-home>section.home-purpose,.opr-home>section[aria-labelledby="recipe-poll-title"]{padding-top:0}
+.opr-home>section[aria-labelledby="opc-launch-heading"]>div{padding:32px;gap:32px}
+.opr-home>section:not(:first-child) h2{font-size:clamp(1.8rem,3.4vw,2.8rem);line-height:1.18}
+.opr-home>section:not(:first-child) h3{font-size:clamp(1.6rem,3vw,2.2rem);line-height:1.2}
+.opr-home .home-cooking-grid{gap:24px}.opr-home .home-cooking-card{min-height:420px}.opr-home .home-cookalong{margin-top:24px}.opr-home .home-cooking-copy{padding:32px}
+@media(max-width:767px){.opr-home{--home-gutter:20px;--home-space:40px}.opr-home>section[aria-labelledby="opc-launch-heading"]>div{padding:24px;gap:24px}.opr-home .home-cooking-grid{gap:20px}.opr-home .home-cooking-copy{padding:28px 24px}.opr-home .home-cooking-card{min-height:400px}.opr-home>section:not(:first-child)>div>div:not(.home-cooking-copy){min-width:0}.opr-home .home-cookalong{padding:24px}.opr-home .home-cookalong-copy{min-width:0}}

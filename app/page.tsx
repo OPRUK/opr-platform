@@ -58,7 +58,7 @@ export default async function Home() {
   return (
     <>
       <Navigation />
-      <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#EED8B2] text-[#123C39]">
+      <main id="main-content" tabIndex={-1} className="opr-home min-h-screen bg-[#EED8B2] text-[#123C39]">
 
 
         {/* Hero */}
@@ -177,7 +177,7 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="bg-[#EED8B2] px-6 py-16 animate-rise-in-delayed md:px-8 md:py-20">
+        <section className="home-purpose bg-[#EED8B2] px-6 py-16 animate-rise-in-delayed md:px-8 md:py-20">
           <div className="mx-auto max-w-6xl">
             <div className="text-center">
               <h2 className="font-display mx-auto max-w-4xl text-4xl font-bold leading-tight text-[#123C39] md:text-6xl">
