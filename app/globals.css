@@ -221,3 +221,6 @@ body :is(main,footer) .text-xs{font-size:.875rem;line-height:1.65}.meal-maker-ey
 @keyframes opr-character-zoom { from { transform: scale(1); } to { transform: scale(1.035); } }
 
 .at-home-tools .at-home-filter-label{font-size:16px;font-weight:600;margin:0 0 10px}.at-home-tools .at-home-filter-label:not(:first-child){margin-top:20px}.at-home-tools>div{display:block}.at-home-reset{padding:12px 22px;min-height:44px;border:1px solid #123c39;border-radius:24px;background:#123c39;color:#fff3df}
+
+/* Long recipe names and film-credit URLs must reflow at narrow widths and enlarged text sizes. */
+main { overflow-wrap: anywhere; }
