@@ -1,3 +1,4 @@
+import { christmasRecipes } from "./christmas-recipes";
 import {atHomeRecipes} from "./at-home-recipes";
 import type { RecipeFaq } from "./recipe-faqs";
 
@@ -58,6 +59,8 @@ export type FeaturedRecipe = {
   relatedRecipeSlugs?: string[];
   atHomeCategory?: "15 minute"|"Family"|"Date night";
   editorialLabel?: string;
+  christmasCourse?: "Starters"|"Mains"|"Sides"|"Desserts";
+  christmasMenus?: ("general"|"vegetarian"|"vegan")[];
 };
 
 export const featuredRecipes: FeaturedRecipe[] = [
@@ -1461,5 +1464,5 @@ export const featuredRecipes: FeaturedRecipe[] = [
 ];
 
 export function getFeaturedRecipe(slug: string): FeaturedRecipe | undefined {
-  return [...featuredRecipes,...atHomeRecipes].find((recipe) => recipe.slug === slug);
+  return [...featuredRecipes,...atHomeRecipes,...christmasRecipes].find((recipe) => recipe.slug === slug);
 }

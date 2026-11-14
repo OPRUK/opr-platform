@@ -131,6 +131,15 @@ export default async function Home() {
           </div>
         </section>
 
+        <section aria-labelledby="home-christmas-heading" className="bg-[#FFF3DF]">
+          <div className="rounded-2xl border border-[#9A622A]/40 bg-[#123C39] p-7 text-[#FFF3DF] md:p-10">
+            <p className="text-sm font-semibold uppercase tracking-[0.15em]">Christmas at our table</p>
+            <h2 id="home-christmas-heading" className="mt-4 font-display text-3xl leading-tight text-[#FFF3DF]">A little planning. A lovely Christmas lunch.</h2>
+            <p className="mt-5 max-w-2xl leading-8">Full recipes for classic, vegetarian and vegan celebrations, with practical timings, quick wins and a visual guide for every dish.</p>
+            <Link href="/christmas" className="mt-6 inline-flex min-h-12 items-center rounded-md bg-[#FFF3DF] px-6 py-3 font-bold text-[#123C39]">Explore Christmas recipes</Link>
+          </div>
+        </section>
+
         <section aria-labelledby="opc-launch-heading" className="bg-[#FFF3DF] px-6 py-12 md:py-16">
           <div className="mx-auto grid max-w-6xl items-center gap-8 rounded-[2rem] border border-[#DDB765]/50 p-7 sm:p-10 md:grid-cols-[1fr_180px]">
             <div>

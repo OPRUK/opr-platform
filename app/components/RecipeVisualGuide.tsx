@@ -46,10 +46,10 @@ export default function RecipeVisualGuide({
               <Image
                 src={photo.src}
                 alt={photo.alt}
-                width={1536}
-                height={1024}
+                width={illustrative ? 1024 : 1536}
+                height={illustrative ? 508 : 1024}
                 sizes={imageSizes}
-                className="aspect-[3/2] w-full object-cover"
+                className={illustrative ? "aspect-[2/1] w-full object-cover" : "aspect-[3/2] w-full object-cover"}
               />
               <figcaption className="p-6">
                 <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#9A622A]">

@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
+    remotePatterns: [{ protocol: "https", hostname: "kag2qb9d0la7upu4.public.blob.vercel-storage.com", pathname: "/christmas-20261113/**" }],
     qualities: [65, 75],
   },
   async rewrites() {

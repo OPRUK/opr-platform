@@ -20,6 +20,7 @@ export default function Navigation() {
     { href: "/founder", label: "Founder" },
     { href: "/family-cookbook", label: "Living Cookbook" },
     { href: "/at-home-recipes", label: "At home recipes" },
+    { href: "/christmas", label: "Christmas" },
     { href: "/films", label: "Films" },
     { href: "/make-me-a-meal", label: "Make me a meal" },
     { href: "/live-with-dave", label: "Cook Along" },

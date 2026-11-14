@@ -192,7 +192,7 @@ export default async function RecipePage({
           }}
         />
 
-        {recipe.editorialLabel&&<Link className="at-home-back" href="/at-home-recipes">Back to At home recipes</Link>}
+        {recipe.editorialLabel&&<Link className="at-home-back" href={recipe.christmasCourse ? "/christmas" : "/at-home-recipes"}>{recipe.christmasCourse ? "Back to Christmas recipes" : "Back to At home recipes"}</Link>}
 
         <section className="bg-[#123C39] px-6 pb-12 pt-44 text-center text-white">
           <p className="mb-3 text-sm uppercase tracking-[0.4em] text-amber-300">
@@ -237,7 +237,7 @@ export default async function RecipePage({
                   </a>
                 ) : null}
                 <p className="mt-10 border-t border-[#DDB765] pt-6 text-sm italic text-stone-600">
-                  {recipe.editorialLabel ? "An OPR editorial recipe for home cooking. The photograph is a serving illustration." : recipe.source ? `Shared by ${recipe.contributorName}, via Pauline. Recipe by ${recipe.source.author}.` : "This recipe now belongs to every family who cooks it."}
+                  {recipe.editorialLabel ? (recipe.christmasCourse ? "An original OPR editorial recipe. Serving and stage images are AI-generated illustrations. This recipe has not been independently kitchen-tested." : "An OPR editorial recipe for home cooking. The photograph is a serving illustration.") : recipe.source ? `Shared by ${recipe.contributorName}, via Pauline. Recipe by ${recipe.source.author}.` : "This recipe now belongs to every family who cooks it."}
                 </p>
               </div>
               {recipe.contributorImage ? (
@@ -280,11 +280,11 @@ export default async function RecipePage({
             <div className="mb-8 flex items-start gap-3">
               <Image
                 src={recipe.image}
-                alt={recipe.editorialLabel ? `${recipe.title} serving illustration` : `Finished dish of ${recipe.title}`}
-                width={imageDimensions?.width ?? 1200}
-                height={imageDimensions?.height ?? 900}
+                alt={recipe.editorialLabel ? `${recipe.title} ${recipe.christmasCourse ? "AI-generated " : ""}serving illustration` : `Finished dish of ${recipe.title}`}
+                width={recipe.christmasCourse ? 1024 : (imageDimensions?.width ?? 1200)}
+                height={recipe.christmasCourse ? 508 : (imageDimensions?.height ?? 900)}
                 sizes="(min-width: 1280px) 1088px, (min-width: 768px) calc(100vw - 144px), calc(100vw - 112px)"
-                className="min-w-0 flex-1 aspect-[4/3] rounded-2xl object-cover"
+                className={recipe.christmasCourse ? "min-w-0 flex-1 aspect-[2/1] rounded-2xl object-cover" : "min-w-0 flex-1 aspect-[4/3] rounded-2xl object-cover"}
               />
               <RecipeActions title={recipe.title} imageUrl={recipe.image} />
             </div>
@@ -310,7 +310,7 @@ export default async function RecipePage({
           </div>
         </section>
 
-        {recipe.methodPhotos ? <RecipeVisualGuide photos={recipe.methodPhotos} /> : null}
+        {recipe.methodPhotos ? <RecipeVisualGuide photos={recipe.methodPhotos} illustrative={Boolean(recipe.christmasCourse)} /> : null}
 
         {recipe.notes?.length ? (
           <section className="bg-[#EED8B2] px-6 pb-4 pt-10 md:pb-5 md:pt-12">
