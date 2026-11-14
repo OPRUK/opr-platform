@@ -50,7 +50,7 @@ export async function POST(request:Request){
   const {error:trackError}=await db.from('newsletter_deliveries').upsert({newsletter_id:id,email:person.email,name:person.name,status:'sending',attempts:1,updated_at:new Date().toISOString()},{onConflict:'newsletter_id,email'});
   if(trackError){failures.push({recipientHash:hash,reason:'Could not record attempt; not sent.'});continue;}
   try{
-   const response=await fetch('https://api.resend.com/emails',{method:'POST',headers:{Authorization:`Bearer ${resend}`,'Content-Type':'application/json','Idempotency-Key':`${id}-${hash}`},body:JSON.stringify({from:`Chaten <${senderAddress}>`,to:[person.email],...content,headers:{'List-Unsubscribe':`<${link}>`}}),signal:AbortSignal.timeout(20000)});
+   const response=await fetch('https://api.resend.com/emails',{method:'POST',headers:{Authorization:`Bearer ${resend}`,'Content-Type':'application/json','Idempotency-Key':`${id}-${hash}`},body:JSON.stringify({from:`Other Peoples Recipes <${senderAddress}>`,to:[person.email],...content,headers:{'List-Unsubscribe':`<${link}>`}}),signal:AbortSignal.timeout(20000)});
    const result=await response.json() as {id?:string;message?:string};
    if(!response.ok||!result.id){failures.push({recipientHash:hash,reason:`Provider did not confirm acceptance (${response.status}).`});continue;}
    const {error:recordError}=await db.from('newsletter_deliveries').update({status:'sent',provider_status:response.status,sent_at:new Date().toISOString(),updated_at:new Date().toISOString(),error_code:null,error_message:null}).eq('newsletter_id',id).eq('email',person.email);

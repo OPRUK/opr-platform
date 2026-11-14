@@ -16,7 +16,7 @@ export async function POST(request:Request){
  for(const kind of kinds){
   const content=designReviewEmail(kind,{name:'Chaten',title:kind==='opc-recipe'?'Your favourite cocktail':'Your family favourite',unsubscribeUrl:link});
   if(!content.html.includes('logo" width="96"')||/Chaten Oberoi|[\u2190-\u21ff]/.test(content.html))return Response.json({error:'Design verification failed.'},{status:500});
-  const result=await fetch('https://api.resend.com/emails',{method:'POST',headers:{Authorization:`Bearer ${key}`,'Content-Type':'application/json','Idempotency-Key':`design-preview-christmas-logos-20261114-${kind}`},body:JSON.stringify({from:`Chaten <${address}>`,to:[recipient],subject:'[UPDATED DESIGN FOR APPROVAL] '+content.subject,html:content.html}),signal:AbortSignal.timeout(20000)});
+  const result=await fetch('https://api.resend.com/emails',{method:'POST',headers:{Authorization:`Bearer ${key}`,'Content-Type':'application/json','Idempotency-Key':`design-preview-brand-sender-20261114-${kind}`},body:JSON.stringify({from:`${kind.startsWith('opc-')?'Other Peoples Cocktails':'Other Peoples Recipes'} <${address}>`,to:[recipient],subject:'[UPDATED DESIGN FOR APPROVAL] '+content.subject,html:content.html}),signal:AbortSignal.timeout(20000)});
   const data=await result.json() as {id?:string};if(!result.ok||!data.id)return Response.json({error:`Preview service did not confirm ${kind}.`,accepted},{status:502});
   accepted.push({kind,providerId:data.id});await new Promise(resolve=>setTimeout(resolve,600));
  }
