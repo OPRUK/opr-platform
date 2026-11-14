@@ -310,7 +310,7 @@ export default async function RecipePage({
           </div>
         </section>
 
-        {recipe.methodPhotos ? <RecipeVisualGuide photos={recipe.methodPhotos} illustrative={Boolean(recipe.christmasCourse)} /> : null}
+        {recipe.methodPhotos ? <RecipeVisualGuide photos={recipe.methodPhotos} illustrative={Boolean(recipe.christmasCourse)} wide={Boolean(recipe.christmasCourse)} /> : null}
 
         {recipe.notes?.length ? (
           <section className="bg-[#EED8B2] px-6 pb-4 pt-10 md:pb-5 md:pt-12">

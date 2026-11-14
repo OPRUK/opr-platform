@@ -4,9 +4,11 @@ import type { RecipeMethodPhoto } from "../../lib/recipes";
 export default function RecipeVisualGuide({
   photos,
   illustrative = false,
+  wide = false,
 }: {
   photos: RecipeMethodPhoto[];
   illustrative?: boolean;
+  wide?: boolean;
 }) {
   if (!photos.length) return null;
 
@@ -46,10 +48,10 @@ export default function RecipeVisualGuide({
               <Image
                 src={photo.src}
                 alt={photo.alt}
-                width={illustrative ? 1024 : 1536}
-                height={illustrative ? 508 : 1024}
+                width={wide ? 1024 : 1536}
+                height={wide ? 508 : 1024}
                 sizes={imageSizes}
-                className={illustrative ? "aspect-[2/1] w-full object-cover" : "aspect-[3/2] w-full object-cover"}
+                className={wide ? "aspect-[2/1] w-full object-cover" : "aspect-[3/2] w-full object-cover"}
               />
               <figcaption className="p-6">
                 <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#9A622A]">
