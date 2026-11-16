@@ -124,6 +124,7 @@ function film(
 const filmsUnordered: Film[] = [
 {
   "title": "Dave & Rubble | The Carol Singers",
+  "captions": "/captions/dave-and-rubble-the-carol-singers.vtt",
   "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/christmas-films-20261116/dave-and-rubble-the-carol-singers-final.mp4",
   "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/christmas-films-20261116/dave-and-rubble-the-carol-singers.jpg",
   "description": "Christmas carol singers arrive. Dave asks Rubble to give them something. Rubble has a suggestion: singing lessons.",
