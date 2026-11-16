@@ -80,7 +80,7 @@ export function getRelatedFilms(currentFilm: Film, limit = 3): Film[] {
   return selected;
 }
 
-export const filmsLastUpdated = "2026-11-13";
+export const filmsLastUpdated = "2026-11-16";
 
 export function filmUploadDate(film: Pick<Film, "uploadDate">): string {
   if (!film.uploadDate) throw new Error("A documented film publication date is required.");
@@ -122,6 +122,19 @@ function film(
 }
 
 const filmsUnordered: Film[] = [
+{
+  "title": "Dave & Rubble | The Carol Singers",
+  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/christmas-films-20261116/dave-and-rubble-the-carol-singers-final.mp4",
+  "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/christmas-films-20261116/dave-and-rubble-the-carol-singers.jpg",
+  "description": "Christmas carol singers arrive. Dave asks Rubble to give them something. Rubble has a suggestion: singing lessons.",
+  "transcript": "Dave: “Give them something, Rubble.”\nRubble: “I’ve got a suggestion.”\nDave: “Be nice.”\nRubble: “Singing lessons.”\n\nDave suppresses a laugh as Rubble settles into his bed.\n\nEnd card: Other People’s Recipes. otherpeoplesrecipes.co.uk. @opr_uk. All our socials: otherpeoplesrecipes.co.uk/links. Love a good drink too? otherpeoplescocktails.co.uk.",
+  "uploadDate": "2026-11-16T09:00:00+00:00",
+  "durationSeconds": 13,
+  "width": 720,
+  "height": 1280,
+  "posterWidth": 720,
+  "posterHeight": 1280
+},
 {
   "title": "The Butter Chicken Verdict | Part 4: The Final Verdict",
   "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/videos/opr-butter-chicken-verdict-part-4-the-final-verdict.mp4",
