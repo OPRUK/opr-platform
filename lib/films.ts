@@ -123,6 +123,20 @@ function film(
 
 const filmsUnordered: Film[] = [
 {
+  "title": "Dave & Rubble | The Christmas List",
+  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/christmas-list-20261117/dave-and-rubble-the-christmas-list-final.mp4",
+  "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/christmas-list-20261117/dave-and-rubble-the-christmas-list.jpg",
+  "description": "Dave writes the Christmas shopping list. Rubble makes sure nobody forgets his share.",
+  "transcript": "Dave: “Turkey, potatoes, carrots. Anything else?”\nRubble: “A second turkey.”\nDave: “We’re only feeding six.”\nRubble: “You always forget me.”\n\nEnd card: Other People’s Recipes. otherpeoplesrecipes.co.uk. @opr_uk. All our socials: otherpeoplesrecipes.co.uk/links. Love a good drink too? otherpeoplescocktails.co.uk.",
+  "uploadDate": "2026-11-17T13:00:00+00:00",
+  "durationSeconds": 13,
+  "width": 720,
+  "height": 1280,
+  "posterWidth": 720,
+  "posterHeight": 1280,
+  "captions": "/captions/dave-and-rubble-the-christmas-list.vtt"
+},
+{
   "title": "Dave & Rubble | The Practice Dinner",
   "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/christmas-films-20261117/dave-and-rubble-the-practice-dinner-final.mp4",
   "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/christmas-films-20261117/dave-and-rubble-the-practice-dinner.jpg",
