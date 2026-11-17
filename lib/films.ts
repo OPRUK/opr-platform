@@ -80,7 +80,7 @@ export function getRelatedFilms(currentFilm: Film, limit = 3): Film[] {
   return selected;
 }
 
-export const filmsLastUpdated = "2026-11-16";
+export const filmsLastUpdated = "2026-11-17";
 
 export function filmUploadDate(film: Pick<Film, "uploadDate">): string {
   if (!film.uploadDate) throw new Error("A documented film publication date is required.");
@@ -122,6 +122,20 @@ function film(
 }
 
 const filmsUnordered: Film[] = [
+{
+  "title": "Dave & Rubble | The Practice Dinner",
+  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/christmas-films-20261117/dave-and-rubble-the-practice-dinner-final.mp4",
+  "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/christmas-films-20261117/dave-and-rubble-the-practice-dinner.jpg",
+  "description": "Dave practises Christmas lunch. Rubble volunteers for a very important role: eating it.",
+  "transcript": "Dave: “We’re practising Christmas lunch.”\nRubble: “Excellent. I’ll practise eating it.”\nDave: “You’re supposed to tell me what’s missing.”\nRubble: “My plate.”\n\nDave suppresses a fond laugh as Rubble looks hopefully at the dinner.\n\nEnd card: Other People’s Recipes. otherpeoplesrecipes.co.uk. @opr_uk. All our socials: otherpeoplesrecipes.co.uk/links. Love a good drink too? otherpeoplescocktails.co.uk.",
+  "uploadDate": "2026-11-17T10:45:00+00:00",
+  "durationSeconds": 13,
+  "width": 720,
+  "height": 1280,
+  "posterWidth": 720,
+  "posterHeight": 1280,
+  "captions": "/captions/dave-and-rubble-the-practice-dinner.vtt"
+},
 {
   "title": "Dave & Rubble | The Carol Singers",
   "captions": "/captions/dave-and-rubble-the-carol-singers.vtt",
