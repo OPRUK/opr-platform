@@ -34,8 +34,11 @@ export default function DaveAndRubblePage() {
             <div className="mt-9 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {daveAndRubbleFilms.map((film) => (
                 <article key={film.video} className="overflow-hidden rounded-3xl bg-[#FFF3DF] shadow-lg shadow-[#1C5A50]/10">
-                  <Link href={`/films/${filmSlug(film)}`} className="group relative block aspect-video overflow-hidden bg-[#123C39]">
+                  <Link href={`/films/${filmSlug(film)}`}
+                    prefetch={false} className="group relative block aspect-video overflow-hidden bg-[#123C39]">
                     <img
+                      loading="lazy"
+                      decoding="async"
                       src={film.poster ?? "/images/recipes/barbaras-beef-casserole-wide.webp"}
                       alt={`Still from ${film.title}`}
                       className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
@@ -47,10 +50,12 @@ export default function DaveAndRubblePage() {
                   </Link>
                   <div className="p-6">
                     <h3 className="text-xl font-bold leading-snug">
-                      <Link href={`/films/${filmSlug(film)}`} className="hover:underline">{film.title}</Link>
+                      <Link href={`/films/${filmSlug(film)}`}
+                    prefetch={false} className="hover:underline">{film.title}</Link>
                     </h3>
                     <p className="mt-3 leading-7 text-stone-700">{filmDescription(film)}</p>
-                    <Link href={`/films/${filmSlug(film)}`} className="mt-5 inline-block font-semibold text-[#1C5A50] underline decoration-[#DDB765] decoration-2 underline-offset-4">
+                    <Link href={`/films/${filmSlug(film)}`}
+                    prefetch={false} className="mt-5 inline-block font-semibold text-[#1C5A50] underline decoration-[#DDB765] decoration-2 underline-offset-4">
                       Watch and read the transcript →
                     </Link>
                   </div>

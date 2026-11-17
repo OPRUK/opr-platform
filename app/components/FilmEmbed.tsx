@@ -174,7 +174,7 @@ export default function FilmEmbed({
           className="relative z-10 h-full w-full object-contain"
           src={filmPlaybackUrl(video)}
           playsInline
-          preload="metadata"
+          preload="none"
           poster={resolvedPoster}
           controls={false}
           controlsList="nodownload noremoteplayback"
@@ -314,7 +314,7 @@ export default function FilmEmbed({
         className={`group relative block overflow-hidden bg-black ${className}`}
       >
         {/* eslint-disable-next-line @next/next/no-img-element -- Supabase poster URLs are runtime data */}
-        <img src={resolvedPoster} alt="" className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]" />
+        <img src={resolvedPoster} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]" />
         <span className="absolute inset-0 flex items-center justify-center bg-black/20 transition group-hover:bg-black/35">
           <span className="flex h-16 w-16 items-center justify-center rounded-full border border-white/70 bg-black/35 shadow-xl backdrop-blur-sm transition group-hover:scale-110 group-hover:bg-[#FFF3DF] group-hover:text-[#123C39]">
             <svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24" fill="currentColor" className="ml-1 text-[#FFF3DF] group-hover:text-[#123C39]">

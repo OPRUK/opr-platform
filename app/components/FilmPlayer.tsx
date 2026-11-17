@@ -25,7 +25,7 @@ export default function FilmPlayer({video, title, poster, captions, width = 16, 
   return <>
     <video ref={player} id="film-player" src={filmPlaybackUrl(video)} aria-label={title}
       className="block h-auto w-full bg-black object-contain" style={{aspectRatio: `${width} / ${height}`}}
-      width={width} height={height} controls playsInline preload="metadata" poster={poster}
+      width={width} height={height} controls playsInline preload="none" poster={poster}
       onError={() => setFailed(true)} onPlaying={() => setFailed(false)}>
       {captions ? <track kind="captions" src={captions} srcLang="en" label="English captions" default /> : null}
       Your browser does not support video playback.

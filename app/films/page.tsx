@@ -97,10 +97,13 @@ export default function FilmsPage() {
                 >
                   <Link
                     href={`/films/${filmSlug(film)}`}
+                    prefetch={false}
                     aria-label={`Watch ${film.title}`}
                     className="group relative block aspect-video overflow-hidden bg-[#123C39]"
                   >
                     <img
+                      loading="lazy"
+                      decoding="async"
                       src={film.poster ?? "/images/recipes/barbaras-beef-casserole-wide.webp"}
                       alt={`Still from ${film.title}`}
                       className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
@@ -112,12 +115,14 @@ export default function FilmsPage() {
                   </Link>
                   <div className="p-6">
                     <h2 className="text-xl font-bold leading-snug">
-                      <Link href={`/films/${filmSlug(film)}`} className="transition hover:text-[#1C5A50] hover:underline">
+                      <Link href={`/films/${filmSlug(film)}`}
+                    prefetch={false} className="transition hover:text-[#1C5A50] hover:underline">
                         {film.title}
                       </Link>
                     </h2>
                     <Link
                       href={`/films/${filmSlug(film)}`}
+                    prefetch={false}
                       className="mt-5 inline-flex rounded-full border border-[#123C39] px-5 py-3 font-semibold text-[#123C39] transition hover:bg-[#123C39] hover:text-white"
                     >
                       Watch this film →
