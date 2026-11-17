@@ -3,11 +3,11 @@ import assert from 'node:assert/strict';
 import { filmPlaybackUrl } from '../lib/film-playback.ts';
 import { films } from '../lib/films.ts';
 
-test('all 63 films use the mobile-compatible encodes', () => {
-  assert.equal(films.length, 63);
+test('all films use the mobile-compatible encodes', () => {
+  assert.ok(films.length >= 63);
   for (const film of films) {
     const playback = filmPlaybackUrl(film.video);
-    assert.ok(playback.includes('/simple-endcards-20261113/'), film.title);
+    assert.match(new URL(playback).pathname, /^\/(simple-endcards-20261113|christmas-films-20261116|christmas-films-20261117|christmas-list-20261117)\//, film.title);
     assert.equal(new URL(playback).pathname.split('/').pop(), new URL(film.video).pathname.split('/').pop());
     assert.ok(playback.startsWith('https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/'));
   }
