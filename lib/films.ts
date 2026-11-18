@@ -137,7 +137,7 @@ const filmsUnordered: Film[] = [
   "captions": "/captions/dave-and-rubble-the-seating-plan.vtt"
 },
 {
-  "title": "Dave & Rubble | Quality Control",
+  "title": "Dave & Rubble | Christmas Quality Control",
   "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/christmas-films-20261118/dave-and-rubble-quality-control-final.mp4",
   "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/christmas-films-20261118/dave-and-rubble-quality-control.jpg",
   "description": "Dave has made mince pies for the neighbours. Rubble would like an independent opinion.",
@@ -148,7 +148,7 @@ const filmsUnordered: Film[] = [
   "height": 1280,
   "posterWidth": 720,
   "posterHeight": 1280,
-  "captions": "/captions/dave-and-rubble-quality-control.vtt"
+  "captions": "/captions/dave-and-rubble-christmas-quality-control.vtt"
 },
 {
   "title": "Dave & Rubble | The Christmas List",
