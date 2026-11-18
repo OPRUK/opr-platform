@@ -80,7 +80,7 @@ export function getRelatedFilms(currentFilm: Film, limit = 3): Film[] {
   return selected;
 }
 
-export const filmsLastUpdated = "2026-11-17";
+export const filmsLastUpdated = "2026-11-18";
 
 export function filmUploadDate(film: Pick<Film, "uploadDate">): string {
   if (!film.uploadDate) throw new Error("A documented film publication date is required.");
@@ -122,6 +122,20 @@ function film(
 }
 
 const filmsUnordered: Film[] = [
+{
+  "title": "Dave & Rubble | The Missing Pig",
+  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/christmas-films-20261118/dave-and-rubble-the-missing-pig-final.mp4",
+  "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/christmas-films-20261118/dave-and-rubble-the-missing-pig.jpg",
+  "description": "Dave counts the pigs in blankets. Rubble has a theory about the missing one.",
+  "transcript": "Dave: There were twelve pigs in blankets.\nRubble: One got up.\nDave: And walked into your mouth?\nRubble: Terrible sense of direction.\n\nEnd card: Other People’s Recipes. otherpeoplesrecipes.co.uk. @opr_uk. All our socials: otherpeoplesrecipes.co.uk/links. Love a good drink too? otherpeoplescocktails.co.uk.",
+  "uploadDate": "2026-11-18T21:55:15.229019+00:00",
+  "durationSeconds": 13,
+  "width": 720,
+  "height": 1280,
+  "posterWidth": 720,
+  "posterHeight": 1280,
+  "captions": "/captions/dave-and-rubble-the-missing-pig.vtt"
+},
 {
   "title": "Dave & Rubble | The Seating Plan",
   "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/christmas-films-20261118/dave-and-rubble-the-seating-plan-final.mp4",
