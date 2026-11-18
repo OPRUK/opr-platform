@@ -2,8 +2,15 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
+    loader: "custom",
+    loaderFile: "./lib/static-image-loader.ts",
+    deviceSizes: [384, 768, 1280, 1920],
+    imageSizes: [48, 96, 192],
     remotePatterns: [{ protocol: "https", hostname: "kag2qb9d0la7upu4.public.blob.vercel-storage.com", pathname: "/christmas-20261113/**" }],
     qualities: [65, 75],
+  },
+  async headers() {
+    return [{ source: "/image-variants/:path*", headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }] }];
   },
   async rewrites() {
     return [{
