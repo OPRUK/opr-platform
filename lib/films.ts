@@ -123,6 +123,34 @@ function film(
 
 const filmsUnordered: Film[] = [
 {
+  "title": "Dave & Rubble | The Seating Plan",
+  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/christmas-films-20261118/dave-and-rubble-the-seating-plan-final.mp4",
+  "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/christmas-films-20261118/dave-and-rubble-the-seating-plan.jpg",
+  "description": "Dave plans the Christmas seating. Rubble has a helpful suggestion for Uncle Brian.",
+  "transcript": "Dave: Where should we put Uncle Brian?\nRubble: Near the door.\nDave: Why?\nRubble: He says he can’t stay long. Let’s support him.\n\nEnd card: Other People’s Recipes. otherpeoplesrecipes.co.uk. @opr_uk. All our socials: otherpeoplesrecipes.co.uk/links. Love a good drink too? otherpeoplescocktails.co.uk.",
+  "uploadDate": "2026-11-18T19:00:00+00:00",
+  "durationSeconds": 13,
+  "width": 720,
+  "height": 1280,
+  "posterWidth": 720,
+  "posterHeight": 1280,
+  "captions": "/captions/dave-and-rubble-the-seating-plan.vtt"
+},
+{
+  "title": "Dave & Rubble | Quality Control",
+  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/christmas-films-20261118/dave-and-rubble-quality-control-final.mp4",
+  "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/christmas-films-20261118/dave-and-rubble-quality-control.jpg",
+  "description": "Dave has made mince pies for the neighbours. Rubble would like an independent opinion.",
+  "transcript": "Dave: These are for the neighbours.\nRubble: Have you tested them?\nDave: Yes.\nRubble: Independently?\n\nEnd card: Other People’s Recipes. otherpeoplesrecipes.co.uk. @opr_uk. All our socials: otherpeoplesrecipes.co.uk/links. Love a good drink too? otherpeoplescocktails.co.uk.",
+  "uploadDate": "2026-11-18T19:01:00+00:00",
+  "durationSeconds": 13,
+  "width": 720,
+  "height": 1280,
+  "posterWidth": 720,
+  "posterHeight": 1280,
+  "captions": "/captions/dave-and-rubble-quality-control.vtt"
+},
+{
   "title": "Dave & Rubble | The Christmas List",
   "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/christmas-list-20261117/dave-and-rubble-the-christmas-list-final.mp4",
   "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/christmas-list-20261117/dave-and-rubble-the-christmas-list.jpg",
