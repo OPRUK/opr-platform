@@ -1,5 +1,7 @@
 import "server-only";
 
+import { getOpcSocialConnection, opcSocialAccounts } from "./opc-social-connections";
+
 import { socialCache, type SocialRequestOptions } from "./social-brand";
 import { getSocialRefreshToken } from "./social-connections";
 
@@ -55,11 +57,11 @@ export async function getYouTubeSummary(
 
   const clientId = process.env.YOUTUBE_OAUTH_CLIENT_ID;
   const clientSecret = process.env.YOUTUBE_OAUTH_CLIENT_SECRET;
+  const connection = brand === "opc" ? await getOpcSocialConnection("youtube") : null;
   const refreshToken = brand === "opc"
-    ? process.env.OPC_YOUTUBE_OAUTH_REFRESH_TOKEN
+    ? connection?.credential ?? process.env.OPC_YOUTUBE_OAUTH_REFRESH_TOKEN
     : (await getSocialRefreshToken("youtube")) ?? process.env.YOUTUBE_OAUTH_REFRESH_TOKEN;
-  const expectedChannel = process.env.OPC_YOUTUBE_CHANNEL_ID;
-  if (brand === "opc" && !expectedChannel) return null;
+  const expectedChannel = opcSocialAccounts.youtubeChannel;
   if (!clientId || !clientSecret || !refreshToken) return null;
 
   try {

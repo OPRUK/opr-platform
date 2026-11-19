@@ -1,6 +1,7 @@
 import "server-only";
 
 import { NextRequest, NextResponse } from "next/server";
+import { finishOpcOAuth } from "../../../../lib/opc-social-oauth";
 
 const REDIRECT_URI = "https://otherpeoplesrecipes.co.uk/api/tiktok/callback";
 
@@ -9,6 +10,7 @@ function htmlResponse(body: string) {
 }
 
 export async function GET(request: NextRequest) {
+  if (request.nextUrl.searchParams.get("state")?.startsWith("opc.")) return finishOpcOAuth(request, "tiktok");
   const code = request.nextUrl.searchParams.get("code");
   const error = request.nextUrl.searchParams.get("error");
   const errorDescription = request.nextUrl.searchParams.get("error_description");

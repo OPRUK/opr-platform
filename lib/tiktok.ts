@@ -1,5 +1,7 @@
 import "server-only";
 
+import { getOpcSocialConnection, rotateOpcSocialCredential } from "./opc-social-connections";
+
 import { socialCache, type SocialRequestOptions } from "./social-brand";
 
 const CACHE_MS = 15 * 60 * 1000;
@@ -23,7 +25,7 @@ export type TikTokSummary = {
 // live integrations (Search Console, YouTube, Instagram).
 const cache = socialCache<TikTokSummary>();
 
-async function getAccessToken(clientKey: string, clientSecret: string, refreshToken: string): Promise<string | null> {
+async function getAccessToken(clientKey: string, clientSecret: string, refreshToken: string, rotate = false): Promise<string | null> {
   const response = await fetch("https://open.tiktokapis.com/v2/oauth/token/", {
     method: "POST",
     headers: {
@@ -44,6 +46,9 @@ async function getAccessToken(clientKey: string, clientSecret: string, refreshTo
   }
 
   const payload = await response.json();
+  if (rotate && typeof payload.refresh_token === "string" && payload.refresh_token !== refreshToken) {
+    await rotateOpcSocialCredential("tiktok", refreshToken, payload.refresh_token);
+  }
   return typeof payload.access_token === "string" ? payload.access_token : null;
 }
 
@@ -112,13 +117,14 @@ export async function getTikTokSummary(
 
   const clientKey = process.env.TIKTOK_CLIENT_KEY;
   const clientSecret = process.env.TIKTOK_CLIENT_SECRET;
-  const refreshToken = process.env[brand === "opc" ? "OPC_TIKTOK_REFRESH_TOKEN" : "TIKTOK_REFRESH_TOKEN"];
-  const expectedOpenId = process.env.OPC_TIKTOK_OPEN_ID;
+  const connection = brand === "opc" ? await getOpcSocialConnection("tiktok") : null;
+  const refreshToken = connection?.credential ?? process.env[brand === "opc" ? "OPC_TIKTOK_REFRESH_TOKEN" : "TIKTOK_REFRESH_TOKEN"];
+  const expectedOpenId = connection?.account_id ?? process.env.OPC_TIKTOK_OPEN_ID;
   if (brand === "opc" && !expectedOpenId) return null;
   if (!clientKey || !clientSecret || !refreshToken) return null;
 
   try {
-    const accessToken = await getAccessToken(clientKey, clientSecret, refreshToken);
+    const accessToken = await getAccessToken(clientKey, clientSecret, refreshToken, Boolean(connection));
     if (!accessToken) return null;
 
     const userInfoResponse = await fetch(

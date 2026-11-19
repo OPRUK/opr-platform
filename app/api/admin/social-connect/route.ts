@@ -2,13 +2,30 @@ import { NextResponse } from "next/server";
 import { randomBytes } from "node:crypto";
 import { requireAdmin } from "../../../../lib/admin-auth";
 
+import { opcOAuthPlatforms, type OpcOAuthPlatform } from "../../../../lib/opc-social-connections";
+import { startOpcOAuth } from "../../../../lib/opc-social-oauth";
+
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
   const { client, error: accessError } = await requireAdmin(request);
   if (!client) return Response.json({ error: accessError }, { status: 401 });
-  const body = await request.json().catch(() => null) as { platform?: unknown } | null;
+  const body = await request.json().catch(() => null) as { platform?: unknown; brand?: unknown } | null;
   const platform = body?.platform;
+  if (body?.brand === "opc") {
+    if (!opcOAuthPlatforms.some((item) => item === platform)) {
+      return Response.json({ error: "Choose an OPC social account." }, { status: 400 });
+    }
+    const provider = platform as OpcOAuthPlatform;
+    const url = await startOpcOAuth(client, provider);
+    if (!url) return Response.json({ error: "This OPC connection could not be started." }, { status: 503 });
+    const state = new URL(url).searchParams.get("state")!;
+    const response = NextResponse.json({ url }, { headers: { "Cache-Control": "private, no-store" } });
+    response.cookies.set(`opc_oauth_${provider}`, state, {
+      secure: true, httpOnly: true, sameSite: "lax", maxAge: 600, path: `/api/${provider}/callback`,
+    });
+    return response;
+  }
   if (platform !== "youtube" && platform !== "pinterest" && platform !== "linkedin") return Response.json({ error: "Choose YouTube, Pinterest or LinkedIn." }, { status: 400 });
 
   const state = randomBytes(32).toString("base64url");

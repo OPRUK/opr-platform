@@ -1,5 +1,7 @@
 import "server-only";
 
+import { getOpcSocialConnection, opcSocialAccounts } from "./opc-social-connections";
+
 import { socialCache, type SocialRequestOptions } from "./social-brand";
 
 const GRAPH_API_VERSION = "v21.0";
@@ -32,8 +34,9 @@ export async function getInstagramSummary(
   const cached = cache.get(brand);
   if (!forceRefresh && cached && cached.expiresAt > Date.now()) return cached.data;
 
-  const accountId = process.env[brand === "opc" ? "OPC_INSTAGRAM_BUSINESS_ACCOUNT_ID" : "INSTAGRAM_BUSINESS_ACCOUNT_ID"];
-  const accessToken = process.env[brand === "opc" ? "OPC_FACEBOOK_PAGE_ACCESS_TOKEN" : "FACEBOOK_PAGE_ACCESS_TOKEN"];
+  const connection = brand === "opc" ? await getOpcSocialConnection("facebook") : null;
+  const accountId = connection?.instagram_id ?? process.env[brand === "opc" ? "OPC_INSTAGRAM_BUSINESS_ACCOUNT_ID" : "INSTAGRAM_BUSINESS_ACCOUNT_ID"];
+  const accessToken = connection?.credential ?? process.env[brand === "opc" ? "OPC_FACEBOOK_PAGE_ACCESS_TOKEN" : "FACEBOOK_PAGE_ACCESS_TOKEN"];
   if (!accountId || !accessToken || (brand === "opc" && accountId === process.env.INSTAGRAM_BUSINESS_ACCOUNT_ID)) return null;
 
   try {
@@ -59,7 +62,7 @@ export async function getInstagramSummary(
       return null;
     }
     const account = await accountResponse.json();
-    if (brand === "opc" && account.username?.toLowerCase() !== "opc_uk") return null;
+    if (brand === "opc" && account.username?.toLowerCase() !== opcSocialAccounts.instagramUsername) return null;
 
     let views = 0;
     let profileViews = 0;

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { consumeSocialOAuthState, saveSocialConnection } from "../../../../lib/social-connections";
 
+import { finishOpcOAuth } from "../../../../lib/opc-social-oauth";
+
 export const runtime = "nodejs";
 const REDIRECT_URI = "https://otherpeoplesrecipes.co.uk/api/youtube/callback";
 
@@ -11,6 +13,7 @@ function back(status: "connected" | "failed") {
 export async function GET(request: NextRequest) {
   const code = request.nextUrl.searchParams.get("code");
   const state = request.nextUrl.searchParams.get("state");
+  if (state?.startsWith("opc.")) return finishOpcOAuth(request, "youtube");
   if (!code || !state || !(await consumeSocialOAuthState(state, "youtube"))) return back("failed");
   const clientId = process.env.YOUTUBE_OAUTH_CLIENT_ID;
   const clientSecret = process.env.YOUTUBE_OAUTH_CLIENT_SECRET;

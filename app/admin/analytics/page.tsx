@@ -9,6 +9,10 @@ export const metadata: Metadata = buildMetadata({
   index: false,
 });
 
-export default function AdminAnalyticsPage() {
-  return <AdminDashboard initialView="analytics" />;
+export default async function AdminAnalyticsPage({ searchParams }: {
+  searchParams: Promise<{ brand?: string; opcPlatform?: string; opcStatus?: string }>;
+}) {
+  const params = await searchParams;
+  return <AdminDashboard initialView="analytics" initialBrand={params.brand === "opc" ? "opc" : "opr"}
+    opcOAuthStatus={params.opcStatus} opcOAuthPlatform={params.opcPlatform} />;
 }

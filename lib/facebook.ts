@@ -1,5 +1,7 @@
 import "server-only";
 
+import { getOpcSocialConnection, opcSocialAccounts } from "./opc-social-connections";
+
 import { socialCache, type SocialRequestOptions } from "./social-brand";
 
 const GRAPH_API_VERSION = "v21.0";
@@ -28,9 +30,10 @@ export async function getFacebookSummary(
   const cached = cache.get(brand);
   if (!forceRefresh && cached && cached.expiresAt > Date.now()) return cached.data;
 
-  const pageId = process.env[brand === "opc" ? "OPC_FACEBOOK_PAGE_ID" : "FACEBOOK_PAGE_ID"];
-  const accessToken = process.env[brand === "opc" ? "OPC_FACEBOOK_PAGE_ACCESS_TOKEN" : "FACEBOOK_PAGE_ACCESS_TOKEN"];
-  if (!pageId || !accessToken || (brand === "opc" && pageId === process.env.FACEBOOK_PAGE_ID)) return null;
+  const connection = brand === "opc" ? await getOpcSocialConnection("facebook") : null;
+  const pageId = connection?.account_id ?? process.env[brand === "opc" ? "OPC_FACEBOOK_PAGE_ID" : "FACEBOOK_PAGE_ID"];
+  const accessToken = connection?.credential ?? process.env[brand === "opc" ? "OPC_FACEBOOK_PAGE_ACCESS_TOKEN" : "FACEBOOK_PAGE_ACCESS_TOKEN"];
+  if (!pageId || !accessToken || (brand === "opc" && pageId !== opcSocialAccounts.facebookPage)) return null;
 
   try {
     const endDate = new Date();

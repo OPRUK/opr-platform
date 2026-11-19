@@ -1,6 +1,8 @@
 import "server-only";
 
-import { socialCache, type SocialRequestOptions } from "./social-brand";
+import { getOpcSocialConnection, opcSocialAccounts, rotateOpcSocialCredential } from "./opc-social-connections";
+
+import { socialCache, type SocialBrand, type SocialRequestOptions } from "./social-brand";
 import {
   configuredPinterestAccessToken,
   configuredPinterestOAuthCredentials,
@@ -25,10 +27,10 @@ export type PinterestSummary = {
 // shared/persistent cache across instances — same trade-off as the other
 // live integrations (Search Console, YouTube, Instagram, TikTok).
 const cache = socialCache<PinterestSummary>();
-let tokenCache: { value: string; expiresAt: number } | null = null;
-let tokenRequest: Promise<string | null> | null = null;
+const tokenCaches = new Map<SocialBrand, { value: string; expiresAt: number }>();
+const tokenRequests = new Map<SocialBrand, Promise<string | null>>();
 
-async function getAccessToken(clientId: string, clientSecret: string, refreshToken: string): Promise<string | null> {
+async function getAccessToken(clientId: string, clientSecret: string, refreshToken: string, brand: SocialBrand): Promise<string | null> {
   const response = await fetch("https://api.pinterest.com/v5/oauth/token", {
     method: "POST",
     headers: {
@@ -49,25 +51,31 @@ async function getAccessToken(clientId: string, clientSecret: string, refreshTok
   const payload = await response.json();
   if (typeof payload.access_token !== "string") return null;
   if (typeof payload.refresh_token === "string" && payload.refresh_token !== refreshToken) {
-    await saveSocialConnection("pinterest", payload.refresh_token, String(payload.scope ?? ""));
+    if (brand === "opc") await rotateOpcSocialCredential("pinterest", refreshToken, payload.refresh_token);
+    else await saveSocialConnection("pinterest", payload.refresh_token, String(payload.scope ?? ""));
   }
-  tokenCache = { value: payload.access_token, expiresAt: Date.now() + Math.max(0, Number(payload.expires_in ?? 3600) - 60) * 1000 };
+  tokenCaches.set(brand, { value: payload.access_token, expiresAt: Date.now() + Math.max(0, Number(payload.expires_in ?? 3600) - 60) * 1000 });
   return payload.access_token;
 }
 
-async function resolvePinterestAccessToken(): Promise<string | null> {
+async function resolvePinterestAccessToken(brand: SocialBrand): Promise<string | null> {
+  const tokenCache = tokenCaches.get(brand);
   if (tokenCache && tokenCache.expiresAt > Date.now()) return tokenCache.value;
-  if (tokenRequest) return tokenRequest;
-  tokenRequest = (async () => {
-    const refreshToken = (await getSocialRefreshToken("pinterest")) ?? process.env.PINTEREST_REFRESH_TOKEN ?? null;
+  const pending = tokenRequests.get(brand);
+  if (pending) return pending;
+  const tokenRequest = (async () => {
+    const refreshToken = brand === "opc"
+      ? (await getOpcSocialConnection("pinterest"))?.credential ?? null
+      : (await getSocialRefreshToken("pinterest")) ?? process.env.PINTEREST_REFRESH_TOKEN ?? null;
     const credentials = configuredPinterestOAuthCredentials(refreshToken);
     if (credentials) {
-      const token = await getAccessToken(credentials.clientId, credentials.clientSecret, credentials.refreshToken);
+      const token = await getAccessToken(credentials.clientId, credentials.clientSecret, credentials.refreshToken, brand);
       if (token) return token;
     }
-    return configuredPinterestAccessToken();
+    return brand === "opc" ? process.env.OPC_PINTEREST_ACCESS_TOKEN ?? null : configuredPinterestAccessToken();
   })();
-  try { return await tokenRequest; } finally { tokenRequest = null; }
+  tokenRequests.set(brand, tokenRequest);
+  try { return await tokenRequest; } finally { tokenRequests.delete(brand); }
 }
 
 function isoDate(date: Date) {
@@ -81,7 +89,7 @@ export async function getPinterestSummary(
   if (!forceRefresh && cached && cached.expiresAt > Date.now()) return cached.data;
 
   try {
-    const accessToken = brand === "opc" ? process.env.OPC_PINTEREST_ACCESS_TOKEN : await resolvePinterestAccessToken();
+    const accessToken = await resolvePinterestAccessToken(brand);
     if (!accessToken) return null;
 
     const authHeaders = { Authorization: `Bearer ${accessToken}` };
@@ -94,7 +102,7 @@ export async function getPinterestSummary(
       return null;
     }
     const account = await accountResponse.json();
-    if (brand === "opc" && (!process.env.OPC_PINTEREST_USERNAME || account.username !== process.env.OPC_PINTEREST_USERNAME)) return null;
+    if (brand === "opc" && account.username?.toLowerCase() !== opcSocialAccounts.pinterestUsername) return null;
 
     const endDate = new Date();
     endDate.setUTCDate(endDate.getUTCDate() - REPORT_LAG_DAYS);
@@ -161,7 +169,7 @@ export async function getPinterestFilmViews(
   if (!forceRefresh && cachedFilmViews && cachedFilmViews.expiresAt > Date.now()) return cachedFilmViews.data;
 
   try {
-    const accessToken = brand === "opc" ? process.env.OPC_PINTEREST_ACCESS_TOKEN : await resolvePinterestAccessToken();
+    const accessToken = await resolvePinterestAccessToken(brand);
     if (!accessToken) return null;
 
     const authHeaders = { Authorization: `Bearer ${accessToken}` };

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { consumeSocialOAuthState, saveSocialConnection } from "../../../../lib/social-connections";
 
+import { finishOpcOAuth } from "../../../../lib/opc-social-oauth";
+
 export const runtime = "nodejs";
 const REDIRECT_URI = "https://otherpeoplesrecipes.co.uk/api/pinterest/callback";
 
@@ -11,6 +13,7 @@ function back(status: "connected" | "failed") {
 export async function GET(request: NextRequest) {
   const code = request.nextUrl.searchParams.get("code");
   const state = request.nextUrl.searchParams.get("state");
+  if (state?.startsWith("opc.")) return finishOpcOAuth(request, "pinterest");
   if (!code || !state || !(await consumeSocialOAuthState(state, "pinterest"))) return back("failed");
   const clientId = process.env.PINTEREST_CLIENT_ID;
   const clientSecret = process.env.PINTEREST_CLIENT_SECRET;

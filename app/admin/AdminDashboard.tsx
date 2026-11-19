@@ -101,8 +101,14 @@ async function adminRequest(path: string, options: RequestInit = {}) {
 
 export default function AdminDashboard({
   initialView = "inbox",
+  initialBrand = "opr",
+  opcOAuthStatus,
+  opcOAuthPlatform,
 }: {
   initialView?: "inbox" | "analytics";
+  initialBrand?: SocialBrand;
+  opcOAuthStatus?: string;
+  opcOAuthPlatform?: string;
 }) {
   const [session, setSession] = useState<Session | null>(null);
   const [email, setEmail] = useState("");
@@ -132,7 +138,7 @@ export default function AdminDashboard({
   const [sendingNewsletterTest, setSendingNewsletterTest] = useState(false);
   const [newsletterResult, setNewsletterResult] = useState<string | null>(null);
   const analyticsRefreshInFlight = useRef(false);
-  const [analyticsBrand, setAnalyticsBrand] = useState<SocialBrand>("opr");
+  const [analyticsBrand, setAnalyticsBrand] = useState<SocialBrand>(initialBrand);
 
   const refreshAnalytics = useCallback(async ({
     forceRefresh = true,
@@ -917,7 +923,7 @@ export default function AdminDashboard({
 
   if (initialView === "analytics") {
     if (analyticsBrand === "opc") {
-      return <OpcAnalyticsPanel request={adminRequest} onChangeBrand={setAnalyticsBrand} onSignOut={() => void supabase.auth.signOut()} />;
+      return <OpcAnalyticsPanel request={adminRequest} oauthStatus={opcOAuthStatus} oauthPlatform={opcOAuthPlatform} onChangeBrand={setAnalyticsBrand} onSignOut={() => void supabase.auth.signOut()} />;
     }
     return (
       <AdminAnalyticsPanel

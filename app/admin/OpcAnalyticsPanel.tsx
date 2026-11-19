@@ -11,18 +11,42 @@ const buttonClass = "rounded-full border border-[#123C39] px-4 py-2 text-sm font
 
 type Props = {
   request: (path: string, options?: RequestInit) => Promise<Response>;
+  oauthStatus?: string;
+  oauthPlatform?: string;
   onChangeBrand: (brand: SocialBrand) => void;
   onSignOut: () => void;
 };
 
-export default function OpcAnalyticsPanel({ request, onChangeBrand, onSignOut }: Props) {
+export default function OpcAnalyticsPanel({ request, oauthStatus, oauthPlatform, onChangeBrand, onSignOut }: Props) {
   const [analytics, setAnalytics] = useState<OpcSocialAnalytics | null>(null);
-  const [revision, setRevision] = useState(0);
+  const [revision, setRevision] = useState(oauthStatus === "connected" ? 1 : 0);
   const [loading, setLoading] = useState(true);
   const [matching, setMatching] = useState<string | null>(null);
   const [selections, setSelections] = useState<Record<string, string>>({});
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
+  const [connecting, setConnecting] = useState<string | null>(null);
+  const platformLabel = platformNames[oauthPlatform as keyof typeof platformNames] || "Social";
+  const oauthMessage = oauthStatus === "connected" ? `${platformLabel} authorised. Checking the available OPC metrics.`
+    : oauthStatus === "wrong-account" ? "The account did not match the verified OPC profile. No connection was saved."
+    : oauthStatus === "denied" ? "Authorisation was declined. No connection was saved."
+    : oauthStatus === "failed" ? `${platformLabel} could not be connected. Check provider access and try again.` : "";
+
+  async function connect(platform: "facebook" | "tiktok" | "youtube" | "pinterest") {
+    setConnecting(platform);
+    setError("");
+    try {
+      const response = await request("/api/admin/social-connect", {
+        method: "POST", body: JSON.stringify({ brand: "opc", platform }),
+      });
+      const payload = await response.json();
+      if (!response.ok || typeof payload.url !== "string") throw new Error();
+      window.location.assign(payload.url);
+    } catch {
+      setError(`${platformNames[platform]} authorisation could not be started.`);
+      setConnecting(null);
+    }
+  }
 
   useEffect(() => {
     const controller = new AbortController();
@@ -79,6 +103,7 @@ export default function OpcAnalyticsPanel({ request, onChangeBrand, onSignOut }:
           </div>
         </header>
         {error && <p role="alert">{error}</p>}
+        {oauthMessage && <p role="status">{oauthMessage}</p>}
         {notice && <p role="status">{notice}</p>}
         {analytics && <>
           <section aria-labelledby="opc-connections" className="rounded-3xl bg-[#FFF3DF] p-5">
@@ -88,6 +113,14 @@ export default function OpcAnalyticsPanel({ request, onChangeBrand, onSignOut }:
                 <article key={item.platform} className="rounded-xl border border-[#B69963] p-4">
                   <h3 className="font-bold">{platformNames[item.platform]}</h3>
                   <p className="text-sm">{item.connected ? item.partial ? "Some metrics unavailable" : "Connected" : "OPC connection needs authorising"}</p>
+                  {item.platform !== "linkedin" && item.platform !== "instagram" && (
+                    <button type="button" className={`mt-3 ${buttonClass}`} disabled={connecting !== null}
+                      onClick={() => void connect(item.platform as "facebook" | "tiktok" | "youtube" | "pinterest")}>
+                      {connecting === item.platform ? "Opening authorisation…" : item.platform === "facebook"
+                        ? "Authorise Facebook and Instagram" : `Authorise ${platformNames[item.platform]}`}
+                    </button>
+                  )}
+                  {item.platform === "instagram" && !item.connected && <p className="mt-2 text-sm">Authorise the linked account in the Facebook connection.</p>}
                   {item.connected && <dl className="mt-2 text-sm">
                     <dt>{item.metric}{item.period ? ` · ${item.period}` : ""}</dt>
                     <dd>{item.activity === null ? "Not reported" : number.format(item.activity)}</dd>
