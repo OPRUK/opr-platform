@@ -1,5 +1,7 @@
 import "server-only";
 
+import { socialCache, type SocialRequestOptions } from "./social-brand";
+
 const CACHE_MS = 15 * 60 * 1000;
 const REPORT_LAG_DAYS = 1;
 const REPORT_WINDOW_DAYS = 28;
@@ -19,7 +21,7 @@ export type TikTokSummary = {
 // Module-scope cache: best-effort within a warm serverless instance, not a
 // shared/persistent cache across instances — same trade-off as the other
 // live integrations (Search Console, YouTube, Instagram).
-let cached: { data: TikTokSummary; expiresAt: number } | null = null;
+const cache = socialCache<TikTokSummary>();
 
 async function getAccessToken(clientKey: string, clientSecret: string, refreshToken: string): Promise<string | null> {
   const response = await fetch("https://open.tiktokapis.com/v2/oauth/token/", {
@@ -103,13 +105,16 @@ function isoDate(date: Date) {
 }
 
 export async function getTikTokSummary(
-  { forceRefresh = false }: { forceRefresh?: boolean } = {},
+  { forceRefresh = false, brand = "opr" }: SocialRequestOptions = {},
 ): Promise<TikTokSummary | null> {
+  const cached = cache.get(brand);
   if (!forceRefresh && cached && cached.expiresAt > Date.now()) return cached.data;
 
   const clientKey = process.env.TIKTOK_CLIENT_KEY;
   const clientSecret = process.env.TIKTOK_CLIENT_SECRET;
-  const refreshToken = process.env.TIKTOK_REFRESH_TOKEN;
+  const refreshToken = process.env[brand === "opc" ? "OPC_TIKTOK_REFRESH_TOKEN" : "TIKTOK_REFRESH_TOKEN"];
+  const expectedOpenId = process.env.OPC_TIKTOK_OPEN_ID;
+  if (brand === "opc" && !expectedOpenId) return null;
   if (!clientKey || !clientSecret || !refreshToken) return null;
 
   try {
@@ -117,7 +122,7 @@ export async function getTikTokSummary(
     if (!accessToken) return null;
 
     const userInfoResponse = await fetch(
-      "https://open.tiktokapis.com/v2/user/info/?fields=follower_count,likes_count,video_count",
+      "https://open.tiktokapis.com/v2/user/info/?fields=open_id,follower_count,likes_count,video_count",
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
     if (!userInfoResponse.ok) {
@@ -126,8 +131,10 @@ export async function getTikTokSummary(
     }
     const userInfoPayload = await userInfoResponse.json();
     const user = userInfoPayload.data?.user as
-      | { follower_count?: number; likes_count?: number; video_count?: number }
+      | { open_id?: string; follower_count?: number; likes_count?: number; video_count?: number }
       | undefined;
+
+    if (brand === "opc" && user?.open_id !== expectedOpenId) return null;
 
     const endDate = new Date();
     endDate.setUTCDate(endDate.getUTCDate() - REPORT_LAG_DAYS);
@@ -151,7 +158,7 @@ export async function getTikTokSummary(
       })),
     };
 
-    cached = { data: summary, expiresAt: Date.now() + CACHE_MS };
+    cache.set(brand, { data: summary, expiresAt: Date.now() + CACHE_MS });
     return summary;
   } catch (error) {
     console.error("OPR TikTok summary could not be loaded", error);

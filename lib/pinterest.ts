@@ -1,4 +1,6 @@
 import "server-only";
+
+import { socialCache, type SocialRequestOptions } from "./social-brand";
 import {
   configuredPinterestAccessToken,
   configuredPinterestOAuthCredentials,
@@ -22,7 +24,7 @@ export type PinterestSummary = {
 // Module-scope cache: best-effort within a warm serverless instance, not a
 // shared/persistent cache across instances — same trade-off as the other
 // live integrations (Search Console, YouTube, Instagram, TikTok).
-let cached: { data: PinterestSummary; expiresAt: number } | null = null;
+const cache = socialCache<PinterestSummary>();
 let tokenCache: { value: string; expiresAt: number } | null = null;
 let tokenRequest: Promise<string | null> | null = null;
 
@@ -73,12 +75,13 @@ function isoDate(date: Date) {
 }
 
 export async function getPinterestSummary(
-  { forceRefresh = false }: { forceRefresh?: boolean } = {},
+  { forceRefresh = false, brand = "opr" }: SocialRequestOptions = {},
 ): Promise<PinterestSummary | null> {
+  const cached = cache.get(brand);
   if (!forceRefresh && cached && cached.expiresAt > Date.now()) return cached.data;
 
   try {
-    const accessToken = await resolvePinterestAccessToken();
+    const accessToken = brand === "opc" ? process.env.OPC_PINTEREST_ACCESS_TOKEN : await resolvePinterestAccessToken();
     if (!accessToken) return null;
 
     const authHeaders = { Authorization: `Bearer ${accessToken}` };
@@ -91,6 +94,7 @@ export async function getPinterestSummary(
       return null;
     }
     const account = await accountResponse.json();
+    if (brand === "opc" && (!process.env.OPC_PINTEREST_USERNAME || account.username !== process.env.OPC_PINTEREST_USERNAME)) return null;
 
     const endDate = new Date();
     endDate.setUTCDate(endDate.getUTCDate() - REPORT_LAG_DAYS);
@@ -129,7 +133,7 @@ export async function getPinterestSummary(
       fetchedAt: new Date().toISOString(),
     };
 
-    cached = { data: summary, expiresAt: Date.now() + CACHE_MS };
+    cache.set(brand, { data: summary, expiresAt: Date.now() + CACHE_MS });
     return summary;
   } catch (error) {
     console.error("OPR Pinterest summary could not be loaded", error);
@@ -145,21 +149,23 @@ export type PinterestFilmViews = {
 const PIN_PAGE_SIZE = 100;
 const MAX_PIN_PAGES = 5;
 
-let cachedFilmViews: { data: PinterestFilmViews; expiresAt: number } | null = null;
+const filmCache = socialCache<PinterestFilmViews>();
 
 // Per-pin metrics come inline from List Pins (pin_metrics=true) rather than a
 // separate call per pin — Pinterest's batch analytics endpoint is beta-gated
 // and not available to all apps, so this is the reliable path.
 export async function getPinterestFilmViews(
-  { forceRefresh = false }: { forceRefresh?: boolean } = {},
+  { forceRefresh = false, brand = "opr" }: SocialRequestOptions = {},
 ): Promise<PinterestFilmViews | null> {
+  const cachedFilmViews = filmCache.get(brand);
   if (!forceRefresh && cachedFilmViews && cachedFilmViews.expiresAt > Date.now()) return cachedFilmViews.data;
 
   try {
-    const accessToken = await resolvePinterestAccessToken();
+    const accessToken = brand === "opc" ? process.env.OPC_PINTEREST_ACCESS_TOKEN : await resolvePinterestAccessToken();
     if (!accessToken) return null;
 
     const authHeaders = { Authorization: `Bearer ${accessToken}` };
+    if (brand === "opc" && !(await getPinterestSummary({ brand }))) return null;
     const films: Array<{ id: string; title: string; views: number }> = [];
     let bookmark: string | undefined;
     let page = 0;
@@ -196,7 +202,7 @@ export async function getPinterestFilmViews(
     } while (bookmark && page < MAX_PIN_PAGES);
 
     const data: PinterestFilmViews = { fetchedAt: new Date().toISOString(), films };
-    cachedFilmViews = { data, expiresAt: Date.now() + CACHE_MS };
+    filmCache.set(brand, { data, expiresAt: Date.now() + CACHE_MS });
     return data;
   } catch (error) {
     console.error("OPR Pinterest film views could not be loaded", error);

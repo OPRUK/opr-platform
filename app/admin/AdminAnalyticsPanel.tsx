@@ -5,7 +5,11 @@ import { useState } from "react";
 import type { AdminAnalyticsResponse } from "../../lib/admin-analytics-types";
 import type { AnalyticsReport } from "../../lib/analytics-report-types";
 
+import AnalyticsBrandSwitch from "./AnalyticsBrandSwitch";
+import type { SocialBrand } from "../../lib/social-brand";
+
 type AdminAnalyticsPanelProps = {
+  onChangeBrand: (brand: SocialBrand) => void;
   analytics: AdminAnalyticsResponse | null;
   loading: boolean;
   message: string;
@@ -173,6 +177,7 @@ const platformEntries: Array<{ key: keyof AnalyticsReport["platforms"]; label: s
 ];
 
 export default function AdminAnalyticsPanel({
+  onChangeBrand,
   analytics,
   loading,
   message,
@@ -234,6 +239,7 @@ export default function AdminAnalyticsPanel({
         <div>
           <p className="text-sm uppercase tracking-[0.35em] text-amber-700">Private OPR area</p>
           <h1 className="mt-4 text-3xl font-bold sm:text-4xl md:text-5xl">Analytics dashboard</h1>
+          <AnalyticsBrandSwitch brand="opr" onChange={onChangeBrand} />
           <p className="mt-4 max-w-3xl text-base leading-7 text-stone-700 sm:text-lg sm:leading-8">
             A private view of website discovery, social reach and the actions people take around the OPR table.
           </p>

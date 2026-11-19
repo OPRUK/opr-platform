@@ -1,12 +1,14 @@
 import "server-only";
 
+import { socialCache, type SocialBrand, type SocialRequestOptions } from "./social-brand";
+
 import { buildLinkedInVideoStatisticsUrl, linkedInVideoViewCount, buildLinkedInPageStatisticsUrl, buildLinkedInShareStatisticsUrl } from "./linkedin-query";
 
 const API_VERSION = "202608";
 const CACHE_MS = 15 * 60 * 1000;
 const REPORT_LAG_DAYS = 1;
 const REPORT_WINDOW_DAYS = 28;
-const ORGANIZATION_URN = "urn:li:organization:141313963";
+const organizations = { opr: "urn:li:organization:141313963", opc: "urn:li:organization:146972243" };
 
 export type LinkedInSummary = {
   period: string;
@@ -23,7 +25,7 @@ export type LinkedInSummary = {
 // Module-scope cache: best-effort within a warm serverless instance, not a
 // shared/persistent cache across instances — same trade-off as the other
 // live integrations.
-let cached: { data: LinkedInSummary; expiresAt: number } | null = null;
+const cache = socialCache<LinkedInSummary>();
 
 async function getAccessToken(clientId: string, clientSecret: string, refreshToken: string): Promise<string | null> {
   const response = await fetch("https://www.linkedin.com/oauth/v2/accessToken", {
@@ -46,17 +48,18 @@ async function getAccessToken(clientId: string, clientSecret: string, refreshTok
   return typeof payload.access_token === "string" ? payload.access_token : null;
 }
 
-async function resolveAccessToken(): Promise<string | null> {
+async function resolveAccessToken(brand: SocialBrand): Promise<string | null> {
   const clientId = process.env.LINKEDIN_CLIENT_ID;
   const clientSecret = process.env.LINKEDIN_CLIENT_SECRET;
-  const refreshToken = process.env.LINKEDIN_REFRESH_TOKEN;
+  const opcRefreshToken = brand === "opc" ? process.env.OPC_LINKEDIN_REFRESH_TOKEN : undefined;
+  const refreshToken = opcRefreshToken ?? process.env.LINKEDIN_REFRESH_TOKEN;
 
   if (clientId && clientSecret && refreshToken) {
     const refreshedAccessToken = await getAccessToken(clientId, clientSecret, refreshToken);
     if (refreshedAccessToken) return refreshedAccessToken;
   }
 
-  return process.env.LINKEDIN_ACCESS_TOKEN ?? null;
+  return opcRefreshToken ? null : process.env.LINKEDIN_ACCESS_TOKEN ?? null;
 }
 
 function isoDate(date: Date) {
@@ -64,12 +67,14 @@ function isoDate(date: Date) {
 }
 
 export async function getLinkedInSummary(
-  { forceRefresh = false }: { forceRefresh?: boolean } = {},
+  { forceRefresh = false, brand = "opr" }: SocialRequestOptions = {},
 ): Promise<LinkedInSummary | null> {
+  const cached = cache.get(brand);
   if (!forceRefresh && cached && cached.expiresAt > Date.now()) return cached.data;
 
   try {
-    const accessToken = await resolveAccessToken();
+    const organizationUrn = organizations[brand];
+    const accessToken = await resolveAccessToken(brand);
     if (!accessToken) return null;
 
     const authHeaders = {
@@ -79,7 +84,7 @@ export async function getLinkedInSummary(
     };
 
     const followersResponse = await fetch(
-      `https://api.linkedin.com/rest/networkSizes/${encodeURIComponent(ORGANIZATION_URN)}?edgeType=COMPANY_FOLLOWED_BY_MEMBER`,
+      `https://api.linkedin.com/rest/networkSizes/${encodeURIComponent(organizationUrn)}?edgeType=COMPANY_FOLLOWED_BY_MEMBER`,
       { headers: authHeaders },
     );
     if (!followersResponse.ok) {
@@ -96,12 +101,12 @@ export async function getLinkedInSummary(
     startDate.setUTCHours(0, 0, 0, 0);
 
     const pageStatsUrl = buildLinkedInPageStatisticsUrl({
-      organizationUrn: ORGANIZATION_URN,
+      organizationUrn,
       start: startDate.getTime(),
       end: endDate.getTime(),
     });
     const shareStatsUrl = buildLinkedInShareStatisticsUrl({
-      organizationUrn: ORGANIZATION_URN,
+      organizationUrn,
       start: startDate.getTime(),
       end: endDate.getTime(),
     });
@@ -158,7 +163,7 @@ export async function getLinkedInSummary(
       console.warn("OPR LinkedIn post statistics query failed", await shareStatsResponse.text());
     }
 
-    const videoReporting = await loadLinkedInFilmViews(authHeaders).catch(() => ({
+    const videoReporting = await loadLinkedInFilmViews(authHeaders, organizationUrn).catch(() => ({
       films: [], error: "LinkedIn video analytics could not be reached. Page statistics remain available.",
     }));
 
@@ -174,7 +179,7 @@ export async function getLinkedInSummary(
       filmError: videoReporting.error,
     };
 
-    cached = { data: summary, expiresAt: Date.now() + CACHE_MS };
+    cache.set(brand, { data: summary, expiresAt: Date.now() + CACHE_MS });
     return summary;
   } catch (error) {
     console.error("OPR LinkedIn summary could not be loaded", error);
@@ -183,7 +188,7 @@ export async function getLinkedInSummary(
 }
 
 
-async function loadLinkedInFilmViews(headers: Record<string, string>): Promise<{
+async function loadLinkedInFilmViews(headers: Record<string, string>, organizationUrn: string): Promise<{
   films: Array<{ id: string; title: string; views: number }>;
   error: string | null;
 }> {
@@ -191,7 +196,7 @@ async function loadLinkedInFilmViews(headers: Record<string, string>): Promise<{
   for (let start = 0; start < 500; start += 100) {
     const url = new URL("https://api.linkedin.com/rest/posts");
     url.searchParams.set("q", "author");
-    url.searchParams.set("author", ORGANIZATION_URN);
+    url.searchParams.set("author", organizationUrn);
     url.searchParams.set("count", "100");
     url.searchParams.set("start", String(start));
     const response = await fetch(url, { headers, signal: AbortSignal.timeout(12000) });
@@ -201,7 +206,7 @@ async function loadLinkedInFilmViews(headers: Record<string, string>): Promise<{
     posts.push(...elements);
     if (elements.length < 100) break;
   }
-  const videos = posts.filter((post) => post.author === ORGANIZATION_URN
+  const videos = posts.filter((post) => post.author === organizationUrn
     && /^urn:li:ugcPost:\d+$/.test(post.id)
     && /^urn:li:(video|digitalmediaAsset):/.test(post.content?.media?.id ?? ""));
   const films: Array<{ id: string; title: string; views: number }> = [];

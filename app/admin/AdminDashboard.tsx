@@ -10,6 +10,8 @@ import { applyCommunityRecipeEditorialOverride } from "../../lib/community-recip
 import { featuredRecipes } from "../../lib/recipes";
 import { supabase } from "../../lib/supabase/client";
 import AdminAnalyticsPanel from "./AdminAnalyticsPanel";
+import OpcAnalyticsPanel from "./OpcAnalyticsPanel";
+import type { SocialBrand } from "../../lib/social-brand";
 import MfaChallenge from "./mfa/MfaChallenge";
 import MfaSecurityPanel from "./mfa/MfaSecurityPanel";
 
@@ -130,6 +132,7 @@ export default function AdminDashboard({
   const [sendingNewsletterTest, setSendingNewsletterTest] = useState(false);
   const [newsletterResult, setNewsletterResult] = useState<string | null>(null);
   const analyticsRefreshInFlight = useRef(false);
+  const [analyticsBrand, setAnalyticsBrand] = useState<SocialBrand>("opr");
 
   const refreshAnalytics = useCallback(async ({
     forceRefresh = true,
@@ -913,8 +916,12 @@ export default function AdminDashboard({
   }
 
   if (initialView === "analytics") {
+    if (analyticsBrand === "opc") {
+      return <OpcAnalyticsPanel request={adminRequest} onChangeBrand={setAnalyticsBrand} onSignOut={() => void supabase.auth.signOut()} />;
+    }
     return (
       <AdminAnalyticsPanel
+        onChangeBrand={setAnalyticsBrand}
         analytics={attributionSummary}
         loading={loading}
         message={message}

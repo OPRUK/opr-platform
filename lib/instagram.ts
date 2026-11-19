@@ -1,5 +1,7 @@
 import "server-only";
 
+import { socialCache, type SocialRequestOptions } from "./social-brand";
+
 const GRAPH_API_VERSION = "v21.0";
 const CACHE_MS = 15 * 60 * 1000;
 const REPORT_LAG_DAYS = 1;
@@ -18,20 +20,21 @@ export type InstagramSummary = {
 // Module-scope cache: best-effort within a warm serverless instance, not a
 // shared/persistent cache across instances — same trade-off as the other
 // live integrations (Search Console, YouTube).
-let cached: { data: InstagramSummary; expiresAt: number } | null = null;
+const cache = socialCache<InstagramSummary>();
 
 function isoDate(date: Date) {
   return date.toISOString().slice(0, 10);
 }
 
 export async function getInstagramSummary(
-  { forceRefresh = false }: { forceRefresh?: boolean } = {},
+  { forceRefresh = false, brand = "opr" }: SocialRequestOptions = {},
 ): Promise<InstagramSummary | null> {
+  const cached = cache.get(brand);
   if (!forceRefresh && cached && cached.expiresAt > Date.now()) return cached.data;
 
-  const accountId = process.env.INSTAGRAM_BUSINESS_ACCOUNT_ID;
-  const accessToken = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
-  if (!accountId || !accessToken) return null;
+  const accountId = process.env[brand === "opc" ? "OPC_INSTAGRAM_BUSINESS_ACCOUNT_ID" : "INSTAGRAM_BUSINESS_ACCOUNT_ID"];
+  const accessToken = process.env[brand === "opc" ? "OPC_FACEBOOK_PAGE_ACCESS_TOKEN" : "FACEBOOK_PAGE_ACCESS_TOKEN"];
+  if (!accountId || !accessToken || (brand === "opc" && accountId === process.env.INSTAGRAM_BUSINESS_ACCOUNT_ID)) return null;
 
   try {
     const endDate = new Date();
@@ -41,7 +44,7 @@ export async function getInstagramSummary(
 
     const [accountResponse, insightsResponse, mediaResponse] = await Promise.all([
       fetch(
-        `https://graph.facebook.com/${GRAPH_API_VERSION}/${accountId}?fields=followers_count,media_count&access_token=${accessToken}`,
+        `https://graph.facebook.com/${GRAPH_API_VERSION}/${accountId}?fields=username,followers_count,media_count&access_token=${accessToken}`,
       ),
       fetch(
         `https://graph.facebook.com/${GRAPH_API_VERSION}/${accountId}/insights?metric=views,profile_views&period=day&metric_type=total_value&since=${isoDate(startDate)}&until=${isoDate(endDate)}&access_token=${accessToken}`,
@@ -56,6 +59,7 @@ export async function getInstagramSummary(
       return null;
     }
     const account = await accountResponse.json();
+    if (brand === "opc" && account.username?.toLowerCase() !== "opc_uk") return null;
 
     let views = 0;
     let profileViews = 0;
@@ -100,7 +104,7 @@ export async function getInstagramSummary(
       films,
     };
 
-    cached = { data: summary, expiresAt: Date.now() + CACHE_MS };
+    cache.set(brand, { data: summary, expiresAt: Date.now() + CACHE_MS });
     return summary;
   } catch (error) {
     console.error("OPR Instagram summary could not be loaded", error);

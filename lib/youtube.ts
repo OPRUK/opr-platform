@@ -1,4 +1,6 @@
 import "server-only";
+
+import { socialCache, type SocialRequestOptions } from "./social-brand";
 import { getSocialRefreshToken } from "./social-connections";
 
 const CACHE_MS = 15 * 60 * 1000;
@@ -18,7 +20,7 @@ export type YouTubeSummary = {
 // Module-scope cache: best-effort within a warm serverless instance, not a
 // shared/persistent cache across instances — same trade-off as the Search
 // Console integration.
-let cached: { data: YouTubeSummary; expiresAt: number } | null = null;
+const cache = socialCache<YouTubeSummary>();
 
 async function getAccessToken(clientId: string, clientSecret: string, refreshToken: string): Promise<string | null> {
   const response = await fetch("https://oauth2.googleapis.com/token", {
@@ -46,13 +48,18 @@ function isoDate(date: Date) {
 }
 
 export async function getYouTubeSummary(
-  { forceRefresh = false }: { forceRefresh?: boolean } = {},
+  { forceRefresh = false, brand = "opr" }: SocialRequestOptions = {},
 ): Promise<YouTubeSummary | null> {
+  const cached = cache.get(brand);
   if (!forceRefresh && cached && cached.expiresAt > Date.now()) return cached.data;
 
   const clientId = process.env.YOUTUBE_OAUTH_CLIENT_ID;
   const clientSecret = process.env.YOUTUBE_OAUTH_CLIENT_SECRET;
-  const refreshToken = (await getSocialRefreshToken("youtube")) ?? process.env.YOUTUBE_OAUTH_REFRESH_TOKEN;
+  const refreshToken = brand === "opc"
+    ? process.env.OPC_YOUTUBE_OAUTH_REFRESH_TOKEN
+    : (await getSocialRefreshToken("youtube")) ?? process.env.YOUTUBE_OAUTH_REFRESH_TOKEN;
+  const expectedChannel = process.env.OPC_YOUTUBE_CHANNEL_ID;
+  if (brand === "opc" && !expectedChannel) return null;
   if (!clientId || !clientSecret || !refreshToken) return null;
 
   try {
@@ -70,6 +77,7 @@ export async function getYouTubeSummary(
       return null;
     }
     const channelPayload = await channelResponse.json();
+    if (brand === "opc" && channelPayload.items?.[0]?.id !== expectedChannel) return null;
     const statistics = channelPayload.items?.[0]?.statistics as
       | { subscriberCount?: string; viewCount?: string }
       | undefined;
@@ -133,7 +141,7 @@ export async function getYouTubeSummary(
       films,
     };
 
-    cached = { data: summary, expiresAt: Date.now() + CACHE_MS };
+    cache.set(brand, { data: summary, expiresAt: Date.now() + CACHE_MS });
     return summary;
   } catch (error) {
     console.error("OPR YouTube summary could not be loaded", error);

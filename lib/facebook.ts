@@ -1,5 +1,7 @@
 import "server-only";
 
+import { socialCache, type SocialRequestOptions } from "./social-brand";
+
 const GRAPH_API_VERSION = "v21.0";
 const CACHE_MS = 15 * 60 * 1000;
 const REPORT_WINDOW_DAYS = 28;
@@ -14,20 +16,21 @@ export type FacebookSummary = {
   films: Array<{ id: string; title: string; views: number }>;
 };
 
-let cached: { data: FacebookSummary; expiresAt: number } | null = null;
+const cache = socialCache<FacebookSummary>();
 
 function isoDate(date: Date) {
   return date.toISOString().slice(0, 10);
 }
 
 export async function getFacebookSummary(
-  { forceRefresh = false }: { forceRefresh?: boolean } = {},
+  { forceRefresh = false, brand = "opr" }: SocialRequestOptions = {},
 ): Promise<FacebookSummary | null> {
+  const cached = cache.get(brand);
   if (!forceRefresh && cached && cached.expiresAt > Date.now()) return cached.data;
 
-  const pageId = process.env.FACEBOOK_PAGE_ID;
-  const accessToken = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
-  if (!pageId || !accessToken) return null;
+  const pageId = process.env[brand === "opc" ? "OPC_FACEBOOK_PAGE_ID" : "FACEBOOK_PAGE_ID"];
+  const accessToken = process.env[brand === "opc" ? "OPC_FACEBOOK_PAGE_ACCESS_TOKEN" : "FACEBOOK_PAGE_ACCESS_TOKEN"];
+  if (!pageId || !accessToken || (brand === "opc" && pageId === process.env.FACEBOOK_PAGE_ID)) return null;
 
   try {
     const endDate = new Date();
@@ -65,6 +68,7 @@ export async function getFacebookSummary(
 
     // Film reporting is independent of the page-level Insights metrics. Meta
     // occasionally retires a summary metric; that must not blank every film.
+    if (brand === "opc" && !accountResponse.ok) return null;
     const account = accountResponse.ok ? await accountResponse.json() : {};
     const insights = insightsResponse.ok ? await insightsResponse.json() : { data: [] };
     const videos = videosResponse.ok ? await videosResponse.json() : { data: [] };
@@ -89,7 +93,7 @@ export async function getFacebookSummary(
         views: Number(video.views ?? 0),
       })),
     };
-    cached = { data: summary, expiresAt: Date.now() + CACHE_MS };
+    cache.set(brand, { data: summary, expiresAt: Date.now() + CACHE_MS });
     return summary;
   } catch (error) {
     console.error("OPR Facebook summary could not be loaded", error);
