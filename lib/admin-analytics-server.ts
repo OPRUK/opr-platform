@@ -912,7 +912,7 @@ function buildFilmViews(
     .sort((a, b) => b.plays - a.plays || a.title.localeCompare(b.title));
 }
 
-type SocialPlatform = "facebook" | "instagram" | "tiktok" | "youtube" | "pinterest";
+type SocialPlatform = SocialConnectionStatus["platform"];
 type PlatformFilm = { id?: string; title: string; views: number; publishedAt?: string; permalink?: string };
 type SavedSocialPost = {
   platform: SocialPlatform;
@@ -969,19 +969,25 @@ async function buildSocialFilmViews(
   );
   const liveByPlatform: Record<SocialPlatform, PlatformFilm[]> = {
     facebook: facebook?.films ?? [], instagram: instagram?.films ?? [], tiktok: tiktok?.films ?? [],
-    youtube: youtube?.films ?? [], pinterest: pinterest?.films ?? [],
+    youtube: youtube?.films ?? [], pinterest: pinterest?.films ?? [], linkedin: live.linkedIn?.films ?? [],
   };
   const sources = Object.fromEntries(
     (Object.keys(liveByPlatform) as SocialPlatform[]).map((platform) => [platform, reconciledSocialFilmTotals(
         platform,
-        savedPosts.filter((row) => row.platform === platform).map((row) => ({
-          id: row.post_id, title: row.post_title, views: Number(row.metric_value),
-        })),
+        [
+          ...(platform === "linkedin" ? savedLinkedInPosts : []),
+          ...savedPosts.filter((row) => row.platform === platform).map((row) => ({
+            id: row.post_id, title: row.post_title, views: Number(row.metric_value),
+          })),
+        ],
         liveByPlatform[platform], savedMatches, ignoredPostIds,
       )]),
   ) as Record<SocialPlatform, Map<string, number>>;
   const unmatched: UnmatchedSocialPost[] = [];
-  const syncedRows: Array<Record<string, unknown>> = [];
+  type SyncedPost = Omit<SavedSocialPost, "ignored" | "film_video"> & { last_synced_at: string };
+  const syncedRows: SyncedPost[] = [];
+  const newRows: Array<SyncedPost & { film_video: string | null }> = [];
+  const knownKeys = new Set(savedPosts.map((row) => `${row.platform}:${row.post_id}`));
   for (const [platform, rows] of Object.entries(liveByPlatform) as Array<[SocialPlatform, PlatformFilm[]]>) {
     for (const row of rows) {
       if (!row.id) continue;
@@ -993,29 +999,38 @@ async function buildSocialFilmViews(
         const sourceUrl = platform === "facebook" && /^\d+$/.test(row.id)
           ? `https://www.facebook.com/watch/?v=${row.id}`
           : platform === "instagram" && row.permalink?.startsWith("https://www.instagram.com/")
-            ? row.permalink : undefined;
+            ? row.permalink
+            : platform === "linkedin" && /^urn:li:(ugcPost|share):\d+$/.test(row.id)
+              ? `https://www.linkedin.com/feed/update/${row.id}/` : undefined;
         unmatched.push({ platform, postId: row.id, title: row.title, metricValue: row.views, sourceUrl });
       }
-      syncedRows.push({
+      const syncedPost = {
         platform,
         post_id: row.id,
-        film_video: matchedFilm ? filmIdentity(matchedFilm) : (savedPosts.find((saved) => saved.platform === platform && saved.post_id === row.id)?.film_video ?? null),
         post_title: row.title,
         metric_value: row.views,
         published_at: row.publishedAt ?? null,
         last_synced_at: new Date().toISOString(),
-        ignored: ignoredPostIds.has(`${platform}:${row.id}`),
-      });
+      };
+      syncedRows.push(syncedPost);
+      if (!knownKeys.has(`${platform}:${row.id}`)) {
+        newRows.push({ ...syncedPost, film_video: matchedFilm ? filmIdentity(matchedFilm) : null });
+      }
     }
   }
+  if (newRows.length) {
+    const result = await client.from("social_film_posts").upsert(newRows, {
+      onConflict: "platform,post_id", ignoreDuplicates: true,
+    });
+    if (result.error) console.error("OPR social-film posts could not be saved", result.error);
+  }
   if (syncedRows.length) {
-    const syncResult = await client.from("social_film_posts").upsert(syncedRows, {
+    // Refresh metadata without overwriting an editor's concurrent match or ignore decision.
+    const result = await client.from("social_film_posts").upsert(syncedRows, {
       onConflict: "platform,post_id",
     });
-    if (syncResult.error) console.error("OPR social-film actuals could not be saved", syncResult.error);
+    if (result.error) console.error("OPR social-film actuals could not be saved", result.error);
   }
-  const linkedInFilms = live.linkedIn?.films ?? [];
-  const linkedInTotals = reconciledSocialFilmTotals("linkedin", savedLinkedInPosts, linkedInFilms);
   const websiteByTitle = new Map(website.map((row) => [row.title, row]));
   const youtubePublishedByTitle = earliestPublishedByTitle(youtube?.films ?? []);
 
@@ -1039,7 +1054,7 @@ async function buildSocialFilmViews(
       instagramViews: sources.instagram.get(film.title) ?? null,
       tiktokViews: sources.tiktok.get(film.title) ?? null,
       youtubeViews: sources.youtube.get(film.title) ?? null,
-      linkedinViews: linkedInTotals.get(film.title) ?? null,
+      linkedinViews: sources.linkedin.get(film.title) ?? null,
       pinterestImpressions: sources.pinterest.get(film.title) ?? null,
       uploadDate,
       daysOnline,
@@ -1057,12 +1072,15 @@ async function buildSocialFilmViews(
         unresolvedPosts,
       };
     });
+  const linkedIn = live.linkedIn;
+  const linkedInUnresolved = unmatched.filter((post) => post.platform === "linkedin").length;
   connections.push({
-    platform: "linkedin", connected: Boolean(live.linkedIn && !live.linkedIn.filmError),
-    fetchedAt: live.linkedIn?.fetchedAt ?? null,
-    matchedPosts: linkedInFilms.filter((row) => matchSocialFilmId("linkedin", row.id) || matchSocialFilmTitle(row.title)).length,
-    unresolvedPosts: linkedInFilms.filter((row) => !matchSocialFilmId("linkedin", row.id) && !matchSocialFilmTitle(row.title)).length,
-    error: live.linkedIn?.filmError ?? null,
+    platform: "linkedin", connected: Boolean(linkedIn && !linkedIn.filmError),
+    fetchedAt: linkedIn?.fetchedAt ?? null,
+    matchedPosts: liveByPlatform.linkedin.filter((row) => row.id
+      && !ignoredPostIds.has(`linkedin:${row.id}`)).length - linkedInUnresolved,
+    unresolvedPosts: linkedInUnresolved,
+    error: linkedIn?.filmError ?? null,
   });
   return { films: filmRows, unmatched, connections };
 }

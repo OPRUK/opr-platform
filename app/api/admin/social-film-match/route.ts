@@ -3,7 +3,7 @@ import { filmForReference, filmIdentity } from "../../../../lib/film-identity";
 
 export const runtime = "nodejs";
 
-const platforms = new Set(["facebook", "instagram", "tiktok", "youtube", "pinterest"]);
+const platforms = new Set(["facebook", "instagram", "tiktok", "youtube", "pinterest", "linkedin"]);
 
 export async function PATCH(request: Request) {
   const { client, error: accessError } = await requireAdmin(request);
@@ -23,7 +23,10 @@ export async function PATCH(request: Request) {
     .from("social_film_posts")
     .update({ film_video: ignored || !film ? null : filmIdentity(film), ignored })
     .eq("platform", platform)
-    .eq("post_id", postId);
+    .eq("post_id", postId)
+    .select("post_id")
+    .maybeSingle();
   if (result.error) return Response.json({ error: "The post match could not be saved." }, { status: 400 });
+  if (!result.data) return Response.json({ error: "The social post was not found. Refresh the dashboard and try again." }, { status: 404 });
   return Response.json({ ok: true });
 }

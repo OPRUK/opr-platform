@@ -38,7 +38,7 @@ export type AnalyticsSocialFilmSummary = AnalyticsFilmSummary & {
 };
 
 export type UnmatchedSocialPost = {
-  platform: "facebook" | "instagram" | "tiktok" | "youtube" | "pinterest";
+  platform: SocialConnectionStatus["platform"];
   postId: string;
   title: string;
   metricValue: number;
