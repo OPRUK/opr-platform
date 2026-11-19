@@ -10,7 +10,6 @@ export const opcSocialAccounts = {
   instagramUsername: "opc_uk",
   youtubeChannel: "UC6KhSnh_V_wv3VDC1inY8WQ",
   pinterestUsername: "otherpeoplescocktails",
-  tiktokUsernames: ["opc_uk", "otherpeoplescocktails"],
 };
 
 type Connection = {

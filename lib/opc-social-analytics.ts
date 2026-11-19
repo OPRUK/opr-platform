@@ -24,7 +24,7 @@ type StoredPost = {
 function sourceUrl(platform: Platform, post: SocialPost) {
   if (platform === "instagram" && post.permalink?.startsWith("https://www.instagram.com/")) return post.permalink;
   if (platform === "facebook" && /^\d+$/.test(post.id)) return `https://www.facebook.com/watch/?v=${post.id}`;
-  if (platform === "tiktok" && /^\d+$/.test(post.id)) return `https://www.tiktok.com/@opc_uk/video/${post.id}`;
+  if (platform === "tiktok" && /^\d+$/.test(post.id)) return `https://www.tiktok.com/@otherpeoplescocktails/video/${post.id}`;
   if (platform === "youtube" && /^[\w-]{11}$/.test(post.id)) return `https://www.youtube.com/watch?v=${post.id}`;
   if (platform === "pinterest" && /^\d+$/.test(post.id)) return `https://www.pinterest.com/pin/${post.id}/`;
   if (platform === "linkedin" && /^urn:li:(ugcPost|share):\d+$/.test(post.id)) return `https://www.linkedin.com/feed/update/${post.id}/`;

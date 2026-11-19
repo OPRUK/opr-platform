@@ -10,7 +10,7 @@ const origin = "https://otherpeoplesrecipes.co.uk";
 const graph = "https://graph.facebook.com/v21.0";
 const providers = {
   facebook: { authorize: "https://www.facebook.com/v21.0/dialog/oauth", token: `${graph}/oauth/access_token`, scope: "pages_show_list,pages_read_engagement,read_insights,instagram_basic,instagram_manage_insights", id: "META_APP_ID", secret: "META_APP_SECRET" },
-  tiktok: { authorize: "https://www.tiktok.com/v2/auth/authorize/", token: "https://open.tiktokapis.com/v2/oauth/token/", scope: "user.info.basic,user.info.profile,user.info.stats,video.list", id: "TIKTOK_CLIENT_KEY", secret: "TIKTOK_CLIENT_SECRET" },
+  tiktok: { authorize: "https://www.tiktok.com/v2/auth/authorize/", token: "https://open.tiktokapis.com/v2/oauth/token/", scope: "user.info.basic,user.info.stats,video.list", id: "TIKTOK_CLIENT_KEY", secret: "TIKTOK_CLIENT_SECRET" },
   youtube: { authorize: "https://accounts.google.com/o/oauth2/v2/auth", token: "https://oauth2.googleapis.com/token", scope: "https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/yt-analytics.readonly", id: "YOUTUBE_OAUTH_CLIENT_ID", secret: "YOUTUBE_OAUTH_CLIENT_SECRET" },
   pinterest: { authorize: "https://www.pinterest.com/oauth/", token: "https://api.pinterest.com/v5/oauth/token", scope: "boards:read,pins:read,user_accounts:read", id: "PINTEREST_CLIENT_ID", secret: "PINTEREST_CLIENT_SECRET" },
 } as const;
@@ -77,9 +77,19 @@ async function verifyAccount(platform: OpcOAuthPlatform, accessToken: string) {
     const account = await providerJson("https://api.pinterest.com/v5/user_account", accessToken);
     return account?.username?.toLowerCase() === opcSocialAccounts.pinterestUsername ? account.username as string : null;
   }
-  const profile = await providerJson("https://open.tiktokapis.com/v2/user/info/?fields=open_id,username", accessToken);
+  // TikTok verifies ownership when a token queries known OPC video IDs. This
+  // keeps account validation within the app's existing video.list scope.
+  const videoIds = ["7709628518224694550", "7709629389993970946"];
+  const [profile, videos] = await Promise.all([
+    providerJson("https://open.tiktokapis.com/v2/user/info/?fields=open_id", accessToken),
+    providerJson("https://open.tiktokapis.com/v2/video/query/?fields=id", accessToken, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ filters: { video_ids: videoIds } }),
+    }),
+  ]);
   const user = profile?.data?.user;
-  return typeof user?.open_id === "string" && opcSocialAccounts.tiktokUsernames.includes(user.username?.toLowerCase())
+  return typeof user?.open_id === "string"
+    && videos?.data?.videos?.some((video: { id?: string }) => video.id && videoIds.includes(video.id))
     ? user.open_id as string : null;
 }
 
