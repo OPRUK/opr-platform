@@ -6,7 +6,7 @@ export const opcOAuthPlatforms = ["facebook", "tiktok", "youtube", "pinterest"] 
 export type OpcOAuthPlatform = typeof opcOAuthPlatforms[number];
 
 export const opcSocialAccounts = {
-  facebookPage: "61596414003109",
+  facebookPage: "1406854652516686",
   instagramUsername: "opc_uk",
   youtubeChannel: "UC6KhSnh_V_wv3VDC1inY8WQ",
   pinterestUsername: "otherpeoplescocktails",
