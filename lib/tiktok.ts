@@ -115,8 +115,8 @@ export async function getTikTokSummary(
   const cached = cache.get(brand);
   if (!forceRefresh && cached && cached.expiresAt > Date.now()) return cached.data;
 
-  const clientKey = process.env.TIKTOK_CLIENT_KEY;
-  const clientSecret = process.env.TIKTOK_CLIENT_SECRET;
+  const clientKey = process.env[brand === "opc" ? "OPC_TIKTOK_CLIENT_KEY" : "TIKTOK_CLIENT_KEY"];
+  const clientSecret = process.env[brand === "opc" ? "OPC_TIKTOK_CLIENT_SECRET" : "TIKTOK_CLIENT_SECRET"];
   const connection = brand === "opc" ? await getOpcSocialConnection("tiktok") : null;
   const refreshToken = connection?.credential ?? process.env[brand === "opc" ? "OPC_TIKTOK_REFRESH_TOKEN" : "TIKTOK_REFRESH_TOKEN"];
   const expectedOpenId = connection?.account_id ?? process.env.OPC_TIKTOK_OPEN_ID;

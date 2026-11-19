@@ -10,7 +10,7 @@ const origin = "https://otherpeoplesrecipes.co.uk";
 const graph = "https://graph.facebook.com/v21.0";
 const providers = {
   facebook: { authorize: "https://www.facebook.com/v21.0/dialog/oauth", token: `${graph}/oauth/access_token`, scope: "pages_show_list,pages_read_engagement,read_insights,instagram_basic,instagram_manage_insights", id: "META_APP_ID", secret: "META_APP_SECRET" },
-  tiktok: { authorize: "https://www.tiktok.com/v2/auth/authorize/", token: "https://open.tiktokapis.com/v2/oauth/token/", scope: "user.info.basic,user.info.stats,video.list", id: "TIKTOK_CLIENT_KEY", secret: "TIKTOK_CLIENT_SECRET" },
+  tiktok: { authorize: "https://www.tiktok.com/v2/auth/authorize/", token: "https://open.tiktokapis.com/v2/oauth/token/", scope: "user.info.basic,user.info.stats,video.list", id: "OPC_TIKTOK_CLIENT_KEY", secret: "OPC_TIKTOK_CLIENT_SECRET" },
   youtube: { authorize: "https://accounts.google.com/o/oauth2/v2/auth", token: "https://oauth2.googleapis.com/token", scope: "https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/yt-analytics.readonly", id: "YOUTUBE_OAUTH_CLIENT_ID", secret: "YOUTUBE_OAUTH_CLIENT_SECRET" },
   pinterest: { authorize: "https://www.pinterest.com/oauth/", token: "https://api.pinterest.com/v5/oauth/token", scope: "boards:read,pins:read,user_accounts:read", id: "PINTEREST_CLIENT_ID", secret: "PINTEREST_CLIENT_SECRET" },
 } as const;
