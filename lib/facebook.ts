@@ -1,6 +1,6 @@
 import "server-only";
 
-import { getOpcSocialConnection, opcSocialAccounts } from "./opc-social-connections";
+import { getOpcSocialConnection, isOpcFacebookId } from "./opc-social-connections";
 
 import { socialCache, type SocialRequestOptions } from "./social-brand";
 
@@ -33,7 +33,7 @@ export async function getFacebookSummary(
   const connection = brand === "opc" ? await getOpcSocialConnection("facebook") : null;
   const pageId = connection?.account_id ?? process.env[brand === "opc" ? "OPC_FACEBOOK_PAGE_ID" : "FACEBOOK_PAGE_ID"];
   const accessToken = connection?.credential ?? process.env[brand === "opc" ? "OPC_FACEBOOK_PAGE_ACCESS_TOKEN" : "FACEBOOK_PAGE_ACCESS_TOKEN"];
-  if (!pageId || !accessToken || (brand === "opc" && pageId !== opcSocialAccounts.facebookPage)) return null;
+  if (!pageId || !accessToken || (brand === "opc" && !isOpcFacebookId(pageId))) return null;
 
   try {
     const endDate = new Date();

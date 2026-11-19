@@ -7,10 +7,15 @@ export type OpcOAuthPlatform = typeof opcOAuthPlatforms[number];
 
 export const opcSocialAccounts = {
   facebookPage: "1406854652516686",
+  facebookPublicProfile: "61596414003109",
   instagramUsername: "opc_uk",
   youtubeChannel: "UC6KhSnh_V_wv3VDC1inY8WQ",
   pinterestUsername: "otherpeoplescocktails",
 };
+
+export function isOpcFacebookId(id: unknown): id is string {
+  return id === opcSocialAccounts.facebookPage || id === opcSocialAccounts.facebookPublicProfile;
+}
 
 type Connection = {
   account_id: string;

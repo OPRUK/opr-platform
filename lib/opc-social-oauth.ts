@@ -3,7 +3,7 @@ import "server-only";
 import { randomBytes } from "node:crypto";
 import { type NextRequest, NextResponse } from "next/server";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { opcSocialAccounts, saveOpcSocialConnection, type OpcOAuthPlatform } from "./opc-social-connections";
+import { isOpcFacebookId, opcSocialAccounts, saveOpcSocialConnection, type OpcOAuthPlatform } from "./opc-social-connections";
 import { getSupabaseAdmin } from "./supabase/admin";
 
 const origin = "https://otherpeoplesrecipes.co.uk";
@@ -117,25 +117,44 @@ async function saveMetaPage(accessToken: string): Promise<MetaConnectionStatus> 
   const exchanged = await providerJson(`${graph}/oauth/access_token?${params}`, undefined, undefined, "long-lived-token");
   if (typeof exchanged?.access_token !== "string") return "meta-token";
 
-  const pageId = opcSocialAccounts.facebookPage;
   const userToken = exchanged.access_token as string;
   const pageParams = new URLSearchParams({ fields: "id,access_token", limit: "100" });
   let pageToken: string | undefined;
+  let managedPageCount = 0;
   for (let index = 0; index < 5 && !pageToken; index++) {
     const pages = await providerJson(`${graph}/me/accounts?${pageParams}`, userToken, undefined, "managed-pages");
-    const page = pages?.data?.find((item: { id?: string }) => item.id === pageId);
+    const managedPages = Array.isArray(pages?.data) ? pages.data : [];
+    managedPageCount += managedPages.length;
+    const page = managedPages.find((item: { id?: string }) => isOpcFacebookId(item?.id));
     if (typeof page?.access_token === "string") pageToken = page.access_token;
     const after = pages?.paging?.cursors?.after;
     if (!pages?.paging?.next || typeof after !== "string") break;
     pageParams.set("after", after);
   }
-  if (!pageToken) return "meta-page";
+  if (!pageToken) {
+    for (const id of [opcSocialAccounts.facebookPage, opcSocialAccounts.facebookPublicProfile]) {
+      const page = await providerJson(`${graph}/${id}?fields=id,access_token`, userToken, undefined, "direct-page");
+      if (isOpcFacebookId(page?.id) && typeof page.access_token === "string") {
+        pageToken = page.access_token;
+        break;
+      }
+    }
+  }
+  if (!pageToken) {
+    const permissions = await providerJson(`${graph}/me/permissions`, userToken, undefined, "granted-permissions");
+    const relevant = new Set(["pages_show_list", "pages_read_engagement", "read_insights", "instagram_basic", "instagram_manage_insights"]);
+    const granted = Array.isArray(permissions?.data) ? permissions.data
+      .filter((row: { permission: string; status: string }) => relevant.has(row.permission) && row.status === "granted")
+      .map((row: { permission: string }) => row.permission) : [];
+    console.warn("OPC Meta Page not returned", { managedPageCount, granted });
+    return "meta-page";
+  }
 
-  const [page, linked] = await Promise.all([
-    providerJson(`${graph}/me?fields=id`, pageToken, undefined, "verify-page-token"),
-    providerJson(`${graph}/${pageId}?fields=instagram_business_account%7Bid,username%7D`, userToken, undefined, "linked-instagram"),
-  ]);
-  if (page?.id !== pageId) return "meta-insights";
+  const page = await providerJson(`${graph}/me?fields=id,name`, pageToken, undefined, "verify-page-token");
+  const verifiedName = typeof page?.name === "string" ? page.name.toLowerCase().replace(/[^a-z]/g, "") : "";
+  if (!isOpcFacebookId(page?.id) || verifiedName !== "otherpeoplescocktails") return "meta-insights";
+  const pageId = page.id;
+  const linked = await providerJson(`${graph}/${pageId}?fields=instagram_business_account%7Bid,username%7D`, userToken, undefined, "linked-instagram");
   const instagram = linked?.instagram_business_account;
   return await saveOpcSocialConnection("facebook", {
     account_id: pageId, credential: pageToken,
