@@ -123,6 +123,42 @@ function film(
 
 const filmsUnordered: Film[] = [
 {
+  "title": "Dave & Rubble | The Christmas Carrot",
+  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/christmas-films-20261119/dave-and-rubble-the-christmas-carrot-final.mp4",
+  "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/christmas-films-20261119/dave-and-rubble-the-christmas-carrot.jpg",
+  "description": "Dave leaves out a carrot for Rudolph. Rubble has some advice for his reindeer agent.",
+  "uploadDate": "2026-11-19T13:58:14.178Z",
+  "durationSeconds": 13,
+  "width": 720,
+  "height": 1280,
+  "posterWidth": 720,
+  "posterHeight": 1280
+},
+{
+  "title": "Dave & Rubble | The Dishwasher",
+  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/christmas-films-20261119/dave-and-rubble-the-dishwasher-final.mp4",
+  "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/christmas-films-20261119/dave-and-rubble-the-dishwasher.jpg",
+  "description": "Dave asks Rubble to help clear up after Christmas lunch. Rubble reckons he already offered.",
+  "uploadDate": "2026-11-19T13:58:15.634Z",
+  "durationSeconds": 13,
+  "width": 720,
+  "height": 1280,
+  "posterWidth": 720,
+  "posterHeight": 1280
+},
+{
+  "title": "Dave & Rubble | The Emergency Chair",
+  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/christmas-films-20261119/dave-and-rubble-the-emergency-chair-final.mp4",
+  "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/christmas-films-20261119/dave-and-rubble-the-emergency-chair.jpg",
+  "description": "Dave brings out an extra chair. Rubble takes the emergency a little more literally.",
+  "uploadDate": "2026-11-19T13:58:17.125Z",
+  "durationSeconds": 10.833333,
+  "width": 720,
+  "height": 1280,
+  "posterWidth": 720,
+  "posterHeight": 1280
+},
+{
   "title": "Dave & Rubble | The Missing Pig",
   "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/christmas-films-20261118/dave-and-rubble-the-missing-pig-final.mp4",
   "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/christmas-films-20261118/dave-and-rubble-the-missing-pig.jpg",
