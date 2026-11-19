@@ -34,6 +34,7 @@ export async function startOpcOAuth(client: SupabaseClient, platform: OpcOAuthPl
     [platform === "tiktok" ? "client_key" : "client_id"]: id,
     redirect_uri: redirectUri(platform), response_type: "code", scope: provider.scope, state,
   }).toString();
+  if (platform === "facebook") url.searchParams.set("auth_type", "rerequest");
   if (platform === "youtube") {
     url.searchParams.set("access_type", "offline");
     url.searchParams.set("prompt", "consent select_account");
@@ -41,12 +42,20 @@ export async function startOpcOAuth(client: SupabaseClient, platform: OpcOAuthPl
   return url.toString();
 }
 
-async function providerJson(url: string, token?: string, options?: RequestInit) {
+async function providerJson(url: string, token?: string, options?: RequestInit, stage?: string) {
   const response = await fetch(url, {
     ...options, cache: "no-store", signal: AbortSignal.timeout(9000),
     headers: { ...options?.headers, ...(token ? { Authorization: `Bearer ${token}` } : {}) },
   });
-  return response.ok ? await response.json() : null;
+  const payload = await response.json().catch(() => null);
+  if (!response.ok && stage) {
+    console.warn("OPC Meta OAuth request rejected", {
+      stage, status: response.status,
+      code: typeof payload?.error?.code === "number" ? payload.error.code : null,
+      subcode: typeof payload?.error?.error_subcode === "number" ? payload.error.error_subcode : null,
+    });
+  }
+  return response.ok ? payload : null;
 }
 
 async function exchange(platform: OpcOAuthPlatform, code: string) {
@@ -63,7 +72,10 @@ async function exchange(platform: OpcOAuthPlatform, code: string) {
     params.set(platform === "tiktok" ? "client_key" : "client_id", id);
     params.set("client_secret", secret);
   }
-  if (platform === "facebook") return providerJson(`${provider.token}?${params}`);
+  if (platform === "facebook") {
+    params.delete("grant_type");
+    return providerJson(`${provider.token}?${params}`, undefined, undefined, "code-exchange");
+  }
   return providerJson(provider.token, undefined, { method: "POST", headers, body: params });
 }
 
@@ -93,33 +105,51 @@ async function verifyAccount(platform: OpcOAuthPlatform, accessToken: string) {
     ? user.open_id as string : null;
 }
 
-async function saveMetaPage(accessToken: string) {
-  // Upgrade the short-lived user token before deriving the Page-scoped token.
+type MetaConnectionStatus = "connected" | "failed" | "meta-token" | "meta-page" | "meta-insights";
+
+async function saveMetaPage(accessToken: string): Promise<MetaConnectionStatus> {
   const appId = process.env.META_APP_ID;
   const appSecret = process.env.META_APP_SECRET;
-  if (!appId || !appSecret) return false;
+  if (!appId || !appSecret) return "failed";
   const params = new URLSearchParams({
     grant_type: "fb_exchange_token", client_id: appId, client_secret: appSecret, fb_exchange_token: accessToken,
   });
-  const exchanged = await providerJson(`${graph}/oauth/access_token?${params}`);
-  if (typeof exchanged?.access_token !== "string") return false;
+  const exchanged = await providerJson(`${graph}/oauth/access_token?${params}`, undefined, undefined, "long-lived-token");
+  if (typeof exchanged?.access_token !== "string") return "meta-token";
 
   const pageId = opcSocialAccounts.facebookPage;
-  const page = await providerJson(`${graph}/${pageId}?fields=id,access_token,instagram_business_account%7Bid,username%7D`, exchanged.access_token);
-  if (page?.id !== pageId || typeof page.access_token !== "string") return false;
-  const instagram = page.instagram_business_account;
-  return saveOpcSocialConnection("facebook", {
-    account_id: pageId, credential: page.access_token,
-    instagram_id: instagram?.username?.toLowerCase() === opcSocialAccounts.instagramUsername ? instagram.id : null,
-  });
+  const userToken = exchanged.access_token as string;
+  const pageParams = new URLSearchParams({ fields: "id,access_token", limit: "100" });
+  let pageToken: string | undefined;
+  for (let index = 0; index < 5 && !pageToken; index++) {
+    const pages = await providerJson(`${graph}/me/accounts?${pageParams}`, userToken, undefined, "managed-pages");
+    const page = pages?.data?.find((item: { id?: string }) => item.id === pageId);
+    if (typeof page?.access_token === "string") pageToken = page.access_token;
+    const after = pages?.paging?.cursors?.after;
+    if (!pages?.paging?.next || typeof after !== "string") break;
+    pageParams.set("after", after);
+  }
+  if (!pageToken) return "meta-page";
+
+  const [page, linked] = await Promise.all([
+    providerJson(`${graph}/me?fields=id`, pageToken, undefined, "verify-page-token"),
+    providerJson(`${graph}/${pageId}?fields=instagram_business_account%7Bid,username%7D`, userToken, undefined, "linked-instagram"),
+  ]);
+  if (page?.id !== pageId) return "meta-insights";
+  const instagram = linked?.instagram_business_account;
+  return await saveOpcSocialConnection("facebook", {
+    account_id: pageId, credential: pageToken,
+    instagram_id: typeof instagram?.id === "string" && instagram.username?.toLowerCase() === opcSocialAccounts.instagramUsername
+      ? instagram.id : null,
+  }) ? "connected" : "failed";
 }
 
 export async function finishOpcOAuth(request: NextRequest, platform: OpcOAuthPlatform) {
   const stateCookie = `opc_oauth_${platform}`;
-  function back(status: "connected" | "failed" | "wrong-account" | "denied") {
+  function back(status: MetaConnectionStatus | "expired" | "wrong-account" | "denied", clearCookie = true) {
     const response = NextResponse.redirect(`${origin}/admin/analytics?brand=opc&opcPlatform=${platform}&opcStatus=${status}`);
     response.headers.set("Cache-Control", "private, no-store");
-    response.cookies.set(stateCookie, "", { maxAge: 0, secure: true, httpOnly: true, path: `/api/${platform}/callback` });
+    if (clearCookie) response.cookies.set(stateCookie, "", { maxAge: 0, secure: true, httpOnly: true, path: `/api/${platform}/callback` });
     return response;
   }
   const params = new URL(request.url).searchParams;
@@ -127,16 +157,16 @@ export async function finishOpcOAuth(request: NextRequest, platform: OpcOAuthPla
   const state = params.get("state") ?? "";
   const client = getSupabaseAdmin();
   if (!client || !/^opc\.[A-Za-z0-9_-]{43}$/.test(state)
-    || request.cookies.get(stateCookie)?.value !== state) return back("failed");
+    || request.cookies.get(stateCookie)?.value !== state) return back("expired", false);
   const consumed = await client.from("opc_social_oauth_states").delete()
     .eq("state", state).eq("platform", platform).gt("expires_at", new Date().toISOString()).select("state").maybeSingle();
-  if (consumed.error || !consumed.data) return back("failed");
+  if (consumed.error || !consumed.data) return back("expired");
   if (!code) return back(params.has("error") ? "denied" : "failed");
 
   try {
     const token = await exchange(platform, code);
-    if (typeof token?.access_token !== "string") return back("failed");
-    if (platform === "facebook") return back(await saveMetaPage(token.access_token) ? "connected" : "failed");
+    if (typeof token?.access_token !== "string") return back(platform === "facebook" ? "meta-token" : "failed");
+    if (platform === "facebook") return back(await saveMetaPage(token.access_token));
     if (typeof token.refresh_token !== "string") return back("failed");
     const account = await verifyAccount(platform, token.access_token);
     if (!account) return back("wrong-account");

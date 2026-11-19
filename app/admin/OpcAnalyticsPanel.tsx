@@ -30,6 +30,10 @@ export default function OpcAnalyticsPanel({ request, oauthStatus, oauthPlatform,
   const oauthMessage = oauthStatus === "connected" ? `${platformLabel} authorised. Checking the available OPC metrics.`
     : oauthStatus === "wrong-account" ? "The account did not match the verified OPC profile. No connection was saved."
     : oauthStatus === "denied" ? "Authorisation was declined. No connection was saved."
+    : oauthStatus === "expired" ? "This authorisation attempt is no longer active. Start again from this dashboard in the same browser."
+    : oauthStatus === "meta-token" ? "Meta did not issue a usable credential. Start a fresh authorisation for the OPC Page."
+    : oauthStatus === "meta-page" ? "Meta did not return access to the Other People’s Cocktails Page. Select that Page and grant read access."
+    : oauthStatus === "meta-insights" ? "Meta returned a credential, but it could not be verified for the OPC Page."
     : oauthStatus === "failed" ? `${platformLabel} could not be connected. Check provider access and try again.` : "";
 
   async function connect(platform: "facebook" | "tiktok" | "youtube" | "pinterest") {
