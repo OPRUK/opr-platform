@@ -1,7 +1,7 @@
 import "server-only";
 
 import { randomBytes } from "node:crypto";
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { opcSocialAccounts, saveOpcSocialConnection, type OpcOAuthPlatform } from "./opc-social-connections";
 import { getSupabaseAdmin } from "./supabase/admin";
@@ -114,7 +114,7 @@ async function saveMetaPage(accessToken: string) {
   });
 }
 
-export async function finishOpcOAuth(request: Request, platform: OpcOAuthPlatform) {
+export async function finishOpcOAuth(request: NextRequest, platform: OpcOAuthPlatform) {
   const stateCookie = `opc_oauth_${platform}`;
   function back(status: "connected" | "failed" | "wrong-account" | "denied") {
     const response = NextResponse.redirect(`${origin}/admin/analytics?brand=opc&opcPlatform=${platform}&opcStatus=${status}`);
@@ -127,7 +127,7 @@ export async function finishOpcOAuth(request: Request, platform: OpcOAuthPlatfor
   const state = params.get("state") ?? "";
   const client = getSupabaseAdmin();
   if (!client || !/^opc\.[A-Za-z0-9_-]{43}$/.test(state)
-    || new NextRequest(request).cookies.get(stateCookie)?.value !== state) return back("failed");
+    || request.cookies.get(stateCookie)?.value !== state) return back("failed");
   const consumed = await client.from("opc_social_oauth_states").delete()
     .eq("state", state).eq("platform", platform).gt("expires_at", new Date().toISOString()).select("state").maybeSingle();
   if (consumed.error || !consumed.data) return back("failed");
