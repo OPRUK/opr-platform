@@ -106,7 +106,7 @@ export default async function FilmWatchPage({ params }: FilmPageProps) {
             <h1 className="font-display text-2xl font-bold leading-tight md:text-4xl">{film.title}</h1>
           </header>
 
-          <div style={{ width: `min(100%, ${68 * (film.width ?? 16) / (film.height ?? 9)}svh)` }} className="relative mx-auto mt-5 max-w-full overflow-hidden rounded-2xl bg-black shadow-xl shadow-[#123C39]/20">
+          <div style={{ width: `min(100%, max(320px, ${68 * (film.width ?? 16) / (film.height ?? 9)}svh))` }} className="relative mx-auto mt-5 max-w-full overflow-hidden rounded-2xl bg-black shadow-xl shadow-[#123C39]/20">
             <FilmPlayer video={film.video} title={film.title} width={film.width} height={film.height}
               poster={film.poster ?? "/images/recipes/barbaras-beef-casserole-wide.webp"} captions={film.captions} />
           </div>

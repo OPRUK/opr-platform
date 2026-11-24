@@ -2,6 +2,7 @@
 // Blob store so each deployment does not bundle another copy. Some poster
 // images remain in the public Supabase Storage bucket. Both /films (desktop)
 // and /app/films (mobile) read from this one list.
+import { filmPosters } from "./film-posters.ts";
 import { filmEnrichment } from "./film-enrichment.ts";
 import { filmVideoRevisions } from "./film-video-revisions.ts";
 
@@ -785,7 +786,8 @@ const filmsUnordered: Film[] = [
 // in the array above. Every page that lists films relies on this ordering
 // rather than sorting itself.
 export const films: Film[] = filmsUnordered.map((entry) => {
-  const enriched = {...entry, ...filmEnrichment[filmSlug(entry)]};
+  const slug = filmSlug(entry);
+  const enriched = {...entry, ...filmEnrichment[slug], ...(filmPosters[slug] ? { poster: filmPosters[slug] } : {})};
   const revision = filmVideoRevisions[filmSlug(entry)];
   if (!revision) return enriched;
   return {
