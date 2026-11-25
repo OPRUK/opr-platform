@@ -124,20 +124,6 @@ function film(
 
 const filmsUnordered: Film[] = [
 {
-  "title": "Dave & Rubble | The Foil",
-  "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/christmas-films-20261125/dave-and-rubble-the-foil-final.mp4",
-  "poster": "/images/films/watch-dave-and-rubble-the-foil.jpg",
-  "captions": "/captions/dave-and-rubble-the-foil.vtt",
-  "description": "Dave pulls out the foil. Rubble comes running for what usually follows.",
-  "transcript": "Dave: It’s just foil.\nRubble: I know.\nDave: Why did you come running?\nRubble: Foil rarely travels alone.",
-  "uploadDate": "2026-11-25T11:55:00.000Z",
-  "durationSeconds": 13,
-  "width": 1080,
-  "height": 1920,
-  "posterWidth": 720,
-  "posterHeight": 1280
-},
-{
   "title": "Dave & Rubble | The Christmas Carrot",
   "video": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/christmas-films-20261119/dave-and-rubble-the-christmas-carrot-final.mp4",
   "poster": "https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/christmas-films-20261119/dave-and-rubble-the-christmas-carrot.jpg",
