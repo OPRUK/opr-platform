@@ -7,7 +7,7 @@ test('all films use the mobile-compatible encodes', () => {
   assert.ok(films.length >= 63);
   for (const film of films) {
     const playback = filmPlaybackUrl(film.video);
-    assert.match(new URL(playback).pathname, /^\/(simple-endcards-20261113|christmas-films-20261116|christmas-films-20261117|christmas-list-20261117|christmas-films-20261118)\//, film.title);
+    assert.match(new URL(playback).pathname, /^\/(simple-endcards-20261113|christmas-films-20261116|christmas-films-20261117|christmas-list-20261117|christmas-films-20261118|christmas-films-20261125)\//, film.title);
     assert.equal(new URL(playback).pathname.split('/').pop(), new URL(film.video).pathname.split('/').pop());
     assert.ok(playback.startsWith('https://kag2qb9d0la7upu4.public.blob.vercel-storage.com/'));
   }
@@ -21,5 +21,5 @@ test('unrelated origins and local media are preserved', () => {
 
 test("new Christmas films keep their own masters and distinct identities", () => {
   assert.equal(new Set(films.map(f=>f.title)).size, films.length);
-  for (const film of films.filter(f=>f.video.includes("/christmas-films-20261118/"))) assert.equal(filmPlaybackUrl(film.video), film.video);
+  for (const film of films.filter(f=>/\/christmas-films-202611(?:18|25)\//.test(f.video))) assert.equal(filmPlaybackUrl(film.video), film.video);
 });
