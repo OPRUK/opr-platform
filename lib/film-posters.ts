@@ -1,5 +1,6 @@
 // Same-origin copies preserve the original posters without an external image-host dependency.
 export const filmPosters: Record<string, string> = {
+  "dave-and-rubble-the-foil": "/images/films/watch-dave-and-rubble-the-foil.jpg",
   "dave-and-rubble-the-emergency-chair": "/images/films/watch-dave-and-rubble-the-emergency-chair.jpg",
   "dave-and-rubble-the-dishwasher": "/images/films/watch-dave-and-rubble-the-dishwasher.jpg",
   "dave-and-rubble-the-christmas-carrot": "/images/films/watch-dave-and-rubble-the-christmas-carrot.jpg",
