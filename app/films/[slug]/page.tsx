@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: FilmPageProps): Promise<Metad
   if (!film) return {};
 
   const metadata = buildMetadata({
-    title: film.title,
+    title: `Watch ${film.title} | OPR Film`,
     absoluteTitle: true,
     description: filmDescription(film),
     path: `/films/${filmSlug(film)}`,
@@ -97,16 +97,12 @@ export default async function FilmWatchPage({ params }: FilmPageProps) {
         <link rel="preload" as="image" href={film.poster} fetchPriority="high" />
 
 
-        <article className="mx-auto max-w-6xl px-4 pb-20 pt-36 sm:px-6 md:px-8 lg:pt-48 2xl:pt-36">
-          <Link href="/films" className="font-semibold text-[#1C5A50] underline decoration-[#DDB765] decoration-2 underline-offset-4">
-            ← The OPR Film Collection
-          </Link>
-
-          <header className="mx-auto mt-4 max-w-5xl text-center">
-            <h1 className="font-display text-2xl font-bold leading-tight md:text-4xl">{film.title}</h1>
+        <article className="mx-auto max-w-6xl px-4 pb-20 pt-24 sm:px-6 sm:pt-28 md:px-8 lg:pt-40 2xl:pt-28">
+          <header className="mx-auto max-w-5xl text-center">
+            <h1 className="font-display text-2xl font-bold leading-tight md:text-4xl">Watch {film.title}</h1>
           </header>
 
-          <div style={{ width: `min(100%, max(320px, ${68 * (film.width ?? 16) / (film.height ?? 9)}svh))` }} className="relative mx-auto mt-5 max-w-full overflow-hidden rounded-2xl bg-black shadow-xl shadow-[#123C39]/20">
+          <div style={{ width: `min(100%, max(320px, ${68 * (film.width ?? 16) / (film.height ?? 9)}svh))` }} className="relative mx-auto mt-3 max-w-full overflow-hidden rounded-2xl bg-black shadow-xl shadow-[#123C39]/20">
             <FilmPlayer video={film.video} title={film.title} width={film.width} height={film.height}
               poster={film.poster ?? "/images/recipes/barbaras-beef-casserole-wide.webp"} captions={film.captions} />
           </div>
@@ -131,11 +127,10 @@ export default async function FilmWatchPage({ params }: FilmPageProps) {
             </section>
           )}
 
-          <section aria-labelledby="transcript-heading" className="mx-auto mt-12 max-w-3xl rounded-3xl bg-[#FFF3DF] p-7 shadow-lg shadow-[#1C5A50]/10 md:p-10">
-            <p className="text-sm uppercase tracking-[0.3em] text-amber-800">Accessible transcript</p>
-            <h2 id="transcript-heading" className="mt-3 text-3xl font-bold">Read the film</h2>
+          <details className="mx-auto mt-8 max-w-3xl rounded-3xl bg-[#FFF3DF] p-7 shadow-lg shadow-[#1C5A50]/10">
+            <summary className="cursor-pointer text-xl font-bold">Read the film transcript</summary>
             <div className="mt-6 whitespace-pre-wrap text-lg leading-8 text-stone-700">{film.transcript}</div>
-          </section>
+          </details>
 
           {relatedFilms.length ? (
             <nav aria-labelledby="more-film-stories-heading" className="mx-auto mt-12 max-w-5xl">
